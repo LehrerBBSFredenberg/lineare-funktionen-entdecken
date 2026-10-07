@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lineare Funktionen – Lern-Dashboard V6 · dynamische Graphen</title>
+<style>
+:root{
+  --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
+  --blue:#2457d6; --blueSoft:#eaf0ff; --violet:#7c3aed; --orange:#c86b09; --teal:#0f766e;
+  --green:#0f7b55; --warn:#a15c00; --bad:#b42318; --gray:#94a3b8;
+  --shadow:0 12px 30px rgba(25,42,75,.08); --r:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{line-height:1.45}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid #111827;outline-offset:2px}
+.app{max-width:1580px;margin:auto;padding:12px}
+.top{
+  display:grid;grid-template-columns:minmax(260px,1fr) auto;gap:12px;align-items:center;
+  padding:13px 15px;background:rgba(255,255,255,.94);border:1px solid var(--line);
+  border-radius:20px;box-shadow:var(--shadow);position:sticky;top:8px;z-index:40;backdrop-filter:blur(8px)
+}
+.brand h1{margin:0;font-size:1.35rem}.brand p{margin:2px 0 0;color:var(--muted);font-size:.86rem}
+.segment,.pathbar,.tabs,.navline,.choice-row,.chart-tools,.chips{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.btn,.seg,.path-btn,.tab,.menu-item{
+  border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:8px 11px;font-weight:760
+}
+.btn.small,.path-btn,.tab,.menu-item{font-size:.83rem;padding:7px 9px}
+.seg[aria-pressed="true"],.path-btn.active,.tab[aria-selected="true"],.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.progress{font-size:.82rem;color:var(--muted);font-weight:750;white-space:nowrap}
+.pathbar{
+  margin-top:10px;padding:8px 10px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)
+}
+.workspace{
+  display:grid;grid-template-columns:minmax(220px,260px) minmax(500px,1fr) minmax(310px,380px);
+  gap:12px;margin-top:12px;min-height:calc(100vh - 150px)
+}
+.panel,.chart-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.left,.right{padding:15px}.left{display:flex;flex-direction:column;gap:12px}.right{display:flex;flex-direction:column;min-width:0}
+.kicker{font-size:.71rem;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);font-weight:850}
+h2{font-size:1.05rem;margin:2px 0 0}
+.control{border:1px solid var(--line);border-radius:14px;padding:11px;background:#fbfcfe}
+.control.focus{border:2px solid #9ab2ff;background:var(--blueSoft)}
+.control.locked{background:#f1f5f9;border-color:#cbd5e1}
+.control.locked input[type="range"]{opacity:.45}
+.control-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.lock-btn{border:1px solid #b8c4d6;background:#fff;color:#334155;border-radius:999px;padding:5px 9px;font-size:.75rem;font-weight:800;min-height:32px}
+.lock-btn[aria-pressed="true"]{background:#e2e8f0;border-color:#94a3b8;color:#0f172a}
+.control-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.control label{font-weight:800;font-size:.89rem}.value{font-weight:850;color:var(--blue);font-variant-numeric:tabular-nums}
+.unit-box{border:1px solid var(--line);border-radius:14px;padding:11px;background:#f8fbff}
+.unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.unit-grid label{display:grid;gap:4px;font-size:.76rem;color:var(--muted);font-weight:750}
+.unit-grid select{width:100%;border:1px solid var(--line);border-radius:9px;background:#fff;padding:7px 8px;color:var(--ink)}
+input[type="range"]{width:100%;margin-top:9px;min-height:38px;accent-color:var(--blue)}
+.mini{font-size:.78rem;color:var(--muted);margin-top:6px}
+.formula{
+  border:1px solid var(--line);border-radius:14px;background:#f8faff;padding:11px 12px;
+  font-family:"Cambria Math","STIX Two Math",serif;font-size:1.19rem
+}
+.hm{background:#fff1bf;border-radius:5px;padding:0 .13em}.hb{background:#eee3ff;border-radius:5px;padding:0 .13em}
+.left-note{margin-top:auto;padding:10px 11px;border-radius:12px;background:#f7f9fc;border:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+.chart-card{height:100%;padding:13px;display:flex;flex-direction:column}
+.chart-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:2px 2px 7px}
+.chart-sub{font-size:.82rem;color:var(--muted);margin-top:3px}
+.scale-chip{font-size:.76rem;border:1px solid var(--line);background:#f8fafc;border-radius:999px;padding:5px 8px;color:var(--muted);font-weight:750}
+.business-graph-panel{margin:4px 2px 10px;padding:11px 12px;border:1px solid #cbd8ef;border-radius:14px;background:#f7faff;display:grid;gap:8px}
+.business-graph-panel[hidden]{display:none}
+.business-graph-label{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.business-graph-label strong{font-size:.9rem}.business-graph-label span{font-size:.78rem;color:var(--muted)}
+.business-graph-controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.graph-toggle{border:2px solid var(--line);background:#fff;border-radius:12px;padding:9px 13px;font-size:.86rem;font-weight:850;min-height:42px;box-shadow:0 2px 7px rgba(25,42,75,.06)}
+.graph-toggle[aria-pressed="true"]{background:#fff}
+.graph-toggle[aria-pressed="false"]{opacity:.5;text-decoration:line-through;background:#eef2f7;box-shadow:none}
+.graph-toggle.k{color:var(--orange);border-color:#e4a767}.graph-toggle.e{color:var(--blue);border-color:#88a5f4}.graph-toggle.g{color:var(--teal);border-color:#70bdb4}
+.business-guide-note{font-size:.78rem;color:#475569;padding-top:2px}
+.curve-switches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.curve-switch,.break-even-switch{display:flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--line);border-radius:12px;background:#fff;padding:11px 12px;font-size:.9rem;font-weight:850;cursor:pointer;min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.curve-switch.k{color:var(--orange);border-color:#e4a767}.curve-switch.e{color:var(--blue);border-color:#88a5f4}.curve-switch.g{color:var(--teal);border-color:#70bdb4}
+.curve-switch[aria-pressed="false"]{opacity:.58;background:#eef2f7;text-decoration:line-through}
+.curve-switch[aria-pressed="true"]::before{content:"✓";font-weight:900}.curve-switch[aria-pressed="false"]::before{content:"○";font-weight:900}
+.break-even-switch{border-color:#b9a4ef;color:#5b21b6;background:#f8f5ff;grid-column:1/-1}
+.break-even-switch[aria-pressed="true"]{background:#efe9ff;border-color:#7c3aed}.break-even-switch[aria-pressed="true"]::before{content:"✓";font-weight:900}.break-even-switch[aria-pressed="false"]::before{content:"○";font-weight:900}
+.sentence-starters{display:grid;gap:7px}.sentence-starter{padding:8px 9px;border-left:4px solid #8aa8f8;background:#f8faff;border-radius:8px}
+.goal-sentence{padding:10px 11px;border-radius:11px;background:#eef8f4;border:1px solid #bfe4d5;color:#164e3b;font-weight:700}
+@media(max-width:780px){.curve-switches{grid-template-columns:1fr}.break-even-switch{grid-column:auto}}
+
+.vocab-defs{display:grid;gap:7px}.vocab-def{padding:8px 9px;border-radius:10px;background:#fff;border:1px solid var(--line)}.vocab-def strong{display:inline;color:#1e3a8a}.vocab-def span{color:#334155}.language-tip{padding:9px 10px;border-radius:11px;background:#eef7ff;border:1px solid #c6def7;color:#24415f;font-size:.86rem}
+
+svg{display:block;width:100%;height:auto;min-height:470px;flex:1}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;padding:6px 4px 0}
+.legend span::before{content:"";display:inline-block;width:16px;height:3px;border-radius:3px;margin-right:6px;vertical-align:middle;background:currentColor}
+.legend .f1{color:var(--orange)}.legend .f2{color:var(--blue)}.legend .f3{color:var(--teal)}.legend .old{color:var(--gray)}
+.insight{margin-top:8px;padding:10px 11px;border-radius:12px;border:1px solid var(--line);background:#fbfcfe;font-size:.88rem}
+.tabs{border-bottom:1px solid var(--line);padding-bottom:9px}
+.right-body{padding-top:11px;min-height:480px;flex:1}
+.view{display:none}.view.active{display:block}
+.cardbox{border:1px solid var(--line);border-radius:14px;background:#fbfcfe;padding:12px;margin:9px 0}
+.cardbox strong{display:block;margin-bottom:5px}
+.choice-row button{flex:1;min-width:80px}
+.choice-row button.selected{background:var(--blueSoft);border-color:#9ab2ff;color:#163d9a}
+textarea{width:100%;min-height:88px;border:1px solid var(--line);border-radius:12px;padding:9px 10px;resize:vertical}
+.feedback{margin-top:8px;font-size:.84rem;font-weight:740}
+.help-stack{display:grid;gap:8px}.help-card{border:1px solid var(--line);border-radius:13px;background:#fbfcfe;padding:10px}
+.help-card button{width:100%;text-align:left}.help-content{display:none;margin-top:8px;font-size:.88rem;color:#334155}.help-card.open .help-content{display:block}
+.chips span{background:var(--blueSoft);color:#173d9a;border:1px solid #bfd0ff;border-radius:999px;padding:5px 8px;font-size:.78rem;font-weight:750}
+table{width:100%;border-collapse:collapse;font-size:.84rem}th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}tr.current{background:var(--blueSoft)}
+.rule{padding:11px;border:1px solid var(--line);border-radius:13px;background:#fbfcfe;margin-bottom:8px}.rule strong{display:block;margin-bottom:4px}
+.status-good{background:#e9f8f1;color:var(--green);border-color:#bce8d6}.status-warn{background:#fff5e6;color:var(--warn);border-color:#f1d3a4}.status-bad{background:#fff0ee;color:var(--bad);border-color:#f0c3bd}
+.navline{justify-content:space-between;margin-top:auto;padding-top:9px;border-top:1px solid var(--line)}
+.module-menu{
+  position:fixed;right:18px;top:82px;width:min(370px,calc(100vw - 36px));max-height:75vh;overflow:auto;
+  background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 20px 60px rgba(20,35,65,.18);padding:12px;z-index:100;display:none
+}
+.module-menu.open{display:block}
+.module-group{margin-bottom:12px}.module-group h3{font-size:.87rem;margin:0 0 7px;color:var(--muted)}
+.menu-item{width:100%;text-align:left;margin-bottom:6px;display:flex;justify-content:space-between;gap:10px}
+.menu-item.current{background:var(--blueSoft);border-color:#b9c9ff}.check{color:var(--green)}
+.start-screen{display:none;position:fixed;inset:0;background:rgba(243,246,251,.96);z-index:120;align-items:center;justify-content:center;padding:20px}
+.start-screen.open{display:flex}.start-card{width:min(760px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:22px}
+.path-choice{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+.path-choice button{min-height:150px;text-align:left;padding:16px;border:1px solid var(--line);background:#fff;border-radius:16px}
+.path-choice strong{display:block;font-size:1.02rem;margin-bottom:5px}.path-choice span{font-size:.86rem;color:var(--muted)}
+.term-editor{display:grid;gap:8px;margin-top:9px}
+.term-editor label{font-weight:850;font-size:.9rem}
+.term-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.term-input{flex:1;min-width:210px;border:2px solid #9ab2ff;border-radius:12px;padding:10px 12px;font-family:"Cambria Math","STIX Two Math",serif;font-size:1.08rem;background:#fff}
+.term-status{font-size:.82rem;font-weight:760;min-height:1.3em}
+.term-status.good{color:var(--green)}.term-status.bad{color:var(--bad)}
+.speech-note{margin-top:7px;padding:7px 9px;border-radius:10px;background:#f1f5ff;border:1px solid #cbd8ff;color:#334155;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:.78rem}
+.mobile-note{display:none;background:#fff8e8;border:1px solid #f0d39b;border-radius:12px;padding:9px 11px;font-size:.82rem;color:#7a4b00;margin-top:10px}
+@media(max-width:1180px){
+  .top{grid-template-columns:1fr auto}.progress{grid-column:1/-1}
+  .workspace{grid-template-columns:230px minmax(430px,1fr)}.right{grid-column:1/-1}.right-body{min-height:300px}
+}
+@media(max-width:780px){
+  .app{padding:7px}.top{position:static;grid-template-columns:1fr}
+  .pathbar{display:grid;grid-template-columns:1fr 1fr;gap:7px;overflow:visible;align-items:stretch}
+  .path-btn{white-space:normal;min-height:48px;width:100%;text-align:center}
+  .workspace{grid-template-columns:1fr;min-height:auto}.left,.center,.right{grid-column:1}.left{order:2}.center{order:1}.right{order:3}
+  svg{min-height:380px}.mobile-note{display:block}.path-choice{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand">
+    <h1>Lineare Funktionen</h1>
+    <p id="pathSubtitle">Grundlagen</p>
+  </div>
+  <div class="progress"><span id="progressText">Modul 1 von 5</span> · <button class="btn small" id="menuBtn">☰ Module</button></div>
+</header>
+
+<nav class="pathbar" aria-label="Lernpfade">
+  <button class="path-btn active" data-path="basics">Grundlagen</button>
+  <button class="path-btn" data-path="compare">Geraden vergleichen</button>
+  <button class="path-btn" data-path="business">Kosten · Erlös · Gewinn</button>
+  <button class="path-btn" data-path="workshop">Funktionswerkstatt</button>
+</nav>
+
+<div class="mobile-note">Für Unterricht ist Tablet im Querformat oder Laptop optimal. Auf kleinen Bildschirmen werden die Arbeitsbereiche untereinander angezeigt.</div>
+
+<main class="workspace">
+  <aside class="panel left">
+    <div>
+      <div class="kicker">Manipulation</div>
+      <h2 id="leftTitle">Verändere nur x</h2>
+    </div>
+    <div id="controls"></div>
+    <div id="formulas"></div>
+    <button class="btn" id="resetBtn">Modul zurücksetzen</button>
+    <div class="left-note" id="leftNote">Alle angezeigten Regler sind beweglich. Der blau hervorgehobene Regler ist der Fokus der aktuellen Aufgabe.</div>
+  </aside>
+
+  <section class="center">
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <div class="kicker">Mathematische Wirkung</div>
+          <h2 id="chartTitle">Punkt und Funktionswert</h2>
+          <div class="chart-sub" id="chartSub">Die Achsenskalierung bleibt innerhalb des Moduls stabil.</div>
+        </div>
+        <div class="chart-tools">
+          <span class="scale-chip" id="scaleChip">🔒 Skala fixiert</span>
+          
+          <button class="btn small" id="previousBtn" aria-pressed="true">Vorher sichtbar</button>
+        </div>
+      </div>
+      <div class="business-graph-panel" id="businessGraphPanel" hidden>
+        <div class="business-graph-label"><strong>Graphen anzeigen</strong><span>Tippe auf eine Funktion, um sie ein- oder auszublenden.</span></div>
+        <div class="business-graph-controls" id="businessGraphControls" aria-label="Kosten-, Erlös- und Gewinnfunktion ein- und ausblenden"></div>
+        <div class="business-guide-note" id="businessGuideNote">Sind K(x), E(x) und G(x) gleichzeitig sichtbar, wird die Gewinnschwelle automatisch als Verbindung von Schnittpunkt und Nullstelle markiert.</div>
+      </div>
+      <svg id="chart" viewBox="0 0 980 560" role="img" aria-labelledby="chartDesc">
+        <title id="chartDesc">Interaktives Koordinatensystem</title>
+      </svg>
+      <div class="legend" id="legend"></div>
+      <div class="insight" id="insight"></div>
+    </div>
+  </section>
+
+  <aside class="panel right">
+    <div class="tabs" id="tabs"></div>
+    <div class="right-body" id="rightBody">
+      <section class="view active" id="view-task"></section>
+      <section class="view" id="view-language"></section>
+      <section class="view" id="view-table"></section>
+      <section class="view" id="view-explain"></section>
+      <section class="view" id="view-calc"></section>
+    </div>
+    <div class="navline">
+      <button class="btn small" id="prevModule">← vorher</button>
+      <button class="btn small" id="overviewBtn">Übersicht</button>
+      <button class="btn small primary" id="nextModule">weiter →</button>
+    </div>
+  </aside>
+</main>
+</div>
+
+<div class="module-menu" id="moduleMenu"></div>
+
+<div class="start-screen open" id="startScreen">
+  <div class="start-card">
+    <div class="kicker">Lernpfad wählen</div>
+    <h1 style="margin:4px 0 4px;font-size:1.55rem">Was möchtest du untersuchen?</h1>
+    <p style="margin:0;color:var(--muted)">Du kannst später jederzeit zwischen den Lernpfaden wechseln.</p>
+    <div class="path-choice">
+      <button data-start="basics"><strong>Grundlagen</strong><span>Punkte, Steigung, Achsenschnittpunkte</span></button>
+      <button data-start="compare"><strong>Geraden vergleichen</strong><span>Parallelität, Schnittpunkt, Differenz</span></button>
+      <button data-start="business"><strong>Kosten · Erlös · Gewinn</strong><span>Mathematische Strukturen anwenden</span></button>
+      <button data-start="workshop"><strong>Funktionswerkstatt</strong><span>Eigene lineare Funktion eingeben und untersuchen</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+const $=id=>document.getElementById(id);
+const fmt=n=>{ if(Math.abs(n)<1e-9)n=0; return Number.isInteger(n)?String(n):n.toFixed(2).replace(/\.?0+$/,'').replace('.',','); };
+const euro=n=>`${fmt(n)} ${state?.moneyUnit??"€"}`;
+
+const paths={
+  basics:{label:"Grundlagen", subtitle:"Punkte, Achsenschnittpunkte und Steigung"},
+  compare:{label:"Geraden vergleichen", subtitle:"Lagebeziehungen, Schnittpunkte und Differenzen"},
+  business:{label:"Kosten · Erlös · Gewinn", subtitle:"Lineare Funktionen im Sachkontext"},
+  workshop:{label:"Funktionswerkstatt", subtitle:"Eigene lineare Funktion eingeben und direkt untersuchen"}
+};
+
+const modules=[
+{path:"basics",id:"point",title:"Punkt und Funktionswert",tabs:["task","language","table","explain"],
+ modeSupport:["math","app"],
+ vars:{m:2,b:3,x:2}, active:"x", ranges:{x:[-6,6],y:[-8,12]},
+ controls:["m","b","x"],
+ taskMath:"Verändere nur x. Beobachte, wie der Punkt auf dem Graphen wandert. Lies seine Koordinaten ab.",
+ taskApp:"Verändere nur die Stückzahl x. Beobachte den zugehörigen Punkt auf der Kostenfunktion.",
+ hypothesis:"Zu einem x-Wert gehört der Funktionswert f(x). Der passende Punkt auf dem Graphen hat die Form P(x|f(x)).",
+ options:["Stimmt","Stimmt nicht","Unsicher"], correct:"Stimmt",
+ experimentMath:"Bewege x und verknüpfe x-Wert, Funktionswert und Punktkoordinate.",
+ experimentApp:"Bewege x und verknüpfe Stückzahl, Kostenwert und Punktkoordinate.",
+ words:["x-Wert","Funktionswert","Punkt","Koordinaten"],
+ starter:"Bei x = … ist f(x) = …",
+ structure:"Setze x = ___ ein. Dann ist f(___) = ___. Der zugehörige Punkt ist P( ___ | ___ ).",
+ modelMath:"f(x) spricht man „f von x“. Für x=2 gilt f(2)=7. Zum x-Wert 2 gehört also der Funktionswert 7 und damit der Punkt P(2|7).",
+ modelApp:"Bei x=2 betragen die Kosten K(2)=7. Deshalb liegt der Punkt P(2|7) auf dem Graphen der Kostenfunktion.",
+ explainMath:[["Kernidee","Zu einem x-Wert gehört der Funktionswert f(x). Der passende Punkt auf dem Graphen hat die Form P(x|f(x))."],["Darstellungswechsel","x-Wert einsetzen → Funktionswert f(x) erhalten → Punkt P(x|f(x)) eintragen."],["Umgekehrt","Beim Punkt P(2|7) ist 2 der x-Wert und 7 der Funktionswert. Deshalb gilt f(2)=7."]],
+ explainApp:[["Übersetzung","x beschreibt die Stückzahl, K(x) die zugehörigen Gesamtkosten."],["Punktbedeutung","P(50|500) bedeutet: Bei 50 Stück betragen die Kosten 500 €."],["Mathematik bleibt gleich","Im Sachkontext ist K(x) der Kostenwert zur Stückzahl x. Zum Beispiel bedeutet K(50)=500: Bei 50 Stück betragen die Kosten 500 €."]],
+ table:"point", calc:null
+},
+{path:"basics",id:"intercept",title:"y-Achsenabschnitt",tabs:["task","language","explain"],
+ modeSupport:["math","app"],
+ vars:{m:2,b:3,x:2}, active:"b", ranges:{x:[-6,6],y:[-8,12]},
+ controls:["m","b"],
+ taskMath:"Verändere nur b. Beobachte den Schnittpunkt des Graphen mit der y-Achse und vergleiche mit der gestrichelten Ausgangslage.",
+ taskApp:"Verändere nur die Fixkosten. Beobachte, wie sich der Graph der Kostenfunktion verschiebt.",
+ hypothesis:"Wenn nur b verändert wird, ändert sich die Steigung nicht.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Verändere ausschließlich b. m bleibt konstant.",
+ experimentApp:"Verändere ausschließlich die Fixkosten. Die variablen Kosten pro Stück bleiben konstant.",
+ words:["y-Achsenabschnitt","Steigung","parallel","f(0)","verschieben"],
+ starter:"Wenn der y-Achsenabschnitt größer wird, …",
+ structure:"Die Steigung bleibt ___. Der Punkt (0|b) verändert sich. Deshalb wird der Graph ___ verschoben.",
+ modelMath:"Wenn nur b größer wird, bleibt die Steigung unverändert. Der Graph wird parallel nach oben verschoben und schneidet die y-Achse weiter oben.",
+ modelApp:"Steigen nur die Fixkosten, bleibt die Steigung der Kostenfunktion unverändert. Der Graph wird parallel nach oben verschoben.",
+ explainMath:[["Achsenschnittpunkt","f(0)=b. Deshalb schneidet der Graph die y-Achse im Punkt (0|b)."],["Veränderung","Ändert sich nur b, bleibt m gleich."],["Folge","Die Geraden bleiben parallel."]],
+ explainApp:[["Fixkosten","Bei K(x)=kᵥx+Kf entsprechen die Fixkosten Kf dem y-Achsenabschnitt."],["Bedeutung","K(0)=Kf: Auch bei 0 Stück fallen Fixkosten an."],["Folge","Mehr Fixkosten verschieben den Graphen parallel nach oben."]],
+ table:null, calc:null
+},
+{path:"basics",id:"slope",title:"Steigung",tabs:["task","language","table","explain"],
+ modeSupport:["math","app"],
+ vars:{m:2,b:3,x:2}, active:"m", ranges:{x:[-6,6],y:[-12,12]},
+ controls:["m","b"], allowNegativeM:true,
+ taskMath:"Verändere nur m. Beobachte, ob der Graph steigt, fällt oder waagerecht verläuft. Achte auf das Steigungsdreieck.",
+ taskApp:"Verändere nur die variablen Kosten pro Stück. Beobachte die Steigung der Kostenfunktion.",
+ hypothesis:"Bei m<0 fällt der Graph von links nach rechts.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Probiere positive, negative und die Steigung 0 aus.",
+ experimentApp:"Verändere die variablen Kosten pro Stück. Im Sachkontext bleiben sie nichtnegativ.",
+ words:["Steigung","Änderungsrate","Δx","Δy","steigend","fallend"],
+ starter:"Wenn x um … zunimmt, verändert sich f(x) um …",
+ structure:"m = Δy / Δx = ___ / ___ = ___.",
+ modelMath:"Die Steigung ist m=Δy/Δx. Bei m>0 steigt der Graph, bei m<0 fällt er, bei m=0 verläuft er waagerecht.",
+ modelApp:"Die Steigung der Kostenfunktion gibt an, um wie viele Euro die Gesamtkosten pro zusätzlichem Stück steigen.",
+ explainMath:[["Steigungsformel","m=Δy/Δx."],["Vorzeichen","m>0: steigend; m<0: fallend; m=0: waagerecht."],["Betrag","Je größer |m| ist, desto steiler verläuft die Gerade."]],
+ explainApp:[["Einheit","Bei der Kostenfunktion lautet die Einheit der Steigung €/Stück."],["Deutung","m=4 bedeutet: Pro zusätzlichem Stück steigen die Kosten um 4 €."],["Grenze des Sachkontexts","Negative variable Kosten sind in diesem Modell nicht sinnvoll, obwohl negative Steigungen mathematisch möglich sind."]],
+ table:"slope", calc:null
+},
+{path:"basics",id:"proportional",title:"Proportional oder nicht?",tabs:["task","language","table","explain"],
+ modeSupport:["math","app"],
+ vars:{m:2,b:3,x:2}, active:"b", ranges:{x:[-6,6],y:[-10,12]},
+ controls:["m","b"],
+ taskMath:"Verändere b und versuche, den Graphen durch den Ursprung zu legen. Was gilt dann für den Funktionsterm?",
+ taskApp:"Verändere die Fixkosten und untersuche, wann die Kostenfunktion durch den Ursprung verläuft.",
+ hypothesis:"Eine Funktion f(x)=mx ist proportional und verläuft durch den Ursprung.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Stelle b auf 0 und vergleiche f(x)=mx mit f(x)=mx+b.",
+ experimentApp:"Stelle die Fixkosten auf 0 und vergleiche die Kostenfunktion mit der Erlösfunktion.",
+ words:["proportional","linear","Ursprung","b=0"],
+ starter:"Die Funktion ist proportional, wenn …",
+ structure:"b = ___. Deshalb gilt f(x)=___. Der Graph verläuft durch den Punkt ___.",
+ modelMath:"Ist b=0, gilt f(x)=mx. Dann ist die Funktion proportional und ihr Graph verläuft durch den Ursprung.",
+ modelApp:"Bei Fixkosten 0 gilt K(x)=kᵥx. Dann ist auch die Kostenfunktion proportional. Die Erlösfunktion E(x)=px ist immer proportional.",
+ explainMath:[["Spezialfall","Proportionale Funktionen sind lineare Funktionen mit b=0."],["Graphisch","Sie verlaufen durch den Ursprung (0|0)."],["Abgrenzung","Bei b≠0 ist die lineare Funktion nicht proportional."]],
+ explainApp:[["Erlös","E(x)=px hat keinen konstanten Summanden und verläuft daher durch den Ursprung."],["Kosten","K(x)=kᵥx+Kf ist bei Kf>0 nicht proportional."],["Sonderfall","Nur bei Kf=0 wird die Kostenfunktion proportional."]],
+ table:"point", calc:null
+},
+{path:"basics",id:"zero",title:"Nullstelle",tabs:["task","language","explain","calc"],
+ vars:{m:2,b:-4,x:0}, active:"b", ranges:{x:[-6,6],y:[-10,10]},
+ controls:["m","b"], allowNegativeB:true,
+ taskMath:"Verändere b. Beobachte, wo der Graph die x-Achse schneidet. Dieser Punkt ist die Nullstelle.",
+ taskApp:"Dieses Modul bleibt im Mathe-Modus, weil Nullstellen hier zunächst innermathematisch untersucht werden.",
+ hypothesis:"An einer Nullstelle gilt f(x)=0.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Verschiebe den Graphen und beobachte, wie sich N(x₀|0) verändert.",
+ experimentApp:"Wechsle zurück in den Mathe-Modus, um die Nullstelle zu untersuchen.",
+ words:["Nullstelle","x-Achse","f(x)=0","N(x₀|0)"],
+ starter:"Die Nullstelle liegt dort, wo …",
+ structure:"f(x)=0. Deshalb schneidet der Graph die x-Achse im Punkt N( ___ | 0 ).",
+ modelMath:"Die Nullstelle ist der x-Wert, für den f(x)=0 gilt. Graphisch ist sie der Schnittpunkt des Graphen mit der x-Achse.",
+ modelApp:"Die Nullstelle wird hier bewusst zuerst innermathematisch behandelt.",
+ explainMath:[["Definition","Eine Nullstelle ist ein x-Wert x₀ mit f(x₀)=0."],["Graphisch","Der Graph schneidet die x-Achse im Punkt N(x₀|0)."],["Abgrenzung","Eine Nullstelle ist nicht dasselbe wie der y-Achsenabschnitt und nicht dasselbe wie der Schnittpunkt zweier beliebiger Funktionen."]],
+ explainApp:[["Hinweis","Für Anwendungen wird die Nullstelle später bei der Gewinnfunktion wieder aufgegriffen."]],
+ table:null, calc:"zero"
+},
+
+{path:"compare",id:"compare",title:"Funktionen vergleichen",tabs:["task","language","table","explain"],
+ vars:{m:2,b:3,n:-1,c:4,x:2}, active:"x", ranges:{x:[-6,6],y:[-10,12]},
+ controls:["m","b","n","c","x"], allowNegativeM:true,allowNegativeN:true,allowNegativeB:true,allowNegativeC:true,
+ taskMath:"Verändere x. Vergleiche f und g an derselben Stelle. Welche Funktion besitzt dort den größeren Funktionswert?",
+ taskApp:"Vergleiche Kosten- und Erlösfunktion bei derselben Stückzahl.",
+ hypothesis:"Die steilere Gerade hat nicht automatisch an jeder Stelle den größeren Funktionswert.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Bewege x und vergleiche Steigung, y-Achsenabschnitt und aktuelle Funktionswerte getrennt.",
+ experimentApp:"Bewege die Stückzahl und vergleiche Kosten und Erlös.",
+ words:["vergleichen","Steigung","y-Achsenabschnitt","Funktionswert","größer"],
+ starter:"Bei x=… gilt f(x)…g(x), obwohl …",
+ structure:"f hat die Steigung ___. g hat die Steigung ___. Bei x=___ gilt jedoch ___.",
+ modelMath:"Eine größere Steigung bedeutet nicht automatisch einen größeren Funktionswert. Entscheidend sind Steigung, y-Achsenabschnitt und die betrachtete Stelle x.",
+ modelApp:"Ob Erlös oder Kosten größer sind, hängt von der betrachteten Stückzahl und den jeweiligen Funktionen ab.",
+ explainMath:[["Drei Vergleichsebenen","Steigung, y-Achsenabschnitt und Funktionswerte sind unterschiedliche Eigenschaften."],["Wichtig","Eine steilere Gerade kann bei kleinen x-Werten trotzdem unter einer weniger steilen Gerade liegen."],["Saubere Sprache","Nicht 'die Funktion ist höher', sondern: 'Bei x=… ist der Funktionswert größer'."]],
+ explainApp:[["Übertragung","Variable Kosten und Verkaufspreis bestimmen die Steigungen; Fixkosten verschieben die Kostenfunktion nach oben."],["Vergleich","Bei derselben Stückzahl lassen sich K(x) und E(x) direkt vergleichen."]],
+ table:"compare", calc:null
+},
+{path:"compare",id:"parallel",title:"Parallel oder identisch?",tabs:["task","language","explain"],
+ vars:{m:2,b:3,n:1,c:-2,x:2}, active:"n", ranges:{x:[-6,6],y:[-10,12]},
+ controls:["m","b","n","c"], allowNegativeM:true,allowNegativeN:true,allowNegativeB:true,allowNegativeC:true,
+ taskMath:"Verändere nur m₂, bis beide Geraden dieselbe Steigung besitzen. Beobachte, was dann passiert.",
+ taskApp:"Stelle den Verkaufspreis pro Stück auf denselben Wert wie die variablen Kosten pro Stück.",
+ hypothesis:"Gleiche Steigung reicht allein nicht aus, damit zwei Funktionen identisch sind.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Stelle m₂=m₁ ein. Vergleiche anschließend die y-Achsenabschnitte.",
+ experimentApp:"Stelle p=kᵥ ein. Bei positiven Fixkosten bleiben Kosten- und Erlösfunktion parallel.",
+ words:["gleiche Steigung","parallel","identisch","y-Achsenabschnitt"],
+ starter:"Die Geraden sind parallel, weil …",
+ structure:"m₁ = m₂, aber b₁ ___ b₂. Deshalb sind die Geraden ___.",
+ modelMath:"Sind die Steigungen gleich und die y-Achsenabschnitte verschieden, sind die Geraden parallel. Sind zusätzlich die y-Achsenabschnitte gleich, sind die Funktionen identisch.",
+ modelApp:"Wenn Verkaufspreis und variable Kosten pro Stück gleich sind, besitzen Kosten- und Erlösfunktion dieselbe Steigung. Bei positiven Fixkosten sind sie parallel.",
+ explainMath:[["Parallel","m₁=m₂ und b₁≠b₂."],["Identisch","m₁=m₂ und b₁=b₂."],["Folge","Parallele verschiedene Geraden besitzen keinen Schnittpunkt. Identische Geraden besitzen unendlich viele gemeinsame Punkte."]],
+ explainApp:[["Kosten/Erlös","p=kᵥ bedeutet: Beide Graphen haben dieselbe Steigung."],["Fixkosten","Bei Kf>0 liegt die Kostenfunktion konstant über der Erlösfunktion."],["Folge","Dann gibt es keine Gewinnschwelle."]],
+ table:null, calc:null
+},
+{path:"compare",id:"intersection",title:"Schnittpunkt",tabs:["task","language","table","explain","calc"],
+ vars:{m:2,b:3,n:-1,c:6,x:2}, active:"n", ranges:{x:[-6,6],y:[-10,12]},
+ controls:["m","b","n","c"], allowNegativeM:true,allowNegativeN:true,allowNegativeB:true,allowNegativeC:true,
+ taskMath:"Verändere nur m₂. Untersuche in dieser konkreten Situation, wie sich der Schnittpunkt verändert.",
+ taskApp:"Verändere nur den Verkaufspreis. Untersuche, wie sich die Gewinnschwelle verändert.",
+ hypothesis:"Am Schnittpunkt gilt f(x)=g(x).",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Beobachte beide Koordinaten des Schnittpunkts S(xS|yS).",
+ experimentApp:"Beobachte den gemeinsamen Punkt von Kosten- und Erlösfunktion.",
+ words:["Schnittpunkt","gleicher x-Wert","gleicher Funktionswert","Gleichsetzen"],
+ starter:"Am Schnittpunkt gilt …",
+ structure:"Für denselben x-Wert gilt f(x)=___. Deshalb besitzen beide Graphen dort denselben ___.",
+ modelMath:"Am Schnittpunkt besitzen f und g bei demselben x-Wert denselben Funktionswert. Algebraisch gilt f(x)=g(x).",
+ modelApp:"An der Gewinnschwelle x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>). Erlös und Gesamtkosten sind bei derselben Menge gleich.",
+ explainMath:[["Graphisch","Der Schnittpunkt ist ein gemeinsamer Punkt beider Geraden."],["Algebraisch","Man bestimmt ihn durch Gleichsetzen: f(x)=g(x)."],["Koordinate","Zum Schnittpunkt gehören immer x- und y-Koordinate."]],
+ explainApp:[["Übertragung","E(x)=K(x) beschreibt die Gewinnschwelle."],["Achtung","Ob eine positive Gewinnschwelle existiert, hängt von Steigungen und Fixkosten ab."]],
+ table:"compare", calc:"intersection"
+},
+{path:"compare",id:"difference",title:"Differenz zweier Funktionen",tabs:["task","language","table","explain"],
+ vars:{m:1.5,b:2,n:3,c:-1,x:2}, active:"x", ranges:{x:[-6,6],y:[-10,16]},
+ controls:["m","b","n","c","x"], allowNegativeM:true,allowNegativeN:true,allowNegativeB:true,allowNegativeC:true,
+ taskMath:"Verändere nur x. Die senkrechte Verbindung zeigt den vertikalen Unterschied der beiden Funktionswerte an derselben Stelle.",
+ taskApp:"Verändere nur die Stückzahl. Die senkrechte Verbindung zwischen Erlös und Kosten zeigt Gewinn oder Verlust.",
+ hypothesis:"g(x)−f(x) kann positiv, 0 oder negativ sein.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Bewege x und beobachte Vorzeichen und Betrag der Differenz.",
+ experimentApp:"Bewege die Stückzahl und beobachte, wann Erlös über oder unter den Kosten liegt.",
+ words:["Differenz","gleicher x-Wert","vertikaler Unterschied","positiv","negativ"],
+ starter:"Bei x=… gilt g(x)−f(x)=…",
+ structure:"Bei demselben x-Wert liegt ___ über ___. Deshalb ist die Differenz ___.",
+ modelMath:"Die Differenz g(x)−f(x) vergleicht zwei Funktionswerte bei demselben x. Das Vorzeichen zeigt, welcher Funktionswert größer ist.",
+ modelApp:"G(x)=E(x)−K(x). Ein positiver Wert bedeutet Gewinn, ein negativer Wert Verlust.",
+ explainMath:[["Differenz","g(x)−f(x) ist vorzeichenbehaftet."],["Betrag","Der Betrag |g(x)−f(x)| entspricht dem vertikalen Abstand der beiden Punkte bei festem x."],["Abgrenzung","Das ist etwas anderes als die Änderung f(x₂)−f(x₁) innerhalb einer Funktion."]],
+ explainApp:[["Gewinn","E(x)>K(x) ⇒ G(x)>0."],["Verlust","E(x)<K(x) ⇒ G(x)<0."],["Gewinnschwelle","E(x)=K(x) ⇒ G(x)=0."]],
+ table:"difference", calc:null
+},
+
+{path:"business",id:"costrevenue",title:"Kosten, Erlös und Gewinn",tabs:["task","language","table","explain"],
+ vars:{m:4,b:300,n:8,c:0,x:100}, active:"x", ranges:{x:[0,150],y:[0,1400]},
+ controls:["m","b","n","x"], businessOnly:true,
+ taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
+ taskApp:"Ordne die bekannten mathematischen Größen den wirtschaftlichen Größen zu. Verändere anschließend Menge, Kosten oder Verkaufspreis und beobachte K(x), E(x) und G(x) gemeinsam.",
+ hypothesis:"Bei E(x)=px ist der y-Achsenabschnitt 0.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Wechsle in den Anwendungsmodus.",
+ experimentApp:"Verändere die Größen und vergleiche K(x), E(x) und G(x). Die Gewinnfunktion beginnt bei G(0)=−Kf im negativen Bereich.",
+ words:["Gesamtkosten K(x)","Erlös E(x)","Gewinn G(x)","Fixkosten","variable Kosten","Verkaufspreis"],
+ starter:"Die Steigung der Kostenfunktion bedeutet …",
+ structure:"Bei K(x)=kᵥx+Kf entspricht kᵥ der ___ und Kf dem ___.",
+ modelMath:"Die Anwendung verwendet dieselbe Struktur wie f(x)=mx+b.",
+ modelApp:"Bei der Kostenfunktion entspricht die Steigung den variablen Kosten pro Stück und der y-Achsenabschnitt den Fixkosten. Bei der Erlösfunktion entspricht die Steigung dem Verkaufspreis pro Stück.",
+ explainMath:[["Mathematische Struktur","K(x), E(x) und G(x) sind lineare Funktionen."],["Übertragung","Die mathematische Struktur bleibt linear; die Parameter erhalten im Sachkontext eine konkrete Bedeutung."]],
+ explainApp:[["Kosten","K(x)=kᵥx+Kf."],["Erlös","E(x)=px."],["Gewinn","G(x)=E(x)−K(x)=(p−kᵥ)x−Kf. Deshalb startet G bei −Kf."],["Einheiten","x kann z. B. Stück, kg oder Meter beschreiben; K, E und G werden in € oder GE angegeben."]],
+ table:"business", calc:null
+},
+{path:"business",id:"profitdiff",title:"Gewinn als Differenz",tabs:["task","language","table","explain"],
+ vars:{m:4,b:300,n:8,c:0,x:50}, active:"x", ranges:{x:[0,150],y:[0,1400]},
+ controls:["m","b","n","x"], businessOnly:true,
+ taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
+ taskApp:"Verändere nur die Stückzahl. Beobachte den vertikalen Unterschied zwischen Erlös und Kosten.",
+ hypothesis:"Wenn E(x)>K(x), ist G(x)>0.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Wechsle in den Anwendungsmodus.",
+ experimentApp:"Bewege x und beobachte Gewinn, Verlust und den Fall G(x)=0.",
+ words:["Gewinn G(x)","Verlust","Erlös E(x)","Gesamtkosten K(x)","Differenz E(x)−K(x)"],
+ starter:"Bei x=… ist der Gewinn/Verlust …",
+ structure:"G(x)=E(x)−K(x)=___−___=___.",
+ modelMath:"Die Differenz zweier linearer Funktionen ist wieder eine lineare Funktion.",
+ modelApp:"Der Gewinn ist die Differenz aus Erlös und Kosten: G(x)=E(x)−K(x).",
+ explainMath:[["Struktur","Differenzen linearer Funktionen sind wieder linear."],["Vorzeichen","Das Vorzeichen zeigt, welche Funktion größer ist."]],
+ explainApp:[["Gewinn","E(x)>K(x) ⇒ G(x)>0: Es entsteht Gewinn."],["Verlust","E(x)<K(x) ⇒ G(x)<0: Es entsteht Verlust."],["Gewinnschwelle","E(x)=K(x) ⇒ G(x)=0: Es entsteht weder Gewinn noch Verlust."]],
+ table:"business", calc:null
+},
+{path:"business",id:"profitfunc",title:"Gewinnfunktion",tabs:["task","language","explain","calc"],
+ vars:{m:4,b:300,n:8,c:0,x:50}, active:"n", ranges:{x:[0,150],y:[-500,900]}, businessOnly:true, showProfitGraph:true,
+ controls:["m","b","n"], 
+ taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
+ taskApp:"Verändere den Verkaufspreis. Beobachte, wie sich dadurch die Gewinnfunktion verändert.",
+ hypothesis:"Für G(x)=E(x)−K(x) gilt G(0)=−Fixkosten.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Wechsle in den Anwendungsmodus.",
+ experimentApp:"Verändere p und beobachte Steigung, y-Achsenabschnitt und Nullstelle der Gewinnfunktion.",
+ words:["Gewinnfunktion G(x)","Erlösfunktion E(x)","Kostenfunktion K(x)","Steigung","Nullstelle","Fixkosten"],
+ starter:"Die Gewinnfunktion lautet …",
+ structure:"G(x)=E(x)−K(x)=(___−___)x−___.",
+ modelMath:"Die Gewinnfunktion ist die Differenz zweier linearer Funktionen.",
+ modelApp:"Aus E(x)=px und K(x)=kᵥx+Kf folgt G(x)=(p−kᵥ)x−Kf. Der y-Achsenabschnitt ist −Kf.",
+ explainMath:[["Struktur","Die Differenz zweier linearer Funktionen ist linear."],["Nullstelle","Die Nullstelle von G(x) liegt bei derselben Menge x wie der Schnittpunkt von E(x) und K(x)."]],
+ explainApp:[["Herleitung","G(x)=px−(kᵥx+Kf)=(p−kᵥ)x−Kf."],["Steigung","p−kᵥ bestimmt, wie schnell der Gewinn mit der Stückzahl wächst oder fällt."],["y-Achsenabschnitt","G(0)=−Kf: Bei 0 Stück entspricht der Verlust den Fixkosten."]],
+ table:null, calc:"profit"
+},
+{path:"business",id:"breakeven",title:"Gewinnschwelle",tabs:["task","language","explain","calc"],
+ vars:{m:4,b:300,n:8,c:0,x:75}, active:"n", ranges:{x:[0,150],y:[0,1400]}, businessOnly:true, showProfitGraph:true,
+ controls:["m","b","n"],
+ taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
+ taskApp:"Verändere nur den Verkaufspreis und beobachte gleichzeitig den Schnittpunkt von E(x) und K(x) sowie die Nullstelle von G(x).",
+ hypothesis:"E(x)=K(x) ist äquivalent zu G(x)=0.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Wechsle in den Anwendungsmodus.",
+ experimentApp:"Beobachte, ob beide Darstellungen denselben x-Wert markieren.",
+ words:["Gewinnschwelle x<sub>GS</sub>","E(x<sub>GS</sub>)=K(x<sub>GS</sub>)","G(x<sub>GS</sub>)=0","Schnittpunkt","Nullstelle"],
+ starter:"An der Gewinnschwelle x<sub>GS</sub> gilt …",
+ structure:"E(x<sub>GS</sub>)=K(x<sub>GS</sub>) ⇔ E(x<sub>GS</sub>)−K(x<sub>GS</sub>)=0 ⇔ G(x<sub>GS</sub>)=0.",
+ modelMath:"Der Schnittpunkt zweier Funktionen kann als Nullstelle ihrer Differenzfunktion verstanden werden.",
+ modelApp:"An der Gewinnschwelle x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>). Deshalb gilt an derselben Menge G(x<sub>GS</sub>)=0.",
+ explainMath:[["Innermathematisch","f(x)=g(x) ⇔ g(x)−f(x)=0."],["Darstellung","Der Schnittpunkt zweier Graphen entspricht einer Nullstelle der Differenzfunktion."]],
+ explainApp:[["Gewinnschwelle","An x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."],["Gewinnfunktion","An derselben Menge gilt G(x<sub>GS</sub>)=0."],["Verbindung","Schnittpunkt von E(x) und K(x) und Nullstelle von G(x) gehören zur selben Menge x<sub>GS</sub>."]],
+ table:null, calc:"breakeven"
+},
+{path:"business",id:"domain",title:"Sachbereich und ganze Stückzahlen",tabs:["task","language","explain","calc"],
+ vars:{m:4.3,b:315,n:8.6,c:0,x:75}, active:"n", ranges:{x:[0,150],y:[0,1500]}, businessOnly:true,
+ controls:["m","b","n"],
+ taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
+ taskApp:"Untersuche den Unterschied zwischen der mathematischen Gewinnschwelle und der praktisch sinnvollen Stückzahl.",
+ hypothesis:"Eine mathematische Lösung wie x=73,4 darf im Sachkontext einfach auf 73 gerundet werden.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt nicht",
+ experimentMath:"Wechsle in den Anwendungsmodus.",
+ experimentApp:"Verändere den Verkaufspreis so, dass die Gewinnschwelle nicht ganzzahlig ist.",
+ words:["Definitionsbereich","Sachbereich","ganze Stückzahl","mathematische Lösung","praktische Interpretation"],
+ starter:"Mathematisch liegt die Gewinnschwelle bei …, praktisch …",
+ structure:"Mathematisch: x=___. Praktisch sind nur ganze Stückzahlen möglich, daher entsteht ab ___ Stück positiver Gewinn.",
+ modelMath:"Innermathematisch kann x reell sein. Im Sachkontext muss geprüft werden, welche Werte sinnvoll sind.",
+ modelApp:"Liegt die mathematische Gewinnschwelle beispielsweise bei x=73,4, können 73,4 Stück nicht verkauft werden. Positiver Gewinn entsteht dann ab 74 Stück.",
+ explainMath:[["Definitionsbereich","Innermathematisch können lineare Funktionen auf ℝ betrachtet werden."],["Sachbereich","Ein Anwendungskontext kann den sinnvollen Wertebereich einschränken."]],
+ explainApp:[["Stückzahlen","Für Stückzahlen gilt praktisch x∈ℕ₀."],["Nicht runden ohne Deutung","Die mathematische Lösung bleibt 73,4. Erst die praktische Aussage lautet: ab 74 Stück positiver Gewinn."],["Wichtig","Mathematische Lösung und praktische Interpretation sind zwei verschiedene Aussagen."]],
+ table:null, calc:"domain"
+},
+{path:"workshop",id:"own",title:"Eigene Funktion ausprobieren",tabs:["task","language","table","explain"],
+ vars:{m:2,b:1,x:2}, active:"m", ranges:{x:[-6,6],y:[-42,42]},
+ controls:["m","b","x"],
+ taskMath:"Gib eine eigene lineare Funktion ein oder verändere die Regler. Beobachte gleichzeitig Term, Graph und Wertetabelle.",
+ taskApp:"Die Funktionswerkstatt arbeitet bewusst innermathematisch.",
+ hypothesis:"Wenn ich im Term nur m verändere, ändert sich die Steigung des Graphen.",
+ options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
+ experimentMath:"Probiere zum Beispiel f(x)=-3x+4, f(x)=0,5x-2 oder f(x)=5. Sperre einzelne Größen, wenn du sie konstant halten möchtest.",
+ experimentApp:"Nutze für Kosten und Erlös den Lernpfad Kosten · Erlös · Gewinn.",
+ words:["f von x","Funktionswert","Steigung m","y-Achsenabschnitt b","Wertetabelle"],
+ starter:"Ich verändere ___ und beobachte, dass …",
+ structure:"Mein Term lautet f(x)=___. Die Steigung ist m=___ und der y-Achsenabschnitt ist b=___.",
+ modelMath:"Term, Regler, Graph und Wertetabelle beschreiben dieselbe lineare Funktion. Ändert sich m oder b, verändern sich die anderen Darstellungen passend mit.",
+ modelApp:"Die Funktionswerkstatt ist für den innermathematischen Blick gedacht.",
+ explainMath:[["Lesart","f(x) spricht man „f von x“. f(x) ist der Funktionswert an der Stelle x."],["Form","Eine lineare Funktion kann als f(x)=mx+b geschrieben werden."],["Darstellungen","Term, Parameter, Graph und Wertetabelle zeigen denselben Zusammenhang auf verschiedene Arten."]],
+ explainApp:[["Hinweis","Für Sachkontexte nutze den Lernpfad Kosten · Erlös · Gewinn."]],
+ table:"point", calc:null
+}
+];
+
+// Jede Station besitzt eine Wertetabelle. Außerdem gelten im Mathematikmodus einheitliche Skalen.
+modules.forEach(m=>{
+  if(!m.tabs.includes("table")){
+    const pos=m.tabs.indexOf("explain");
+    m.tabs.splice(pos>=0?pos:m.tabs.length,0,"table");
+  }
+  if(["basics","compare","workshop"].includes(m.path)) m.ranges={x:[-6,6],y:[-42,42]};
+  // K, E und G werden im Anwendungspfad gemeinsam dargestellt; G startet bei -Kf.
+  if(m.path==="business") m.ranges={x:[0,150],y:[-650,2500]};
+});
+
+const state={
+ path:"basics", moduleIndex:0, mode:"math", view:"task", showPrevious:true,
+ quantityUnit:"Stück", moneyUnit:"€",
+ businessVisible:{K:true,E:true,G:true}, showBreakEven:false,
+ values:{}, baseline:{}, locks:{}, hypotheses:{}, responses:{}, completed:new Set()
+};
+
+function listPathModules(path){return modules.filter(m=>m.path===path);}
+function currentModule(){return listPathModules(state.path)[state.moduleIndex];}
+function key(){return `${state.path}:${currentModule().id}`;}
+
+function setDefaults(){
+ const m=currentModule();
+ state.values={...m.vars}; state.baseline={...m.vars}; state.locks={};
+ // Der Lernpfad bestimmt eindeutig den Kontext. Es gibt keinen zweiten, konkurrierenden Modusschalter mehr.
+ state.mode = m.path==="business" ? "app" : "math";
+ if(m.path==="business"){
+   state.showPrevious=false;
+   state.businessVisible={K:true,E:true,G:true};
+   state.showBreakEven=false;
+
+ }else{
+   state.showPrevious=true;
+ }
+}
+function pathIndexByModuleId(path,id){
+ const arr=listPathModules(path); return Math.max(0,arr.findIndex(m=>m.id===id));
+}
+function updateUrl(){
+ // Beim lokalen Testen auf Android (file://) darf die Navigation nicht an history.replaceState scheitern.
+ // URL-Parameter werden deshalb nur auf einer echten Webadresse aktualisiert.
+ if(location.protocol!=="http:" && location.protocol!=="https:") return;
+ try{
+   const m=currentModule();
+   const u=new URL(location.href);
+   u.searchParams.set("pfad",state.path);
+   u.searchParams.set("modul",m.id);
+   history.replaceState(null,"",u);
+ }catch(err){
+   // Navigation muss auch dann weiterlaufen, wenn der Browser URL-Änderungen blockiert.
+ }
+}
+function readUrl(){
+ try{
+   const u=new URL(location.href),p=u.searchParams.get("pfad"),id=u.searchParams.get("modul");
+   if(paths[p]){state.path=p;state.moduleIndex=pathIndexByModuleId(p,id);return true;}
+ }catch(err){}
+ return false;
+}
+
+function niceStep(range,targetTicks=7){
+ if(!Number.isFinite(range)||range<=0) return 1;
+ const rough=range/Math.max(2,targetTicks);
+ const power=Math.pow(10,Math.floor(Math.log10(rough)));
+ const normalized=rough/power;
+ const factor=normalized<=1?1:normalized<=2?2:normalized<=5?5:10;
+ return factor*power;
+}
+function niceBounds(min,max,targetTicks=7){
+ if(!Number.isFinite(min)||!Number.isFinite(max)||min===max){min=(Number.isFinite(min)?min:0)-1;max=(Number.isFinite(max)?max:0)+1;}
+ const step=niceStep(max-min,targetTicks);
+ return {min:Math.floor(min/step)*step,max:Math.ceil(max/step)*step,step};
+}
+function businessBreakEvenData(){
+ const v=state.values,F=v.b??0,d=(v.n??0)-(v.m??0);
+ if(Math.abs(F)<1e-9 && Math.abs(d)<1e-9) return {kind:"all",x:null,text:"Kosten und Erlös sind identisch. G(x)=0 für alle x."};
+ if(Math.abs(F)<1e-9) return {kind:"point",x:0,y:0,text:"Bei x=0 gilt E(0)=K(0) und G(0)=0."};
+ if(d<=1e-9) return {kind:"none",x:null,text:"Keine Gewinnschwelle im Sachbereich: E(x) steigt nicht schneller als K(x) (p ≤ kᵥ)."};
+ const x=F/d,y=(v.m??0)*x+F;
+ return {kind:"point",x,y,text:`Gewinnschwelle bei x=${fmt(x)}. Dort gilt E(x)=K(x) und G(x)=0.`};
+}
+function businessXMax(){
+ const v=state.values,be=businessBreakEvenData();
+ let raw=Math.max(150,(v.x??0)*1.18);
+ if(be.kind==="point"&&be.x>0) raw=Math.max(raw,be.x*1.22);
+ const step=niceStep(raw,7);
+ return Math.max(step,Math.ceil(raw/step)*step);
+}
+function businessPlotBounds(){
+ const v=state.values,xmin=0,xmax=businessXMax();
+ const values=[0,-(v.b??0),(v.b??0),(v.m??0)*xmax+(v.b??0),(v.n??0)*xmax,((v.n??0)-(v.m??0))*xmax-(v.b??0)];
+ const be=businessBreakEvenData(); if(be.kind==="point"&&be.x>=0&&be.x<=xmax) values.push(be.y??0);
+ let ymin=Math.min(...values),ymax=Math.max(...values);
+ const span=Math.max(1,ymax-ymin),pad=Math.max(10,span*.08);
+ const yb=niceBounds(ymin-pad,ymax+pad,7);
+ return {xmin,xmax,ymin:yb.min,ymax:yb.max};
+}
+function axisTicks(min,max,targetTicks=7){
+ const step=niceStep(max-min,targetTicks),start=Math.ceil((min-1e-9)/step)*step,ticks=[];
+ for(let v=start;v<=max+step*1e-6&&ticks.length<30;v+=step) ticks.push(Math.abs(v)<1e-9?0:v);
+ return ticks;
+}
+function refreshBusinessXControl(){
+ if(currentModule().path!=="business") return;
+ const input=$("ctrl-x"); if(!input) return;
+ const max=businessXMax(); input.max=max; input.step=max>600?5:max>300?2:1;
+}
+
+function controlRange(name,m){
+ if(name==="x"){
+   if(state.mode==="app") return m.path==="business"?[0,businessXMax(),businessXMax()>600?5:businessXMax()>300?2:1]:[0,20,0.5];
+   return [-6,6,0.5];
+ }
+ if(name==="m"||name==="n"){
+   // Innermathematisch sind negative, positive und die Steigung 0 immer zugelassen.
+   if(state.mode==="math") return [-5,5,0.5];
+   // In Kosten-/Erlösmodellen bleiben Stückkosten und Verkaufspreise nichtnegativ.
+   return [0,12,0.5];
+ }
+ if(name==="b"||name==="c"){
+   if(state.mode==="math") return [-10,10,1];
+   return name==="b"?[0,600,25]:[0,0,1];
+ }
+ return [0,10,1];
+}
+function quantityWord(){return state.quantityUnit==="Stück"?"Stückzahl":"Menge";}
+function perUnit(){return `${state.moneyUnit}/${state.quantityUnit}`;}
+function labelFor(name){
+ const app=state.mode==="app";
+ const labelsMath={m:"Steigung m₁",b:"y-Achsenabschnitt b₁",n:"Steigung m₂",c:"y-Achsenabschnitt b₂",x:"Stelle x"};
+ const labelsApp={m:`Variable Kosten / ${state.quantityUnit}`,b:"Fixkosten",n:`Verkaufspreis / ${state.quantityUnit}`,c:"y-Achsenabschnitt E",x:`${quantityWord()} x`};
+ return (app?labelsApp:labelsMath)[name];
+}
+function displayValue(name,v){
+ if(state.mode==="app"){
+   if(name==="b"||name==="c") return euro(v);
+   if(name==="m"||name==="n") return `${fmt(v)} ${perUnit()}`;
+   if(name==="x") return `${fmt(v)} ${state.quantityUnit}`;
+ }
+ return fmt(v);
+}
+function hintFor(name){
+ if(state.mode==="app"){
+   return {m:`Steigung der Kostenfunktion in ${perUnit()}.`,b:`Kosten bei x=0 in ${state.moneyUnit}.`,n:`Steigung der Erlösfunktion in ${perUnit()}.`,c:"Bei E(x)=px ist dieser Wert 0.",x:`K, E und G werden bei derselben Menge in ${state.quantityUnit} verglichen.`}[name];
+ }
+ return {m:"Änderung von f pro Schritt nach rechts.",b:"f(0)=b.",n:"Änderung von g pro Schritt nach rechts.",c:"g(0)=c.",x:"Funktionswerte werden an derselben Stelle betrachtet."}[name];
+}
+
+function linearTermText(){
+ const v=state.values;
+ const m=v.m, b=v.b;
+ let mx="";
+ if(Math.abs(m-1)<1e-9) mx="x";
+ else if(Math.abs(m+1)<1e-9) mx="−x";
+ else if(Math.abs(m)<1e-9) mx="";
+ else mx=`${fmt(m)}x`;
+ if(Math.abs(b)<1e-9) return mx||"0";
+ if(!mx) return fmt(b);
+ return `${mx} ${b>=0?"+":"−"} ${fmt(Math.abs(b))}`;
+}
+function syncWorkshopInput(){
+ if(currentModule().id!=="own") return;
+ const input=$("termInput");
+ if(input) input.value=`f(x) = ${linearTermText()}`;
+ const status=$("termStatus");
+ if(status){status.textContent=`Erkannt: m = ${fmt(state.values.m)}, b = ${fmt(state.values.b)}`;status.className="term-status good";}
+}
+function parseLinearTerm(raw){
+ let t=String(raw||"").trim().toLowerCase().replace(/,/g,".").replace(/\s+/g,"").replace(/·|\*/g,"");
+ t=t.replace(/^f\(x\)=/,"").replace(/^y=/,"");
+ if(!t) return null;
+ if(/^[-+]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(t)) return {m:0,b:Number(t)};
+ const hit=t.match(/^([+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+))?)x(?:([+-](?:\d+(?:\.\d+)?|\.\d+)))?$/);
+ if(!hit) return null;
+ let a=hit[1];
+ let m=a===""||a==="+"?1:a==="-"?-1:Number(a);
+ let b=hit[2]?Number(hit[2]):0;
+ if(!Number.isFinite(m)||!Number.isFinite(b)||m < -5||m > 5||b < -10||b > 10) return {rangeError:true,m,b};
+ return {m,b};
+}
+
+function renderControls(){
+ const m=currentModule(),wrap=$("controls");wrap.innerHTML="";
+ m.controls.forEach(name=>{
+   const active=m.active===name;
+   const locked=!!state.locks[name];
+   const [min,max,step]=controlRange(name,m);
+   const div=document.createElement("div");
+   div.className="control"+(active?" focus":"")+(locked?" locked":"");
+   div.innerHTML=`<div class="control-top">
+     <label for="ctrl-${name}">${labelFor(name)}</label>
+     <div class="control-actions">
+       <span class="value">${displayValue(name,state.values[name])}</span>
+       <button type="button" class="lock-btn" aria-pressed="${locked}" aria-label="${labelFor(name)} ${locked?"entsperren":"fixieren"}">${locked?"🔒 fixiert":"🔓 frei"}</button>
+     </div>
+   </div>
+   <input id="ctrl-${name}" type="range" min="${min}" max="${max}" step="${step}" value="${state.values[name]}" ${locked?"disabled":""}>
+   <div class="mini">${hintFor(name)}${active?" · Fokus der Aufgabe":""}</div>`;
+   wrap.appendChild(div);
+   const input=div.querySelector("input");
+   const lockBtn=div.querySelector(".lock-btn");
+   input.addEventListener("input",e=>{
+     state.values[name]=+e.target.value;
+     div.querySelector(".value").textContent=displayValue(name,state.values[name]);
+     syncWorkshopInput();
+     refreshBusinessXControl();
+     renderFormulas();
+     renderTable();
+     renderCalc();
+     renderCenter();
+   });
+   lockBtn.addEventListener("click",()=>{
+     state.locks[name]=!state.locks[name];
+     const nowLocked=state.locks[name];
+     input.disabled=nowLocked;
+     div.classList.toggle("locked",nowLocked);
+     lockBtn.setAttribute("aria-pressed",String(nowLocked));
+     lockBtn.setAttribute("aria-label",`${labelFor(name)} ${nowLocked?"entsperren":"fixieren"}`);
+     lockBtn.textContent=nowLocked?"🔒 fixiert":"🔓 frei";
+   });
+ });
+ if(m.path==="business"){
+   const units=document.createElement("div"); units.className="unit-box";
+   units.innerHTML=`<strong>Einheiten wählen</strong><div class="unit-grid">
+     <label>Mengeneinheit<select id="quantityUnit"><option>Stück</option><option>kg</option><option>m</option></select></label>
+     <label>Geldeinheit<select id="moneyUnit"><option>€</option><option>GE</option></select></label>
+   </div><div class="mini">Dasselbe lineare Modell kann Stückware, Gewicht oder Kabellänge beschreiben.</div>`;
+   wrap.appendChild(units);
+   $("quantityUnit").value=state.quantityUnit; $("moneyUnit").value=state.moneyUnit;
+   $("quantityUnit").addEventListener("change",e=>{state.quantityUnit=e.target.value;renderAll();});
+   $("moneyUnit").addEventListener("change",e=>{state.moneyUnit=e.target.value;renderAll();});
+ }
+ $("leftTitle").textContent = m.active==="x"?"Fokus: betrachtete Stelle":`Fokus: ${labelFor(m.active)}`;
+ $("leftNote").textContent="Jeden Regler kannst du selbst sperren: 🔓 frei = veränderbar, 🔒 fixiert = Wert bleibt konstant. Der blau markierte Regler ist nur der Fokus der aktuellen Aufgabe.";
+}
+
+function renderFormulas(){
+ const v=state.values, m=currentModule(), f=$("formulas"); f.innerHTML="";
+ if(state.mode==="app"){
+   const k=document.createElement("div");k.className="formula";k.innerHTML=`K(x)=<span class="hm">${fmt(v.m)}</span>x+<span class="hb">${fmt(v.b)}</span>`;f.appendChild(k);
+   if("n" in v || m.path==="business"){ const e=document.createElement("div");e.className="formula";e.innerHTML=`E(x)=<span class="hm">${fmt(v.n??0)}</span>x`;f.appendChild(e); }
+   if(m.path==="business"){
+     const g=document.createElement("div");g.className="formula";g.innerHTML=`G(x)=<span class="hm">${fmt((v.n??0)-v.m)}</span>x−<span class="hb">${fmt(v.b)}</span>`;f.appendChild(g);
+   }
+ }else{
+   const one=document.createElement("div");one.className="formula";one.innerHTML=`f(x)=<span class="hm">${fmt(v.m)}</span>x ${v.b>=0?"+":"−"} <span class="hb">${fmt(Math.abs(v.b))}</span>`;f.appendChild(one);
+   if("n" in v){
+     const two=document.createElement("div");two.className="formula";two.innerHTML=`g(x)=<span class="hm">${fmt(v.n)}</span>x ${v.c>=0?"+":"−"} <span class="hb">${fmt(Math.abs(v.c))}</span>`;f.appendChild(two);
+   }
+   const speech=document.createElement("div");speech.className="speech-note";speech.textContent='f(x) spricht man „f von x“. f(x) ist der Funktionswert an der Stelle x.';f.appendChild(speech);
+ }
+}
+
+function renderHeader(){
+ const arr=listPathModules(state.path),m=currentModule();
+ $("pathSubtitle").textContent=`${paths[state.path].label} · ${m.title}`;
+ $("progressText").textContent=`Modul ${state.moduleIndex+1} von ${arr.length}`;
+ document.querySelectorAll(".path-btn").forEach(b=>b.classList.toggle("active",b.dataset.path===state.path));
+}
+
+function renderTabs(){
+ const names={task:"Auftrag",language:"💬 Sprache",table:"Tabelle",explain:"Erklärung",calc:"Rechnung"};
+ const m=currentModule(),tabs=$("tabs");tabs.innerHTML="";
+ if(!m.tabs.includes(state.view)) state.view="task";
+ m.tabs.forEach(name=>{
+   const b=document.createElement("button");b.className="tab";b.dataset.view=name;b.textContent=names[name];
+   b.setAttribute("aria-selected",name===state.view);
+   b.addEventListener("click",()=>switchView(name));tabs.appendChild(b);
+ });
+ document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===`view-${state.view}`));
+}
+function switchView(name){state.view=name;renderTabs();}
+
+function taskText(m){return state.mode==="app"?m.taskApp:m.taskMath}
+function experimentText(m){return state.mode==="app"?m.experimentApp:m.experimentMath}
+function modelText(m){return state.mode==="app"?m.modelApp:m.modelMath}
+function explainBlocks(m){return state.mode==="app"?m.explainApp:m.explainMath}
+
+function renderTask(){
+ const m=currentModule(),sel=state.hypotheses[key()]||"";
+ if(m.id==="own"){
+   $("view-task").innerHTML=`
+   <div class="kicker">Funktionswerkstatt</div><h2>${m.title}</h2>
+   <div class="cardbox"><strong>Eigene lineare Funktion</strong>
+     <div class="term-editor">
+       <label for="termInput">Funktion eingeben</label>
+       <div class="term-row"><input id="termInput" class="term-input" value="f(x) = ${linearTermText()}" inputmode="text" autocomplete="off" spellcheck="false"></div>
+       <div class="mini">Beispiele: f(x)=-3x+4 · f(x)=0,5x-2 · f(x)=5. Zulässig sind hier m von −5 bis +5 und b von −10 bis +10.</div>
+       <div id="termStatus" class="term-status good">Erkannt: m = ${fmt(state.values.m)}, b = ${fmt(state.values.b)}</div>
+     </div>
+   </div>
+   <div class="cardbox"><strong>Untersuche</strong>${m.experimentMath}</div>
+   <div class="cardbox"><strong>Beobachtung formulieren</strong>
+     <textarea id="studentText" placeholder="Was verändert sich am Graphen und in der Tabelle?">${state.responses[key()]||""}</textarea>
+     <button class="btn small" id="markDone" style="margin-top:7px">Beobachtung festhalten</button>
+     <div class="feedback" id="doneFeedback">${state.completed.has(key())?"✓ Modul bearbeitet":""}</div>
+   </div>`;
+   const inp=$("termInput"), status=$("termStatus");
+   inp.addEventListener("input",()=>{
+     const parsed=parseLinearTerm(inp.value);
+     if(!parsed){status.textContent='Noch nicht erkannt. Nutze z. B. f(x)=-3x+4.';status.className="term-status bad";return;}
+     if(parsed.rangeError){status.textContent='Der Term ist linear, liegt aber außerhalb der Werkstatt-Bereiche: m −5…+5, b −10…+10.';status.className="term-status bad";return;}
+     state.values.m=parsed.m;state.values.b=parsed.b;
+     status.textContent=`Erkannt: m = ${fmt(parsed.m)}, b = ${fmt(parsed.b)}`;status.className="term-status good";
+     renderControls();renderFormulas();renderTable();renderCalc();renderCenter();
+   });
+   $("studentText").addEventListener("input",e=>state.responses[key()]=e.target.value);
+   $("markDone").addEventListener("click",()=>{state.responses[key()]=$("studentText").value;if(state.responses[key()].trim())state.completed.add(key());renderTask();renderMenu();});
+   return;
+ }
+ $("view-task").innerHTML=`
+ <div class="kicker">Forscherauftrag</div><h2>${m.title}</h2>
+ <div class="cardbox"><strong>Auftrag</strong>${taskText(m)}</div>
+ <div class="cardbox"><strong>1 · Vermute zuerst</strong><div>${m.hypothesis}</div>
+   <div class="choice-row" id="choices">${m.options.map(o=>`<button class="btn small ${sel===o?"selected":""}" data-o="${o}">${o}</button>`).join("")}</div>
+   <div class="feedback">${sel?`Vermutung notiert: „${sel}“. Prüfe sie jetzt am Graphen.`:"Noch keine Vermutung gewählt."}</div>
+ </div>
+ <div class="cardbox"><strong>2 · Experimentiere gezielt</strong>${experimentText(m)}</div>
+ <div class="cardbox"><strong>3 · Beobachtung formulieren</strong>
+   <textarea id="studentText" placeholder="Formuliere deine Beobachtung oder Begründung ...">${state.responses[key()]||""}</textarea>
+   <button class="btn small" id="markDone" style="margin-top:7px">Beobachtung festhalten</button>
+   <div class="feedback" id="doneFeedback">${state.completed.has(key())?"✓ Modul bearbeitet":""}</div>
+ </div>`;
+ $("choices").addEventListener("click",e=>{const b=e.target.closest("[data-o]");if(!b)return;state.hypotheses[key()]=b.dataset.o;renderTask();});
+ $("studentText").addEventListener("input",e=>state.responses[key()]=e.target.value);
+ $("markDone").addEventListener("click",()=>{state.responses[key()]=$("studentText").value;if(state.responses[key()].trim()||state.hypotheses[key()])state.completed.add(key());renderTask();renderMenu();});
+}
+
+const languageExtensions={
+ point:{defs:[["x-Wert","Die Zahl, die für x eingesetzt wird."],["Funktionswert f(x)","Der Wert, der zur eingesetzten Zahl x gehört."],["Punkt P(x|f(x))","Verbindet den x-Wert mit seinem Funktionswert auf dem Graphen."]],tip:"Sage nicht nur „der y-Wert“, sondern möglichst: „der Funktionswert f(x) an der Stelle x“.",explain:"Term, Funktionswert und Punkt beschreiben denselben Zusammenhang in verschiedenen Darstellungen."},
+ intercept:{defs:[["y-Achsenabschnitt b","Der Wert b=f(0); der Graph schneidet die senkrechte Achse bei (0|b)."],["parallel verschieben","Die Steigung bleibt gleich, nur der Achsenabschnitt ändert sich."],["f(0)","Funktionswert an der Stelle x=0."]],tip:"Formuliere Ursache und Wirkung: „b wird größer – der Graph verschiebt sich parallel nach oben.“",explain:"Der Achsenabschnitt beschreibt den Startwert der linearen Funktion bei x=0."},
+ slope:{defs:[["Steigung m","Änderung des Funktionswertes pro Schritt in x-Richtung."],["Δx","Änderung auf der x-Achse."],["Δf(x)","Zugehörige Änderung des Funktionswertes."],["steigend / fallend","m>0: steigend; m<0: fallend; m=0: waagerecht."]],tip:"Nutze die Formulierung: „Wenn x um … zunimmt, verändert sich f(x) um …“.",explain:"Vorzeichen und Betrag der Steigung beschreiben Richtung und Steilheit des Graphen."},
+ proportional:{defs:[["proportional","Lineare Funktion mit b=0."],["Ursprung","Punkt (0|0)."],["Proportionalitätsfaktor","Die konstante Steigung m in f(x)=mx."]],tip:"Ein sicherer Satz ist: „Der Graph verläuft durch den Ursprung, deshalb ist die lineare Funktion proportional.“",explain:"Proportionale Funktionen sind ein Spezialfall linearer Funktionen."},
+ zero:{defs:[["Nullstelle","x-Wert, bei dem f(x)=0 gilt."],["x-Achse","Waagerechte Achse; dort ist der Funktionswert 0."],["N(x₀|0)","Nullstellenpunkt auf dem Graphen."]],tip:"Unterscheide Nullstelle x₀ und Nullstellenpunkt N(x₀|0).",explain:"Graphisch ist die Nullstelle der Schnitt mit der x-Achse; algebraisch löst man f(x)=0."},
+ compare:{defs:[["Funktionswerte vergleichen","f(x) und g(x) werden für denselben x-Wert betrachtet."],["größer / kleiner","Der höher liegende Graph besitzt an dieser Stelle den größeren Funktionswert."],["Differenz","Beschreibt den Abstand der beiden Funktionswerte mit Vorzeichen."]],tip:"Nenne immer den gemeinsamen x-Wert, auf den sich der Vergleich bezieht.",explain:"Ein sinnvoller Vergleich zweier Funktionen bezieht sich auf dieselbe Stelle x."},
+ parallel:{defs:[["parallel","Geraden mit gleicher Steigung und verschiedenem Achsenabschnitt."],["identisch","Gleiche Steigung und gleicher Achsenabschnitt; beide Graphen fallen zusammen."],["Steigung vergleichen","m₁ und m₂ entscheiden über die Lagebeziehung."]],tip:"Erst Steigungen vergleichen, danach die Achsenabschnitte.",explain:"Die Parameter m und b entscheiden gemeinsam, ob zwei lineare Funktionen parallel, identisch oder schneidend sind."},
+ intersection:{defs:[["Schnittpunkt","Gemeinsamer Punkt zweier Graphen."],["gleichsetzen","f(x)=g(x), weil am Schnittpunkt beide Funktionswerte gleich sind."],["S(xₛ|f(xₛ))","Bezeichnet x- und Funktionswert des gemeinsamen Punktes."]],tip:"Sprich präzise: „Bei x=xₛ besitzen beide Funktionen denselben Funktionswert.“",explain:"Graphisches Schneiden und algebraisches Gleichsetzen beschreiben denselben Sachverhalt."},
+ difference:{defs:[["Differenz g(x)−f(x)","Vergleicht zwei Funktionswerte an derselben Stelle."],["positiv / negativ","Das Vorzeichen zeigt, welcher Graph höher liegt."],["vertikaler Abstand","Betrag der Differenz der Funktionswerte."]],tip:"Trenne Vorzeichen und Betrag: Vorzeichen = Richtung, Betrag = Größe des Unterschieds.",explain:"Die Differenzfunktion macht den Vergleich zweier Funktionen selbst zu einer neuen Funktion."},
+ costrevenue:{defs:[["Fixkosten Kf","Kosten, die auch bei Menge 0 entstehen."],["variable Kosten kᵥ","Kosten pro zusätzlicher Mengeneinheit."],["Gesamtkosten K(x)","Fixkosten plus variable Kosten für die Menge x."],["Erlös E(x)","Verkaufserlös für die Menge x."],["Verkaufspreis p","Erlös pro verkaufter Mengeneinheit."],["Gewinn G(x)","Differenz aus Erlös und Kosten: E(x)−K(x)."]],tip:"Sprich und schreibe die Funktionen vollständig: K(x), E(x) und G(x). Denke außerdem die Einheit mit, z. B. €/Stück, €/kg oder €/m.",explain:"K(x), E(x) und G(x) beziehen sich auf dieselbe Menge x: K(x) beschreibt die Gesamtkosten, E(x) den Erlös und G(x)=E(x)−K(x) den Gewinn oder Verlust."},
+ profitdiff:{defs:[["Gewinn","Erlös ist größer als Kosten: G(x)>0."],["Verlust","Kosten sind größer als Erlös: G(x)<0."],["Differenz","G(x)=E(x)−K(x)."],["gleiche Menge","Kosten und Erlös werden bei demselben x verglichen."]],tip:"Sage nicht nur „plus“ oder „minus“. Begründe fachsprachlich: E(x)>K(x) bedeutet Gewinn; E(x)<K(x) bedeutet Verlust.",explain:"Der vertikale Unterschied zwischen Erlös- und Kostenfunktion entspricht bei derselben Menge dem Gewinn oder Verlust."},
+ profitfunc:{defs:[["Gewinnfunktion G(x)","Ordnet jeder Menge x den Gewinn oder Verlust zu."],["Gewinnsteigerung p−kᵥ","Zunahme des Gewinns pro zusätzlicher Mengeneinheit."],["G(0)=−Kf","Ohne Verkauf entsprechen die Fixkosten einem anfänglichen Verlust."]],tip:"Nutze konsequent G(x): Die Gewinnfunktion ordnet jeder Menge x einen Gewinn oder Verlust zu. Deute anschließend Steigung und Startwert im Sachkontext.",explain:"Die Gewinnfunktion entsteht durch Subtraktion der gesamten Kostenfunktion von der Erlösfunktion."},
+ breakeven:{defs:[["Gewinnschwelle","Menge, bei der E(x)=K(x) gilt."],["Schnittpunkt von E(x) und K(x)","Graphische Sicht auf die Gewinnschwelle."],["Nullstelle von G(x)","Bei derselben Menge gilt G(x)=0."],["gleicher x-Wert","Verbindet Schnittpunkt und Nullstelle mathematisch."]],tip:"Nutze bewusst beide Sichtweisen und den Index: An x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und gleichzeitig G(x<sub>GS</sub>)=0.",explain:"Die Gewinnschwelle verknüpft zwei Darstellungen: Schnittpunkt von Kosten und Erlös sowie Nullstelle der Gewinnfunktion."},
+ domain:{defs:[["Sachbereich","Alle x-Werte, die in der realen Situation sinnvoll sind."],["ganzzahlig","Bei Stückzahlen sind meist nur ganze Zahlen sinnvoll."],["mathematische Lösung","Kann zwischen zwei ganzen Stückzahlen liegen."],["praktische Mindestmenge","Erste ganze Menge, bei der tatsächlich positiver Gewinn entsteht."]],tip:"Unterscheide mathematische Lösung und praktische Interpretation im Sachkontext.",explain:"Eine mathematische Lösung muss zum Sachbereich und zur verwendeten Einheit passen, bevor sie im Sachkontext gedeutet wird."},
+ own:{defs:[["Funktionsterm","Rechenvorschrift, z. B. f(x)=−3x+4."],["Parameter m","Bestimmt die Steigung."],["Parameter b","Bestimmt den Achsenabschnitt f(0)."],["Darstellungswechsel","Term, Graph und Wertetabelle zeigen dieselbe Funktion."]],tip:"Beschreibe nach einer Änderung immer, welcher Parameter verändert wurde und was sich am Graphen verändert.",explain:"Die Funktionswerkstatt verbindet symbolische, graphische und tabellarische Darstellung einer linearen Funktion."}
+};
+function languageExtension(m){return languageExtensions[m.id]||{defs:[],tip:"",explain:""};}
+
+const sensitiveLanguage={
+ point:{starters:["Für x = … gilt f(…) = … .","Der Funktionswert an der Stelle … ist … .","Der zugehörige Punkt lautet P(…|…)."],goal:"Ich kann zu einer Stelle x den Funktionswert f(x) bestimmen und den zugehörigen Punkt P(x|f(x)) angeben.",extra:[["Sprechen und schreiben","f(3) liest man „f von 3“. Die Zahl 3 ist die Stelle; f(3) ist der zugehörige Funktionswert."],["Darstellungen verbinden","Stelle x, Funktionswert f(x) und Punkt P(x|f(x)) gehören immer zusammen."]]},
+ intercept:{starters:["Bei x = 0 gilt f(0) = … .","Der Achsenabschnitt beträgt b = … .","Wenn b größer wird, verschiebt sich der Graph … ."],goal:"Ich kann erklären, wie der Achsenabschnitt b mit f(0) zusammenhängt und wie eine Änderung von b den Graphen verschiebt.",extra:[["Woran erkenne ich b?","Im Term f(x)=mx+b ist b der Funktionswert bei x=0."],["Was bleibt gleich?","Wenn nur b verändert wird, bleibt die Steigung m unverändert."]]},
+ slope:{starters:["Wenn x um … zunimmt, verändert sich f(x) um … .","Die Steigung m = … bedeutet: … .","Da m … 0 ist, verläuft der Graph … ."],goal:"Ich kann die Steigung m als Änderung des Funktionswertes pro Änderung von x beschreiben und das Vorzeichen von m deuten.",extra:[["Steigung lesen","m>0 bedeutet steigend, m<0 bedeutet fallend und m=0 bedeutet waagerecht."],["Änderungsrate","Die Steigung beschreibt nicht einen einzelnen Punkt, sondern eine konstante Änderung entlang der gesamten Geraden."]]},
+ proportional:{starters:["Die Funktion ist proportional, weil … .","Für x = 0 gilt f(0) = … .","Der Graph verläuft durch … ."],goal:"Ich kann erkennen und begründen, wann eine lineare Funktion proportional ist.",extra:[["Kennzeichen","Bei einer proportionalen Funktion gilt b=0 und damit f(0)=0."],["Graphisch","Der Graph einer proportionalen Funktion verläuft durch den Ursprung (0|0)."]]},
+ zero:{starters:["x₀ = … ist eine Nullstelle, weil f(…) = 0 gilt.","Der Graph schneidet die x-Achse bei … .","Um die Nullstelle zu bestimmen, löse ich f(x)=0."],goal:"Ich kann eine Nullstelle als x-Wert mit f(x)=0 beschreiben und vom Nullstellenpunkt N(x₀|0) unterscheiden.",extra:[["Nullstelle oder Punkt?","Die Nullstelle ist der x-Wert x₀. Der Punkt auf dem Graphen heißt N(x₀|0)."],["Zwei Sichtweisen","Graphisch liegt die Nullstelle auf der x-Achse; rechnerisch löst man f(x)=0."]]},
+ compare:{starters:["An der Stelle x = … gilt f(x) = … und g(x) = … .","Damit ist f(x) … als g(x).","Für den Vergleich betrachte ich beide Funktionen bei demselben x-Wert."],goal:"Ich kann die Funktionswerte f(x) und g(x) an derselben Stelle x vergleichen und meine Aussage mit den Funktionswerten begründen.",extra:[["Gleiche Stelle","Ein Vergleich ist nur eindeutig, wenn f(x) und g(x) zur selben Stelle x gehören."],["Nicht verwechseln","Eine größere Steigung bedeutet nicht automatisch, dass der Funktionswert an jeder Stelle größer ist."]]},
+ parallel:{starters:["Die Steigungen sind … .","Die Achsenabschnitte sind … .","Deshalb sind die Geraden … ."],goal:"Ich kann mithilfe von Steigung und Achsenabschnitt entscheiden, ob zwei Geraden parallel, identisch oder schneidend sind.",extra:[["Reihenfolge","Vergleiche zuerst die Steigungen m₁ und m₂ und danach die Achsenabschnitte b₁ und b₂."],["Parallel oder identisch","Gleiche Steigung reicht für Parallelität; sind zusätzlich die Achsenabschnitte gleich, sind die Geraden identisch."]]},
+ intersection:{starters:["Am Schnittpunkt gilt f(x) = g(x).","Bei x = … besitzen beide Funktionen den Funktionswert … .","Der Schnittpunkt lautet S(…|…)."],goal:"Ich kann einen Schnittpunkt als gemeinsamen Punkt zweier Graphen beschreiben und durch f(x)=g(x) bestimmen.",extra:[["Warum gleichsetzen?","Am Schnittpunkt gehören zu demselben x-Wert zwei gleiche Funktionswerte."],["Koordinaten","Zum Schnittpunkt gehören sowohl die gemeinsame Stelle x als auch der gemeinsame Funktionswert."]]},
+ difference:{starters:["An der Stelle x = … gilt g(x)−f(x) = … .","Die Differenz ist positiv/negativ, deshalb liegt … höher.","Der Betrag der Differenz beträgt … ."],goal:"Ich kann die Differenz g(x)−f(x) verwenden, um zwei Funktionswerte an derselben Stelle zu vergleichen.",extra:[["Vorzeichen","Das Vorzeichen zeigt, welcher Funktionswert größer ist."],["Betrag","Der Betrag |g(x)−f(x)| beschreibt den vertikalen Abstand der beiden Graphen an derselben Stelle."]]},
+ costrevenue:{starters:["Bei der Menge x = … gilt K(x) = … und E(x) = … .","Der Gewinn beträgt G(x)=E(x)−K(x)=… .","Die Einheit von K(x), E(x) und G(x) ist … ."],goal:"Ich kann für dieselbe Menge x die Gesamtkosten K(x), den Erlös E(x) und den Gewinn oder Verlust G(x) bestimmen und sachgerecht deuten.",extra:[["Funktionssprache","Sprich vollständig: K(x) „K von x“, E(x) „E von x“ und G(x) „G von x“. Alle drei Werte beziehen sich auf dieselbe Menge x."],["Drei Größen","K(x) sind die Gesamtkosten, E(x) ist der Erlös und G(x)=E(x)−K(x) ist der Gewinn beziehungsweise Verlust."]]},
+ profitdiff:{starters:["Bei x = … gilt E(x) = … und K(x) = … .","Da E(x) größer/kleiner als K(x) ist, gilt G(x) … 0.","G(x)=E(x)−K(x)=… ."],goal:"Ich kann Gewinn und Verlust als Differenz G(x)=E(x)−K(x) erklären und mit E(x) und K(x) begründen.",extra:[["Gewinn oder Verlust","E(x)>K(x) bedeutet Gewinn; E(x)<K(x) bedeutet Verlust; E(x)=K(x) bedeutet weder Gewinn noch Verlust."],["Gleiche Menge","E(x) und K(x) müssen sich immer auf dieselbe Menge x beziehen."]]},
+ profitfunc:{starters:["Aus E(x) = … und K(x) = … folgt G(x) = … .","Bei x = 0 gilt G(0) = … .","Pro zusätzlicher Mengeneinheit verändert sich G(x) um … ."],goal:"Ich kann die Gewinnfunktion G(x)=E(x)−K(x) aus Erlösfunktion und Kostenfunktion herleiten und ihre Parameter im Sachkontext deuten.",extra:[["Startwert","Bei positiven Fixkosten gilt G(0)<0, weil ohne Verkauf noch kein Erlös entsteht, aber Fixkosten anfallen."],["Steigung der Gewinnfunktion","Die Steigung von G(x) ist p−kᵥ. Sie zeigt, wie sich der Gewinn pro zusätzlicher Mengeneinheit verändert."]]},
+ breakeven:{starters:["An der Gewinnschwelle x<sub>GS</sub> gilt E(x<sub>GS</sub>) = K(x<sub>GS</sub>).","Für dieselbe Menge gilt G(x<sub>GS</sub>) = 0.","Der Schnittpunkt von E(x) und K(x) und die Nullstelle von G(x) haben denselben x-Wert."],goal:"Ich kann die Gewinnschwelle x<sub>GS</sub> als gemeinsame Stelle mit E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0 erklären.",extra:[["Zwei Darstellungen – eine Menge","Der Schnittpunkt von E(x) und K(x) und die Nullstelle von G(x) beschreiben dieselbe Gewinnschwelle x<sub>GS</sub>."],["Fachsprachlich vollständig","Schreibe die Gleichheit vollständig als E(x)=K(x), weil sich beide Funktionswerte auf dieselbe Menge x beziehen."]]},
+ domain:{starters:["Im Sachbereich darf x nur … sein.","Die mathematische Gewinnschwelle liegt bei x<sub>GS</sub> = … .","Für ganze Stückzahlen bedeutet das praktisch: … ."],goal:"Ich kann eine mathematische Lösung an den Sachbereich und die verwendete Mengeneinheit anpassen und zwischen rechnerischer Lösung und praktischer Deutung unterscheiden.",extra:[["Sachbereich","Nicht jeder mathematisch mögliche x-Wert ist im Sachkontext sinnvoll."],["Einheit beachten","Bei Stückzahlen sind meist ganze Zahlen nötig; bei kg oder m können auch Dezimalwerte sinnvoll sein."]]},
+ own:{starters:["Im Term f(x)=mx+b ist m = … und b = … .","Wenn ich m verändere, dann … .","Wenn ich b verändere, dann … ."],goal:"Ich kann einen linearen Funktionsterm eingeben und die Zusammenhänge zwischen Term, Parametern, Graph und Wertetabelle beschreiben.",extra:[["Vier Darstellungen","Term, Parameter, Graph und Wertetabelle beschreiben dieselbe lineare Funktion."],["Gezielt verändern","Verändere möglichst nur einen Parameter und beschreibe anschließend genau dessen Wirkung."]]}
+};
+function sensitiveFor(m){return sensitiveLanguage[m.id]||{starters:[m.starter],goal:modelText(m),extra:[]};}
+
+
+function renderLanguage(){
+ const m=currentModule(),ext=languageExtension(m),sens=sensitiveFor(m);
+ $("view-language").innerHTML=`<div class="kicker">Sprachhilfe</div><h2>Fachsprache verstehen und nutzen</h2>
+ <p class="mini">Gehe schrittweise vor: Begriff verstehen → Satz beginnen → mathematischen oder sachlichen Zusammenhang vollständig ausdrücken.</p>
+ <div class="help-stack">
+  <div class="help-card"><button class="btn help-toggle">1 · Fachwörter</button><div class="help-content"><div class="chips">${m.words.map(w=>`<span>${w}</span>`).join("")}</div></div></div>
+  <div class="help-card"><button class="btn help-toggle">2 · Begriffe erklärt</button><div class="help-content"><div class="vocab-defs">${ext.defs.map(([w,d])=>`<div class="vocab-def"><strong>${w}: </strong><span>${d}</span></div>`).join("")}</div></div></div>
+  <div class="help-card"><button class="btn help-toggle">3 · Satzbausteine</button><div class="help-content"><div class="sentence-starters">${sens.starters.map(s=>`<div class="sentence-starter">${s}</div>`).join("")}</div></div></div>
+  <div class="help-card"><button class="btn help-toggle">4 · Strukturhilfe</button><div class="help-content">${m.structure}</div></div>
+  <div class="help-card"><button class="btn help-toggle">5 · Sprach-Tipp</button><div class="help-content"><div class="language-tip">${ext.tip}</div></div></div>
+  <div class="help-card"><button class="btn help-toggle">6 · Mögliche Zielformulierung</button><div class="help-content"><div class="goal-sentence">${sens.goal}</div></div></div>
+ </div>`;
+ $("view-language").querySelectorAll(".help-toggle").forEach(b=>b.addEventListener("click",()=>b.parentElement.classList.toggle("open")));
+}
+
+function fx(x){const v=state.values;return v.m*x+v.b}
+function gx(x){const v=state.values;return (v.n??0)*x+(v.c??0)}
+function K(x){return state.values.m*x+state.values.b}
+function E(x){return (state.values.n??0)*x}
+function G(x){return E(x)-K(x)}
+
+function renderTable(){
+ const m=currentModule();
+ let head="",rows="";
+ let xs;
+ if(m.path==="business"){
+   const xmax=businessXMax(),be=businessBreakEvenData();
+   const base=[0,xmax*.25,xmax*.5,xmax*.75,xmax].map(x=>Math.round(x*10)/10);
+   if(be.kind==="point"&&be.x>=0&&be.x<=xmax)base.push(Math.round(be.x*100)/100);
+   xs=[...new Set(base)].sort((a,b)=>a-b);
+ }else xs=[-4,-2,0,2,4];
+ if(m.path==="business"){
+   head=`<tr><th>x [${state.quantityUnit}]</th><th>K(x) [${state.moneyUnit}]</th><th>E(x) [${state.moneyUnit}]</th><th>G(x) [${state.moneyUnit}]</th></tr>`;
+   rows=xs.map(x=>`<tr class="${x===state.values.x?"current":""}"><td>${fmt(x)}</td><td>${fmt(K(x))}</td><td>${fmt(E(x))}</td><td>${fmt(G(x))}</td></tr>`).join("");
+ }else if(m.path==="compare"){
+   const withDiff=m.id==="difference";
+   head=withDiff?"<tr><th>x</th><th>f(x)</th><th>g(x)</th><th>g(x)−f(x)</th></tr>":"<tr><th>x</th><th>f(x)</th><th>g(x)</th></tr>";
+   rows=xs.map(x=>`<tr class="${x===state.values.x?"current":""}"><td>${fmt(x)}</td><td>${fmt(fx(x))}</td><td>${fmt(gx(x))}</td>${withDiff?`<td>${fmt(gx(x)-fx(x))}</td>`:""}</tr>`).join("");
+ }else if(m.id==="slope"){
+   head="<tr><th>x</th><th>f(x)</th><th>Δx</th><th>Δf(x)</th></tr>";
+   let prev=null;
+   rows=xs.map(x=>{const y=fx(x),dx=prev?x-prev.x:"",dy=prev?y-prev.y:"";prev={x,y};return `<tr><td>${fmt(x)}</td><td>${fmt(y)}</td><td>${dx===""?"–":fmt(dx)}</td><td>${dy===""?"–":fmt(dy)}</td></tr>`}).join("");
+ }else if(m.id==="point"){
+   head="<tr><th>x</th><th>f(x)</th><th>Punkt</th></tr>";
+   rows=xs.map(x=>`<tr class="${x===state.values.x?"current":""}"><td>${fmt(x)}</td><td>${fmt(fx(x))}</td><td>P(${fmt(x)}|${fmt(fx(x))})</td></tr>`).join("");
+ }else{
+   head="<tr><th>x</th><th>f(x)</th></tr>";
+   rows=xs.map(x=>`<tr class="${x===state.values.x?"current":""}"><td>${fmt(x)}</td><td>${fmt(fx(x))}</td></tr>`).join("");
+ }
+ $("view-table").innerHTML=`<div class="kicker">Darstellungswechsel</div><h2>Wertetabelle</h2><p class="mini">Die Tabelle gehört immer zur aktuell eingestellten Funktion und verändert sich live mit.</p><table><thead>${head}</thead><tbody>${rows}</tbody></table>`;
+}
+function renderExplain(){
+ const m=currentModule(),ext=languageExtension(m),sens=sensitiveFor(m);
+ $("view-explain").innerHTML=`<div class="kicker">Erklärung</div><h2>Zusammenhang verstehen</h2>${explainBlocks(m).map(([h,t])=>`<div class="rule"><strong>${h}</strong>${t}</div>`).join("")}<div class="rule"><strong>Fachsprachlicher Blick</strong>${ext.explain}</div>${sens.extra.map(([h,t])=>`<div class="rule"><strong>${h}</strong>${t}</div>`).join("")}`;
+}
+
+function zeroInfo(){
+ const v=state.values;
+ if(Math.abs(v.m)<1e-9){
+   if(Math.abs(v.b)<1e-9) return "f(x)=0 für alle x. Jeder x-Wert ist eine Nullstelle.";
+   return "f ist konstant und ungleich 0. Es gibt keine Nullstelle.";
+ }
+ return `0=${fmt(v.m)}x ${v.b>=0?"+":"−"} ${fmt(Math.abs(v.b))} ⇒ x₀=${fmt(-v.b/v.m)}.`;
+}
+function intersectionInfo(){
+ const v=state.values;
+ if(Math.abs(v.m-v.n)<1e-9){
+   return Math.abs(v.b-v.c)<1e-9 ? "Die Funktionen sind identisch: unendlich viele gemeinsame Punkte." : "Die Geraden sind parallel: kein Schnittpunkt.";
+ }
+ const x=(v.c-v.b)/(v.m-v.n), y=fx(x);
+ return `${fmt(v.m)}x ${v.b>=0?"+":"−"} ${fmt(Math.abs(v.b))} = ${fmt(v.n)}x ${v.c>=0?"+":"−"} ${fmt(Math.abs(v.c))} ⇒ S(${fmt(x)}|${fmt(y)}).`;
+}
+function breakEven(){
+ const be=businessBreakEvenData();
+ if(be.kind==="all") return {text:be.text,x:null};
+ if(be.kind==="none") return {text:be.text,x:null};
+ return {text:be.text,x:be.x};
+}
+
+function renderCalc(){
+ const m=currentModule(); if(!m.tabs.includes("calc")) return;
+ let html="";
+ if(m.calc==="zero") html=`<div class="rule"><strong>Nullstelle berechnen</strong>${zeroInfo()}</div>`;
+ else if(m.calc==="intersection") html=`<div class="rule"><strong>Schnittpunkt berechnen</strong>${intersectionInfo()}</div>`;
+ else if(m.calc==="profit") html=`<div class="rule"><strong>Gewinnfunktion herleiten</strong>G(x)=E(x)−K(x)=${fmt(state.values.n)}x−(${fmt(state.values.m)}x+${fmt(state.values.b)}) = ${fmt(state.values.n-state.values.m)}x−${fmt(state.values.b)}.</div>`;
+ else if(m.calc==="breakeven") html=`<div class="rule"><strong>Gewinnschwelle</strong>${breakEven().text}</div>`;
+ else if(m.calc==="domain"){
+   const be=breakEven(); const practical=be.x!==null&&be.x>=0?Math.floor(be.x)+1:null;
+   html=`<div class="rule"><strong>Mathematische Lösung</strong>${be.text}</div>`+(practical!==null?`<div class="rule"><strong>Praktische Interpretation</strong>Da nur ganze Stückzahlen sinnvoll sind, entsteht bei positiver Gewinnsteigung ab ${practical} Stück positiver Gewinn.</div>`:"");
+ }
+ $("view-calc").innerHTML=`<div class="kicker">Rechnung</div><h2>Algebraischer Blick</h2>${html}`;
+}
+
+function renderRight(){renderTabs();renderTask();renderLanguage();renderTable();renderExplain();renderCalc();}
+
+function svgEl(name,attrs={},text=""){const e=document.createElementNS("http://www.w3.org/2000/svg",name);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(text)e.textContent=text;return e;}
+function svgIndexedText(svg,x,y,prefix,index,suffix,attrs={}){
+ const t=svgEl("text",{x,y,...attrs});
+ t.appendChild(document.createTextNode(prefix));
+ const sub=svgEl("tspan",{"baseline-shift":"sub","font-size":Math.max(8,(+(attrs["font-size"]||12))-3)},index); t.appendChild(sub);
+ const tail=svgEl("tspan",{"baseline-shift":"baseline","font-size":attrs["font-size"]||12},suffix); t.appendChild(tail);
+ svg.appendChild(t); return t;
+}
+
+function relation(){
+ const v=state.values;if(!("n" in v))return null;
+ if(Math.abs(v.m-v.n)<1e-9)return Math.abs(v.b-(v.c??0))<1e-9?{kind:"identical"}:{kind:"parallel"};
+ const x=((v.c??0)-v.b)/(v.m-v.n),y=fx(x);return {kind:"intersection",x,y};
+}
+
+function drawChart(){
+ const svg=$("chart"); while(svg.firstChild)svg.removeChild(svg.firstChild);
+ const m=currentModule(),v=state.values,b=state.baseline,W=980,H=560,p={l:92,r:46,t:38,b:68};
+ let [xmin,xmax]=m.ranges.x,[ymin,ymax]=m.ranges.y;
+ if(m.path==="business")({xmin,xmax,ymin,ymax}=businessPlotBounds());
+ const sx=x=>p.l+(x-xmin)/(xmax-xmin)*(W-p.l-p.r), sy=y=>H-p.b-(y-ymin)/(ymax-ymin)*(H-p.t-p.b);
+ const xAxisY=(ymin<=0&&ymax>=0)?sy(0):H-p.b;
+ const yAxisX=(xmin<=0&&xmax>=0)?sx(0):p.l;
+
+ svg.appendChild(svgEl("rect",{x:0,y:0,width:W,height:H,fill:"#fff"}));
+ const defs=svgEl("defs");
+ const marker=svgEl("marker",{id:"axisArrow",markerWidth:8,markerHeight:8,refX:6,refY:3,orient:"auto",markerUnits:"strokeWidth"});
+ marker.appendChild(svgEl("path",{d:"M0,0 L0,6 L7,3 z",fill:"#334155"})); defs.appendChild(marker); svg.appendChild(defs);
+
+ const xTicks=axisTicks(xmin,xmax,7),yTicks=axisTicks(ymin,ymax,7);
+ for(const x of xTicks){const X=sx(x);svg.appendChild(svgEl("line",{x1:X,y1:p.t,x2:X,y2:H-p.b,stroke:"#e9eef5","stroke-width":1}));}
+ for(const y of yTicks){const Y=sy(y);svg.appendChild(svgEl("line",{x1:p.l,y1:Y,x2:W-p.r,y2:Y,stroke:"#e9eef5","stroke-width":1}));}
+ svg.appendChild(svgEl("line",{x1:p.l,y1:xAxisY,x2:W-p.r+8,y2:xAxisY,stroke:"#334155","stroke-width":2.2,"marker-end":"url(#axisArrow)"}));
+ svg.appendChild(svgEl("line",{x1:yAxisX,y1:H-p.b,x2:yAxisX,y2:p.t-8,stroke:"#334155","stroke-width":2.2,"marker-end":"url(#axisArrow)"}));
+
+ const xLabelY=Math.min(H-12,xAxisY+22);
+ for(const x of xTicks){const X=sx(x);svg.appendChild(svgEl("line",{x1:X,y1:xAxisY-4,x2:X,y2:xAxisY+4,stroke:"#475569","stroke-width":1.3}));svg.appendChild(svgEl("text",{x:X,y:xLabelY,"text-anchor":"middle",fill:"#64748b","font-size":12},fmt(x)));}
+ const yLabelX=Math.max(26,yAxisX-11);
+ for(const y of yTicks){const Y=sy(y);svg.appendChild(svgEl("line",{x1:yAxisX-4,y1:Y,x2:yAxisX+4,y2:Y,stroke:"#475569","stroke-width":1.3}));if(Math.abs(y)>1e-9||Math.abs(xmin)>1e-9)svg.appendChild(svgEl("text",{x:yLabelX,y:Y+4,"text-anchor":"end",fill:"#64748b","font-size":12},fmt(y)));}
+
+ const xAxisLabel=state.mode==="app"?`x [${state.quantityUnit}]`:"x";
+ const yAxisLabel=state.mode==="app"?`K(x), E(x), G(x) [${state.moneyUnit}]`:("n" in v?"f(x), g(x)":"f(x)");
+ svg.appendChild(svgEl("text",{x:W-p.r+2,y:xAxisY-10,"text-anchor":"end",fill:"#1e293b","font-size":14,"font-weight":850},xAxisLabel));
+ if(state.mode==="app"){
+   const yy=(p.t+H-p.b)/2;
+   svg.appendChild(svgEl("text",{x:24,y:yy,"text-anchor":"middle",fill:"#1e293b","font-size":14,"font-weight":850,transform:`rotate(-90 24 ${yy})`},yAxisLabel));
+ }else svg.appendChild(svgEl("text",{x:yAxisX+12,y:p.t+8,fill:"#1e293b","font-size":14,"font-weight":850},yAxisLabel));
+
+ const pathFor=fn=>{let d="";for(let i=0;i<=260;i++){const x=xmin+(xmax-xmin)*i/260,y=fn(x);d+=(i?"L":"M")+sx(x).toFixed(2)+","+sy(y).toFixed(2);}return d;};
+ const f=x=>state.mode==="app"?K(x):fx(x), g=x=>state.mode==="app"?E(x):gx(x);
+ const f0=x=>b.m*x+b.b, g0=x=>(b.n??0)*x+(state.mode==="app"?0:(b.c??0));
+ const hasSecond=("n" in v)||m.path==="business";
+
+ // Ausgangslage nur innermathematisch: Im Wirtschaftsbereich würde sie die drei aktuellen Graphen unnötig überlagern.
+ if(state.showPrevious&&m.path!=="business"){
+   if(Math.abs(v.m-b.m)>1e-9||Math.abs(v.b-b.b)>1e-9)svg.appendChild(svgEl("path",{d:pathFor(f0),fill:"none",stroke:"#94a3b8","stroke-width":2.4,"stroke-dasharray":"8 7"}));
+   if(hasSecond&&(Math.abs((v.n??0)-(b.n??0))>1e-9||Math.abs((v.c??0)-(b.c??0))>1e-9))svg.appendChild(svgEl("path",{d:pathFor(g0),fill:"none",stroke:"#94a3b8","stroke-width":2.4,"stroke-dasharray":"8 7"}));
+ }
+
+ if(m.path==="business"){
+   if(state.businessVisible.K)svg.appendChild(svgEl("path",{d:pathFor(K),fill:"none",stroke:"#c86b09","stroke-width":4,"stroke-linecap":"round"}));
+   if(state.businessVisible.E)svg.appendChild(svgEl("path",{d:pathFor(E),fill:"none",stroke:"#2457d6","stroke-width":4,"stroke-linecap":"round"}));
+   if(state.businessVisible.G)svg.appendChild(svgEl("path",{d:pathFor(G),fill:"none",stroke:"#0f766e","stroke-width":4,"stroke-linecap":"round"}));
+ }else{
+   svg.appendChild(svgEl("path",{d:pathFor(f),fill:"none",stroke:"#c86b09","stroke-width":4,"stroke-linecap":"round"}));
+   if(hasSecond)svg.appendChild(svgEl("path",{d:pathFor(g),fill:"none",stroke:"#2457d6","stroke-width":4,"stroke-linecap":"round"}));
+ }
+
+ const lx=xmax-(xmax-xmin)*0.07;
+ const addCurveLabel=(txt,fn,color,dy=0)=>{const yy=fn(lx);if(yy>=ymin&&yy<=ymax)svg.appendChild(svgEl("text",{x:sx(lx)-6,y:sy(yy)+dy,"text-anchor":"end",fill:color,"font-size":13,"font-weight":850},txt));};
+ if(m.path==="business"){
+   if(state.businessVisible.K)addCurveLabel("K(x)",K,"#c86b09",-7);
+   if(state.businessVisible.E)addCurveLabel("E(x)",E,"#2457d6",-7);
+   if(state.businessVisible.G)addCurveLabel("G(x)",G,"#0f766e",-7);
+ }else{addCurveLabel("f(x)",fx,"#c86b09",-7);if("n" in v)addCurveLabel("g(x)",gx,"#2457d6",-7);}
+
+ // module-specific marks
+ if(m.id==="point"){
+   const x=v.x,y=f(x),X=sx(x),Y=sy(y);
+   svg.appendChild(svgEl("line",{x1:X,y1:xAxisY,x2:X,y2:Y,stroke:"#64748b","stroke-dasharray":"5 5"}));
+   svg.appendChild(svgEl("line",{x1:yAxisX,y1:Y,x2:X,y2:Y,stroke:"#64748b","stroke-dasharray":"5 5"}));
+   svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#fff",stroke:"#c86b09","stroke-width":4}));
+   svg.appendChild(svgEl("text",{x:X+10,y:Y-10,fill:"#111827","font-size":13,"font-weight":800},`P(${fmt(x)}|${fmt(y)})`));
+ }
+ if(m.id==="intercept"||m.id==="proportional"||(m.id==="costrevenue"&&state.businessVisible.K)){
+   const y=f(0),X=sx(0),Y=sy(y); if(Y>=p.t&&Y<=H-p.b){svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#fff",stroke:"#c86b09","stroke-width":4}));svg.appendChild(svgEl("text",{x:X+10,y:Y-10,fill:"#7c3f05","font-size":12,"font-weight":800},`(0|${fmt(y)})`));}
+   if(m.id==="proportional"){svg.appendChild(svgEl("circle",{cx:sx(0),cy:sy(0),r:5,fill:"#111827"}));svg.appendChild(svgEl("text",{x:sx(0)+8,y:sy(0)+18,fill:"#111827","font-size":12},"Ursprung (0|0)"));}
+ }
+ if(m.id==="slope"){
+   const x0=-1,x1=1,y0=f(x0),y1=f(x1);
+   if([y0,y1].every(y=>y>=ymin&&y<=ymax)){svg.appendChild(svgEl("line",{x1:sx(x0),y1:sy(y0),x2:sx(x1),y2:sy(y0),stroke:"#0f766e","stroke-width":3}));svg.appendChild(svgEl("line",{x1:sx(x1),y1:sy(y0),x2:sx(x1),y2:sy(y1),stroke:"#0f766e","stroke-width":3}));svg.appendChild(svgEl("text",{x:(sx(x0)+sx(x1))/2,y:sy(y0)+18,"text-anchor":"middle",fill:"#0f766e","font-size":11,"font-weight":800},"Δx=2"));svg.appendChild(svgEl("text",{x:sx(x1)+8,y:(sy(y0)+sy(y1))/2,fill:"#0f766e","font-size":11,"font-weight":800},`Δf(x)=${fmt(v.m*2)}`));}
+ }
+ if(m.id==="zero"&&Math.abs(v.m)>1e-9){const x=-v.b/v.m;if(x>=xmin&&x<=xmax){svg.appendChild(svgEl("circle",{cx:sx(x),cy:sy(0),r:7,fill:"#111827",stroke:"#fff","stroke-width":3}));svg.appendChild(svgEl("text",{x:sx(x)+10,y:sy(0)-10,fill:"#111827","font-size":12,"font-weight":800},`N(${fmt(x)}|0)`));}}
+ if(["compare","difference"].includes(m.id)){
+   const x=v.x,y1=f(x),y2=g(x),X=sx(x);
+   svg.appendChild(svgEl("circle",{cx:X,cy:sy(y1),r:6,fill:"#fff",stroke:"#c86b09","stroke-width":3}));
+   svg.appendChild(svgEl("circle",{cx:X,cy:sy(y2),r:6,fill:"#fff",stroke:"#2457d6","stroke-width":3}));
+   if(m.id==="difference"){svg.appendChild(svgEl("line",{x1:X,y1:sy(y1),x2:X,y2:sy(y2),stroke:"#111827","stroke-width":3,"stroke-dasharray":"5 5"}));svg.appendChild(svgEl("text",{x:X+10,y:(sy(y1)+sy(y2))/2,fill:"#111827","font-size":12,"font-weight":800},`Δ=${fmt(y2-y1)}`));}
+ }
+ if(m.id==="profitdiff"){
+   const x=v.x,X=sx(x),yk=K(x),ye=E(x);
+   if(state.businessVisible.K)svg.appendChild(svgEl("circle",{cx:X,cy:sy(yk),r:6,fill:"#fff",stroke:"#c86b09","stroke-width":3}));
+   if(state.businessVisible.E)svg.appendChild(svgEl("circle",{cx:X,cy:sy(ye),r:6,fill:"#fff",stroke:"#2457d6","stroke-width":3}));
+   if(state.businessVisible.K&&state.businessVisible.E){svg.appendChild(svgEl("line",{x1:X,y1:sy(yk),x2:X,y2:sy(ye),stroke:"#111827","stroke-width":3,"stroke-dasharray":"5 5"}));svg.appendChild(svgEl("text",{x:X+10,y:(sy(yk)+sy(ye))/2,fill:"#111827","font-size":12,"font-weight":800},`G=${euro(ye-yk)}`));}
+ }
+ if(["parallel","intersection"].includes(m.id)){
+   const r=relation();
+   if(r?.kind==="intersection"&&r.x>=xmin&&r.x<=xmax&&r.y>=ymin&&r.y<=ymax){svg.appendChild(svgEl("circle",{cx:sx(r.x),cy:sy(r.y),r:7,fill:"#111827",stroke:"#fff","stroke-width":3}));svg.appendChild(svgEl("text",{x:sx(r.x)+10,y:sy(r.y)-10,fill:"#111827","font-size":12,"font-weight":800},`S(${fmt(r.x)}|${fmt(r.y)})`));}
+ }
+
+ // Gewinnschwelle gezielt zuschaltbar: Schnittpunkt von E(x) und K(x) sowie Nullstelle von G(x).
+ if(m.path==="business"&&state.showBreakEven){
+   const be=businessBreakEvenData();
+   if(be.kind==="point"&&be.x>=xmin&&be.x<=xmax){
+     const X=sx(be.x),YS=sy(be.y??0),YN=sy(0);
+     // Der Schalter „Gewinnschwelle anzeigen“ schaltet K(x), E(x) und G(x) automatisch ein.
+     svg.appendChild(svgEl("line",{x1:X,y1:YS,x2:X,y2:YN,stroke:"#7c3aed","stroke-width":3.5}));
+     svg.appendChild(svgEl("circle",{cx:X,cy:YS,r:8,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));
+     svg.appendChild(svgEl("text",{x:X+12,y:YS-12,fill:"#6d28d9","font-size":13,"font-weight":850},"E(x)=K(x)"));
+     svg.appendChild(svgEl("circle",{cx:X,cy:YN,r:7,fill:"#fff",stroke:"#0f766e","stroke-width":4}));
+     svgIndexedText(svg,X+12,YN+21,"G(x","GS",")=0",{fill:"#0f766e","font-size":13,"font-weight":850});
+     svgIndexedText(svg,X,Math.min(H-10,xAxisY+40),"x","GS",` = ${fmt(be.x)}`,{"text-anchor":"middle",fill:"#6d28d9","font-size":13,"font-weight":850});
+   }else if(be.kind==="none"){
+     svg.appendChild(svgEl("text",{x:W-p.r-8,y:p.t+20,"text-anchor":"end",fill:"#b42318","font-size":12,"font-weight":850},"Keine Gewinnschwelle im Sachbereich: E(x) erreicht K(x) nicht."));
+   }else if(be.kind==="all"){
+     svg.appendChild(svgEl("text",{x:W-p.r-8,y:p.t+20,"text-anchor":"end",fill:"#6d28d9","font-size":12,"font-weight":850},"E(x)=K(x) und G(x)=0 für alle x."));
+   }
+ }
+}
+
+function renderBusinessGraphControls(){
+ const m=currentModule(),box=$("businessGraphControls"),panel=$("businessGraphPanel"),chip=$("scaleChip"),prev=$("previousBtn");
+ if(m.path!=="business"){
+   box.innerHTML=""; panel.setAttribute("hidden",""); panel.style.display="none"; prev.style.display=""; chip.textContent="🔒 Skala fixiert";
+   prev.setAttribute("aria-pressed",String(state.showPrevious)); prev.textContent=state.showPrevious?"Vorher sichtbar":"Vorher aus";
+   return;
+ }
+ panel.removeAttribute("hidden"); panel.style.display="grid"; prev.style.display="none"; chip.textContent="↕ Skala automatisch";
+ const items=[["K","K(x) – Kosten","k"],["E","E(x) – Erlös","e"],["G","G(x) – Gewinn","g"]];
+ box.innerHTML=`<div class="curve-switches">${items.map(([key,label,cls])=>`<button type="button" class="curve-switch ${cls}" data-curve="${key}" aria-pressed="${state.businessVisible[key]}">${label}</button>`).join("")}<button type="button" class="break-even-switch" id="breakEvenToggle" aria-pressed="${state.showBreakEven}">Gewinnschwelle anzeigen</button></div>`;
+ box.querySelectorAll("[data-curve]").forEach(btn=>btn.addEventListener("click",()=>{
+   const k=btn.dataset.curve; state.businessVisible[k]=!state.businessVisible[k];
+   if(!state.businessVisible[k]) state.showBreakEven=false;
+   renderCenter();
+ }));
+ $("breakEvenToggle").addEventListener("click",()=>{
+   state.showBreakEven=!state.showBreakEven;
+   if(state.showBreakEven) state.businessVisible={K:true,E:true,G:true};
+   renderCenter();
+ });
+ const be=businessBreakEvenData();
+ if(state.showBreakEven){
+   $("businessGuideNote").innerHTML=be.kind==="point"
+     ? `Markiert wird dieselbe Menge x<sub>GS</sub>: oben gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>), unten G(x<sub>GS</sub>)=0.`
+     : be.text;
+ }else{
+   $("businessGuideNote").textContent="Tippe auf K(x), E(x) oder G(x), um den jeweiligen Graphen ein- oder auszublenden. Mit „Gewinnschwelle anzeigen“ werden alle drei Funktionen eingeblendet und Schnittpunkt und Nullstelle bei xGS verbunden.";
+ }
+}
+
+function renderLegend(){
+ const m=currentModule(),arr=[];
+ if(m.path==="business"){
+   if(state.businessVisible.K)arr.push(`<span class="f1">Kosten K(x)</span>`);
+   if(state.businessVisible.E)arr.push(`<span class="f2">Erlös E(x)</span>`);
+   if(state.businessVisible.G)arr.push(`<span class="f3">Gewinn G(x)</span>`);
+ }else{
+   arr.push(`<span class="f1">f(x)</span>`);
+   if("n" in state.values)arr.push(`<span class="f2">g(x)</span>`);
+   if(state.showPrevious)arr.push(`<span class="old">Ausgangslage</span>`);
+ }
+ $("legend").innerHTML=arr.join("");
+}
+
+function renderCenter(){
+ const m=currentModule();
+ $("chartTitle").textContent=m.title;
+ $("chartSub").textContent=m.path==="business"?"Die Skala passt sich automatisch an. K(x), E(x) und G(x) lassen sich einzeln schalten; die Gewinnschwelle kann gezielt eingeblendet werden.":"Die Achsenskalierung bleibt innerhalb des Moduls stabil.";
+ $("insight").textContent=insightText();
+ renderBusinessGraphControls();drawChart();renderLegend();
+}
+
+function insightText(){
+ const m=currentModule(),v=state.values;
+ if(m.id==="own")return `Aktuell: f(x)=${linearTermText()}. Steigung m=${fmt(v.m)}, y-Achsenabschnitt b=${fmt(v.b)}.`;
+ if(m.id==="point"){const y=state.mode==="app"?K(v.x):fx(v.x);return `${state.mode==="app"?"K":"f"}(${fmt(v.x)})=${fmt(y)}. Der zugehörige Punkt ist P(${fmt(v.x)}|${fmt(y)}).`;}
+ if(m.id==="intercept")return `Aktuell gilt f(0)=${fmt(v.b)}. Der y-Achsenabschnitt ist (0|${fmt(v.b)}).`;
+ if(m.id==="slope")return `m=${fmt(v.m)}. Bei Δx=2 ergibt sich Δy=${fmt(v.m*2)}; also m=Δy/Δx=${fmt(v.m*2)}/2=${fmt(v.m)}.`;
+ if(m.id==="proportional")return Math.abs(v.b)<1e-9?"b=0: Der Graph verläuft durch den Ursprung und die Funktion ist proportional.":"b≠0: Der Graph verläuft nicht durch den Ursprung.";
+ if(m.id==="zero")return zeroInfo();
+ if(m.id==="compare")return `${state.mode==="app"?"K":"f"}(${fmt(v.x)})=${fmt(state.mode==="app"?K(v.x):fx(v.x))}; ${state.mode==="app"?"E":"g"}(${fmt(v.x)})=${fmt(state.mode==="app"?E(v.x):gx(v.x))}.`;
+ if(m.id==="parallel"){const r=relation();return r.kind==="parallel"?"Gleiche Steigung, unterschiedliche y-Achsenabschnitte: parallel.":r.kind==="identical"?"Gleiche Steigung und gleicher y-Achsenabschnitt: identisch.":"Die Steigungen sind noch verschieden.";}
+ if(m.id==="intersection"){return intersectionInfo();}
+ if(m.id==="difference")return `g(${fmt(v.x)})−f(${fmt(v.x)})=${fmt(gx(v.x)-fx(v.x))}.`;
+ if(m.id==="costrevenue"){const be=businessBreakEvenData();return `Bei x=${fmt(v.x)} gilt K(x)=${euro(K(v.x))}, E(x)=${euro(E(v.x))} und G(x)=${euro(G(v.x))}. ${be.text}`;}
+ if(m.id==="profitdiff")return `G(${fmt(v.x)})=${euro(G(v.x))}. ${G(v.x)>0?"Gewinn":G(v.x)<0?"Verlust":"Weder Gewinn noch Verlust"}.`;
+ if(m.id==="profitfunc"){const be=businessBreakEvenData();return `G(x)=${fmt(v.n-v.m)}x−${fmt(v.b)} und G(0)=${euro(-v.b)}. ${be.text}`;}
+ if(m.id==="breakeven")return breakEven().text;
+ if(m.id==="domain"){const be=breakEven();return be.text;}
+ return "";
+}
+function renderMenu(){
+ const box=$("moduleMenu"); let html="";
+ Object.keys(paths).forEach(p=>{
+   html+=`<div class="module-group"><h3>${paths[p].label}</h3>`;
+   listPathModules(p).forEach((m,i)=>{const k=`${p}:${m.id}`;html+=`<button class="menu-item ${p===state.path&&i===state.moduleIndex?"current":""}" data-p="${p}" data-i="${i}"><span>${i+1}. ${m.title}</span><span class="check">${state.completed.has(k)?"✓":""}</span></button>`;});
+   html+="</div>";
+ });
+ box.innerHTML=html;
+ box.querySelectorAll("[data-p]").forEach(b=>b.addEventListener("click",()=>{
+   const p=b.dataset.p;
+   if(!paths[p]) return;
+   state.path=p;
+   state.moduleIndex=+b.dataset.i;
+   setDefaults();
+   state.view="task";
+   box.classList.remove("open");
+   $("startScreen").classList.remove("open");
+   updateUrl();
+   renderAll();
+}));
+}
+
+function renderAll(resetControls=true){
+ renderHeader();if(resetControls)renderControls();else renderControls();renderFormulas();renderRight();renderCenter();renderMenu();
+ $("prevModule").disabled=state.moduleIndex===0;
+ $("nextModule").disabled=state.moduleIndex===listPathModules(state.path).length-1;
+}
+
+function changePath(path){
+ if(!paths[path]) return;
+ state.path=path;
+ state.moduleIndex=0;
+ setDefaults();
+ state.view="task";
+ $("startScreen").classList.remove("open");
+ $("moduleMenu").classList.remove("open");
+ updateUrl();
+ renderAll();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".path-btn").forEach(b=>{
+ b.addEventListener("click",e=>{
+   e.preventDefault();
+   changePath(b.dataset.path);
+ });
+});
+$("menuBtn").addEventListener("click",()=>$("moduleMenu").classList.toggle("open"));
+$("overviewBtn").addEventListener("click",()=>$("moduleMenu").classList.add("open"));
+$("resetBtn").addEventListener("click",()=>{setDefaults();renderAll();});
+$("previousBtn").addEventListener("click",()=>{if(currentModule().path==="business")return;state.showPrevious=!state.showPrevious;renderCenter();});
+$("prevModule").addEventListener("click",()=>{if(state.moduleIndex>0){state.moduleIndex--;setDefaults();state.view="task";updateUrl();renderAll();}});
+$("nextModule").addEventListener("click",()=>{if(state.moduleIndex<listPathModules(state.path).length-1){state.moduleIndex++;setDefaults();state.view="task";updateUrl();renderAll();}});
+
+$("startScreen").querySelectorAll("[data-start]").forEach(b=>b.addEventListener("click",()=>{
+ state.path=b.dataset.start;state.moduleIndex=0;setDefaults();$("startScreen").classList.remove("open");updateUrl();renderAll();
+}));
+
+let touchX=null;
+$("rightBody").addEventListener("touchstart",e=>touchX=e.changedTouches[0].clientX,{passive:true});
+$("rightBody").addEventListener("touchend",e=>{
+ if(touchX===null)return;const dx=e.changedTouches[0].clientX-touchX;touchX=null;if(Math.abs(dx)<55)return;
+ const arr=currentModule().tabs,i=arr.indexOf(state.view);if(dx<0&&i<arr.length-1)switchView(arr[i+1]);if(dx>0&&i>0)switchView(arr[i-1]);
+},{passive:true});
+
+const openedDirectly=readUrl();setDefaults();renderAll();if(openedDirectly)$("startScreen").classList.remove("open");
+})();
+</script>
+</body>
+</html>
