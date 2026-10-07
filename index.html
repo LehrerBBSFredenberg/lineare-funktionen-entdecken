@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V6 · dynamische Graphen</title>
+<title>Lineare Funktionen – Lern-Dashboard V10 · Bedingungen und Notation</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -270,7 +270,7 @@ const modules=[
  explainApp:[["Übersetzung","x beschreibt die Stückzahl, K(x) die zugehörigen Gesamtkosten."],["Punktbedeutung","P(50|500) bedeutet: Bei 50 Stück betragen die Kosten 500 €."],["Mathematik bleibt gleich","Im Sachkontext ist K(x) der Kostenwert zur Stückzahl x. Zum Beispiel bedeutet K(50)=500: Bei 50 Stück betragen die Kosten 500 €."]],
  table:"point", calc:null
 },
-{path:"basics",id:"intercept",title:"y-Achsenabschnitt",tabs:["task","language","explain"],
+{path:"basics",id:"intercept",title:"y-Achsenabschnitt",tabs:["task","language","table","explain"],
  modeSupport:["math","app"],
  vars:{m:2,b:3,x:2}, active:"b", ranges:{x:[-6,6],y:[-8,12]},
  controls:["m","b"],
@@ -280,13 +280,13 @@ const modules=[
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
  experimentMath:"Verändere ausschließlich b. m bleibt konstant.",
  experimentApp:"Verändere ausschließlich die Fixkosten. Die variablen Kosten pro Stück bleiben konstant.",
- words:["y-Achsenabschnitt","Steigung","parallel","f(0)","verschieben"],
- starter:"Wenn der y-Achsenabschnitt größer wird, …",
- structure:"Die Steigung bleibt ___. Der Punkt (0|b) verändert sich. Deshalb wird der Graph ___ verschoben.",
- modelMath:"Wenn nur b größer wird, bleibt die Steigung unverändert. Der Graph wird parallel nach oben verschoben und schneidet die y-Achse weiter oben.",
- modelApp:"Steigen nur die Fixkosten, bleibt die Steigung der Kostenfunktion unverändert. Der Graph wird parallel nach oben verschoben.",
- explainMath:[["Achsenschnittpunkt","f(0)=b. Deshalb schneidet der Graph die y-Achse im Punkt (0|b)."],["Veränderung","Ändert sich nur b, bleibt m gleich."],["Folge","Die Geraden bleiben parallel."]],
- explainApp:[["Fixkosten","Bei K(x)=kᵥx+Kf entsprechen die Fixkosten Kf dem y-Achsenabschnitt."],["Bedeutung","K(0)=Kf: Auch bei 0 Stück fallen Fixkosten an."],["Folge","Mehr Fixkosten verschieben den Graphen parallel nach oben."]],
+ words:["y-Achsenabschnitt","S<sub>y</sub>","Bedingung x=0","f(0)","Steigung","parallel"],
+ starter:"Für den Schnittpunkt mit der y-Achse gilt x = 0. Dann …",
+ structure:"Bedingung: x=0. Dann gilt f(0)=___. Der Schnittpunkt mit der y-Achse ist S<sub>y</sub>(0|___).",
+ modelMath:"Für jeden Punkt auf der y-Achse gilt x=0. Deshalb setzt man x=0. Bei f(x)=mx+b erhält man f(0)=b. Der Schnittpunkt mit der y-Achse ist S<sub>y</sub>(0|b).",
+ modelApp:"Für die Kostenfunktion gilt bei x=0: K(0)=Kf. Der Schnittpunkt S<sub>y</sub>(0|Kf) zeigt die Fixkosten. Verändert sich nur Kf, bleibt die Steigung unverändert und der Graph verschiebt sich parallel.",
+ explainMath:[["Bedingung","Ein Punkt liegt auf der y-Achse, wenn seine x-Koordinate 0 ist. Deshalb gilt für den y-Achsenabschnitt: x=0."],["Einsetzen","Für f(x)=mx+b folgt f(0)=m·0+b=b."],["Punkt und Bezeichnung","Der Schnittpunkt mit der y-Achse heißt S<sub>y</sub>(0|f(0))=S<sub>y</sub>(0|b)."],["Veränderung","Ändert sich nur b, bleibt m gleich; der Graph wird parallel nach oben oder unten verschoben."]],
+ explainApp:[["Bedingung","Auch im Sachkontext gilt für den Schnittpunkt mit der senkrechten Achse x=0."],["Fixkosten","Bei K(x)=kᵥx+Kf gilt K(0)=Kf. Deshalb ist S<sub>y</sub>(0|Kf) der Achsenschnittpunkt der Kostenfunktion."],["Bedeutung","Bei 0 Mengeneinheiten fallen bereits die Fixkosten Kf an."],["Folge","Ändert sich nur Kf, bleibt kᵥ unverändert und K(x) verschiebt sich parallel."]],
  table:null, calc:null
 },
 {path:"basics",id:"slope",title:"Steigung",tabs:["task","language","table","explain"],
@@ -323,25 +323,25 @@ const modules=[
  structure:"b = ___. Deshalb gilt f(x)=___. Der Graph verläuft durch den Punkt ___.",
  modelMath:"Ist b=0, gilt f(x)=mx. Dann ist die Funktion proportional und ihr Graph verläuft durch den Ursprung.",
  modelApp:"Bei Fixkosten 0 gilt K(x)=kᵥx. Dann ist auch die Kostenfunktion proportional. Die Erlösfunktion E(x)=px ist immer proportional.",
- explainMath:[["Spezialfall","Proportionale Funktionen sind lineare Funktionen mit b=0."],["Graphisch","Sie verlaufen durch den Ursprung (0|0)."],["Abgrenzung","Bei b≠0 ist die lineare Funktion nicht proportional."]],
+ explainMath:[["Bedingung","Eine lineare Funktion ist genau dann proportional, wenn b=0 gilt. Gleichwertig dazu ist f(0)=0."],["Spezialfall","Dann lautet der Term f(x)=mx."],["Graphisch","Der Graph verläuft durch den Ursprung O(0|0)."],["Abgrenzung","Bei b≠0 gilt f(0)≠0; die lineare Funktion ist dann nicht proportional."]],
  explainApp:[["Erlös","E(x)=px hat keinen konstanten Summanden und verläuft daher durch den Ursprung."],["Kosten","K(x)=kᵥx+Kf ist bei Kf>0 nicht proportional."],["Sonderfall","Nur bei Kf=0 wird die Kostenfunktion proportional."]],
  table:"point", calc:null
 },
-{path:"basics",id:"zero",title:"Nullstelle",tabs:["task","language","explain","calc"],
+{path:"basics",id:"zero",title:"Nullstelle",tabs:["task","language","table","explain","calc"],
  vars:{m:2,b:-4,x:0}, active:"b", ranges:{x:[-6,6],y:[-10,10]},
  controls:["m","b"], allowNegativeB:true,
  taskMath:"Verändere b. Beobachte, wo der Graph die x-Achse schneidet. Dieser Punkt ist die Nullstelle.",
  taskApp:"Dieses Modul bleibt im Mathe-Modus, weil Nullstellen hier zunächst innermathematisch untersucht werden.",
  hypothesis:"An einer Nullstelle gilt f(x)=0.",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
- experimentMath:"Verschiebe den Graphen und beobachte, wie sich N(x₀|0) verändert.",
+ experimentMath:"Verschiebe den Graphen und beobachte, wie sich x<sub>N</sub> und der Punkt N(x<sub>N</sub>|0) verändern.",
  experimentApp:"Wechsle zurück in den Mathe-Modus, um die Nullstelle zu untersuchen.",
- words:["Nullstelle","x-Achse","f(x)=0","N(x₀|0)"],
- starter:"Die Nullstelle liegt dort, wo …",
- structure:"f(x)=0. Deshalb schneidet der Graph die x-Achse im Punkt N( ___ | 0 ).",
- modelMath:"Die Nullstelle ist der x-Wert, für den f(x)=0 gilt. Graphisch ist sie der Schnittpunkt des Graphen mit der x-Achse.",
- modelApp:"Die Nullstelle wird hier bewusst zuerst innermathematisch behandelt.",
- explainMath:[["Definition","Eine Nullstelle ist ein x-Wert x₀ mit f(x₀)=0."],["Graphisch","Der Graph schneidet die x-Achse im Punkt N(x₀|0)."],["Abgrenzung","Eine Nullstelle ist nicht dasselbe wie der y-Achsenabschnitt und nicht dasselbe wie der Schnittpunkt zweier beliebiger Funktionen."]],
+ words:["Nullstelle x<sub>N</sub>","x-Achse","Bedingung f(x<sub>N</sub>)=0","Nullstellenpunkt N(x<sub>N</sub>|0)"],
+ starter:"Für die Nullstelle x<sub>N</sub> gilt …",
+ structure:"Bedingung: f(x<sub>N</sub>)=0. Löse die Gleichung nach x<sub>N</sub>. Der Nullstellenpunkt ist N(x<sub>N</sub>|0).",
+ modelMath:"Ein Punkt liegt auf der x-Achse, wenn sein Funktionswert 0 ist. Deshalb bestimmt man die Nullstelle mit der Bedingung f(x<sub>N</sub>)=0. Der zugehörige Punkt heißt N(x<sub>N</sub>|0).",
+ modelApp:"Die Nullstelle wird hier bewusst zuerst innermathematisch behandelt. Später wird dieselbe Bedingung bei G(x<sub>GS</sub>)=0 wieder aufgegriffen.",
+ explainMath:[["Bedingung","Ein Punkt liegt auf der x-Achse, wenn sein Funktionswert 0 ist. Deshalb gilt für die Nullstelle: f(x<sub>N</sub>)=0."],["Nullstelle","x<sub>N</sub> ist der x-Wert, der die Bedingung f(x<sub>N</sub>)=0 erfüllt."],["Nullstellenpunkt","Der Punkt auf dem Graphen heißt N(x<sub>N</sub>|0). Nullstelle und Nullstellenpunkt sind nicht dasselbe."],["Abgrenzung","Beim y-Achsenabschnitt gilt x=0; bei der Nullstelle gilt dagegen f(x)=0."]],
  explainApp:[["Hinweis","Für Anwendungen wird die Nullstelle später bei der Gewinnfunktion wieder aufgegriffen."]],
  table:null, calc:"zero"
 },
@@ -364,7 +364,7 @@ const modules=[
  explainApp:[["Übertragung","Variable Kosten und Verkaufspreis bestimmen die Steigungen; Fixkosten verschieben die Kostenfunktion nach oben."],["Vergleich","Bei derselben Stückzahl lassen sich K(x) und E(x) direkt vergleichen."]],
  table:"compare", calc:null
 },
-{path:"compare",id:"parallel",title:"Parallel oder identisch?",tabs:["task","language","explain"],
+{path:"compare",id:"parallel",title:"Parallel oder identisch?",tabs:["task","language","table","explain"],
  vars:{m:2,b:3,n:1,c:-2,x:2}, active:"n", ranges:{x:[-6,6],y:[-10,12]},
  controls:["m","b","n","c"], allowNegativeM:true,allowNegativeN:true,allowNegativeB:true,allowNegativeC:true,
  taskMath:"Verändere nur m₂, bis beide Geraden dieselbe Steigung besitzen. Beobachte, was dann passiert.",
@@ -378,7 +378,7 @@ const modules=[
  structure:"m₁ = m₂, aber b₁ ___ b₂. Deshalb sind die Geraden ___.",
  modelMath:"Sind die Steigungen gleich und die y-Achsenabschnitte verschieden, sind die Geraden parallel. Sind zusätzlich die y-Achsenabschnitte gleich, sind die Funktionen identisch.",
  modelApp:"Wenn Verkaufspreis und variable Kosten pro Stück gleich sind, besitzen Kosten- und Erlösfunktion dieselbe Steigung. Bei positiven Fixkosten sind sie parallel.",
- explainMath:[["Parallel","m₁=m₂ und b₁≠b₂."],["Identisch","m₁=m₂ und b₁=b₂."],["Folge","Parallele verschiedene Geraden besitzen keinen Schnittpunkt. Identische Geraden besitzen unendlich viele gemeinsame Punkte."]],
+ explainMath:[["Bedingung für parallel","m₁=m₂ und b₁≠b₂."],["Bedingung für identisch","m₁=m₂ und b₁=b₂."],["Bedingung für einen Schnittpunkt","m₁≠m₂. Dann gibt es bei linearen Funktionen genau einen Schnittpunkt."],["Folge","Parallele verschiedene Geraden besitzen keinen Schnittpunkt. Identische Geraden besitzen unendlich viele gemeinsame Punkte."]],
  explainApp:[["Kosten/Erlös","p=kᵥ bedeutet: Beide Graphen haben dieselbe Steigung."],["Fixkosten","Bei Kf>0 liegt die Kostenfunktion konstant über der Erlösfunktion."],["Folge","Dann gibt es keine Gewinnschwelle."]],
  table:null, calc:null
 },
@@ -389,15 +389,15 @@ const modules=[
  taskApp:"Verändere nur den Verkaufspreis. Untersuche, wie sich die Gewinnschwelle verändert.",
  hypothesis:"Am Schnittpunkt gilt f(x)=g(x).",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
- experimentMath:"Beobachte beide Koordinaten des Schnittpunkts S(xS|yS).",
- experimentApp:"Beobachte den gemeinsamen Punkt von Kosten- und Erlösfunktion.",
- words:["Schnittpunkt","gleicher x-Wert","gleicher Funktionswert","Gleichsetzen"],
- starter:"Am Schnittpunkt gilt …",
- structure:"Für denselben x-Wert gilt f(x)=___. Deshalb besitzen beide Graphen dort denselben ___.",
- modelMath:"Am Schnittpunkt besitzen f und g bei demselben x-Wert denselben Funktionswert. Algebraisch gilt f(x)=g(x).",
- modelApp:"An der Gewinnschwelle x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>). Erlös und Gesamtkosten sind bei derselben Menge gleich.",
- explainMath:[["Graphisch","Der Schnittpunkt ist ein gemeinsamer Punkt beider Geraden."],["Algebraisch","Man bestimmt ihn durch Gleichsetzen: f(x)=g(x)."],["Koordinate","Zum Schnittpunkt gehören immer x- und y-Koordinate."]],
- explainApp:[["Übertragung","E(x)=K(x) beschreibt die Gewinnschwelle."],["Achtung","Ob eine positive Gewinnschwelle existiert, hängt von Steigungen und Fixkosten ab."]],
+ experimentMath:"Beobachte die Schnittpunktstelle x<sub>S</sub> und den gemeinsamen Funktionswert am Punkt S.",
+ experimentApp:"Beobachte den gemeinsamen Punkt von E(x) und K(x).",
+ words:["Schnittpunkt S","Schnittpunktstelle x<sub>S</sub>","Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>)","Gleichsetzen"],
+ starter:"Für den Schnittpunkt bei x<sub>S</sub> gilt …",
+ structure:"Bedingung: f(x<sub>S</sub>)=g(x<sub>S</sub>). Bestimme zuerst x<sub>S</sub>. Setze x<sub>S</sub> danach in eine Funktion ein, um den gemeinsamen Funktionswert zu erhalten.",
+ modelMath:"Am Schnittpunkt gehören zu derselben Stelle x<sub>S</sub> zwei gleiche Funktionswerte. Deshalb gilt die Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>). Der Schnittpunkt kann als S(x<sub>S</sub>|f(x<sub>S</sub>)) angegeben werden.",
+ modelApp:"Bei der Gewinnschwelle ist der Schnittpunkt von E(x) und K(x) ein besonderer Schnittpunkt. Für x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>).",
+ explainMath:[["Bedingung","Am Schnittpunkt besitzen beide Funktionen bei derselben Stelle x<sub>S</sub> denselben Funktionswert: f(x<sub>S</sub>)=g(x<sub>S</sub>)."],["1. Schritt","Gleichsetzen und nach x lösen. Das Ergebnis ist die Schnittpunktstelle x<sub>S</sub>."],["2. Schritt","x<sub>S</sub> in f oder g einsetzen. Beide liefern denselben Funktionswert."],["Punkt","Der Schnittpunkt kann als S(x<sub>S</sub>|f(x<sub>S</sub>)) angegeben werden."],["Sonderfälle","Bei gleicher Steigung sind die Geraden entweder parallel oder identisch; dann gibt es keinen beziehungsweise unendlich viele Schnittpunkte."]],
+ explainApp:[["Übertragung","Für die Gewinnschwelle wird dieselbe Schnittpunktbedingung auf Erlös- und Kostenfunktion übertragen: E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."],["Zusammenhang","An derselben Stelle gilt zusätzlich G(x<sub>GS</sub>)=0."],["Achtung","Eine positive Gewinnschwelle existiert bei positiven Fixkosten nur, wenn E(x) stärker steigt als K(x)."]],
  table:"compare", calc:"intersection"
 },
 {path:"compare",id:"difference",title:"Differenz zweier Funktionen",tabs:["task","language","table","explain"],
@@ -455,7 +455,7 @@ const modules=[
  explainApp:[["Gewinn","E(x)>K(x) ⇒ G(x)>0: Es entsteht Gewinn."],["Verlust","E(x)<K(x) ⇒ G(x)<0: Es entsteht Verlust."],["Gewinnschwelle","E(x)=K(x) ⇒ G(x)=0: Es entsteht weder Gewinn noch Verlust."]],
  table:"business", calc:null
 },
-{path:"business",id:"profitfunc",title:"Gewinnfunktion",tabs:["task","language","explain","calc"],
+{path:"business",id:"profitfunc",title:"Gewinnfunktion",tabs:["task","language","table","explain","calc"],
  vars:{m:4,b:300,n:8,c:0,x:50}, active:"n", ranges:{x:[0,150],y:[-500,900]}, businessOnly:true, showProfitGraph:true,
  controls:["m","b","n"], 
  taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
@@ -469,11 +469,11 @@ const modules=[
  structure:"G(x)=E(x)−K(x)=(___−___)x−___.",
  modelMath:"Die Gewinnfunktion ist die Differenz zweier linearer Funktionen.",
  modelApp:"Aus E(x)=px und K(x)=kᵥx+Kf folgt G(x)=(p−kᵥ)x−Kf. Der y-Achsenabschnitt ist −Kf.",
- explainMath:[["Struktur","Die Differenz zweier linearer Funktionen ist linear."],["Nullstelle","Die Nullstelle von G(x) liegt bei derselben Menge x wie der Schnittpunkt von E(x) und K(x)."]],
- explainApp:[["Herleitung","G(x)=px−(kᵥx+Kf)=(p−kᵥ)x−Kf."],["Steigung","p−kᵥ bestimmt, wie schnell der Gewinn mit der Stückzahl wächst oder fällt."],["y-Achsenabschnitt","G(0)=−Kf: Bei 0 Stück entspricht der Verlust den Fixkosten."]],
+ explainMath:[["Struktur","Die Differenz zweier linearer Funktionen ist linear."],["y-Achsenabschnitt","Für den Schnittpunkt mit der y-Achse gilt x=0. Deshalb ist G(0)=−Kf."],["Nullstelle","Für die Nullstelle der Gewinnfunktion gilt G(x)=0. Diese Nullstelle liegt bei derselben Menge wie der Schnittpunkt von E(x) und K(x)."]],
+ explainApp:[["Herleitung","G(x)=E(x)−K(x)=px−(kᵥx+Kf)=(p−kᵥ)x−Kf."],["Steigung","p−kᵥ bestimmt, wie schnell G(x) mit der Menge wächst oder fällt."],["Bedingung y-Achsenabschnitt","Setze x=0: G(0)=−Kf. Bei 0 Mengeneinheiten entspricht der Verlust den Fixkosten."],["Bedingung Gewinnschwelle","Setze G(x<sub>GS</sub>)=0. Gleichwertig gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."]],
  table:null, calc:"profit"
 },
-{path:"business",id:"breakeven",title:"Gewinnschwelle",tabs:["task","language","explain","calc"],
+{path:"business",id:"breakeven",title:"Gewinnschwelle",tabs:["task","language","table","explain","calc"],
  vars:{m:4,b:300,n:8,c:0,x:75}, active:"n", ranges:{x:[0,150],y:[0,1400]}, businessOnly:true, showProfitGraph:true,
  controls:["m","b","n"],
  taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
@@ -487,11 +487,11 @@ const modules=[
  structure:"E(x<sub>GS</sub>)=K(x<sub>GS</sub>) ⇔ E(x<sub>GS</sub>)−K(x<sub>GS</sub>)=0 ⇔ G(x<sub>GS</sub>)=0.",
  modelMath:"Der Schnittpunkt zweier Funktionen kann als Nullstelle ihrer Differenzfunktion verstanden werden.",
  modelApp:"An der Gewinnschwelle x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>). Deshalb gilt an derselben Menge G(x<sub>GS</sub>)=0.",
- explainMath:[["Innermathematisch","f(x)=g(x) ⇔ g(x)−f(x)=0."],["Darstellung","Der Schnittpunkt zweier Graphen entspricht einer Nullstelle der Differenzfunktion."]],
- explainApp:[["Gewinnschwelle","An x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."],["Gewinnfunktion","An derselben Menge gilt G(x<sub>GS</sub>)=0."],["Verbindung","Schnittpunkt von E(x) und K(x) und Nullstelle von G(x) gehören zur selben Menge x<sub>GS</sub>."]],
+ explainMath:[["Schnittpunktbedingung","Für einen Schnittpunkt bei x<sub>S</sub> gilt f(x<sub>S</sub>)=g(x<sub>S</sub>)."],["Differenzfunktion","Gleichwertig dazu ist g(x<sub>S</sub>)−f(x<sub>S</sub>)=0. Der Schnittpunkt wird zur Nullstelle der Differenzfunktion."],["Darstellung","Damit werden Schnittpunkt und Nullstelle über denselben x-Wert verknüpft."]],
+ explainApp:[["Bedingung Gewinnschwelle","An der Gewinnschwelle gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."],["Bedingung Nullstelle","Weil G(x)=E(x)−K(x) gilt, folgt an derselben Menge G(x<sub>GS</sub>)=0."],["Verbindung","Der Schnittpunkt von E(x) und K(x) und die Nullstelle von G(x) besitzen denselben x-Wert x<sub>GS</sub>."],["Existenz","Bei positiven Fixkosten gibt es im positiven Sachbereich nur dann eine Gewinnschwelle, wenn der Verkaufspreis pro Einheit größer als die variablen Kosten pro Einheit ist: p>kᵥ."]],
  table:null, calc:"breakeven"
 },
-{path:"business",id:"domain",title:"Sachbereich und ganze Stückzahlen",tabs:["task","language","explain","calc"],
+{path:"business",id:"domain",title:"Sachbereich und ganze Stückzahlen",tabs:["task","language","table","explain","calc"],
  vars:{m:4.3,b:315,n:8.6,c:0,x:75}, active:"n", ranges:{x:[0,150],y:[0,1500]}, businessOnly:true,
  controls:["m","b","n"],
  taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
@@ -606,10 +606,10 @@ function niceBounds(min,max,targetTicks=7){
 function businessBreakEvenData(){
  const v=state.values,F=v.b??0,d=(v.n??0)-(v.m??0);
  if(Math.abs(F)<1e-9 && Math.abs(d)<1e-9) return {kind:"all",x:null,text:"Kosten und Erlös sind identisch. G(x)=0 für alle x."};
- if(Math.abs(F)<1e-9) return {kind:"point",x:0,y:0,text:"Bei x=0 gilt E(0)=K(0) und G(0)=0."};
+ if(Math.abs(F)<1e-9) return {kind:"point",x:0,y:0,text:"Gewinnschwelle bei x<sub>GS</sub>=0: E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0."};
  if(d<=1e-9) return {kind:"none",x:null,text:"Keine Gewinnschwelle im Sachbereich: E(x) steigt nicht schneller als K(x) (p ≤ kᵥ)."};
  const x=F/d,y=(v.m??0)*x+F;
- return {kind:"point",x,y,text:`Gewinnschwelle bei x=${fmt(x)}. Dort gilt E(x)=K(x) und G(x)=0.`};
+ return {kind:"point",x,y,text:`Gewinnschwelle bei x<sub>GS</sub>=${fmt(x)}. Dort gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0.`};
 }
 function businessXMax(){
  const v=state.values,be=businessBreakEvenData();
@@ -860,13 +860,13 @@ function renderTask(){
 
 const languageExtensions={
  point:{defs:[["x-Wert","Die Zahl, die für x eingesetzt wird."],["Funktionswert f(x)","Der Wert, der zur eingesetzten Zahl x gehört."],["Punkt P(x|f(x))","Verbindet den x-Wert mit seinem Funktionswert auf dem Graphen."]],tip:"Sage nicht nur „der y-Wert“, sondern möglichst: „der Funktionswert f(x) an der Stelle x“.",explain:"Term, Funktionswert und Punkt beschreiben denselben Zusammenhang in verschiedenen Darstellungen."},
- intercept:{defs:[["y-Achsenabschnitt b","Der Wert b=f(0); der Graph schneidet die senkrechte Achse bei (0|b)."],["parallel verschieben","Die Steigung bleibt gleich, nur der Achsenabschnitt ändert sich."],["f(0)","Funktionswert an der Stelle x=0."]],tip:"Formuliere Ursache und Wirkung: „b wird größer – der Graph verschiebt sich parallel nach oben.“",explain:"Der Achsenabschnitt beschreibt den Startwert der linearen Funktion bei x=0."},
+ intercept:{defs:[["Bedingung x=0","Jeder Punkt auf der y-Achse hat die x-Koordinate 0."],["y-Achsenabschnitt b","Bei f(x)=mx+b gilt f(0)=b."],["S<sub>y</sub>(0|b)","Bezeichnung für den Schnittpunkt des Graphen mit der y-Achse."],["parallel verschieben","Ändert sich nur b, bleibt die Steigung gleich."]],tip:"Nenne zuerst die Bedingung: „Für den Schnittpunkt mit der y-Achse gilt x=0.“ Setze danach x=0 in die Funktion ein.",explain:"Bedingung x=0 → Funktionswert f(0) bestimmen → Schnittpunkt S<sub>y</sub>(0|f(0)) angeben."},
  slope:{defs:[["Steigung m","Änderung des Funktionswertes pro Schritt in x-Richtung."],["Δx","Änderung auf der x-Achse."],["Δf(x)","Zugehörige Änderung des Funktionswertes."],["steigend / fallend","m>0: steigend; m<0: fallend; m=0: waagerecht."]],tip:"Nutze die Formulierung: „Wenn x um … zunimmt, verändert sich f(x) um …“.",explain:"Vorzeichen und Betrag der Steigung beschreiben Richtung und Steilheit des Graphen."},
- proportional:{defs:[["proportional","Lineare Funktion mit b=0."],["Ursprung","Punkt (0|0)."],["Proportionalitätsfaktor","Die konstante Steigung m in f(x)=mx."]],tip:"Ein sicherer Satz ist: „Der Graph verläuft durch den Ursprung, deshalb ist die lineare Funktion proportional.“",explain:"Proportionale Funktionen sind ein Spezialfall linearer Funktionen."},
- zero:{defs:[["Nullstelle","x-Wert, bei dem f(x)=0 gilt."],["x-Achse","Waagerechte Achse; dort ist der Funktionswert 0."],["N(x₀|0)","Nullstellenpunkt auf dem Graphen."]],tip:"Unterscheide Nullstelle x₀ und Nullstellenpunkt N(x₀|0).",explain:"Graphisch ist die Nullstelle der Schnitt mit der x-Achse; algebraisch löst man f(x)=0."},
+ proportional:{defs:[["Bedingung b=0","Eine lineare Funktion ist proportional, wenn ihr y-Achsenabschnitt 0 ist."],["f(0)=0","Gleichwertige Bedingung: Bei x=0 ist auch der Funktionswert 0."],["Ursprung O(0|0)","Schnittpunkt der beiden Koordinatenachsen."],["Proportionalitätsfaktor m","Die konstante Steigung in f(x)=mx."]],tip:"Begründe mit einer Bedingung: „b=0, also f(0)=0. Deshalb verläuft der Graph durch den Ursprung und die Funktion ist proportional.“",explain:"Bedingung b=0 ⇔ f(0)=0 ⇔ der Graph verläuft durch O(0|0)."},
+ zero:{defs:[["Bedingung f(x<sub>N</sub>)=0","Auf der x-Achse ist der Funktionswert 0."],["Nullstelle x<sub>N</sub>","Der x-Wert, der die Bedingung f(x<sub>N</sub>)=0 erfüllt."],["Nullstellenpunkt N(x<sub>N</sub>|0)","Der zugehörige Punkt auf dem Graphen."],["x-Achse","Waagerechte Achse; dort ist der Funktionswert 0."]],tip:"Unterscheide klar: x<sub>N</sub> ist die Nullstelle; N(x<sub>N</sub>|0) ist der Nullstellenpunkt.",explain:"Bedingung f(x<sub>N</sub>)=0 → nach x<sub>N</sub> lösen → Nullstellenpunkt N(x<sub>N</sub>|0) angeben."},
  compare:{defs:[["Funktionswerte vergleichen","f(x) und g(x) werden für denselben x-Wert betrachtet."],["größer / kleiner","Der höher liegende Graph besitzt an dieser Stelle den größeren Funktionswert."],["Differenz","Beschreibt den Abstand der beiden Funktionswerte mit Vorzeichen."]],tip:"Nenne immer den gemeinsamen x-Wert, auf den sich der Vergleich bezieht.",explain:"Ein sinnvoller Vergleich zweier Funktionen bezieht sich auf dieselbe Stelle x."},
  parallel:{defs:[["parallel","Geraden mit gleicher Steigung und verschiedenem Achsenabschnitt."],["identisch","Gleiche Steigung und gleicher Achsenabschnitt; beide Graphen fallen zusammen."],["Steigung vergleichen","m₁ und m₂ entscheiden über die Lagebeziehung."]],tip:"Erst Steigungen vergleichen, danach die Achsenabschnitte.",explain:"Die Parameter m und b entscheiden gemeinsam, ob zwei lineare Funktionen parallel, identisch oder schneidend sind."},
- intersection:{defs:[["Schnittpunkt","Gemeinsamer Punkt zweier Graphen."],["gleichsetzen","f(x)=g(x), weil am Schnittpunkt beide Funktionswerte gleich sind."],["S(xₛ|f(xₛ))","Bezeichnet x- und Funktionswert des gemeinsamen Punktes."]],tip:"Sprich präzise: „Bei x=xₛ besitzen beide Funktionen denselben Funktionswert.“",explain:"Graphisches Schneiden und algebraisches Gleichsetzen beschreiben denselben Sachverhalt."},
+ intersection:{defs:[["Schnittpunkt S","Gemeinsamer Punkt zweier Graphen."],["Schnittpunktstelle x<sub>S</sub>","Der gemeinsame x-Wert des Schnittpunkts."],["Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>)","Am Schnittpunkt sind die beiden Funktionswerte gleich."],["S(x<sub>S</sub>|f(x<sub>S</sub>))","Bezeichnung des gemeinsamen Punktes."]],tip:"Nenne die Bedingung vollständig: „Am Schnittpunkt gilt f(x<sub>S</sub>)=g(x<sub>S</sub>).“ Bestimme zuerst x<sub>S</sub>, danach den gemeinsamen Funktionswert.",explain:"Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>) → x<sub>S</sub> berechnen → gemeinsamen Funktionswert bestimmen → Schnittpunkt S angeben."},
  difference:{defs:[["Differenz g(x)−f(x)","Vergleicht zwei Funktionswerte an derselben Stelle."],["positiv / negativ","Das Vorzeichen zeigt, welcher Graph höher liegt."],["vertikaler Abstand","Betrag der Differenz der Funktionswerte."]],tip:"Trenne Vorzeichen und Betrag: Vorzeichen = Richtung, Betrag = Größe des Unterschieds.",explain:"Die Differenzfunktion macht den Vergleich zweier Funktionen selbst zu einer neuen Funktion."},
  costrevenue:{defs:[["Fixkosten Kf","Kosten, die auch bei Menge 0 entstehen."],["variable Kosten kᵥ","Kosten pro zusätzlicher Mengeneinheit."],["Gesamtkosten K(x)","Fixkosten plus variable Kosten für die Menge x."],["Erlös E(x)","Verkaufserlös für die Menge x."],["Verkaufspreis p","Erlös pro verkaufter Mengeneinheit."],["Gewinn G(x)","Differenz aus Erlös und Kosten: E(x)−K(x)."]],tip:"Sprich und schreibe die Funktionen vollständig: K(x), E(x) und G(x). Denke außerdem die Einheit mit, z. B. €/Stück, €/kg oder €/m.",explain:"K(x), E(x) und G(x) beziehen sich auf dieselbe Menge x: K(x) beschreibt die Gesamtkosten, E(x) den Erlös und G(x)=E(x)−K(x) den Gewinn oder Verlust."},
  profitdiff:{defs:[["Gewinn","Erlös ist größer als Kosten: G(x)>0."],["Verlust","Kosten sind größer als Erlös: G(x)<0."],["Differenz","G(x)=E(x)−K(x)."],["gleiche Menge","Kosten und Erlös werden bei demselben x verglichen."]],tip:"Sage nicht nur „plus“ oder „minus“. Begründe fachsprachlich: E(x)>K(x) bedeutet Gewinn; E(x)<K(x) bedeutet Verlust.",explain:"Der vertikale Unterschied zwischen Erlös- und Kostenfunktion entspricht bei derselben Menge dem Gewinn oder Verlust."},
@@ -879,18 +879,18 @@ function languageExtension(m){return languageExtensions[m.id]||{defs:[],tip:"",e
 
 const sensitiveLanguage={
  point:{starters:["Für x = … gilt f(…) = … .","Der Funktionswert an der Stelle … ist … .","Der zugehörige Punkt lautet P(…|…)."],goal:"Ich kann zu einer Stelle x den Funktionswert f(x) bestimmen und den zugehörigen Punkt P(x|f(x)) angeben.",extra:[["Sprechen und schreiben","f(3) liest man „f von 3“. Die Zahl 3 ist die Stelle; f(3) ist der zugehörige Funktionswert."],["Darstellungen verbinden","Stelle x, Funktionswert f(x) und Punkt P(x|f(x)) gehören immer zusammen."]]},
- intercept:{starters:["Bei x = 0 gilt f(0) = … .","Der Achsenabschnitt beträgt b = … .","Wenn b größer wird, verschiebt sich der Graph … ."],goal:"Ich kann erklären, wie der Achsenabschnitt b mit f(0) zusammenhängt und wie eine Änderung von b den Graphen verschiebt.",extra:[["Woran erkenne ich b?","Im Term f(x)=mx+b ist b der Funktionswert bei x=0."],["Was bleibt gleich?","Wenn nur b verändert wird, bleibt die Steigung m unverändert."]]},
+ intercept:{starters:["Für den Schnittpunkt mit der y-Achse gilt x=0.","Setze ich x=0 ein, erhalte ich f(0)=… .","Der Schnittpunkt mit der y-Achse lautet S<sub>y</sub>(0|…).","Wenn nur b verändert wird, bleibt die Steigung … ."],goal:"Ich kann die Bedingung x=0 für den Schnittpunkt mit der y-Achse erklären, f(0) bestimmen und den Punkt S<sub>y</sub>(0|f(0)) angeben.",extra:[["Bedingung zuerst","Ein Punkt liegt auf der y-Achse, wenn x=0 gilt."],["Term und Punkt verbinden","Bei f(x)=mx+b ist f(0)=b. Deshalb lautet der Achsenschnittpunkt S<sub>y</sub>(0|b)."],["Veränderung beschreiben","Wenn nur b verändert wird, bleibt m gleich und der Graph verschiebt sich parallel."]]},
  slope:{starters:["Wenn x um … zunimmt, verändert sich f(x) um … .","Die Steigung m = … bedeutet: … .","Da m … 0 ist, verläuft der Graph … ."],goal:"Ich kann die Steigung m als Änderung des Funktionswertes pro Änderung von x beschreiben und das Vorzeichen von m deuten.",extra:[["Steigung lesen","m>0 bedeutet steigend, m<0 bedeutet fallend und m=0 bedeutet waagerecht."],["Änderungsrate","Die Steigung beschreibt nicht einen einzelnen Punkt, sondern eine konstante Änderung entlang der gesamten Geraden."]]},
- proportional:{starters:["Die Funktion ist proportional, weil … .","Für x = 0 gilt f(0) = … .","Der Graph verläuft durch … ."],goal:"Ich kann erkennen und begründen, wann eine lineare Funktion proportional ist.",extra:[["Kennzeichen","Bei einer proportionalen Funktion gilt b=0 und damit f(0)=0."],["Graphisch","Der Graph einer proportionalen Funktion verläuft durch den Ursprung (0|0)."]]},
- zero:{starters:["x₀ = … ist eine Nullstelle, weil f(…) = 0 gilt.","Der Graph schneidet die x-Achse bei … .","Um die Nullstelle zu bestimmen, löse ich f(x)=0."],goal:"Ich kann eine Nullstelle als x-Wert mit f(x)=0 beschreiben und vom Nullstellenpunkt N(x₀|0) unterscheiden.",extra:[["Nullstelle oder Punkt?","Die Nullstelle ist der x-Wert x₀. Der Punkt auf dem Graphen heißt N(x₀|0)."],["Zwei Sichtweisen","Graphisch liegt die Nullstelle auf der x-Achse; rechnerisch löst man f(x)=0."]]},
+ proportional:{starters:["Die Funktion ist proportional, weil b=0 gilt.","Aus b=0 folgt f(0)=0.","Deshalb verläuft der Graph durch den Ursprung O(0|0).","Bei b≠0 ist die Funktion nicht proportional."],goal:"Ich kann die Bedingung b=0 beziehungsweise f(0)=0 nutzen, um zu begründen, ob eine lineare Funktion proportional ist.",extra:[["Gleichwertige Kennzeichen","b=0, f(0)=0 und der Verlauf durch O(0|0) beschreiben denselben Sachverhalt."],["Nicht jede lineare Funktion ist proportional","f(x)=mx+b ist nur im Spezialfall b=0 proportional."]]},
+ zero:{starters:["Für die Nullstelle x<sub>N</sub> gilt f(x<sub>N</sub>)=0.","Ich löse die Gleichung f(x)=0 und erhalte x<sub>N</sub>=… .","Der Nullstellenpunkt lautet N(x<sub>N</sub>|0).","Der Graph schneidet die x-Achse, weil der Funktionswert dort 0 ist."],goal:"Ich kann die Bedingung f(x<sub>N</sub>)=0 nutzen, die Nullstelle x<sub>N</sub> bestimmen und sie vom Nullstellenpunkt N(x<sub>N</sub>|0) unterscheiden.",extra:[["Bedingung zuerst","Auf der x-Achse ist der Funktionswert 0. Deshalb setzt man f(x)=0."],["Nullstelle oder Punkt?","x<sub>N</sub> ist ein x-Wert; N(x<sub>N</sub>|0) ist ein Punkt mit zwei Koordinaten."],["Nicht verwechseln","Beim y-Achsenabschnitt setzt man x=0; bei der Nullstelle setzt man f(x)=0."]]},
  compare:{starters:["An der Stelle x = … gilt f(x) = … und g(x) = … .","Damit ist f(x) … als g(x).","Für den Vergleich betrachte ich beide Funktionen bei demselben x-Wert."],goal:"Ich kann die Funktionswerte f(x) und g(x) an derselben Stelle x vergleichen und meine Aussage mit den Funktionswerten begründen.",extra:[["Gleiche Stelle","Ein Vergleich ist nur eindeutig, wenn f(x) und g(x) zur selben Stelle x gehören."],["Nicht verwechseln","Eine größere Steigung bedeutet nicht automatisch, dass der Funktionswert an jeder Stelle größer ist."]]},
- parallel:{starters:["Die Steigungen sind … .","Die Achsenabschnitte sind … .","Deshalb sind die Geraden … ."],goal:"Ich kann mithilfe von Steigung und Achsenabschnitt entscheiden, ob zwei Geraden parallel, identisch oder schneidend sind.",extra:[["Reihenfolge","Vergleiche zuerst die Steigungen m₁ und m₂ und danach die Achsenabschnitte b₁ und b₂."],["Parallel oder identisch","Gleiche Steigung reicht für Parallelität; sind zusätzlich die Achsenabschnitte gleich, sind die Geraden identisch."]]},
- intersection:{starters:["Am Schnittpunkt gilt f(x) = g(x).","Bei x = … besitzen beide Funktionen den Funktionswert … .","Der Schnittpunkt lautet S(…|…)."],goal:"Ich kann einen Schnittpunkt als gemeinsamen Punkt zweier Graphen beschreiben und durch f(x)=g(x) bestimmen.",extra:[["Warum gleichsetzen?","Am Schnittpunkt gehören zu demselben x-Wert zwei gleiche Funktionswerte."],["Koordinaten","Zum Schnittpunkt gehören sowohl die gemeinsame Stelle x als auch der gemeinsame Funktionswert."]]},
+ parallel:{starters:["Für parallele Geraden gilt m₁=m₂ und b₁≠b₂.","Für identische Geraden gilt m₁=m₂ und b₁=b₂.","Da m₁ … m₂ gilt, besitzen die Geraden … ."],goal:"Ich kann die Bedingungen für parallele, identische und sich schneidende Geraden mithilfe von Steigung und y-Achsenabschnitt unterscheiden.",extra:[["Bedingung parallel","m₁=m₂ und b₁≠b₂."],["Bedingung identisch","m₁=m₂ und b₁=b₂."],["Bedingung Schnittpunkt","Bei m₁≠m₂ besitzen zwei lineare Funktionen genau einen Schnittpunkt."]]},
+ intersection:{starters:["Am Schnittpunkt gilt f(x<sub>S</sub>)=g(x<sub>S</sub>).","Durch Gleichsetzen bestimme ich zuerst x<sub>S</sub>=… .","Bei x<sub>S</sub> besitzen beide Funktionen den Funktionswert … .","Der Schnittpunkt lautet S(x<sub>S</sub>|…)."],goal:"Ich kann die Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>) nutzen, zuerst die Schnittpunktstelle x<sub>S</sub> und danach den gemeinsamen Funktionswert bestimmen.",extra:[["Warum gleichsetzen?","Am Schnittpunkt haben beide Graphen bei derselben Stelle x<sub>S</sub> denselben Funktionswert."],["Reihenfolge","Zuerst x<sub>S</sub> durch Gleichsetzen bestimmen, danach x<sub>S</sub> in f oder g einsetzen."],["Punkt angeben","Der Schnittpunkt kann als S(x<sub>S</sub>|f(x<sub>S</sub>)) geschrieben werden."]]},
  difference:{starters:["An der Stelle x = … gilt g(x)−f(x) = … .","Die Differenz ist positiv/negativ, deshalb liegt … höher.","Der Betrag der Differenz beträgt … ."],goal:"Ich kann die Differenz g(x)−f(x) verwenden, um zwei Funktionswerte an derselben Stelle zu vergleichen.",extra:[["Vorzeichen","Das Vorzeichen zeigt, welcher Funktionswert größer ist."],["Betrag","Der Betrag |g(x)−f(x)| beschreibt den vertikalen Abstand der beiden Graphen an derselben Stelle."]]},
  costrevenue:{starters:["Bei der Menge x = … gilt K(x) = … und E(x) = … .","Der Gewinn beträgt G(x)=E(x)−K(x)=… .","Die Einheit von K(x), E(x) und G(x) ist … ."],goal:"Ich kann für dieselbe Menge x die Gesamtkosten K(x), den Erlös E(x) und den Gewinn oder Verlust G(x) bestimmen und sachgerecht deuten.",extra:[["Funktionssprache","Sprich vollständig: K(x) „K von x“, E(x) „E von x“ und G(x) „G von x“. Alle drei Werte beziehen sich auf dieselbe Menge x."],["Drei Größen","K(x) sind die Gesamtkosten, E(x) ist der Erlös und G(x)=E(x)−K(x) ist der Gewinn beziehungsweise Verlust."]]},
  profitdiff:{starters:["Bei x = … gilt E(x) = … und K(x) = … .","Da E(x) größer/kleiner als K(x) ist, gilt G(x) … 0.","G(x)=E(x)−K(x)=… ."],goal:"Ich kann Gewinn und Verlust als Differenz G(x)=E(x)−K(x) erklären und mit E(x) und K(x) begründen.",extra:[["Gewinn oder Verlust","E(x)>K(x) bedeutet Gewinn; E(x)<K(x) bedeutet Verlust; E(x)=K(x) bedeutet weder Gewinn noch Verlust."],["Gleiche Menge","E(x) und K(x) müssen sich immer auf dieselbe Menge x beziehen."]]},
- profitfunc:{starters:["Aus E(x) = … und K(x) = … folgt G(x) = … .","Bei x = 0 gilt G(0) = … .","Pro zusätzlicher Mengeneinheit verändert sich G(x) um … ."],goal:"Ich kann die Gewinnfunktion G(x)=E(x)−K(x) aus Erlösfunktion und Kostenfunktion herleiten und ihre Parameter im Sachkontext deuten.",extra:[["Startwert","Bei positiven Fixkosten gilt G(0)<0, weil ohne Verkauf noch kein Erlös entsteht, aber Fixkosten anfallen."],["Steigung der Gewinnfunktion","Die Steigung von G(x) ist p−kᵥ. Sie zeigt, wie sich der Gewinn pro zusätzlicher Mengeneinheit verändert."]]},
- breakeven:{starters:["An der Gewinnschwelle x<sub>GS</sub> gilt E(x<sub>GS</sub>) = K(x<sub>GS</sub>).","Für dieselbe Menge gilt G(x<sub>GS</sub>) = 0.","Der Schnittpunkt von E(x) und K(x) und die Nullstelle von G(x) haben denselben x-Wert."],goal:"Ich kann die Gewinnschwelle x<sub>GS</sub> als gemeinsame Stelle mit E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0 erklären.",extra:[["Zwei Darstellungen – eine Menge","Der Schnittpunkt von E(x) und K(x) und die Nullstelle von G(x) beschreiben dieselbe Gewinnschwelle x<sub>GS</sub>."],["Fachsprachlich vollständig","Schreibe die Gleichheit vollständig als E(x)=K(x), weil sich beide Funktionswerte auf dieselbe Menge x beziehen."]]},
+ profitfunc:{starters:["Aus E(x)=… und K(x)=… folgt G(x)=E(x)−K(x)=… .","Für den y-Achsenabschnitt setze ich x=0 und erhalte G(0)=… .","Für die Gewinnschwelle gilt G(x<sub>GS</sub>)=0.","Pro zusätzlicher Mengeneinheit verändert sich G(x) um … ."],goal:"Ich kann G(x)=E(x)−K(x) herleiten, mit x=0 den y-Achsenabschnitt bestimmen und mit G(x<sub>GS</sub>)=0 die Bedingung für die Gewinnschwelle angeben.",extra:[["Startwert","Bedingung x=0: Bei positiven Fixkosten gilt G(0)=−Kf<0."],["Nullstelle","Bedingung G(x<sub>GS</sub>)=0: Dort liegt die Gewinnschwelle."],["Steigung der Gewinnfunktion","Die Steigung p−kᵥ zeigt, wie sich G(x) pro zusätzlicher Mengeneinheit verändert."]]},
+ breakeven:{starters:["Bedingung am Schnittpunkt: E(x<sub>GS</sub>)=K(x<sub>GS</sub>).","Bedingung an der Nullstelle der Gewinnfunktion: G(x<sub>GS</sub>)=0.","Beide Bedingungen beziehen sich auf dieselbe Menge x<sub>GS</sub>.","Eine positive Gewinnschwelle existiert nur, wenn … ."],goal:"Ich kann die Gewinnschwelle x<sub>GS</sub> mit den beiden gleichwertigen Bedingungen E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0 erklären.",extra:[["Zwei Bedingungen – eine Menge","Schnittpunkt von E(x) und K(x) und Nullstelle von G(x) besitzen denselben x-Wert x<sub>GS</sub>."],["Fachsprachlich vollständig","Schreibe E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und nicht nur E=K."],["Existenz","Bei positiven Fixkosten muss p>kᵥ gelten, damit E(x) K(x) im positiven Sachbereich erreichen kann."]]},
  domain:{starters:["Im Sachbereich darf x nur … sein.","Die mathematische Gewinnschwelle liegt bei x<sub>GS</sub> = … .","Für ganze Stückzahlen bedeutet das praktisch: … ."],goal:"Ich kann eine mathematische Lösung an den Sachbereich und die verwendete Mengeneinheit anpassen und zwischen rechnerischer Lösung und praktischer Deutung unterscheiden.",extra:[["Sachbereich","Nicht jeder mathematisch mögliche x-Wert ist im Sachkontext sinnvoll."],["Einheit beachten","Bei Stückzahlen sind meist ganze Zahlen nötig; bei kg oder m können auch Dezimalwerte sinnvoll sein."]]},
  own:{starters:["Im Term f(x)=mx+b ist m = … und b = … .","Wenn ich m verändere, dann … .","Wenn ich b verändere, dann … ."],goal:"Ich kann einen linearen Funktionsterm eingeben und die Zusammenhänge zwischen Term, Parametern, Graph und Wertetabelle beschreiben.",extra:[["Vier Darstellungen","Term, Parameter, Graph und Wertetabelle beschreiben dieselbe lineare Funktion."],["Gezielt verändern","Verändere möglichst nur einen Parameter und beschreibe anschließend genau dessen Wirkung."]]}
 };
@@ -927,7 +927,14 @@ function renderTable(){
    const base=[0,xmax*.25,xmax*.5,xmax*.75,xmax].map(x=>Math.round(x*10)/10);
    if(be.kind==="point"&&be.x>=0&&be.x<=xmax)base.push(Math.round(be.x*100)/100);
    xs=[...new Set(base)].sort((a,b)=>a-b);
- }else xs=[-4,-2,0,2,4];
+ }else{
+   const base=[-4,-2,0,2,4];
+   if(m.id==="zero"&&Math.abs(state.values.m)>1e-9) base.push(Math.round((-state.values.b/state.values.m)*100)/100);
+   if(m.id==="intersection"){
+     const r=relation(); if(r?.kind==="intersection") base.push(Math.round(r.x*100)/100);
+   }
+   xs=[...new Set(base)].sort((a,b)=>a-b);
+ }
  if(m.path==="business"){
    head=`<tr><th>x [${state.quantityUnit}]</th><th>K(x) [${state.moneyUnit}]</th><th>E(x) [${state.moneyUnit}]</th><th>G(x) [${state.moneyUnit}]</th></tr>`;
    rows=xs.map(x=>`<tr class="${x===state.values.x?"current":""}"><td>${fmt(x)}</td><td>${fmt(K(x))}</td><td>${fmt(E(x))}</td><td>${fmt(G(x))}</td></tr>`).join("");
@@ -956,18 +963,19 @@ function renderExplain(){
 function zeroInfo(){
  const v=state.values;
  if(Math.abs(v.m)<1e-9){
-   if(Math.abs(v.b)<1e-9) return "f(x)=0 für alle x. Jeder x-Wert ist eine Nullstelle.";
-   return "f ist konstant und ungleich 0. Es gibt keine Nullstelle.";
+   if(Math.abs(v.b)<1e-9) return "Bedingung f(x)=0: Sie ist für alle x erfüllt. Jeder x-Wert ist eine Nullstelle.";
+   return "Bedingung f(x)=0: Sie kann nicht erfüllt werden, weil f konstant und ungleich 0 ist. Es gibt keine Nullstelle.";
  }
- return `0=${fmt(v.m)}x ${v.b>=0?"+":"−"} ${fmt(Math.abs(v.b))} ⇒ x₀=${fmt(-v.b/v.m)}.`;
+ const xN=-v.b/v.m;
+ return `Bedingung: f(x<sub>N</sub>)=0. Also 0=${fmt(v.m)}x ${v.b>=0?"+":"−"} ${fmt(Math.abs(v.b))} ⇒ x<sub>N</sub>=${fmt(xN)}. Nullstellenpunkt: N(x<sub>N</sub>|0)=N(${fmt(xN)}|0).`;
 }
 function intersectionInfo(){
  const v=state.values;
  if(Math.abs(v.m-v.n)<1e-9){
-   return Math.abs(v.b-v.c)<1e-9 ? "Die Funktionen sind identisch: unendlich viele gemeinsame Punkte." : "Die Geraden sind parallel: kein Schnittpunkt.";
+   return Math.abs(v.b-v.c)<1e-9 ? "Bedingung f(x)=g(x): Sie ist für alle x erfüllt. Die Funktionen sind identisch und besitzen unendlich viele gemeinsame Punkte." : "Bedingung f(x)=g(x): Sie ist nicht erfüllbar. Die Geraden sind parallel und besitzen keinen Schnittpunkt.";
  }
  const x=(v.c-v.b)/(v.m-v.n), y=fx(x);
- return `${fmt(v.m)}x ${v.b>=0?"+":"−"} ${fmt(Math.abs(v.b))} = ${fmt(v.n)}x ${v.c>=0?"+":"−"} ${fmt(Math.abs(v.c))} ⇒ S(${fmt(x)}|${fmt(y)}).`;
+ return `Bedingung: f(x<sub>S</sub>)=g(x<sub>S</sub>). Also ${fmt(v.m)}x ${v.b>=0?"+":"−"} ${fmt(Math.abs(v.b))} = ${fmt(v.n)}x ${v.c>=0?"+":"−"} ${fmt(Math.abs(v.c))} ⇒ x<sub>S</sub>=${fmt(x)}. Danach f(x<sub>S</sub>)=${fmt(y)}. Schnittpunkt: S(${fmt(x)}|${fmt(y)}).`;
 }
 function breakEven(){
  const be=businessBreakEvenData();
@@ -1077,14 +1085,23 @@ function drawChart(){
    svg.appendChild(svgEl("text",{x:X+10,y:Y-10,fill:"#111827","font-size":13,"font-weight":800},`P(${fmt(x)}|${fmt(y)})`));
  }
  if(m.id==="intercept"||m.id==="proportional"||(m.id==="costrevenue"&&state.businessVisible.K)){
-   const y=f(0),X=sx(0),Y=sy(y); if(Y>=p.t&&Y<=H-p.b){svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#fff",stroke:"#c86b09","stroke-width":4}));svg.appendChild(svgEl("text",{x:X+10,y:Y-10,fill:"#7c3f05","font-size":12,"font-weight":800},`(0|${fmt(y)})`));}
-   if(m.id==="proportional"){svg.appendChild(svgEl("circle",{cx:sx(0),cy:sy(0),r:5,fill:"#111827"}));svg.appendChild(svgEl("text",{x:sx(0)+8,y:sy(0)+18,fill:"#111827","font-size":12},"Ursprung (0|0)"));}
+   const y=f(0),X=sx(0),Y=sy(y); if(Y>=p.t&&Y<=H-p.b){
+     svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#fff",stroke:"#c86b09","stroke-width":4}));
+     if(m.id==="intercept") svgIndexedText(svg,X+10,Y-10,"S","y",`(0|${fmt(y)})`,{fill:"#7c3f05","font-size":12,"font-weight":800});
+     else svg.appendChild(svgEl("text",{x:X+10,y:Y-10,fill:"#7c3f05","font-size":12,"font-weight":800},`(0|${fmt(y)})`));
+   }
+   if(m.id==="proportional"){svg.appendChild(svgEl("circle",{cx:sx(0),cy:sy(0),r:5,fill:"#111827"}));svg.appendChild(svgEl("text",{x:sx(0)+8,y:sy(0)+18,fill:"#111827","font-size":12},"Ursprung O(0|0)"));}
  }
  if(m.id==="slope"){
    const x0=-1,x1=1,y0=f(x0),y1=f(x1);
    if([y0,y1].every(y=>y>=ymin&&y<=ymax)){svg.appendChild(svgEl("line",{x1:sx(x0),y1:sy(y0),x2:sx(x1),y2:sy(y0),stroke:"#0f766e","stroke-width":3}));svg.appendChild(svgEl("line",{x1:sx(x1),y1:sy(y0),x2:sx(x1),y2:sy(y1),stroke:"#0f766e","stroke-width":3}));svg.appendChild(svgEl("text",{x:(sx(x0)+sx(x1))/2,y:sy(y0)+18,"text-anchor":"middle",fill:"#0f766e","font-size":11,"font-weight":800},"Δx=2"));svg.appendChild(svgEl("text",{x:sx(x1)+8,y:(sy(y0)+sy(y1))/2,fill:"#0f766e","font-size":11,"font-weight":800},`Δf(x)=${fmt(v.m*2)}`));}
  }
- if(m.id==="zero"&&Math.abs(v.m)>1e-9){const x=-v.b/v.m;if(x>=xmin&&x<=xmax){svg.appendChild(svgEl("circle",{cx:sx(x),cy:sy(0),r:7,fill:"#111827",stroke:"#fff","stroke-width":3}));svg.appendChild(svgEl("text",{x:sx(x)+10,y:sy(0)-10,fill:"#111827","font-size":12,"font-weight":800},`N(${fmt(x)}|0)`));}}
+ if(m.id==="zero"&&Math.abs(v.m)>1e-9){const x=-v.b/v.m;if(x>=xmin&&x<=xmax){
+   const X=sx(x),Y=sy(0);
+   svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#111827",stroke:"#fff","stroke-width":3}));
+   svgIndexedText(svg,X+10,Y-10,"N(x","N",`|0) = N(${fmt(x)}|0)`,{fill:"#111827","font-size":12,"font-weight":800});
+   svgIndexedText(svg,X,Math.min(H-10,xAxisY+40),"x","N",` = ${fmt(x)}`,{"text-anchor":"middle",fill:"#111827","font-size":12,"font-weight":800});
+ }}
  if(["compare","difference"].includes(m.id)){
    const x=v.x,y1=f(x),y2=g(x),X=sx(x);
    svg.appendChild(svgEl("circle",{cx:X,cy:sy(y1),r:6,fill:"#fff",stroke:"#c86b09","stroke-width":3}));
@@ -1099,7 +1116,14 @@ function drawChart(){
  }
  if(["parallel","intersection"].includes(m.id)){
    const r=relation();
-   if(r?.kind==="intersection"&&r.x>=xmin&&r.x<=xmax&&r.y>=ymin&&r.y<=ymax){svg.appendChild(svgEl("circle",{cx:sx(r.x),cy:sy(r.y),r:7,fill:"#111827",stroke:"#fff","stroke-width":3}));svg.appendChild(svgEl("text",{x:sx(r.x)+10,y:sy(r.y)-10,fill:"#111827","font-size":12,"font-weight":800},`S(${fmt(r.x)}|${fmt(r.y)})`));}
+   if(r?.kind==="intersection"&&r.x>=xmin&&r.x<=xmax&&r.y>=ymin&&r.y<=ymax){
+     const X=sx(r.x),Y=sy(r.y);
+     svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#111827",stroke:"#fff","stroke-width":3}));
+     if(m.id==="intersection"){
+       svgIndexedText(svg,X+10,Y-10,"S(x","S",`|${fmt(r.y)})`,{fill:"#111827","font-size":12,"font-weight":800});
+       svgIndexedText(svg,X,Math.min(H-10,xAxisY+40),"x","S",` = ${fmt(r.x)}`,{"text-anchor":"middle",fill:"#111827","font-size":12,"font-weight":800});
+     }else svg.appendChild(svgEl("text",{x:X+10,y:Y-10,fill:"#111827","font-size":12,"font-weight":800},`S(${fmt(r.x)}|${fmt(r.y)})`));
+   }
  }
 
  // Gewinnschwelle gezielt zuschaltbar: Schnittpunkt von E(x) und K(x) sowie Nullstelle von G(x).
@@ -1148,7 +1172,7 @@ function renderBusinessGraphControls(){
      ? `Markiert wird dieselbe Menge x<sub>GS</sub>: oben gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>), unten G(x<sub>GS</sub>)=0.`
      : be.text;
  }else{
-   $("businessGuideNote").textContent="Tippe auf K(x), E(x) oder G(x), um den jeweiligen Graphen ein- oder auszublenden. Mit „Gewinnschwelle anzeigen“ werden alle drei Funktionen eingeblendet und Schnittpunkt und Nullstelle bei xGS verbunden.";
+   $("businessGuideNote").innerHTML="Tippe auf K(x), E(x) oder G(x), um den jeweiligen Graphen ein- oder auszublenden. Mit „Gewinnschwelle anzeigen“ werden alle drei Funktionen eingeblendet; Schnittpunkt und Nullstelle werden bei x<sub>GS</sub> verbunden.";
  }
 }
 
@@ -1170,7 +1194,7 @@ function renderCenter(){
  const m=currentModule();
  $("chartTitle").textContent=m.title;
  $("chartSub").textContent=m.path==="business"?"Die Skala passt sich automatisch an. K(x), E(x) und G(x) lassen sich einzeln schalten; die Gewinnschwelle kann gezielt eingeblendet werden.":"Die Achsenskalierung bleibt innerhalb des Moduls stabil.";
- $("insight").textContent=insightText();
+ $("insight").innerHTML=insightText();
  renderBusinessGraphControls();drawChart();renderLegend();
 }
 
@@ -1178,12 +1202,12 @@ function insightText(){
  const m=currentModule(),v=state.values;
  if(m.id==="own")return `Aktuell: f(x)=${linearTermText()}. Steigung m=${fmt(v.m)}, y-Achsenabschnitt b=${fmt(v.b)}.`;
  if(m.id==="point"){const y=state.mode==="app"?K(v.x):fx(v.x);return `${state.mode==="app"?"K":"f"}(${fmt(v.x)})=${fmt(y)}. Der zugehörige Punkt ist P(${fmt(v.x)}|${fmt(y)}).`;}
- if(m.id==="intercept")return `Aktuell gilt f(0)=${fmt(v.b)}. Der y-Achsenabschnitt ist (0|${fmt(v.b)}).`;
+ if(m.id==="intercept")return state.mode==="app"?`Bedingung: x=0. K(0)=${fmt(v.b)}. Schnittpunkt: S<sub>y</sub>(0|${fmt(v.b)}).`:`Bedingung: x=0. f(0)=${fmt(v.b)}. Schnittpunkt: S<sub>y</sub>(0|${fmt(v.b)}).`;
  if(m.id==="slope")return `m=${fmt(v.m)}. Bei Δx=2 ergibt sich Δy=${fmt(v.m*2)}; also m=Δy/Δx=${fmt(v.m*2)}/2=${fmt(v.m)}.`;
- if(m.id==="proportional")return Math.abs(v.b)<1e-9?"b=0: Der Graph verläuft durch den Ursprung und die Funktion ist proportional.":"b≠0: Der Graph verläuft nicht durch den Ursprung.";
+ if(m.id==="proportional")return Math.abs(v.b)<1e-9?"Bedingung erfüllt: b=0 und f(0)=0. Der Graph verläuft durch O(0|0); die Funktion ist proportional.":"Bedingung nicht erfüllt: b≠0 und damit f(0)≠0. Die Funktion ist nicht proportional.";
  if(m.id==="zero")return zeroInfo();
  if(m.id==="compare")return `${state.mode==="app"?"K":"f"}(${fmt(v.x)})=${fmt(state.mode==="app"?K(v.x):fx(v.x))}; ${state.mode==="app"?"E":"g"}(${fmt(v.x)})=${fmt(state.mode==="app"?E(v.x):gx(v.x))}.`;
- if(m.id==="parallel"){const r=relation();return r.kind==="parallel"?"Gleiche Steigung, unterschiedliche y-Achsenabschnitte: parallel.":r.kind==="identical"?"Gleiche Steigung und gleicher y-Achsenabschnitt: identisch.":"Die Steigungen sind noch verschieden.";}
+ if(m.id==="parallel"){const r=relation();return r.kind==="parallel"?"Bedingung parallel: m₁=m₂ und b₁≠b₂.":r.kind==="identical"?"Bedingung identisch: m₁=m₂ und b₁=b₂.":"m₁≠m₂: Die Geraden besitzen genau einen Schnittpunkt.";}
  if(m.id==="intersection"){return intersectionInfo();}
  if(m.id==="difference")return `g(${fmt(v.x)})−f(${fmt(v.x)})=${fmt(gx(v.x)-fx(v.x))}.`;
  if(m.id==="costrevenue"){const be=businessBreakEvenData();return `Bei x=${fmt(v.x)} gilt K(x)=${euro(K(v.x))}, E(x)=${euro(E(v.x))} und G(x)=${euro(G(v.x))}. ${be.text}`;}
