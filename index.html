@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V11 · Fachlich finalisiert</title>
+<title>Lineare Funktionen – Lern-Dashboard V12 · Großer Graph und flüssige Regler</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -35,11 +35,23 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus
   margin-top:10px;padding:8px 10px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)
 }
 .workspace{
-  display:grid;grid-template-columns:minmax(220px,260px) minmax(500px,1fr) minmax(310px,380px);
+  display:grid;
+  grid-template-columns:minmax(0,2.15fr) minmax(310px,1fr);
+  grid-template-areas:
+    "center right"
+    "controls right";
+  grid-template-rows:auto auto;
+  align-items:start;
   gap:12px;margin-top:12px;min-height:calc(100vh - 150px)
 }
+.center{grid-area:center;min-width:0}
+.left{grid-area:controls}
+.right{grid-area:right;align-self:stretch}
 .panel,.chart-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
-.left,.right{padding:15px}.left{display:flex;flex-direction:column;gap:12px}.right{display:flex;flex-direction:column;min-width:0}
+.left,.right{padding:15px}.left{display:grid;gap:12px}.right{display:flex;flex-direction:column;min-width:0}
+#controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+#formulas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.left>.btn{justify-self:start}.left-note{margin-top:0}
 .kicker{font-size:.71rem;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);font-weight:850}
 h2{font-size:1.05rem;margin:2px 0 0}
 .control{border:1px solid var(--line);border-radius:14px;padding:11px;background:#fbfcfe}
@@ -76,20 +88,27 @@ input[type="range"]{width:100%;margin-top:9px;min-height:38px;accent-color:var(-
 .graph-toggle[aria-pressed="false"]{opacity:.5;text-decoration:line-through;background:#eef2f7;box-shadow:none}
 .graph-toggle.k{color:var(--orange);border-color:#e4a767}.graph-toggle.e{color:var(--blue);border-color:#88a5f4}.graph-toggle.g{color:var(--teal);border-color:#70bdb4}
 .business-guide-note{font-size:.78rem;color:#475569;padding-top:2px}
-.curve-switches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.curve-switches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .curve-switch,.break-even-switch{display:flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--line);border-radius:12px;background:#fff;padding:11px 12px;font-size:.9rem;font-weight:850;cursor:pointer;min-height:48px;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .curve-switch.k{color:var(--orange);border-color:#e4a767}.curve-switch.e{color:var(--blue);border-color:#88a5f4}.curve-switch.g{color:var(--teal);border-color:#70bdb4}
 .curve-switch[aria-pressed="false"]{opacity:.58;background:#eef2f7;text-decoration:line-through}
 .curve-switch[aria-pressed="true"]::before{content:"✓";font-weight:900}.curve-switch[aria-pressed="false"]::before{content:"○";font-weight:900}
-.break-even-switch{border-color:#b9a4ef;color:#5b21b6;background:#f8f5ff;grid-column:1/-1}
+.break-even-switch{border-color:#b9a4ef;color:#5b21b6;background:#f8f5ff;grid-column:auto}
 .break-even-switch[aria-pressed="true"]{background:#efe9ff;border-color:#7c3aed}.break-even-switch[aria-pressed="true"]::before{content:"✓";font-weight:900}.break-even-switch[aria-pressed="false"]::before{content:"○";font-weight:900}
 .sentence-starters{display:grid;gap:7px}.sentence-starter{padding:8px 9px;border-left:4px solid #8aa8f8;background:#f8faff;border-radius:8px}
 .goal-sentence{padding:10px 11px;border-radius:11px;background:#eef8f4;border:1px solid #bfe4d5;color:#164e3b;font-weight:700}
-@media(max-width:780px){.curve-switches{grid-template-columns:1fr}.break-even-switch{grid-column:auto}}
+@media(max-width:780px){.curve-switches{grid-template-columns:repeat(2,minmax(0,1fr))}.break-even-switch{grid-column:auto}}
 
 .vocab-defs{display:grid;gap:7px}.vocab-def{padding:8px 9px;border-radius:10px;background:#fff;border:1px solid var(--line)}.vocab-def strong{display:inline;color:#1e3a8a}.vocab-def span{color:#334155}.language-tip{padding:9px 10px;border-radius:11px;background:#eef7ff;border:1px solid #c6def7;color:#24415f;font-size:.86rem}
 
-svg{display:block;width:100%;height:auto;min-height:470px;flex:1}
+#chart{display:block;width:100%;height:clamp(590px,66vh,720px);min-height:590px;flex:none}
+.focus-btn{border-color:#9ab2ff;background:#f6f8ff;color:#173d9a}
+body.graph-focus .app{max-width:1900px}
+body.graph-focus .workspace{grid-template-columns:1fr;grid-template-areas:"center";grid-template-rows:auto}
+body.graph-focus .left,body.graph-focus .right{display:none}
+body.graph-focus .pathbar,body.graph-focus .mobile-note{display:none}
+body.graph-focus .chart-card{min-height:calc(100vh - 110px)}
+body.graph-focus #chart{height:clamp(620px,74vh,820px);min-height:620px}
 .legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:.8rem;padding:6px 4px 0}
 .legend span::before{content:"";display:inline-block;width:16px;height:3px;border-radius:3px;margin-right:6px;vertical-align:middle;background:currentColor}
 .legend .f1{color:var(--orange)}.legend .f2{color:var(--blue)}.legend .f3{color:var(--teal)}.legend .old{color:var(--gray)}
@@ -134,14 +153,29 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
 .mobile-note{display:none;background:#fff8e8;border:1px solid #f0d39b;border-radius:12px;padding:9px 11px;font-size:.82rem;color:#7a4b00;margin-top:10px}
 @media(max-width:1180px){
   .top{grid-template-columns:1fr auto}.progress{grid-column:1/-1}
-  .workspace{grid-template-columns:230px minmax(430px,1fr)}.right{grid-column:1/-1}.right-body{min-height:300px}
+  .workspace{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "center"
+      "controls"
+      "right";
+    min-height:auto
+  }
+  .right-body{min-height:300px}
+  #chart{height:clamp(520px,60vh,670px);min-height:520px}
+  #controls{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 }
 @media(max-width:780px){
   .app{padding:7px}.top{position:static;grid-template-columns:1fr}
   .pathbar{display:grid;grid-template-columns:1fr 1fr;gap:7px;overflow:visible;align-items:stretch}
   .path-btn{white-space:normal;min-height:48px;width:100%;text-align:center}
-  .workspace{grid-template-columns:1fr;min-height:auto}.left,.center,.right{grid-column:1}.left{order:2}.center{order:1}.right{order:3}
-  svg{min-height:380px}.mobile-note{display:block}.path-choice{grid-template-columns:1fr}
+  .workspace{grid-template-columns:1fr;grid-template-areas:"center" "controls" "right";min-height:auto}
+  #controls,#formulas{grid-template-columns:1fr}
+  #chart{height:auto;min-height:0;max-height:none;order:2}
+  .chart-head{order:1;gap:8px}.business-graph-panel{order:3}.legend{order:4}.insight{order:5}
+  body.graph-focus #chart{height:auto;min-height:0;max-height:none}
+  .mobile-note{display:block}.path-choice{grid-template-columns:1fr}
+  .chart-tools{justify-content:flex-end}
 }
 </style>
 </head>
@@ -162,7 +196,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
   <button class="path-btn" data-path="workshop">Funktionswerkstatt</button>
 </nav>
 
-<div class="mobile-note">Für Unterricht ist Tablet im Querformat oder Laptop optimal. Auf kleinen Bildschirmen werden die Arbeitsbereiche untereinander angezeigt.</div>
+<div class="mobile-note">Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst: großer Graph → Regler → Lernkarte.</div>
 
 <main class="workspace">
   <aside class="panel left">
@@ -188,6 +222,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
           <span class="scale-chip" id="scaleChip">🔒 Skala fixiert</span>
           
           <button class="btn small" id="previousBtn" aria-pressed="true">Vorher sichtbar</button>
+          <button class="btn small focus-btn" id="focusGraphBtn" aria-pressed="false" title="Koordinatensystem vergrößern">⛶ Graph groß</button>
         </div>
       </div>
       <div class="business-graph-panel" id="businessGraphPanel" hidden>
@@ -613,8 +648,10 @@ function businessBreakEvenData(){
  return {kind:"point",x,y,text:`Gewinnschwelle bei x<sub>GS</sub>=${fmt(x)}. Dort gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0.`};
 }
 function businessXMax(){
- const v=state.values,be=businessBreakEvenData();
- let raw=Math.max(150,(v.x??0)*1.18);
+ const be=businessBreakEvenData();
+ // Die betrachtete Menge x darf die Achsenskalierung nicht während des Ziehens verändern.
+ // Der sichtbare Bereich richtet sich nur nach dem Modell und einer eventuell relevanten Gewinnschwelle.
+ let raw=150;
  if(be.kind==="point"&&be.x>0) raw=Math.max(raw,be.x*1.22);
  const step=niceStep(raw,7);
  return Math.max(step,Math.ceil(raw/step)*step);
@@ -636,7 +673,14 @@ function axisTicks(min,max,targetTicks=7){
 function refreshBusinessXControl(){
  if(currentModule().path!=="business") return;
  const input=$("ctrl-x"); if(!input) return;
- const max=businessXMax(); input.max=max; input.step=max>600?5:max>300?2:1;
+ const max=businessXMax();
+ input.max=max; input.step=max>600?5:max>300?2:1;
+ if((state.values.x??0)>max){
+   state.values.x=max;
+   input.value=max;
+   const value=input.closest(".control")?.querySelector(".value");
+   if(value) value.textContent=displayValue("x",max);
+ }
 }
 
 function controlRange(name,m){
@@ -712,6 +756,29 @@ function parseLinearTerm(raw){
  return {m,b};
 }
 
+let sliderFrame=0;
+let pendingSliderNames=new Set();
+function updateCenterLive(){
+ const insight=$("insight");
+ if(insight) insight.innerHTML=insightText();
+ drawChart();
+}
+function scheduleSliderFrame(name){
+ pendingSliderNames.add(name);
+ if(sliderFrame) return;
+ sliderFrame=requestAnimationFrame(()=>{
+   sliderFrame=0;
+   const names=[...pendingSliderNames];
+   pendingSliderNames.clear();
+   const parameterChanged=names.some(n=>n!=="x");
+   if(parameterChanged){
+     if(currentModule().path==="business") refreshBusinessXControl();
+     renderFormulas();
+   }
+   updateCenterLive();
+ });
+}
+
 function renderControls(){
  const m=currentModule(),wrap=$("controls");wrap.innerHTML="";
  m.controls.forEach(name=>{
@@ -736,11 +803,15 @@ function renderControls(){
      state.values[name]=+e.target.value;
      div.querySelector(".value").textContent=displayValue(name,state.values[name]);
      syncWorkshopInput();
-     refreshBusinessXControl();
+     scheduleSliderFrame(name);
+   });
+   input.addEventListener("change",()=>{
+     // Aufwendigere Darstellungen erst nach dem Ziehen vollständig aktualisieren.
+     if(m.path==="business"&&name!=="x") refreshBusinessXControl();
      renderFormulas();
      renderTable();
      renderCalc();
-     renderCenter();
+     updateCenterLive();
    });
    lockBtn.addEventListener("click",()=>{
      state.locks[name]=!state.locks[name];
@@ -1077,7 +1148,10 @@ function relation(){
 
 function drawChart(){
  const svg=$("chart"); while(svg.firstChild)svg.removeChild(svg.firstChild);
- const m=currentModule(),v=state.values,b=state.baseline,W=980,H=560,p={l:92,r:46,t:38,b:68};
+ const compactGraph=window.innerWidth<=780;
+ const W=compactGraph?660:980,H=560,p=compactGraph?{l:76,r:34,t:34,b:66}:{l:92,r:46,t:38,b:68};
+ svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+ const m=currentModule(),v=state.values,b=state.baseline;
  let [xmin,xmax]=m.ranges.x,[ymin,ymax]=m.ranges.y;
  if(m.path==="business")({xmin,xmax,ymin,ymax}=businessPlotBounds());
  const sx=x=>p.l+(x-xmin)/(xmax-xmin)*(W-p.l-p.r), sy=y=>H-p.b-(y-ymin)/(ymax-ymin)*(H-p.t-p.b);
@@ -1168,11 +1242,18 @@ function drawChart(){
    svg.appendChild(svgEl("circle",{cx:X,cy:sy(y2),r:6,fill:"#fff",stroke:"#2457d6","stroke-width":3}));
    if(m.id==="difference"){svg.appendChild(svgEl("line",{x1:X,y1:sy(y1),x2:X,y2:sy(y2),stroke:"#111827","stroke-width":3,"stroke-dasharray":"5 5"}));svg.appendChild(svgEl("text",{x:X+10,y:(sy(y1)+sy(y2))/2,fill:"#111827","font-size":12,"font-weight":800},`Δ=${fmt(y2-y1)}`));}
  }
- if(m.id==="profitdiff"){
-   const x=v.x,X=sx(x),yk=K(x),ye=E(x);
-   if(state.businessVisible.K)svg.appendChild(svgEl("circle",{cx:X,cy:sy(yk),r:6,fill:"#fff",stroke:"#c86b09","stroke-width":3}));
-   if(state.businessVisible.E)svg.appendChild(svgEl("circle",{cx:X,cy:sy(ye),r:6,fill:"#fff",stroke:"#2457d6","stroke-width":3}));
-   if(state.businessVisible.K&&state.businessVisible.E){svg.appendChild(svgEl("line",{x1:X,y1:sy(yk),x2:X,y2:sy(ye),stroke:"#111827","stroke-width":3,"stroke-dasharray":"5 5"}));svg.appendChild(svgEl("text",{x:X+10,y:(sy(yk)+sy(ye))/2,fill:"#111827","font-size":12,"font-weight":800},`G=${euro(ye-yk)}`));}
+ if(["costrevenue","profitdiff"].includes(m.id)){
+   const x=v.x,X=sx(x),yk=K(x),ye=E(x),yg=G(x);
+   // x ist hier nur die betrachtete Menge: Eine ruhige Hilfslinie und die Punkte bewegen sich, die Skala bleibt stehen.
+   svg.appendChild(svgEl("line",{x1:X,y1:p.t,x2:X,y2:H-p.b,stroke:"#64748b","stroke-width":1.5,"stroke-dasharray":"4 6",opacity:.5}));
+   svg.appendChild(svgEl("text",{x:X,y:Math.min(H-10,xAxisY+40),"text-anchor":"middle",fill:"#475569","font-size":12,"font-weight":800},`x=${fmt(x)} ${state.quantityUnit}`));
+   if(state.businessVisible.K&&yk>=ymin&&yk<=ymax)svg.appendChild(svgEl("circle",{cx:X,cy:sy(yk),r:6,fill:"#fff",stroke:"#c86b09","stroke-width":3}));
+   if(state.businessVisible.E&&ye>=ymin&&ye<=ymax)svg.appendChild(svgEl("circle",{cx:X,cy:sy(ye),r:6,fill:"#fff",stroke:"#2457d6","stroke-width":3}));
+   if(m.id==="costrevenue"&&state.businessVisible.G&&yg>=ymin&&yg<=ymax)svg.appendChild(svgEl("circle",{cx:X,cy:sy(yg),r:6,fill:"#fff",stroke:"#0f766e","stroke-width":3}));
+   if(m.id==="profitdiff"&&state.businessVisible.K&&state.businessVisible.E){
+     svg.appendChild(svgEl("line",{x1:X,y1:sy(yk),x2:X,y2:sy(ye),stroke:"#111827","stroke-width":3,"stroke-dasharray":"5 5"}));
+     svg.appendChild(svgEl("text",{x:X+10,y:(sy(yk)+sy(ye))/2,fill:"#111827","font-size":12,"font-weight":800},`G=${euro(ye-yk)}`));
+   }
  }
  if(["parallel","intersection"].includes(m.id)){
    const r=relation();
@@ -1253,7 +1334,7 @@ function renderLegend(){
 function renderCenter(){
  const m=currentModule();
  $("chartTitle").textContent=m.title;
- $("chartSub").textContent=m.path==="business"?"Die Skala passt sich automatisch an. K(x), E(x) und G(x) lassen sich einzeln schalten; die Gewinnschwelle kann gezielt eingeblendet werden.":"Die Achsenskalierung bleibt innerhalb des Moduls stabil.";
+ $("chartSub").textContent=m.path==="business"?"Die Skala reagiert auf Kosten, Preis und Gewinnschwelle. Beim Ziehen von x bewegt sich nur die Mengenmarkierung – die Skala bleibt ruhig.":"Die Achsenskalierung bleibt innerhalb des Moduls stabil.";
  $("insight").innerHTML=insightText();
  renderBusinessGraphControls();drawChart();renderLegend();
 }
@@ -1340,6 +1421,27 @@ $("rightBody").addEventListener("touchend",e=>{
  if(touchX===null)return;const dx=e.changedTouches[0].clientX-touchX;touchX=null;if(Math.abs(dx)<55)return;
  const arr=currentModule().tabs,i=arr.indexOf(state.view);if(dx<0&&i<arr.length-1)switchView(arr[i+1]);if(dx>0&&i>0)switchView(arr[i-1]);
 },{passive:true});
+
+let resizeFrame=0;
+window.addEventListener("resize",()=>{
+ if(resizeFrame) cancelAnimationFrame(resizeFrame);
+ resizeFrame=requestAnimationFrame(()=>{resizeFrame=0;drawChart();});
+});
+
+let graphFocus=false;
+function setGraphFocus(on){
+ graphFocus=!!on;
+ document.body.classList.toggle("graph-focus",graphFocus);
+ const b=$("focusGraphBtn");
+ if(b){
+   b.setAttribute("aria-pressed",String(graphFocus));
+   b.textContent=graphFocus?"↩ Ansicht zurück":"⛶ Graph groß";
+   b.title=graphFocus?"Zur normalen Arbeitsansicht zurückkehren":"Koordinatensystem vergrößern";
+ }
+ requestAnimationFrame(()=>drawChart());
+}
+$("focusGraphBtn").addEventListener("click",()=>setGraphFocus(!graphFocus));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&graphFocus)setGraphFocus(false);});
 
 const openedDirectly=readUrl();setDefaults();renderAll();if(openedDirectly)$("startScreen").classList.remove("open");
 })();
