@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V13 · Regler rechts und Gewinnhinweise</title>
+<title>Lineare Funktionen – Lern-Dashboard V14 · Sichtbare Gewinnschwelle</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -1159,6 +1159,27 @@ function svgIndexedText(svg,x,y,prefix,index,suffix,attrs={}){
  const tail=svgEl("tspan",{"baseline-shift":"baseline","font-size":attrs["font-size"]||12},suffix); t.appendChild(tail);
  svg.appendChild(t); return t;
 }
+function svgLabelBox(svg,x,y,lines,opts={}){
+ const g=svgEl("g",{});
+ const text=svgEl("text",{x,y,fill:opts.textFill||"#4c1d95","font-size":opts.fontSize||13,"font-weight":opts.fontWeight||850});
+ lines.forEach((line,i)=>{
+   const tspan=svgEl("tspan",{x,dy:i===0?0:(opts.lineHeight||16)},line);
+   text.appendChild(tspan);
+ });
+ g.appendChild(text);
+ svg.appendChild(g);
+ const bb=text.getBBox();
+ const padX=opts.padX||8,padY=opts.padY||5;
+ const rect=svgEl("rect",{x:bb.x-padX,y:bb.y-padY,width:bb.width+padX*2,height:bb.height+padY*2,rx:8,ry:8,fill:opts.fill||"#ffffff","fill-opacity":opts.fillOpacity||0.96,stroke:opts.stroke||"#7c3aed","stroke-width":opts.strokeWidth||1.8});
+ g.insertBefore(rect,text);
+ if(opts.anchorX!=null && opts.anchorY!=null){
+   const tx=(opts.anchorSide||"left")==="left" ? (bb.x-padX+12) : (bb.x+bb.width+padX-12);
+   const ty=bb.y+bb.height+padY-2;
+   const line=svgEl("line",{x1:opts.anchorX,y1:opts.anchorY,x2:tx,y2:ty,stroke:opts.stroke||"#7c3aed","stroke-width":2});
+   g.insertBefore(line,text);
+ }
+ return g;
+}
 
 function relation(){
  const v=state.values;if(!("n" in v))return null;
@@ -1295,7 +1316,9 @@ function drawChart(){
      // Der Schalter „Gewinnschwelle anzeigen“ schaltet K(x), E(x) und G(x) automatisch ein.
      svg.appendChild(svgEl("line",{x1:X,y1:YS,x2:X,y2:YN,stroke:"#7c3aed","stroke-width":3.5}));
      svg.appendChild(svgEl("circle",{cx:X,cy:YS,r:8,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));
-     svg.appendChild(svgEl("text",{x:X+12,y:YS-12,fill:"#6d28d9","font-size":13,"font-weight":850},"E(x)=K(x)"));
+     const labelX=Math.min(W-p.r-180,X+24);
+     const labelY=Math.max(p.t+22,YS-34);
+     svgLabelBox(svg,labelX,labelY,["Gewinnschwelle","E(x)=K(x)"],{anchorX:X+4,anchorY:YS-4,stroke:"#7c3aed",textFill:"#4c1d95",fontSize:13,fontWeight:850,fill:"#ffffff",fillOpacity:0.97});
      svg.appendChild(svgEl("circle",{cx:X,cy:YN,r:7,fill:"#fff",stroke:"#0f766e","stroke-width":4}));
      svgIndexedText(svg,X+12,YN+21,"G(x","GS",")=0",{fill:"#0f766e","font-size":13,"font-weight":850});
      svgIndexedText(svg,X,Math.min(H-10,xAxisY+40),"x","GS",` = ${fmt(be.x)}`,{"text-anchor":"middle",fill:"#6d28d9","font-size":13,"font-weight":850});
