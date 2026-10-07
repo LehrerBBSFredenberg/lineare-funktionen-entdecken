@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V10 · Bedingungen und Notation</title>
+<title>Lineare Funktionen – Lern-Dashboard V11 · Fachlich finalisiert</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -284,9 +284,9 @@ const modules=[
  starter:"Für den Schnittpunkt mit der y-Achse gilt x = 0. Dann …",
  structure:"Bedingung: x=0. Dann gilt f(0)=___. Der Schnittpunkt mit der y-Achse ist S<sub>y</sub>(0|___).",
  modelMath:"Für jeden Punkt auf der y-Achse gilt x=0. Deshalb setzt man x=0. Bei f(x)=mx+b erhält man f(0)=b. Der Schnittpunkt mit der y-Achse ist S<sub>y</sub>(0|b).",
- modelApp:"Für die Kostenfunktion gilt bei x=0: K(0)=Kf. Der Schnittpunkt S<sub>y</sub>(0|Kf) zeigt die Fixkosten. Verändert sich nur Kf, bleibt die Steigung unverändert und der Graph verschiebt sich parallel.",
+ modelApp:"Für die Kostenfunktion gilt bei x=0: K(0)=K<sub>f</sub>. Der Schnittpunkt S<sub>y</sub>(0|K<sub>f</sub>) zeigt die Fixkosten. Verändert sich nur K<sub>f</sub>, bleibt die Steigung unverändert und der Graph verschiebt sich parallel.",
  explainMath:[["Bedingung","Ein Punkt liegt auf der y-Achse, wenn seine x-Koordinate 0 ist. Deshalb gilt für den y-Achsenabschnitt: x=0."],["Einsetzen","Für f(x)=mx+b folgt f(0)=m·0+b=b."],["Punkt und Bezeichnung","Der Schnittpunkt mit der y-Achse heißt S<sub>y</sub>(0|f(0))=S<sub>y</sub>(0|b)."],["Veränderung","Ändert sich nur b, bleibt m gleich; der Graph wird parallel nach oben oder unten verschoben."]],
- explainApp:[["Bedingung","Auch im Sachkontext gilt für den Schnittpunkt mit der senkrechten Achse x=0."],["Fixkosten","Bei K(x)=kᵥx+Kf gilt K(0)=Kf. Deshalb ist S<sub>y</sub>(0|Kf) der Achsenschnittpunkt der Kostenfunktion."],["Bedeutung","Bei 0 Mengeneinheiten fallen bereits die Fixkosten Kf an."],["Folge","Ändert sich nur Kf, bleibt kᵥ unverändert und K(x) verschiebt sich parallel."]],
+ explainApp:[["Bedingung","Auch im Sachkontext gilt für den Schnittpunkt mit der senkrechten Achse x=0."],["Fixkosten","Bei K(x)=kᵥx+K<sub>f</sub> gilt K(0)=K<sub>f</sub>. Deshalb ist S<sub>y</sub>(0|K<sub>f</sub>) der Achsenschnittpunkt der Kostenfunktion."],["Bedeutung","Bei 0 Mengeneinheiten fallen bereits die Fixkosten K<sub>f</sub> an."],["Folge","Ändert sich nur K<sub>f</sub>, bleibt kᵥ unverändert und K(x) verschiebt sich parallel."]],
  table:null, calc:null
 },
 {path:"basics",id:"slope",title:"Steigung",tabs:["task","language","table","explain"],
@@ -322,9 +322,9 @@ const modules=[
  starter:"Die Funktion ist proportional, wenn …",
  structure:"b = ___. Deshalb gilt f(x)=___. Der Graph verläuft durch den Punkt ___.",
  modelMath:"Ist b=0, gilt f(x)=mx. Dann ist die Funktion proportional und ihr Graph verläuft durch den Ursprung.",
- modelApp:"Bei Fixkosten 0 gilt K(x)=kᵥx. Dann ist auch die Kostenfunktion proportional. Die Erlösfunktion E(x)=px ist immer proportional.",
+ modelApp:"Bei Fixkosten 0 gilt K(x)=kᵥx. Dann ist auch die Kostenfunktion proportional. In diesem Modell ist die Erlösfunktion E(x)=px proportional.",
  explainMath:[["Bedingung","Eine lineare Funktion ist genau dann proportional, wenn b=0 gilt. Gleichwertig dazu ist f(0)=0."],["Spezialfall","Dann lautet der Term f(x)=mx."],["Graphisch","Der Graph verläuft durch den Ursprung O(0|0)."],["Abgrenzung","Bei b≠0 gilt f(0)≠0; die lineare Funktion ist dann nicht proportional."]],
- explainApp:[["Erlös","E(x)=px hat keinen konstanten Summanden und verläuft daher durch den Ursprung."],["Kosten","K(x)=kᵥx+Kf ist bei Kf>0 nicht proportional."],["Sonderfall","Nur bei Kf=0 wird die Kostenfunktion proportional."]],
+ explainApp:[["Erlös","E(x)=px hat keinen konstanten Summanden und verläuft daher durch den Ursprung."],["Kosten","K(x)=kᵥx+K<sub>f</sub> ist bei K<sub>f</sub>>0 nicht proportional."],["Sonderfall","Nur bei K<sub>f</sub>=0 wird die Kostenfunktion proportional."]],
  table:"point", calc:null
 },
 {path:"basics",id:"zero",title:"Nullstelle",tabs:["task","language","table","explain","calc"],
@@ -332,7 +332,7 @@ const modules=[
  controls:["m","b"], allowNegativeB:true,
  taskMath:"Verändere b. Beobachte, wo der Graph die x-Achse schneidet. Dieser Punkt ist die Nullstelle.",
  taskApp:"Dieses Modul bleibt im Mathe-Modus, weil Nullstellen hier zunächst innermathematisch untersucht werden.",
- hypothesis:"An einer Nullstelle gilt f(x)=0.",
+ hypothesis:"Für die Nullstelle x<sub>N</sub> gilt f(x<sub>N</sub>)=0.",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
  experimentMath:"Verschiebe den Graphen und beobachte, wie sich x<sub>N</sub> und der Punkt N(x<sub>N</sub>|0) verändern.",
  experimentApp:"Wechsle zurück in den Mathe-Modus, um die Nullstelle zu untersuchen.",
@@ -379,7 +379,7 @@ const modules=[
  modelMath:"Sind die Steigungen gleich und die y-Achsenabschnitte verschieden, sind die Geraden parallel. Sind zusätzlich die y-Achsenabschnitte gleich, sind die Funktionen identisch.",
  modelApp:"Wenn Verkaufspreis und variable Kosten pro Stück gleich sind, besitzen Kosten- und Erlösfunktion dieselbe Steigung. Bei positiven Fixkosten sind sie parallel.",
  explainMath:[["Bedingung für parallel","m₁=m₂ und b₁≠b₂."],["Bedingung für identisch","m₁=m₂ und b₁=b₂."],["Bedingung für einen Schnittpunkt","m₁≠m₂. Dann gibt es bei linearen Funktionen genau einen Schnittpunkt."],["Folge","Parallele verschiedene Geraden besitzen keinen Schnittpunkt. Identische Geraden besitzen unendlich viele gemeinsame Punkte."]],
- explainApp:[["Kosten/Erlös","p=kᵥ bedeutet: Beide Graphen haben dieselbe Steigung."],["Fixkosten","Bei Kf>0 liegt die Kostenfunktion konstant über der Erlösfunktion."],["Folge","Dann gibt es keine Gewinnschwelle."]],
+ explainApp:[["Kosten/Erlös","p=kᵥ bedeutet: Beide Graphen haben dieselbe Steigung."],["Fixkosten","Bei K<sub>f</sub>>0 liegt die Kostenfunktion konstant über der Erlösfunktion."],["Folge","Dann gibt es keine Gewinnschwelle."]],
  table:null, calc:null
 },
 {path:"compare",id:"intersection",title:"Schnittpunkt",tabs:["task","language","table","explain","calc"],
@@ -387,7 +387,7 @@ const modules=[
  controls:["m","b","n","c"], allowNegativeM:true,allowNegativeN:true,allowNegativeB:true,allowNegativeC:true,
  taskMath:"Verändere nur m₂. Untersuche in dieser konkreten Situation, wie sich der Schnittpunkt verändert.",
  taskApp:"Verändere nur den Verkaufspreis. Untersuche, wie sich die Gewinnschwelle verändert.",
- hypothesis:"Am Schnittpunkt gilt f(x)=g(x).",
+ hypothesis:"Für die Schnittpunktstelle x<sub>S</sub> gilt f(x<sub>S</sub>)=g(x<sub>S</sub>).",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
  experimentMath:"Beobachte die Schnittpunktstelle x<sub>S</sub> und den gemeinsamen Funktionswert am Punkt S.",
  experimentApp:"Beobachte den gemeinsamen Punkt von E(x) und K(x).",
@@ -408,7 +408,7 @@ const modules=[
  hypothesis:"g(x)−f(x) kann positiv, 0 oder negativ sein.",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
  experimentMath:"Bewege x und beobachte Vorzeichen und Betrag der Differenz.",
- experimentApp:"Bewege die Stückzahl und beobachte, wann Erlös über oder unter den Kosten liegt.",
+ experimentApp:"Bewege die Menge x und beobachte, wann E(x) über oder unter K(x) liegt.",
  words:["Differenz","gleicher x-Wert","vertikaler Unterschied","positiv","negativ"],
  starter:"Bei x=… gilt g(x)−f(x)=…",
  structure:"Bei demselben x-Wert liegt ___ über ___. Deshalb ist die Differenz ___.",
@@ -427,21 +427,21 @@ const modules=[
  hypothesis:"Bei E(x)=px ist der y-Achsenabschnitt 0.",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
  experimentMath:"Wechsle in den Anwendungsmodus.",
- experimentApp:"Verändere die Größen und vergleiche K(x), E(x) und G(x). Die Gewinnfunktion beginnt bei G(0)=−Kf im negativen Bereich.",
+ experimentApp:"Verändere die Größen und vergleiche K(x), E(x) und G(x). Die Gewinnfunktion beginnt bei G(0)=−K<sub>f</sub> im negativen Bereich.",
  words:["Gesamtkosten K(x)","Erlös E(x)","Gewinn G(x)","Fixkosten","variable Kosten","Verkaufspreis"],
  starter:"Die Steigung der Kostenfunktion bedeutet …",
- structure:"Bei K(x)=kᵥx+Kf entspricht kᵥ der ___ und Kf dem ___.",
+ structure:"Bei K(x)=kᵥx+K<sub>f</sub> entspricht kᵥ der ___ und K<sub>f</sub> dem ___.",
  modelMath:"Die Anwendung verwendet dieselbe Struktur wie f(x)=mx+b.",
- modelApp:"Bei der Kostenfunktion entspricht die Steigung den variablen Kosten pro Stück und der y-Achsenabschnitt den Fixkosten. Bei der Erlösfunktion entspricht die Steigung dem Verkaufspreis pro Stück.",
+ modelApp:"Bei der Kostenfunktion entspricht die Steigung den variablen Kosten pro Mengeneinheit und der y-Achsenabschnitt den Fixkosten. Bei der Erlösfunktion entspricht die Steigung dem Verkaufspreis pro Mengeneinheit.",
  explainMath:[["Mathematische Struktur","K(x), E(x) und G(x) sind lineare Funktionen."],["Übertragung","Die mathematische Struktur bleibt linear; die Parameter erhalten im Sachkontext eine konkrete Bedeutung."]],
- explainApp:[["Kosten","K(x)=kᵥx+Kf."],["Erlös","E(x)=px."],["Gewinn","G(x)=E(x)−K(x)=(p−kᵥ)x−Kf. Deshalb startet G bei −Kf."],["Einheiten","x kann z. B. Stück, kg oder Meter beschreiben; K, E und G werden in € oder GE angegeben."]],
+ explainApp:[["Kosten","K(x)=kᵥx+K<sub>f</sub>."],["Erlös","E(x)=px."],["Gewinn","G(x)=E(x)−K(x)=(p−kᵥ)x−K<sub>f</sub>. Deshalb startet G bei −K<sub>f</sub>."],["Einheiten","x kann z. B. Stück, kg oder Meter beschreiben; K, E und G werden in € oder GE angegeben."]],
  table:"business", calc:null
 },
 {path:"business",id:"profitdiff",title:"Gewinn als Differenz",tabs:["task","language","table","explain"],
  vars:{m:4,b:300,n:8,c:0,x:50}, active:"x", ranges:{x:[0,150],y:[0,1400]},
  controls:["m","b","n","x"], businessOnly:true,
  taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
- taskApp:"Verändere nur die Stückzahl. Beobachte den vertikalen Unterschied zwischen Erlös und Kosten.",
+ taskApp:"Verändere nur die Menge x. Beobachte den vertikalen Unterschied zwischen E(x) und K(x).",
  hypothesis:"Wenn E(x)>K(x), ist G(x)>0.",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
  experimentMath:"Wechsle in den Anwendungsmodus.",
@@ -468,9 +468,9 @@ const modules=[
  starter:"Die Gewinnfunktion lautet …",
  structure:"G(x)=E(x)−K(x)=(___−___)x−___.",
  modelMath:"Die Gewinnfunktion ist die Differenz zweier linearer Funktionen.",
- modelApp:"Aus E(x)=px und K(x)=kᵥx+Kf folgt G(x)=(p−kᵥ)x−Kf. Der y-Achsenabschnitt ist −Kf.",
- explainMath:[["Struktur","Die Differenz zweier linearer Funktionen ist linear."],["y-Achsenabschnitt","Für den Schnittpunkt mit der y-Achse gilt x=0. Deshalb ist G(0)=−Kf."],["Nullstelle","Für die Nullstelle der Gewinnfunktion gilt G(x)=0. Diese Nullstelle liegt bei derselben Menge wie der Schnittpunkt von E(x) und K(x)."]],
- explainApp:[["Herleitung","G(x)=E(x)−K(x)=px−(kᵥx+Kf)=(p−kᵥ)x−Kf."],["Steigung","p−kᵥ bestimmt, wie schnell G(x) mit der Menge wächst oder fällt."],["Bedingung y-Achsenabschnitt","Setze x=0: G(0)=−Kf. Bei 0 Mengeneinheiten entspricht der Verlust den Fixkosten."],["Bedingung Gewinnschwelle","Setze G(x<sub>GS</sub>)=0. Gleichwertig gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."]],
+ modelApp:"Aus E(x)=px und K(x)=kᵥx+K<sub>f</sub> folgt G(x)=(p−kᵥ)x−K<sub>f</sub>. Der y-Achsenabschnitt ist −K<sub>f</sub>.",
+ explainMath:[["Struktur","Die Differenz zweier linearer Funktionen ist linear."],["y-Achsenabschnitt","Für den Schnittpunkt mit der y-Achse gilt x=0. Deshalb ist G(0)=−K<sub>f</sub>."],["Nullstelle","Für die Nullstelle der Gewinnfunktion gilt G(x)=0. Diese Nullstelle liegt bei derselben Menge wie der Schnittpunkt von E(x) und K(x)."]],
+ explainApp:[["Herleitung","G(x)=E(x)−K(x)=px−(kᵥx+K<sub>f</sub>)=(p−kᵥ)x−K<sub>f</sub>."],["Steigung","p−kᵥ bestimmt, wie schnell G(x) mit der Menge wächst oder fällt."],["Bedingung y-Achsenabschnitt","Setze x=0: G(0)=−K<sub>f</sub>. Bei 0 Mengeneinheiten entspricht der Verlust den Fixkosten."],["Bedingung Gewinnschwelle","Setze G(x<sub>GS</sub>)=0. Gleichwertig gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."]],
  table:null, calc:"profit"
 },
 {path:"business",id:"breakeven",title:"Gewinnschwelle",tabs:["task","language","table","explain","calc"],
@@ -478,7 +478,7 @@ const modules=[
  controls:["m","b","n"],
  taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
  taskApp:"Verändere nur den Verkaufspreis und beobachte gleichzeitig den Schnittpunkt von E(x) und K(x) sowie die Nullstelle von G(x).",
- hypothesis:"E(x)=K(x) ist äquivalent zu G(x)=0.",
+ hypothesis:"An der Gewinnschwelle gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und gleichwertig G(x<sub>GS</sub>)=0.",
  options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
  experimentMath:"Wechsle in den Anwendungsmodus.",
  experimentApp:"Beobachte, ob beide Darstellungen denselben x-Wert markieren.",
@@ -491,7 +491,7 @@ const modules=[
  explainApp:[["Bedingung Gewinnschwelle","An der Gewinnschwelle gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>)."],["Bedingung Nullstelle","Weil G(x)=E(x)−K(x) gilt, folgt an derselben Menge G(x<sub>GS</sub>)=0."],["Verbindung","Der Schnittpunkt von E(x) und K(x) und die Nullstelle von G(x) besitzen denselben x-Wert x<sub>GS</sub>."],["Existenz","Bei positiven Fixkosten gibt es im positiven Sachbereich nur dann eine Gewinnschwelle, wenn der Verkaufspreis pro Einheit größer als die variablen Kosten pro Einheit ist: p>kᵥ."]],
  table:null, calc:"breakeven"
 },
-{path:"business",id:"domain",title:"Sachbereich und ganze Stückzahlen",tabs:["task","language","table","explain","calc"],
+{path:"business",id:"domain",title:"Sachbereich und zulässige Mengen",tabs:["task","language","table","explain","calc"],
  vars:{m:4.3,b:315,n:8.6,c:0,x:75}, active:"n", ranges:{x:[0,150],y:[0,1500]}, businessOnly:true,
  controls:["m","b","n"],
  taskMath:"Dieses Modul nutzt den Anwendungskontext. Wechsle in den Anwendungsmodus.",
@@ -505,7 +505,7 @@ const modules=[
  structure:"Mathematisch: x=___. Praktisch sind nur ganze Stückzahlen möglich, daher entsteht ab ___ Stück positiver Gewinn.",
  modelMath:"Innermathematisch kann x reell sein. Im Sachkontext muss geprüft werden, welche Werte sinnvoll sind.",
  modelApp:"Liegt die mathematische Gewinnschwelle beispielsweise bei x=73,4, können 73,4 Stück nicht verkauft werden. Positiver Gewinn entsteht dann ab 74 Stück.",
- explainMath:[["Definitionsbereich","Innermathematisch können lineare Funktionen auf ℝ betrachtet werden."],["Sachbereich","Ein Anwendungskontext kann den sinnvollen Wertebereich einschränken."]],
+ explainMath:[["Definitionsbereich","Innermathematisch können lineare Funktionen auf ℝ betrachtet werden."],["Sachbereich","Ein Anwendungskontext kann den sinnvollen Definitionsbereich beziehungsweise Sachbereich einschränken."]],
  explainApp:[["Stückzahlen","Für Stückzahlen gilt praktisch x∈ℕ₀."],["Nicht runden ohne Deutung","Die mathematische Lösung bleibt 73,4. Erst die praktische Aussage lautet: ab 74 Stück positiver Gewinn."],["Wichtig","Mathematische Lösung und praktische Interpretation sind zwei verschiedene Aussagen."]],
  table:null, calc:"domain"
 },
@@ -536,7 +536,7 @@ modules.forEach(m=>{
     m.tabs.splice(pos>=0?pos:m.tabs.length,0,"table");
   }
   if(["basics","compare","workshop"].includes(m.path)) m.ranges={x:[-6,6],y:[-42,42]};
-  // K, E und G werden im Anwendungspfad gemeinsam dargestellt; G startet bei -Kf.
+  // K, E und G werden im Anwendungspfad gemeinsam dargestellt; G startet bei -K<sub>f</sub>.
   if(m.path==="business") m.ranges={x:[0,150],y:[-650,2500]};
 });
 
@@ -605,8 +605,9 @@ function niceBounds(min,max,targetTicks=7){
 }
 function businessBreakEvenData(){
  const v=state.values,F=v.b??0,d=(v.n??0)-(v.m??0);
- if(Math.abs(F)<1e-9 && Math.abs(d)<1e-9) return {kind:"all",x:null,text:"Kosten und Erlös sind identisch. G(x)=0 für alle x."};
- if(Math.abs(F)<1e-9) return {kind:"point",x:0,y:0,text:"Gewinnschwelle bei x<sub>GS</sub>=0: E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0."};
+ if(Math.abs(F)<1e-9 && Math.abs(d)<1e-9) return {kind:"all",x:null,text:"E(x) und K(x) sind identisch. G(x)=0 für alle x; es gibt keine einzelne Gewinnschwelle."};
+ if(Math.abs(F)<1e-9 && d < -1e-9) return {kind:"none",x:null,text:"Bei x=0 gilt E(0)=K(0) und G(0)=0. Für jede positive Menge gilt jedoch G(x)<0, weil p<kᵥ. Deshalb gibt es keine Gewinnschwelle als Übergang von Verlust zu Gewinn."};
+ if(Math.abs(F)<1e-9) return {kind:"point",x:0,y:0,text:"Gewinnschwelle bei x<sub>GS</sub>=0: E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0. Für x>0 gilt bei p>kᵥ: G(x)>0."};
  if(d<=1e-9) return {kind:"none",x:null,text:"Keine Gewinnschwelle im Sachbereich: E(x) steigt nicht schneller als K(x) (p ≤ kᵥ)."};
  const x=F/d,y=(v.m??0)*x+F;
  return {kind:"point",x,y,text:`Gewinnschwelle bei x<sub>GS</sub>=${fmt(x)}. Dort gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0.`};
@@ -803,10 +804,50 @@ function renderTabs(){
 }
 function switchView(name){state.view=name;renderTabs();}
 
-function taskText(m){return state.mode==="app"?m.taskApp:m.taskMath}
-function experimentText(m){return state.mode==="app"?m.experimentApp:m.experimentMath}
-function modelText(m){return state.mode==="app"?m.modelApp:m.modelMath}
-function explainBlocks(m){return state.mode==="app"?m.explainApp:m.explainMath}
+function domainCopy(){
+ const unit=state.quantityUnit;
+ const discrete=unit==="Stück";
+ if(discrete){
+   return {
+     task:"Untersuche den Unterschied zwischen der mathematischen Gewinnschwelle und der praktisch zulässigen Stückzahl.",
+     hypothesis:"Eine mathematische Gewinnschwelle wie x<sub>GS</sub>=73,4 darf bei Stückzahlen einfach auf 73 gerundet werden.",
+     experiment:"Verändere den Verkaufspreis so, dass x<sub>GS</sub> nicht ganzzahlig ist. Prüfe, ab welcher ganzen Stückzahl tatsächlich G(x)>0 gilt.",
+     words:["Definitionsbereich","Sachbereich","ganze Stückzahl","mathematische Lösung","praktische Interpretation"],
+     structure:"Mathematisch: x<sub>GS</sub>=___. Im Sachbereich sind nur ganze Stückzahlen zulässig. Positiver Gewinn entsteht deshalb ab ___ Stück.",
+     model:"Liegt die mathematische Gewinnschwelle beispielsweise bei x<sub>GS</sub>=73,4, sind 73,4 Stück nicht möglich. Die mathematische Lösung bleibt 73,4; praktisch entsteht positiver Gewinn ab 74 Stück.",
+     explain:[["Definitionsbereich und Sachbereich","Innermathematisch kann x reell sein. Im Sachkontext Stück gilt als sinnvoller Sachbereich x∈ℕ₀."],["Nicht einfach runden","Die mathematische Lösung wird nicht verändert. x<sub>GS</sub>=73,4 bleibt die Gewinnschwelle des mathematischen Modells."],["Praktische Deutung","Da nur ganze Stückzahlen möglich sind, ist 74 die erste ganze Stückzahl mit G(x)>0."],["Wichtig","Mathematische Lösung und praktische Interpretation sind zwei verschiedene Aussagen."]],
+     defs:[["Definitionsbereich","Menge der x-Werte, für die eine Funktion mathematisch betrachtet wird."],["Sachbereich","Die im konkreten Kontext sinnvollen x-Werte."],["x∈ℕ₀","Bei Stückzahlen sind 0, 1, 2, 3, … zulässig."],["praktische Mindestmenge","Erste ganze Stückzahl, für die tatsächlich G(x)>0 gilt."]],
+     tip:"Ändere die mathematische Lösung nicht durch Runden. Deute sie anschließend im Sachbereich Stück.",
+     langExplain:"Bei Stückzahlen ist der Sachbereich diskret: Nicht jeder reelle x-Wert ist praktisch zulässig.",
+     starters:["Die mathematische Gewinnschwelle liegt bei x<sub>GS</sub> = … .","Da x eine Stückzahl beschreibt, gilt im Sachbereich x∈ℕ₀.","Die erste ganze Stückzahl mit G(x)>0 ist … ."],
+     goal:"Ich kann die mathematische Gewinnschwelle von ihrer praktischen Deutung bei ganzen Stückzahlen unterscheiden und die erste zulässige Stückzahl mit positivem Gewinn angeben.",
+     extra:[["Sachbereich Stück","Bei Stückzahlen sind ganze, nichtnegative Werte zulässig."],["Nicht runden ohne Deutung","x<sub>GS</sub>=73,4 bleibt mathematisch 73,4; praktisch entsteht positiver Gewinn erst ab 74 Stück."]]
+   };
+ }
+ const unitName=unit==="kg"?"Kilogramm":"Meter";
+ return {
+   task:`Untersuche, wie eine nicht ganzzahlige mathematische Gewinnschwelle im Sachbereich mit der Einheit ${unit} gedeutet wird.`,
+   hypothesis:`Eine mathematische Gewinnschwelle wie x<sub>GS</sub>=73,4 muss bei der Einheit ${unit} auf eine ganze Zahl gerundet werden.`,
+   experiment:`Verändere den Verkaufspreis so, dass x<sub>GS</sub> nicht ganzzahlig ist. Prüfe, ob eine Menge wie 73,4 ${unit} im Sachkontext sinnvoll sein kann.`,
+   words:["Definitionsbereich","Sachbereich","Mengeneinheit",unitName,"Dezimalwert","praktische Interpretation"],
+   structure:`Mathematisch: x<sub>GS</sub>=___ ${unit}. Im Sachbereich mit ${unit} ist dieser Dezimalwert ___. Für x>x<sub>GS</sub> gilt bei positiver Gewinnsteigung G(x)>0.`,
+   model:`Liegt die mathematische Gewinnschwelle beispielsweise bei x<sub>GS</sub>=73,4 ${unit}, kann diese Menge im Sachkontext sinnvoll sein. Die Gewinnschwelle bleibt 73,4 ${unit}; bei positiver Gewinnsteigung gilt für x>73,4 ${unit}: G(x)>0.`,
+   explain:[["Definitionsbereich und Sachbereich","Innermathematisch kann x reell sein. Im Sachkontext entscheidet die Einheit, welche Werte sinnvoll sind."],["Kontinuierliche Menge",`Bei ${unit} können Dezimalwerte wie 73,4 ${unit} sinnvoll sein. Eine Ganzzahligkeit ist nicht grundsätzlich erforderlich.`],["Gewinnschwelle",`x<sub>GS</sub>=73,4 ${unit} kann deshalb direkt als sachlich zulässige Gewinnschwelle gedeutet werden.`],["Positiver Gewinn",`An der Gewinnschwelle gilt G(x<sub>GS</sub>)=0. Bei positiver Gewinnsteigung gilt erst für x>x<sub>GS</sub>: G(x)>0.`]],
+   defs:[["Definitionsbereich","Menge der x-Werte, für die eine Funktion mathematisch betrachtet wird."],["Sachbereich","Die im konkreten Kontext sinnvollen x-Werte."],["kontinuierliche Menge",`${unitName} können grundsätzlich auch durch Dezimalzahlen beschrieben werden.`],["Gewinnschwelle x<sub>GS</sub>","Menge, bei der E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0 gilt."]],
+   tip:`Runde nicht automatisch auf ganze ${unitName}. Prüfe zuerst, ob Dezimalwerte in der gewählten Mengeneinheit sinnvoll sind.`,
+   langExplain:`Bei ${unit} ist der Sachbereich in diesem Modell kontinuierlich: Dezimalwerte können sachlich zulässig sein.`,
+   starters:[`Die mathematische Gewinnschwelle liegt bei x<sub>GS</sub> = … ${unit}.`,`Eine Menge von … ${unit} ist im Sachbereich sinnvoll, weil … .`,`Für x>x<sub>GS</sub> gilt bei positiver Gewinnsteigung G(x)>0.`],
+   goal:`Ich kann eine mathematische Gewinnschwelle in der Einheit ${unit} sachgerecht deuten und erklären, warum Dezimalwerte hier zulässig sein können.`,
+   extra:[["Einheit beachten",`Bei ${unit} sind Dezimalwerte grundsätzlich möglich; die reale Situation kann den Sachbereich zusätzlich begrenzen.`],["Nicht unnötig runden",`Eine Gewinnschwelle von 73,4 ${unit} bleibt 73,4 ${unit}, sofern diese Genauigkeit im Sachkontext sinnvoll ist.`]]
+ };
+}
+function hypothesisText(m){return m.id==="domain"&&state.mode==="app"?domainCopy().hypothesis:m.hypothesis;}
+function structureText(m){return m.id==="domain"&&state.mode==="app"?domainCopy().structure:m.structure;}
+function wordsFor(m){return m.id==="domain"&&state.mode==="app"?domainCopy().words:m.words;}
+function taskText(m){return m.id==="domain"&&state.mode==="app"?domainCopy().task:(state.mode==="app"?m.taskApp:m.taskMath)}
+function experimentText(m){return m.id==="domain"&&state.mode==="app"?domainCopy().experiment:(state.mode==="app"?m.experimentApp:m.experimentMath)}
+function modelText(m){return m.id==="domain"&&state.mode==="app"?domainCopy().model:(state.mode==="app"?m.modelApp:m.modelMath)}
+function explainBlocks(m){return m.id==="domain"&&state.mode==="app"?domainCopy().explain:(state.mode==="app"?m.explainApp:m.explainMath)}
 
 function renderTask(){
  const m=currentModule(),sel=state.hypotheses[key()]||"";
@@ -843,7 +884,7 @@ function renderTask(){
  $("view-task").innerHTML=`
  <div class="kicker">Forscherauftrag</div><h2>${m.title}</h2>
  <div class="cardbox"><strong>Auftrag</strong>${taskText(m)}</div>
- <div class="cardbox"><strong>1 · Vermute zuerst</strong><div>${m.hypothesis}</div>
+ <div class="cardbox"><strong>1 · Vermute zuerst</strong><div>${hypothesisText(m)}</div>
    <div class="choice-row" id="choices">${m.options.map(o=>`<button class="btn small ${sel===o?"selected":""}" data-o="${o}">${o}</button>`).join("")}</div>
    <div class="feedback">${sel?`Vermutung notiert: „${sel}“. Prüfe sie jetzt am Graphen.`:"Noch keine Vermutung gewählt."}</div>
  </div>
@@ -868,14 +909,19 @@ const languageExtensions={
  parallel:{defs:[["parallel","Geraden mit gleicher Steigung und verschiedenem Achsenabschnitt."],["identisch","Gleiche Steigung und gleicher Achsenabschnitt; beide Graphen fallen zusammen."],["Steigung vergleichen","m₁ und m₂ entscheiden über die Lagebeziehung."]],tip:"Erst Steigungen vergleichen, danach die Achsenabschnitte.",explain:"Die Parameter m und b entscheiden gemeinsam, ob zwei lineare Funktionen parallel, identisch oder schneidend sind."},
  intersection:{defs:[["Schnittpunkt S","Gemeinsamer Punkt zweier Graphen."],["Schnittpunktstelle x<sub>S</sub>","Der gemeinsame x-Wert des Schnittpunkts."],["Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>)","Am Schnittpunkt sind die beiden Funktionswerte gleich."],["S(x<sub>S</sub>|f(x<sub>S</sub>))","Bezeichnung des gemeinsamen Punktes."]],tip:"Nenne die Bedingung vollständig: „Am Schnittpunkt gilt f(x<sub>S</sub>)=g(x<sub>S</sub>).“ Bestimme zuerst x<sub>S</sub>, danach den gemeinsamen Funktionswert.",explain:"Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>) → x<sub>S</sub> berechnen → gemeinsamen Funktionswert bestimmen → Schnittpunkt S angeben."},
  difference:{defs:[["Differenz g(x)−f(x)","Vergleicht zwei Funktionswerte an derselben Stelle."],["positiv / negativ","Das Vorzeichen zeigt, welcher Graph höher liegt."],["vertikaler Abstand","Betrag der Differenz der Funktionswerte."]],tip:"Trenne Vorzeichen und Betrag: Vorzeichen = Richtung, Betrag = Größe des Unterschieds.",explain:"Die Differenzfunktion macht den Vergleich zweier Funktionen selbst zu einer neuen Funktion."},
- costrevenue:{defs:[["Fixkosten Kf","Kosten, die auch bei Menge 0 entstehen."],["variable Kosten kᵥ","Kosten pro zusätzlicher Mengeneinheit."],["Gesamtkosten K(x)","Fixkosten plus variable Kosten für die Menge x."],["Erlös E(x)","Verkaufserlös für die Menge x."],["Verkaufspreis p","Erlös pro verkaufter Mengeneinheit."],["Gewinn G(x)","Differenz aus Erlös und Kosten: E(x)−K(x)."]],tip:"Sprich und schreibe die Funktionen vollständig: K(x), E(x) und G(x). Denke außerdem die Einheit mit, z. B. €/Stück, €/kg oder €/m.",explain:"K(x), E(x) und G(x) beziehen sich auf dieselbe Menge x: K(x) beschreibt die Gesamtkosten, E(x) den Erlös und G(x)=E(x)−K(x) den Gewinn oder Verlust."},
+ costrevenue:{defs:[["Fixkosten K<sub>f</sub>","Kosten, die auch bei Menge 0 entstehen."],["variable Kosten kᵥ","Kosten pro zusätzlicher Mengeneinheit."],["Gesamtkosten K(x)","Fixkosten plus variable Kosten für die Menge x."],["Erlös E(x)","Verkaufserlös für die Menge x."],["Verkaufspreis p","Erlös pro verkaufter Mengeneinheit."],["Gewinn G(x)","Differenz aus Erlös und Kosten: E(x)−K(x)."]],tip:"Sprich und schreibe die Funktionen vollständig: K(x), E(x) und G(x). Denke außerdem die Einheit mit, z. B. €/Stück, €/kg oder €/m.",explain:"K(x), E(x) und G(x) beziehen sich auf dieselbe Menge x: K(x) beschreibt die Gesamtkosten, E(x) den Erlös und G(x)=E(x)−K(x) den Gewinn oder Verlust."},
  profitdiff:{defs:[["Gewinn","Erlös ist größer als Kosten: G(x)>0."],["Verlust","Kosten sind größer als Erlös: G(x)<0."],["Differenz","G(x)=E(x)−K(x)."],["gleiche Menge","Kosten und Erlös werden bei demselben x verglichen."]],tip:"Sage nicht nur „plus“ oder „minus“. Begründe fachsprachlich: E(x)>K(x) bedeutet Gewinn; E(x)<K(x) bedeutet Verlust.",explain:"Der vertikale Unterschied zwischen Erlös- und Kostenfunktion entspricht bei derselben Menge dem Gewinn oder Verlust."},
- profitfunc:{defs:[["Gewinnfunktion G(x)","Ordnet jeder Menge x den Gewinn oder Verlust zu."],["Gewinnsteigerung p−kᵥ","Zunahme des Gewinns pro zusätzlicher Mengeneinheit."],["G(0)=−Kf","Ohne Verkauf entsprechen die Fixkosten einem anfänglichen Verlust."]],tip:"Nutze konsequent G(x): Die Gewinnfunktion ordnet jeder Menge x einen Gewinn oder Verlust zu. Deute anschließend Steigung und Startwert im Sachkontext.",explain:"Die Gewinnfunktion entsteht durch Subtraktion der gesamten Kostenfunktion von der Erlösfunktion."},
+ profitfunc:{defs:[["Gewinnfunktion G(x)","Ordnet jeder Menge x den Gewinn oder Verlust zu."],["Gewinnsteigerung p−kᵥ","Zunahme des Gewinns pro zusätzlicher Mengeneinheit."],["G(0)=−K<sub>f</sub>","Ohne Verkauf entsprechen die Fixkosten einem anfänglichen Verlust."]],tip:"Nutze konsequent G(x): Die Gewinnfunktion ordnet jeder Menge x einen Gewinn oder Verlust zu. Deute anschließend Steigung und Startwert im Sachkontext.",explain:"Die Gewinnfunktion entsteht durch Subtraktion der gesamten Kostenfunktion von der Erlösfunktion."},
  breakeven:{defs:[["Gewinnschwelle","Menge, bei der E(x)=K(x) gilt."],["Schnittpunkt von E(x) und K(x)","Graphische Sicht auf die Gewinnschwelle."],["Nullstelle von G(x)","Bei derselben Menge gilt G(x)=0."],["gleicher x-Wert","Verbindet Schnittpunkt und Nullstelle mathematisch."]],tip:"Nutze bewusst beide Sichtweisen und den Index: An x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und gleichzeitig G(x<sub>GS</sub>)=0.",explain:"Die Gewinnschwelle verknüpft zwei Darstellungen: Schnittpunkt von Kosten und Erlös sowie Nullstelle der Gewinnfunktion."},
  domain:{defs:[["Sachbereich","Alle x-Werte, die in der realen Situation sinnvoll sind."],["ganzzahlig","Bei Stückzahlen sind meist nur ganze Zahlen sinnvoll."],["mathematische Lösung","Kann zwischen zwei ganzen Stückzahlen liegen."],["praktische Mindestmenge","Erste ganze Menge, bei der tatsächlich positiver Gewinn entsteht."]],tip:"Unterscheide mathematische Lösung und praktische Interpretation im Sachkontext.",explain:"Eine mathematische Lösung muss zum Sachbereich und zur verwendeten Einheit passen, bevor sie im Sachkontext gedeutet wird."},
  own:{defs:[["Funktionsterm","Rechenvorschrift, z. B. f(x)=−3x+4."],["Parameter m","Bestimmt die Steigung."],["Parameter b","Bestimmt den Achsenabschnitt f(0)."],["Darstellungswechsel","Term, Graph und Wertetabelle zeigen dieselbe Funktion."]],tip:"Beschreibe nach einer Änderung immer, welcher Parameter verändert wurde und was sich am Graphen verändert.",explain:"Die Funktionswerkstatt verbindet symbolische, graphische und tabellarische Darstellung einer linearen Funktion."}
 };
-function languageExtension(m){return languageExtensions[m.id]||{defs:[],tip:"",explain:""};}
+function languageExtension(m){
+ if(m.id==="domain"&&state.mode==="app"){
+   const d=domainCopy(); return {defs:d.defs,tip:d.tip,explain:d.langExplain};
+ }
+ return languageExtensions[m.id]||{defs:[],tip:"",explain:""};
+}
 
 const sensitiveLanguage={
  point:{starters:["Für x = … gilt f(…) = … .","Der Funktionswert an der Stelle … ist … .","Der zugehörige Punkt lautet P(…|…)."],goal:"Ich kann zu einer Stelle x den Funktionswert f(x) bestimmen und den zugehörigen Punkt P(x|f(x)) angeben.",extra:[["Sprechen und schreiben","f(3) liest man „f von 3“. Die Zahl 3 ist die Stelle; f(3) ist der zugehörige Funktionswert."],["Darstellungen verbinden","Stelle x, Funktionswert f(x) und Punkt P(x|f(x)) gehören immer zusammen."]]},
@@ -889,12 +935,17 @@ const sensitiveLanguage={
  difference:{starters:["An der Stelle x = … gilt g(x)−f(x) = … .","Die Differenz ist positiv/negativ, deshalb liegt … höher.","Der Betrag der Differenz beträgt … ."],goal:"Ich kann die Differenz g(x)−f(x) verwenden, um zwei Funktionswerte an derselben Stelle zu vergleichen.",extra:[["Vorzeichen","Das Vorzeichen zeigt, welcher Funktionswert größer ist."],["Betrag","Der Betrag |g(x)−f(x)| beschreibt den vertikalen Abstand der beiden Graphen an derselben Stelle."]]},
  costrevenue:{starters:["Bei der Menge x = … gilt K(x) = … und E(x) = … .","Der Gewinn beträgt G(x)=E(x)−K(x)=… .","Die Einheit von K(x), E(x) und G(x) ist … ."],goal:"Ich kann für dieselbe Menge x die Gesamtkosten K(x), den Erlös E(x) und den Gewinn oder Verlust G(x) bestimmen und sachgerecht deuten.",extra:[["Funktionssprache","Sprich vollständig: K(x) „K von x“, E(x) „E von x“ und G(x) „G von x“. Alle drei Werte beziehen sich auf dieselbe Menge x."],["Drei Größen","K(x) sind die Gesamtkosten, E(x) ist der Erlös und G(x)=E(x)−K(x) ist der Gewinn beziehungsweise Verlust."]]},
  profitdiff:{starters:["Bei x = … gilt E(x) = … und K(x) = … .","Da E(x) größer/kleiner als K(x) ist, gilt G(x) … 0.","G(x)=E(x)−K(x)=… ."],goal:"Ich kann Gewinn und Verlust als Differenz G(x)=E(x)−K(x) erklären und mit E(x) und K(x) begründen.",extra:[["Gewinn oder Verlust","E(x)>K(x) bedeutet Gewinn; E(x)<K(x) bedeutet Verlust; E(x)=K(x) bedeutet weder Gewinn noch Verlust."],["Gleiche Menge","E(x) und K(x) müssen sich immer auf dieselbe Menge x beziehen."]]},
- profitfunc:{starters:["Aus E(x)=… und K(x)=… folgt G(x)=E(x)−K(x)=… .","Für den y-Achsenabschnitt setze ich x=0 und erhalte G(0)=… .","Für die Gewinnschwelle gilt G(x<sub>GS</sub>)=0.","Pro zusätzlicher Mengeneinheit verändert sich G(x) um … ."],goal:"Ich kann G(x)=E(x)−K(x) herleiten, mit x=0 den y-Achsenabschnitt bestimmen und mit G(x<sub>GS</sub>)=0 die Bedingung für die Gewinnschwelle angeben.",extra:[["Startwert","Bedingung x=0: Bei positiven Fixkosten gilt G(0)=−Kf<0."],["Nullstelle","Bedingung G(x<sub>GS</sub>)=0: Dort liegt die Gewinnschwelle."],["Steigung der Gewinnfunktion","Die Steigung p−kᵥ zeigt, wie sich G(x) pro zusätzlicher Mengeneinheit verändert."]]},
+ profitfunc:{starters:["Aus E(x)=… und K(x)=… folgt G(x)=E(x)−K(x)=… .","Für den y-Achsenabschnitt setze ich x=0 und erhalte G(0)=… .","Für die Gewinnschwelle gilt G(x<sub>GS</sub>)=0.","Pro zusätzlicher Mengeneinheit verändert sich G(x) um … ."],goal:"Ich kann G(x)=E(x)−K(x) herleiten, mit x=0 den y-Achsenabschnitt bestimmen und mit G(x<sub>GS</sub>)=0 die Bedingung für die Gewinnschwelle angeben.",extra:[["Startwert","Bedingung x=0: Bei positiven Fixkosten gilt G(0)=−K<sub>f</sub><0."],["Nullstelle","Bedingung G(x<sub>GS</sub>)=0: Dort liegt die Gewinnschwelle."],["Steigung der Gewinnfunktion","Die Steigung p−kᵥ zeigt, wie sich G(x) pro zusätzlicher Mengeneinheit verändert."]]},
  breakeven:{starters:["Bedingung am Schnittpunkt: E(x<sub>GS</sub>)=K(x<sub>GS</sub>).","Bedingung an der Nullstelle der Gewinnfunktion: G(x<sub>GS</sub>)=0.","Beide Bedingungen beziehen sich auf dieselbe Menge x<sub>GS</sub>.","Eine positive Gewinnschwelle existiert nur, wenn … ."],goal:"Ich kann die Gewinnschwelle x<sub>GS</sub> mit den beiden gleichwertigen Bedingungen E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0 erklären.",extra:[["Zwei Bedingungen – eine Menge","Schnittpunkt von E(x) und K(x) und Nullstelle von G(x) besitzen denselben x-Wert x<sub>GS</sub>."],["Fachsprachlich vollständig","Schreibe E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und nicht nur E=K."],["Existenz","Bei positiven Fixkosten muss p>kᵥ gelten, damit E(x) K(x) im positiven Sachbereich erreichen kann."]]},
  domain:{starters:["Im Sachbereich darf x nur … sein.","Die mathematische Gewinnschwelle liegt bei x<sub>GS</sub> = … .","Für ganze Stückzahlen bedeutet das praktisch: … ."],goal:"Ich kann eine mathematische Lösung an den Sachbereich und die verwendete Mengeneinheit anpassen und zwischen rechnerischer Lösung und praktischer Deutung unterscheiden.",extra:[["Sachbereich","Nicht jeder mathematisch mögliche x-Wert ist im Sachkontext sinnvoll."],["Einheit beachten","Bei Stückzahlen sind meist ganze Zahlen nötig; bei kg oder m können auch Dezimalwerte sinnvoll sein."]]},
  own:{starters:["Im Term f(x)=mx+b ist m = … und b = … .","Wenn ich m verändere, dann … .","Wenn ich b verändere, dann … ."],goal:"Ich kann einen linearen Funktionsterm eingeben und die Zusammenhänge zwischen Term, Parametern, Graph und Wertetabelle beschreiben.",extra:[["Vier Darstellungen","Term, Parameter, Graph und Wertetabelle beschreiben dieselbe lineare Funktion."],["Gezielt verändern","Verändere möglichst nur einen Parameter und beschreibe anschließend genau dessen Wirkung."]]}
 };
-function sensitiveFor(m){return sensitiveLanguage[m.id]||{starters:[m.starter],goal:modelText(m),extra:[]};}
+function sensitiveFor(m){
+ if(m.id==="domain"&&state.mode==="app"){
+   const d=domainCopy(); return {starters:d.starters,goal:d.goal,extra:d.extra};
+ }
+ return sensitiveLanguage[m.id]||{starters:[m.starter],goal:modelText(m),extra:[]};
+}
 
 
 function renderLanguage(){
@@ -902,10 +953,10 @@ function renderLanguage(){
  $("view-language").innerHTML=`<div class="kicker">Sprachhilfe</div><h2>Fachsprache verstehen und nutzen</h2>
  <p class="mini">Gehe schrittweise vor: Begriff verstehen → Satz beginnen → mathematischen oder sachlichen Zusammenhang vollständig ausdrücken.</p>
  <div class="help-stack">
-  <div class="help-card"><button class="btn help-toggle">1 · Fachwörter</button><div class="help-content"><div class="chips">${m.words.map(w=>`<span>${w}</span>`).join("")}</div></div></div>
+  <div class="help-card"><button class="btn help-toggle">1 · Fachwörter</button><div class="help-content"><div class="chips">${wordsFor(m).map(w=>`<span>${w}</span>`).join("")}</div></div></div>
   <div class="help-card"><button class="btn help-toggle">2 · Begriffe erklärt</button><div class="help-content"><div class="vocab-defs">${ext.defs.map(([w,d])=>`<div class="vocab-def"><strong>${w}: </strong><span>${d}</span></div>`).join("")}</div></div></div>
   <div class="help-card"><button class="btn help-toggle">3 · Satzbausteine</button><div class="help-content"><div class="sentence-starters">${sens.starters.map(s=>`<div class="sentence-starter">${s}</div>`).join("")}</div></div></div>
-  <div class="help-card"><button class="btn help-toggle">4 · Strukturhilfe</button><div class="help-content">${m.structure}</div></div>
+  <div class="help-card"><button class="btn help-toggle">4 · Strukturhilfe</button><div class="help-content">${structureText(m)}</div></div>
   <div class="help-card"><button class="btn help-toggle">5 · Sprach-Tipp</button><div class="help-content"><div class="language-tip">${ext.tip}</div></div></div>
   <div class="help-card"><button class="btn help-toggle">6 · Mögliche Zielformulierung</button><div class="help-content"><div class="goal-sentence">${sens.goal}</div></div></div>
  </div>`;
@@ -992,8 +1043,17 @@ function renderCalc(){
  else if(m.calc==="profit") html=`<div class="rule"><strong>Gewinnfunktion herleiten</strong>G(x)=E(x)−K(x)=${fmt(state.values.n)}x−(${fmt(state.values.m)}x+${fmt(state.values.b)}) = ${fmt(state.values.n-state.values.m)}x−${fmt(state.values.b)}.</div>`;
  else if(m.calc==="breakeven") html=`<div class="rule"><strong>Gewinnschwelle</strong>${breakEven().text}</div>`;
  else if(m.calc==="domain"){
-   const be=breakEven(); const practical=be.x!==null&&be.x>=0?Math.floor(be.x)+1:null;
-   html=`<div class="rule"><strong>Mathematische Lösung</strong>${be.text}</div>`+(practical!==null?`<div class="rule"><strong>Praktische Interpretation</strong>Da nur ganze Stückzahlen sinnvoll sind, entsteht bei positiver Gewinnsteigung ab ${practical} Stück positiver Gewinn.</div>`:"");
+   const be=breakEven();
+   let practicalHtml="";
+   if(be.x!==null&&be.x>=0){
+     if(state.quantityUnit==="Stück"){
+       const practical=Math.floor(be.x+1e-9)+1;
+       practicalHtml=`<div class="rule"><strong>Praktische Interpretation</strong>Die mathematische Gewinnschwelle bleibt x<sub>GS</sub>=${fmt(be.x)}. Da im Sachbereich nur ganze Stückzahlen zulässig sind, ist ${practical} die erste Stückzahl mit G(x)>0.</div>`;
+     }else{
+       practicalHtml=`<div class="rule"><strong>Praktische Interpretation</strong>Die Gewinnschwelle x<sub>GS</sub>=${fmt(be.x)} ${state.quantityUnit} ist im kontinuierlichen Sachbereich zulässig. Bei positiver Gewinnsteigung gilt für x>${fmt(be.x)} ${state.quantityUnit}: G(x)>0.</div>`;
+     }
+   }
+   html=`<div class="rule"><strong>Mathematische Lösung</strong>${be.text}</div>${practicalHtml}`;
  }
  $("view-calc").innerHTML=`<div class="kicker">Rechnung</div><h2>Algebraischer Blick</h2>${html}`;
 }
