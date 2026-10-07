@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V18 · Sprache aktiv nutzen</title>
+<title>Lineare Funktionen – Lern-Dashboard V19 · Üben & Sichern</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -142,6 +142,34 @@ input[type="range"]{width:100%;margin-top:9px;min-height:38px;accent-color:var(-
 .language-goal{margin-top:10px;padding-top:9px;border-top:1px solid var(--line)}
 @media(max-width:780px){.language-help-grid{grid-template-columns:1fr}.lang-choice{font-size:.84rem}}
 
+.practice-card{display:grid;gap:10px}
+.practice-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.practice-progress{font-size:.78rem;font-weight:850;color:#173d9a;background:var(--blueSoft);border:1px solid #bfd0ff;border-radius:999px;padding:5px 9px}
+.practice-score{font-size:.76rem;color:var(--muted);font-weight:760}
+.practice-question{border:1px solid #cbd8ef;background:#f8faff;border-radius:14px;padding:12px;font-weight:800;line-height:1.5}
+.practice-choice-grid{display:grid;gap:8px}
+.practice-choice{width:100%;text-align:left;border:1px solid #cbd5e1;background:#fff;border-radius:12px;padding:10px 11px;font-weight:760;color:#1e293b}
+.practice-choice:hover{border-color:#9ab2ff;background:#f7f9ff}
+.practice-choice.selected.correct{border-color:#7ac7aa;background:#eef9f4;color:#145c43}
+.practice-choice.selected.wrong{border-color:#e6aaa5;background:#fff3f2;color:#8f241d}
+.practice-number-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.practice-number{flex:1;min-width:150px;border:2px solid #9ab2ff;border-radius:11px;padding:10px 11px;font-size:1rem;background:#fff}
+.practice-feedback{border-radius:12px;padding:10px 11px;font-size:.86rem;font-weight:720}
+.practice-feedback.good{background:#edf9f4;border:1px solid #bce8d6;color:#145c43}
+.practice-feedback.try{background:#fff8e8;border:1px solid #f0d39b;color:#7a4b00}
+.practice-hint{border-left:4px solid #8aa8f8;background:#f8faff;border-radius:9px;padding:9px 10px;font-size:.84rem;color:#334155}
+.practice-actions{display:flex;gap:8px;flex-wrap:wrap}
+.practice-actions .btn{flex:1;min-width:120px}
+.practice-summary{border:1px solid #bce8d6;background:#f2fbf7;border-radius:14px;padding:13px}
+.practice-summary strong{display:block;margin-bottom:4px;color:#145c43}
+body.practice-mode .right{display:none}
+body.practice-mode .workspace{grid-template-areas:"center controls";grid-template-rows:auto}
+body.practice-mode .left-note{display:none}
+body.practice-mode #resetBtn{display:none}
+body.practice-mode .left{align-self:start}
+body.practice-mode .chart-sub{max-width:760px}
+@media(max-width:1180px){body.practice-mode .workspace{grid-template-areas:"center" "controls";grid-template-columns:1fr}}
+
 #chart{display:block;width:100%;height:clamp(590px,66vh,720px);min-height:590px;flex:none}
 .focus-btn{border-color:#9ab2ff;background:#f6f8ff;color:#173d9a}
 body.graph-focus .app{max-width:1900px}
@@ -239,6 +267,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
   <button class="path-btn" data-path="compare">Geraden vergleichen</button>
   <button class="path-btn" data-path="business">Kosten · Erlös · Gewinn</button>
   <button class="path-btn" data-path="workshop">Funktionswerkstatt</button>
+  <button class="path-btn" data-path="practice">Üben &amp; Sichern</button>
 </nav>
 <nav class="modulebar" id="moduleBar" aria-label="Teilmodule des gewählten Lernpfads"></nav>
 
@@ -247,7 +276,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
 <main class="workspace">
   <aside class="panel left">
     <div>
-      <div class="kicker">Manipulation</div>
+      <div class="kicker" id="leftKicker">Manipulation</div>
       <h2 id="leftTitle">Verändere nur x</h2>
     </div>
     <div id="controls"></div>
@@ -260,7 +289,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
     <div class="chart-card">
       <div class="chart-head">
         <div>
-          <div class="kicker">Mathematische Wirkung</div>
+          <div class="kicker" id="chartKicker">Mathematische Wirkung</div>
           <h2 id="chartTitle">Punkt und Funktionswert</h2>
           <div class="chart-sub" id="chartSub">Die Achsenskalierung bleibt innerhalb des Moduls stabil.</div>
         </div>
@@ -314,6 +343,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
       <button data-start="compare"><strong>Geraden vergleichen</strong><span>Parallelität, Schnittpunkt, Differenz</span></button>
       <button data-start="business"><strong>Kosten · Erlös · Gewinn</strong><span>Mathematische Strukturen anwenden</span></button>
       <button data-start="workshop"><strong>Funktionswerkstatt</strong><span>Eigene lineare Funktion eingeben und untersuchen</span></button>
+      <button data-start="practice"><strong>Üben &amp; Sichern</strong><span>Kurze Aufgaben bearbeiten und direkt Rückmeldung erhalten</span></button>
     </div>
   </div>
 </div>
@@ -328,7 +358,8 @@ const paths={
   basics:{label:"Grundlagen", subtitle:"Punkte, Achsenschnittpunkte und Steigung"},
   compare:{label:"Geraden vergleichen", subtitle:"Lagebeziehungen, Schnittpunkte und Differenzen"},
   business:{label:"Kosten · Erlös · Gewinn", subtitle:"Lineare Funktionen im Sachkontext"},
-  workshop:{label:"Funktionswerkstatt", subtitle:"Eigene lineare Funktion eingeben und direkt untersuchen"}
+  workshop:{label:"Funktionswerkstatt", subtitle:"Eigene lineare Funktion eingeben und direkt untersuchen"},
+  practice:{label:"Üben & Sichern", subtitle:"Selbstständig anwenden, prüfen und festigen"}
 };
 
 const modules=[
@@ -607,11 +638,24 @@ const modules=[
  explainMath:[["Lesart","f(x) spricht man „f von x“. f(x) ist der Funktionswert an der Stelle x."],["Form","Eine lineare Funktion kann als f(x)=mx+b geschrieben werden."],["Darstellungen","Term, Parameter, Graph und Wertetabelle zeigen denselben Zusammenhang auf verschiedene Arten."]],
  explainApp:[["Hinweis","Für Sachkontexte nutze den Lernpfad Kosten · Erlös · Gewinn."]],
  table:"point", calc:null
+},
+{path:"practice",id:"practice_basics",title:"Grundlagen üben",tabs:["task"],practiceSet:"basics",practiceOnly:true,
+ vars:{m:2,b:3,x:2},active:"x",ranges:{x:[-6,6],y:[-12,14]},controls:[],words:[],structure:"",modelMath:"",modelApp:"",explainMath:[],explainApp:[]
+},
+{path:"practice",id:"practice_compare",title:"Geraden vergleichen",tabs:["task"],practiceSet:"compare",practiceOnly:true,
+ vars:{m:1,b:1,n:-1,c:5,x:2},active:"x",ranges:{x:[-6,6],y:[-10,14]},controls:[],words:[],structure:"",modelMath:"",modelApp:"",explainMath:[],explainApp:[]
+},
+{path:"practice",id:"practice_business",title:"Kosten · Erlös · Gewinn",tabs:["task"],practiceSet:"business",practiceOnly:true,
+ vars:{m:4,b:300,n:8,c:0,x:50},active:"x",ranges:{x:[0,150],y:[-500,1400]},controls:[],words:[],structure:"",modelMath:"",modelApp:"",explainMath:[],explainApp:[]
+},
+{path:"practice",id:"practice_mixed",title:"Gemischter Selbstcheck",tabs:["task"],practiceSet:"mixed",practiceOnly:true,
+ vars:{m:2,b:3,n:-1,c:5,x:2},active:"x",ranges:{x:[-6,6],y:[-12,14]},controls:[],words:[],structure:"",modelMath:"",modelApp:"",explainMath:[],explainApp:[]
 }
 ];
 
 // Jede Station besitzt eine Wertetabelle. Außerdem gelten im Mathematikmodus einheitliche Skalen.
 modules.forEach(m=>{
+  if(m.practiceOnly) return;
   if(!m.tabs.includes("table")){
     const pos=m.tabs.indexOf("explain");
     m.tabs.splice(pos>=0?pos:m.tabs.length,0,"table");
@@ -625,18 +669,71 @@ const state={
  path:"basics", moduleIndex:0, mode:"math", view:"task", showPrevious:true,
  quantityUnit:"Stück", moneyUnit:"€",
  businessVisible:{K:true,E:true,G:true}, showBreakEven:false,
- values:{}, baseline:{}, locks:{}, hypotheses:{}, responses:{}, languageAnswers:{}, completed:new Set()
+ values:{}, baseline:{}, locks:{}, hypotheses:{}, responses:{}, languageAnswers:{}, completed:new Set(), practiceSessions:{}
 };
 
 function listPathModules(path){return modules.filter(m=>m.path===path);}
 function currentModule(){return listPathModules(state.path)[state.moduleIndex];}
 function key(){return `${state.path}:${currentModule().id}`;}
 
+const practiceBanks={
+ basics:[
+  {prompt:"Gegeben ist <strong>f(x)=2x+3</strong>. Bestimme <strong>f(4)</strong>.",type:"number",answer:11,hint:"Setze x=4 in den Funktionsterm ein.",feedback:"f(4)=2·4+3=11.",graph:{kind:"single",m:2,b:3,x:[-2,6],y:[-4,16]}},
+  {prompt:"Welche Aussage beschreibt bei <strong>f(x)=−2x+4</strong> die Steigung korrekt?",type:"mc",choices:["Der Graph steigt von links nach rechts.","Der Graph fällt von links nach rechts.","Der Graph ist waagerecht."],correct:1,hint:"Achte auf das Vorzeichen von m.",feedback:"m=−2 ist negativ. Deshalb fällt der Graph.",graph:{kind:"single",m:-2,b:4,x:[-4,6],y:[-10,14]}},
+  {prompt:"Welchen y-Achsenabschnitt besitzt <strong>f(x)=1,5x−2</strong>?",type:"number",answer:-2,hint:"Für den Schnittpunkt mit der y-Achse gilt x=0.",feedback:"f(0)=−2. Also ist b=−2.",graph:{kind:"single",m:1.5,b:-2,x:[-5,6],y:[-10,10]}},
+  {prompt:"Welche Funktion ist proportional?",type:"mc",choices:["f(x)=3x","f(x)=3x+2","f(x)=2"],correct:0,hint:"Bei einer proportionalen Funktion gilt b=0.",feedback:"f(x)=3x hat den y-Achsenabschnitt 0 und verläuft durch den Ursprung.",graph:{kind:"single",m:3,b:0,x:[-4,4],y:[-12,12]}},
+  {prompt:"Bestimme die Nullstelle von <strong>f(x)=2x−6</strong>.",type:"number",answer:3,hint:"Setze f(x_N)=0 und löse nach x_N auf.",feedback:"0=2x−6 ⇒ x_N=3.",graph:{kind:"single",m:2,b:-6,x:[-2,6],y:[-10,8],markZero:true}},
+  {prompt:"Liegt der Punkt <strong>P(2|7)</strong> auf dem Graphen von <strong>f(x)=2x+3</strong>?",type:"mc",choices:["Ja","Nein"],correct:0,hint:"Berechne f(2).",feedback:"f(2)=2·2+3=7. Deshalb liegt P(2|7) auf dem Graphen.",graph:{kind:"single",m:2,b:3,x:[-2,6],y:[-4,16],point:[2,7]}}
+ ],
+ compare:[
+  {prompt:"Gegeben sind <strong>f(x)=2x+1</strong> und <strong>g(x)=2x−3</strong>. Wie liegen die Geraden?",type:"mc",choices:["parallel","identisch","sie schneiden sich"],correct:0,hint:"Vergleiche zuerst die Steigungen.",feedback:"Beide Geraden haben m=2, aber verschiedene y-Achsenabschnitte. Sie sind parallel.",graph:{kind:"double",m:2,b:1,n:2,c:-3,x:[-4,6],y:[-12,14]}},
+  {prompt:"Gegeben sind <strong>f(x)=x+1</strong> und <strong>g(x)=−x+5</strong>. Bestimme die Schnittpunktstelle <strong>x_S</strong>.",type:"number",answer:2,hint:"Setze f(x_S)=g(x_S).",feedback:"x+1=−x+5 ⇒ 2x=4 ⇒ x_S=2.",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
+  {prompt:"Für denselben Schnittpunkt aus f(x)=x+1 und g(x)=−x+5: Wie groß ist der gemeinsame Funktionswert?",type:"number",answer:3,hint:"Setze x_S=2 in eine der beiden Funktionen ein.",feedback:"f(2)=3 und g(2)=3. Der Schnittpunkt ist S(2|3).",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
+  {prompt:"Bei <strong>x=3</strong> gelten f(x)=2x+1 und g(x)=x+4. Welche Aussage ist richtig?",type:"mc",choices:["f(3)>g(3)","f(3)<g(3)","f(3)=g(3)"],correct:2,hint:"Berechne beide Funktionswerte für denselben x-Wert.",feedback:"f(3)=7 und g(3)=7. Beide Funktionswerte sind gleich.",graph:{kind:"double",m:2,b:1,n:1,c:4,x:[-2,6],y:[-4,14],markX:3}},
+  {prompt:"Gegeben sind f(x)=x+2 und g(x)=3x−2. Bestimme bei <strong>x=2</strong> die Differenz <strong>g(x)−f(x)</strong>.",type:"number",answer:0,hint:"Berechne zuerst beide Funktionswerte bei x=2.",feedback:"f(2)=4 und g(2)=4. Daher ist g(2)−f(2)=0.",graph:{kind:"double",m:1,b:2,n:3,c:-2,x:[-2,5],y:[-8,14],markX:2}}
+ ],
+ business:[
+  {prompt:"Es gilt <strong>K(x)=4x+300</strong> und <strong>E(x)=8x</strong>. Bestimme den Gewinn bei <strong>x=50</strong> Stück.",type:"number",answer:-100,hint:"Nutze G(x)=E(x)−K(x).",feedback:"E(50)=400, K(50)=500. Also G(50)=−100 €: Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
+  {prompt:"Für K(x)=4x+300 und E(x)=8x: Bestimme die Gewinnschwelle <strong>x_GS</strong>.",type:"number",answer:75,hint:"Setze E(x_GS)=K(x_GS).",feedback:"8x=4x+300 ⇒ 4x=300 ⇒ x_GS=75.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markBreakEven:true}},
+  {prompt:"Bei x=50 Stück gilt für dasselbe Modell K(50)=500 € und E(50)=400 €. Was bedeutet das?",type:"mc",choices:["Gewinn","Verlust","Gewinnschwelle"],correct:1,hint:"Vergleiche E(x) und K(x).",feedback:"E(50)<K(50). Deshalb entsteht Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
+  {prompt:"Wann gibt es bei positiven Fixkosten <strong>keine positive Gewinnschwelle</strong>?",type:"mc",choices:["Wenn p>k_v","Wenn p≤k_v","Immer bei K_f>0"],correct:1,hint:"Die Erlösfunktion muss die Kostenfunktion irgendwann einholen können.",feedback:"Bei p≤k_v steigt E(x) nicht schneller als K(x). Eine positive Gewinnschwelle entsteht dann nicht.",graph:{kind:"business",kv:6,Kf:300,p:5,x:[0,150],y:[-700,1200]}},
+  {prompt:"K(x)=4,5x+300 und E(x)=9x. Welche Steigung besitzt die Gewinnfunktion G(x)?",type:"number",answer:4.5,hint:"Die Steigung von G ist p−k_v.",feedback:"9−4,5=4,5. Also G(x)=4,5x−300.",graph:{kind:"business",kv:4.5,Kf:300,p:9,x:[0,150],y:[-500,1500]}},
+  {prompt:"Die mathematische Gewinnschwelle liegt bei <strong>x_GS=73,4</strong>. x beschreibt Stückzahlen. Ab welcher ganzen Stückzahl ist bei positiver Gewinnsteigung Gewinn möglich?",type:"number",answer:74,hint:"Die mathematische Lösung bleibt 73,4. Gesucht ist die erste ganze Stückzahl darüber.",feedback:"73,4 Stück sind nicht möglich. 74 ist die erste ganze Stückzahl mit x>x_GS.",graph:{kind:"business",kv:4.3,Kf:315.62,p:8.6,x:[0,150],y:[-500,1500],markBreakEven:true}}
+ ]
+};
+practiceBanks.mixed=[
+ practiceBanks.basics[0],practiceBanks.compare[0],practiceBanks.business[0],practiceBanks.basics[4],
+ practiceBanks.compare[1],practiceBanks.business[1],practiceBanks.basics[3],practiceBanks.business[5]
+];
+function practiceBank(){return practiceBanks[currentModule().practiceSet]||[];}
+function practiceSession(){
+ const id=currentModule().id,bank=practiceBank();
+ if(!state.practiceSessions[id]) state.practiceSessions[id]={index:0,responses:{},firstTryCorrect:0};
+ const ss=state.practiceSessions[id];
+ if(ss.index>=bank.length) ss.index=Math.max(0,bank.length-1);
+ return ss;
+}
+function currentPracticeQuestion(){
+ if(currentModule().path!=="practice") return null;
+ const bank=practiceBank(),ss=practiceSession(); return bank[ss.index]||null;
+}
+function resetPracticeSession(id=currentModule().id){state.practiceSessions[id]={index:0,responses:{},firstTryCorrect:0};}
+function parsePracticeNumber(raw){const n=Number(String(raw??"").trim().replace(",","."));return Number.isFinite(n)?n:null;}
+function answerMatches(q,value){return q.type==="number"?value!==null&&Math.abs(value-q.answer)<1e-6:false;}
+function practiceGraphValues(q){
+ const g=q?.graph||{};
+ if(g.kind==="business") return {m:g.kv??4,b:g.Kf??300,n:g.p??8,c:0,x:g.markX??50};
+ return {m:g.m??2,b:g.b??3,n:g.kind==="double"?(g.n??-1):undefined,c:g.kind==="double"?(g.c??5):undefined,x:g.markX??2};
+}
+
 function setDefaults(){
  const m=currentModule();
  state.values={...m.vars}; state.baseline={...m.vars}; state.locks={};
  // Der Lernpfad bestimmt eindeutig den Kontext. Es gibt keinen zweiten, konkurrierenden Modusschalter mehr.
  state.mode = m.path==="business" ? "app" : "math";
+ if(m.path==="practice"){
+   const q=currentPracticeQuestion(); state.values=practiceGraphValues(q); state.baseline={...state.values}; state.showPrevious=false;
+ }
  if(m.path==="business"){
    state.showPrevious=false;
    state.businessVisible={K:true,E:true,G:true};
@@ -846,6 +943,8 @@ function scheduleSliderFrame(name){
 
 function renderControls(){
  const m=currentModule(),wrap=$("controls");wrap.innerHTML="";
+ if(m.path==="practice"){renderPracticePane();return;}
+ $("leftKicker").textContent="Manipulation";
  m.controls.forEach(name=>{
    const active=m.active===name;
    const locked=!!state.locks[name];
@@ -907,6 +1006,7 @@ function renderControls(){
 
 function renderFormulas(){
  const v=state.values, m=currentModule(), f=$("formulas"); f.innerHTML="";
+ if(m.path==="practice") return;
  if(state.mode==="app"){
    const k=document.createElement("div");k.className="formula";k.innerHTML=`K(x)=<span class="hm">${fmt(v.m)}</span>x+<span class="hb">${fmt(v.b)}</span>`;f.appendChild(k);
    if("n" in v || m.path==="business"){ const e=document.createElement("div");e.className="formula";e.innerHTML=`E(x)=<span class="hm">${fmt(v.n??0)}</span>x`;f.appendChild(e); }
@@ -925,7 +1025,7 @@ function renderFormulas(){
 function renderModuleBar(){
  const bar=$("moduleBar"),arr=listPathModules(state.path);
  if(!bar)return;
- bar.innerHTML=`<span class="modulebar-label">Teilmodule:</span>${arr.map((m,i)=>`<button type="button" class="module-step" data-module-index="${i}" aria-current="${i===state.moduleIndex?"step":"false"}" title="${m.title}"><span class="module-no">${i+1}/${arr.length}</span><span>${m.title}</span></button>`).join("")}`;
+ bar.innerHTML=`<span class="modulebar-label">${state.path==="practice"?"Übungsbereiche:":"Teilmodule:"}</span>${arr.map((m,i)=>`<button type="button" class="module-step" data-module-index="${i}" aria-current="${i===state.moduleIndex?"step":"false"}" title="${m.title}"><span class="module-no">${i+1}/${arr.length}</span><span>${m.title}</span></button>`).join("")}`;
  bar.querySelectorAll("[data-module-index]").forEach(btn=>btn.addEventListener("click",()=>{
    const i=+btn.dataset.moduleIndex;
    if(i===state.moduleIndex)return;
@@ -943,7 +1043,7 @@ function renderModuleBar(){
 function renderHeader(){
  const arr=listPathModules(state.path),m=currentModule();
  $("pathSubtitle").textContent=`${paths[state.path].label} · ${m.title}`;
- $("progressText").textContent=`Modul ${state.moduleIndex+1} von ${arr.length}`;
+ $("progressText").textContent=state.path==="practice"?`Übungsbereich ${state.moduleIndex+1} von ${arr.length}`:`Modul ${state.moduleIndex+1} von ${arr.length}`;
  document.querySelectorAll(".path-btn").forEach(b=>b.classList.toggle("active",b.dataset.path===state.path));
  renderModuleBar();
 }
@@ -1400,7 +1500,52 @@ function renderCalc(){
  $("view-calc").innerHTML=`<div class="kicker">Rechnung</div><h2>Algebraischer Blick</h2>${html}`;
 }
 
-function renderRight(){renderTabs();renderTask();renderLanguage();renderTable();renderExplain();renderCalc();}
+function renderRight(){if(currentModule().path==="practice"){$("tabs").innerHTML="";return;}renderTabs();renderTask();renderLanguage();renderTable();renderExplain();renderCalc();}
+
+function renderPracticePane(){
+ const wrap=$("controls"),m=currentModule(),bank=practiceBank(),ss=practiceSession(),q=bank[ss.index];
+ $("leftKicker").textContent="Üben & Sichern";
+ $("leftTitle").textContent=m.title;
+ const completed=Object.values(ss.responses).filter(r=>r.correct).length;
+ if(!q){wrap.innerHTML='<div class="practice-summary"><strong>Keine Aufgaben gefunden.</strong></div>';return;}
+ const r=ss.responses[ss.index]||{attempts:0,correct:false,value:"",choice:null,hint:false};
+ let answerHtml="";
+ if(q.type==="mc"){
+   answerHtml=`<div class="practice-choice-grid">${q.choices.map((c,i)=>{const cls=["practice-choice"];if(r.choice===i)cls.push("selected",r.correct?"correct":"wrong");return `<button type="button" class="${cls.join(" ")}" data-practice-choice="${i}">${c}</button>`}).join("")}</div>`;
+ }else{
+   answerHtml=`<div class="practice-number-row"><input class="practice-number" id="practiceNumber" inputmode="decimal" autocomplete="off" placeholder="Ergebnis eingeben" value="${r.value??""}"><button type="button" class="btn primary" id="practiceCheck">Prüfen</button></div>`;
+ }
+ const feedback=r.attempts?`<div class="practice-feedback ${r.correct?"good":"try"}">${r.correct?"✓ ":"↻ "}${r.correct?q.feedback:"Noch nicht richtig. Nutze bei Bedarf den Hinweis und versuche es erneut."}</div>`:"";
+ const hint=r.hint?`<div class="practice-hint"><strong>Hinweis:</strong> ${q.hint}</div>`:"";
+ const atEnd=ss.index===bank.length-1;
+ const next=r.correct?`<button type="button" class="btn primary" id="practiceNext">${atEnd?"Auswertung anzeigen":"Nächste Aufgabe →"}</button>`:"";
+ wrap.innerHTML=`<div class="practice-card"><div class="practice-meta"><span class="practice-progress">Aufgabe ${ss.index+1} von ${bank.length}</span><span class="practice-score">${completed} richtig gelöst</span></div><div class="practice-question">${q.prompt}</div>${answerHtml}${feedback}${hint}<div class="practice-actions"><button type="button" class="btn small" id="practiceHint">💡 Hinweis</button>${next}</div><div class="mini">Du kannst eine falsche Antwort direkt verbessern. Im gemischten Selbstcheck wird zusätzlich gezählt, wie viele Aufgaben beim ersten Versuch richtig waren.</div></div>`;
+ const saveResponse=(patch)=>{ss.responses[ss.index]={...r,...patch};};
+ wrap.querySelectorAll('[data-practice-choice]').forEach(btn=>btn.addEventListener('click',()=>{
+   const choice=+btn.dataset.practiceChoice,first=(ss.responses[ss.index]?.attempts||0)===0,correct=choice===q.correct;
+   if(first&&correct)ss.firstTryCorrect++;
+   saveResponse({choice,correct,attempts:(ss.responses[ss.index]?.attempts||0)+1});
+   renderPracticePane();
+ }));
+ const check=$("practiceCheck"); if(check)check.addEventListener('click',()=>{
+   const raw=$("practiceNumber").value,val=parsePracticeNumber(raw),first=(ss.responses[ss.index]?.attempts||0)===0,correct=answerMatches(q,val);
+   if(first&&correct)ss.firstTryCorrect++;
+   saveResponse({value:raw,correct,attempts:(ss.responses[ss.index]?.attempts||0)+1}); renderPracticePane();
+ });
+ const inp=$("practiceNumber");if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')$("practiceCheck")?.click();});
+ const hintBtn=$("practiceHint");if(hintBtn)hintBtn.addEventListener('click',()=>{saveResponse({hint:true});renderPracticePane();});
+ const nextBtn=$("practiceNext");if(nextBtn)nextBtn.addEventListener('click',()=>{
+   if(atEnd){renderPracticeSummary();return;}
+   ss.index++; const nq=bank[ss.index]; state.values=practiceGraphValues(nq);state.baseline={...state.values};renderAll();resetManipulationScroll();
+ });
+}
+function renderPracticeSummary(){
+ const wrap=$("controls"),m=currentModule(),bank=practiceBank(),ss=practiceSession(),correct=Object.values(ss.responses).filter(r=>r.correct).length;
+ $("leftKicker").textContent="Üben & Sichern";
+ $("leftTitle").textContent=m.title;
+ wrap.innerHTML=`<div class="practice-summary"><strong>Übungsreihe abgeschlossen</strong><div>${correct} von ${bank.length} Aufgaben wurden richtig gelöst.</div>${m.id==="practice_mixed"?`<div style="margin-top:5px">Beim ersten Versuch richtig: <strong>${ss.firstTryCorrect} von ${bank.length}</strong>.</div>`:""}<div class="mini" style="margin-top:7px">Fehler sind hier Teil des Übens. Du kannst die Reihe jederzeit noch einmal bearbeiten.</div></div><div class="practice-actions"><button type="button" class="btn primary" id="practiceRestart">Noch einmal starten</button></div>`;
+ $("practiceRestart").addEventListener('click',()=>{resetPracticeSession();setDefaults();renderAll();resetManipulationScroll();});
+}
 
 function svgEl(name,attrs={},text=""){const e=document.createElementNS("http://www.w3.org/2000/svg",name);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(text)e.textContent=text;return e;}
 function svgIndexedText(svg,x,y,prefix,index,suffix,attrs={}){
@@ -1438,8 +1583,39 @@ function relation(){
  const x=((v.c??0)-v.b)/(v.m-v.n),y=fx(x);return {kind:"intersection",x,y};
 }
 
+function drawPracticeChart(svg){
+ const q=currentPracticeQuestion(),g=q?.graph||{}; if(!q)return;
+ const compact=window.innerWidth<=780,W=compact?660:980,H=560,p=compact?{l:76,r:34,t:34,b:66}:{l:92,r:46,t:38,b:68};
+ svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+ const xr=g.x||[-6,6],yr=g.y||[-12,14],xmin=xr[0],xmax=xr[1],ymin=yr[0],ymax=yr[1];
+ const sx=x=>p.l+(x-xmin)/(xmax-xmin)*(W-p.l-p.r),sy=y=>H-p.b-(y-ymin)/(ymax-ymin)*(H-p.t-p.b);
+ const x0=(ymin<=0&&ymax>=0)?sy(0):H-p.b,y0=(xmin<=0&&xmax>=0)?sx(0):p.l;
+ svg.appendChild(svgEl("rect",{x:0,y:0,width:W,height:H,fill:"#fff"}));
+ const xt=axisTicks(xmin,xmax,7),yt=axisTicks(ymin,ymax,7);
+ xt.forEach(x=>{const X=sx(x);svg.appendChild(svgEl("line",{x1:X,y1:p.t,x2:X,y2:H-p.b,stroke:"#e9eef5"}));svg.appendChild(svgEl("text",{x:X,y:Math.min(H-10,x0+22),"text-anchor":"middle",fill:"#64748b","font-size":12},fmt(x)));});
+ yt.forEach(y=>{const Y=sy(y);svg.appendChild(svgEl("line",{x1:p.l,y1:Y,x2:W-p.r,y2:Y,stroke:"#e9eef5"}));if(Math.abs(y)>1e-9)svg.appendChild(svgEl("text",{x:Math.max(24,y0-10),y:Y+4,"text-anchor":"end",fill:"#64748b","font-size":12},fmt(y)));});
+ svg.appendChild(svgEl("line",{x1:p.l,y1:x0,x2:W-p.r,y2:x0,stroke:"#334155","stroke-width":2.2}));
+ svg.appendChild(svgEl("line",{x1:y0,y1:H-p.b,x2:y0,y2:p.t,stroke:"#334155","stroke-width":2.2}));
+ const pathFor=fn=>{let d="";for(let i=0;i<=220;i++){const x=xmin+(xmax-xmin)*i/220,y=fn(x);d+=(i?"L":"M")+sx(x).toFixed(2)+","+sy(y).toFixed(2);}return d;};
+ const addLine=(fn,color,label)=>{svg.appendChild(svgEl("path",{d:pathFor(fn),fill:"none",stroke:color,"stroke-width":4,"stroke-linecap":"round"}));const x=xmax-(xmax-xmin)*.08,y=fn(x);if(y>=ymin&&y<=ymax)svg.appendChild(svgEl("text",{x:sx(x)-4,y:sy(y)-7,"text-anchor":"end",fill:color,"font-size":13,"font-weight":850},label));};
+ if(g.kind==="business"){
+   const K=x=>(g.kv??4)*x+(g.Kf??300),E=x=>(g.p??8)*x,G=x=>E(x)-K(x);
+   addLine(K,"#c86b09","K(x)");addLine(E,"#2457d6","E(x)");addLine(G,"#0f766e","G(x)");
+   svg.appendChild(svgEl("text",{x:W-p.r,y:x0-10,"text-anchor":"end",fill:"#1e293b","font-size":14,"font-weight":850},"x [Stück]"));
+   if(g.markX!=null){const X=sx(g.markX);svg.appendChild(svgEl("line",{x1:X,y1:p.t,x2:X,y2:H-p.b,stroke:"#64748b","stroke-dasharray":"5 5"}));svg.appendChild(svgEl("text",{x:X,y:Math.min(H-10,x0+40),"text-anchor":"middle",fill:"#475569","font-size":12,"font-weight":800},`x=${fmt(g.markX)}`));}
+   if(g.markBreakEven&&Math.abs((g.p??8)-(g.kv??4))>1e-9){const xb=(g.Kf??300)/((g.p??8)-(g.kv??4));if(xb>=xmin&&xb<=xmax){const X=sx(xb),Y=sy(K(xb));svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:8,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));svgIndexedText(svg,X+12,Y-12,"x","GS",`=${fmt(xb)}`,{fill:"#6d28d9","font-size":13,"font-weight":850});}}
+ }else{
+   const f=x=>(g.m??2)*x+(g.b??3); addLine(f,"#c86b09","f(x)");
+   if(g.kind==="double"){const h=x=>(g.n??-1)*x+(g.c??5);addLine(h,"#2457d6","g(x)");if(g.markIntersection&&Math.abs((g.m??2)-(g.n??-1))>1e-9){const xi=((g.c??5)-(g.b??3))/((g.m??2)-(g.n??-1)),yi=f(xi);svg.appendChild(svgEl("circle",{cx:sx(xi),cy:sy(yi),r:7,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));}}
+   if(g.markZero&&Math.abs(g.m??2)>1e-9){const xn=-(g.b??3)/(g.m??2);svg.appendChild(svgEl("circle",{cx:sx(xn),cy:sy(0),r:7,fill:"#fff",stroke:"#111827","stroke-width":3}));}
+   if(g.point){svg.appendChild(svgEl("circle",{cx:sx(g.point[0]),cy:sy(g.point[1]),r:7,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));svg.appendChild(svgEl("text",{x:sx(g.point[0])+10,y:sy(g.point[1])-10,fill:"#4c1d95","font-size":12,"font-weight":850},`P(${fmt(g.point[0])}|${fmt(g.point[1])})`));}
+   if(g.markX!=null){const X=sx(g.markX);svg.appendChild(svgEl("line",{x1:X,y1:p.t,x2:X,y2:H-p.b,stroke:"#64748b","stroke-dasharray":"5 5"}));}
+ }
+}
+
 function drawChart(){
  const svg=$("chart"); while(svg.firstChild)svg.removeChild(svg.firstChild);
+ if(currentModule().path==="practice"){drawPracticeChart(svg);return;}
  const compactGraph=window.innerWidth<=780;
  const W=compactGraph?660:980,H=560,p=compactGraph?{l:76,r:34,t:34,b:66}:{l:92,r:46,t:38,b:68};
  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
@@ -1584,8 +1760,9 @@ function drawChart(){
 function renderBusinessGraphControls(){
  const m=currentModule(),box=$("businessGraphControls"),panel=$("businessGraphPanel"),chip=$("scaleChip"),prev=$("previousBtn");
  if(m.path!=="business"){
-   box.innerHTML=""; panel.setAttribute("hidden",""); panel.style.display="none"; prev.style.display=""; chip.textContent="🔒 Skala fixiert";
-   prev.setAttribute("aria-pressed",String(state.showPrevious)); prev.textContent=state.showPrevious?"Vorher sichtbar":"Vorher aus";
+   box.innerHTML=""; panel.setAttribute("hidden",""); panel.style.display="none";
+   if(m.path==="practice"){prev.style.display="none";chip.textContent="✓ Übungsgraph";}
+   else{prev.style.display="";chip.textContent="🔒 Skala fixiert";prev.setAttribute("aria-pressed",String(state.showPrevious)); prev.textContent=state.showPrevious?"Vorher sichtbar":"Vorher aus";}
    return;
  }
  panel.removeAttribute("hidden"); panel.style.display="grid"; prev.style.display="none"; chip.textContent="↕ Skala automatisch";
@@ -1613,7 +1790,11 @@ function renderBusinessGraphControls(){
 
 function renderLegend(){
  const m=currentModule(),arr=[];
- if(m.path==="business"){
+ if(m.path==="practice"){
+   const g=currentPracticeQuestion()?.graph||{};
+   if(g.kind==="business")arr.push(`<span class="f1">Kosten K(x)</span>`,`<span class="f2">Erlös E(x)</span>`,`<span class="f3">Gewinn G(x)</span>`);
+   else{arr.push(`<span class="f1">f(x)</span>`);if(g.kind==="double")arr.push(`<span class="f2">g(x)</span>`);}
+ }else if(m.path==="business"){
    if(state.businessVisible.K)arr.push(`<span class="f1">Kosten K(x)</span>`);
    if(state.businessVisible.E)arr.push(`<span class="f2">Erlös E(x)</span>`);
    if(state.businessVisible.G)arr.push(`<span class="f3">Gewinn G(x)</span>`);
@@ -1628,8 +1809,15 @@ function renderLegend(){
 function renderCenter(){
  const m=currentModule();
  $("chartTitle").textContent=m.title;
- $("chartSub").textContent=m.path==="business"?"Die Skala reagiert auf Kosten, Preis und Gewinnschwelle. Beim Ziehen von x bewegt sich nur die Mengenmarkierung – die Skala bleibt ruhig.":"Die Achsenskalierung bleibt innerhalb des Moduls stabil.";
- $("insight").innerHTML=insightText();
+ if(m.path==="practice"){
+   $("chartKicker").textContent="Übungsgraph";
+   $("chartSub").textContent="Nutze den Graphen als zusätzliche Darstellung. Löse die Aufgabe rechts zunächst selbstständig und prüfe anschließend deine Antwort.";
+   $("insight").innerHTML="Übungsmodus: Die Aufgaben werden direkt ausgewertet. Bei einer falschen Antwort kannst du korrigieren und einen Hinweis öffnen.";
+ }else{
+   $("chartKicker").textContent="Mathematische Wirkung";
+   $("chartSub").textContent=m.path==="business"?"Die Skala reagiert auf Kosten, Preis und Gewinnschwelle. Beim Ziehen von x bewegt sich nur die Mengenmarkierung – die Skala bleibt ruhig.":"Die Achsenskalierung bleibt innerhalb des Moduls stabil.";
+   $("insight").innerHTML=insightText();
+ }
  renderBusinessGraphControls();drawChart();renderLegend();
 }
 
@@ -1675,6 +1863,9 @@ function renderMenu(){
 }
 
 function renderAll(resetControls=true){
+ document.body.classList.toggle("practice-mode",state.path==="practice");
+ const mobileNote=document.querySelector(".mobile-note");
+ if(mobileNote) mobileNote.textContent=state.path==="practice"?"Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst: Übungsgraph → Aufgabe → Rückmeldung.":"Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst: großer Graph → Regler → Lernkarte. Auf großen Bildschirmen liegen die Regler rechts neben dem Graphen.";
  renderHeader();if(resetControls)renderControls();else renderControls();renderFormulas();renderRight();renderCenter();renderMenu();
  $("prevModule").disabled=state.moduleIndex===0;
  $("nextModule").disabled=state.moduleIndex===listPathModules(state.path).length-1;
@@ -1700,7 +1891,7 @@ document.querySelectorAll(".path-btn").forEach(b=>{
 });
 $("menuBtn").addEventListener("click",()=>$("moduleMenu").classList.toggle("open"));
 $("overviewBtn").addEventListener("click",()=>$("moduleMenu").classList.add("open"));
-$("resetBtn").addEventListener("click",()=>{setDefaults();renderAll();});
+$("resetBtn").addEventListener("click",()=>{if(currentModule().path==="practice")resetPracticeSession();setDefaults();renderAll();});
 $("previousBtn").addEventListener("click",()=>{if(currentModule().path==="business")return;state.showPrevious=!state.showPrevious;renderCenter();});
 function resetManipulationScroll(){const panel=document.querySelector(".left");if(panel)panel.scrollTop=0;}
 $("prevModule").addEventListener("click",()=>{if(state.moduleIndex>0){state.moduleIndex--;setDefaults();state.view="task";updateUrl();renderAll();resetManipulationScroll();}});
