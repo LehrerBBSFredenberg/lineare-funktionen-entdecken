@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V14 · Sichtbare Gewinnschwelle</title>
+<title>Lineare Funktionen – Lern-Dashboard V15 · Label höher gesetzt</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -1317,8 +1317,8 @@ function drawChart(){
      svg.appendChild(svgEl("line",{x1:X,y1:YS,x2:X,y2:YN,stroke:"#7c3aed","stroke-width":3.5}));
      svg.appendChild(svgEl("circle",{cx:X,cy:YS,r:8,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));
      const labelX=Math.min(W-p.r-180,X+24);
-     const labelY=Math.max(p.t+22,YS-34);
-     svgLabelBox(svg,labelX,labelY,["Gewinnschwelle","E(x)=K(x)"],{anchorX:X+4,anchorY:YS-4,stroke:"#7c3aed",textFill:"#4c1d95",fontSize:13,fontWeight:850,fill:"#ffffff",fillOpacity:0.97});
+     const labelY=Math.max(p.t+18,YS-122);
+     svgLabelBox(svg,labelX,labelY,["Gewinnschwelle","E(x)=K(x)"],{anchorX:X+4,anchorY:YS-4,stroke:"#7c3aed",textFill:"#4c1d95",fontSize:13,fontWeight:850,fill:"#ffffff",fillOpacity:0.97,lineHeight:17,padX:9,padY:6});
      svg.appendChild(svgEl("circle",{cx:X,cy:YN,r:7,fill:"#fff",stroke:"#0f766e","stroke-width":4}));
      svgIndexedText(svg,X+12,YN+21,"G(x","GS",")=0",{fill:"#0f766e","font-size":13,"font-weight":850});
      svgIndexedText(svg,X,Math.min(H-10,xAxisY+40),"x","GS",` = ${fmt(be.x)}`,{"text-anchor":"middle",fill:"#6d28d9","font-size":13,"font-weight":850});
