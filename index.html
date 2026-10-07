@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V17 · Sichtbare Teilmodule und eigener Regler-Scrollbereich</title>
+<title>Lineare Funktionen – Lern-Dashboard V18 · Sprache aktiv nutzen</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -122,6 +122,25 @@ input[type="range"]{width:100%;margin-top:9px;min-height:38px;accent-color:var(-
 @media(max-width:780px){.curve-switches{grid-template-columns:repeat(2,minmax(0,1fr))}.break-even-switch{grid-column:auto}}
 
 .vocab-defs{display:grid;gap:7px}.vocab-def{padding:8px 9px;border-radius:10px;background:#fff;border:1px solid var(--line)}.vocab-def strong{display:inline;color:#1e3a8a}.vocab-def span{color:#334155}.language-tip{padding:9px 10px;border-radius:11px;background:#eef7ff;border:1px solid #c6def7;color:#24415f;font-size:.86rem}
+
+.language-flow{display:grid;gap:10px;margin-top:10px}
+.language-step{border:1px solid var(--line);border-radius:15px;background:#fbfcfe;padding:12px}
+.language-step.done{border-color:#a8dbc8;background:#f5fbf8}
+.language-step.compact{padding:10px 12px}.language-step.locked{background:#f8fafc;opacity:.68}.language-step.locked .language-step-title{color:#64748b}
+.lang-answer-summary{margin-top:5px;font-size:.84rem;color:#176044;font-weight:720}
+.language-step-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px}
+.language-step-title{font-weight:900;color:#173d9a}.language-step-sub{font-size:.79rem;color:var(--muted);margin-top:2px}
+.language-step-badge{flex:0 0 auto;border-radius:999px;background:var(--blueSoft);color:#173d9a;border:1px solid #bfd0ff;padding:3px 7px;font-size:.72rem;font-weight:850}
+.language-step.done .language-step-badge{background:#e9f8f1;color:#0f6b4c;border-color:#bce8d6}
+.lang-prompt{font-weight:780;margin:5px 0 8px}.lang-choice-grid{display:grid;gap:7px}
+.lang-choice{width:100%;text-align:left;border:1px solid #cbd5e1;background:#fff;color:#172033;border-radius:11px;padding:9px 10px;font-size:.86rem;font-weight:690;line-height:1.35}
+.lang-choice:hover{border-color:#9ab2ff;background:#f8faff}.lang-choice.selected{border-color:#7899ef;background:#edf2ff}
+.lang-choice.correct{border-color:#71bf9f;background:#eaf8f2;color:#124d39}.lang-choice.wrong{border-color:#e4a199;background:#fff1ef;color:#8e291f}
+.lang-feedback{margin-top:8px;padding:8px 9px;border-radius:10px;font-size:.82rem;font-weight:720}.lang-feedback.good{background:#e9f8f1;color:#0f6b4c}.lang-feedback.try{background:#fff6e8;color:#835000}
+.language-help{margin-top:12px;border:1px dashed #b9c8df;border-radius:14px;background:#f8fbff;padding:10px}.language-help>.help-toggle{width:100%;text-align:left}.language-help .help-content{display:none;margin-top:10px}.language-help.open .help-content{display:block}
+.language-help-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.language-help-block{border:1px solid var(--line);background:#fff;border-radius:11px;padding:9px}.language-help-block strong{display:block;margin-bottom:6px;font-size:.83rem}
+.language-goal{margin-top:10px;padding-top:9px;border-top:1px solid var(--line)}
+@media(max-width:780px){.language-help-grid{grid-template-columns:1fr}.lang-choice{font-size:.84rem}}
 
 #chart{display:block;width:100%;height:clamp(590px,66vh,720px);min-height:590px;flex:none}
 .focus-btn{border-color:#9ab2ff;background:#f6f8ff;color:#173d9a}
@@ -606,7 +625,7 @@ const state={
  path:"basics", moduleIndex:0, mode:"math", view:"task", showPrevious:true,
  quantityUnit:"Stück", moneyUnit:"€",
  businessVisible:{K:true,E:true,G:true}, showBreakEven:false,
- values:{}, baseline:{}, locks:{}, hypotheses:{}, responses:{}, completed:new Set()
+ values:{}, baseline:{}, locks:{}, hypotheses:{}, responses:{}, languageAnswers:{}, completed:new Set()
 };
 
 function listPathModules(path){return modules.filter(m=>m.path===path);}
@@ -857,6 +876,8 @@ function renderControls(){
      renderFormulas();
      renderTable();
      renderCalc();
+     delete state.languageAnswers[key()];
+     renderLanguage();
      updateCenterLive();
    });
    lockBtn.addEventListener("click",()=>{
@@ -877,8 +898,8 @@ function renderControls(){
    </div><div class="mini">Dasselbe lineare Modell kann Stückware, Gewicht oder Kabellänge beschreiben.</div>`;
    wrap.appendChild(units);
    $("quantityUnit").value=state.quantityUnit; $("moneyUnit").value=state.moneyUnit;
-   $("quantityUnit").addEventListener("change",e=>{state.quantityUnit=e.target.value;renderAll();});
-   $("moneyUnit").addEventListener("change",e=>{state.moneyUnit=e.target.value;renderAll();});
+   $("quantityUnit").addEventListener("change",e=>{state.quantityUnit=e.target.value;delete state.languageAnswers[key()];renderAll();});
+   $("moneyUnit").addEventListener("change",e=>{state.moneyUnit=e.target.value;delete state.languageAnswers[key()];renderAll();});
  }
  $("leftTitle").textContent = m.active==="x"?"Fokus: betrachtete Stelle":`Fokus: ${labelFor(m.active)}`;
  $("leftNote").textContent="Jeden Regler kannst du selbst sperren: 🔓 frei = veränderbar, 🔒 fixiert = Wert bleibt konstant. Der blau markierte Regler ist nur der Fokus der aktuellen Aufgabe.";
@@ -928,7 +949,7 @@ function renderHeader(){
 }
 
 function renderTabs(){
- const names={task:"Auftrag",language:"💬 Sprache",table:"Tabelle",explain:"Erklärung",calc:"Rechnung"};
+ const names={task:"Auftrag",language:"💬 Sprache & Begründen",table:"Tabelle",explain:"Erklärung",calc:"Rechnung"};
  const m=currentModule(),tabs=$("tabs");tabs.innerHTML="";
  if(!m.tabs.includes(state.view)) state.view="task";
  m.tabs.forEach(name=>{
@@ -1084,19 +1105,204 @@ function sensitiveFor(m){
 }
 
 
+function languagePracticeFor(m){
+ const v=state.values;
+ const be=m.path==="business"?businessBreakEvenData():null;
+ const choice=(text,correct=false,feedback="")=>({text,correct,feedback});
+ const step=(title,sub,prompt,choices)=>({title,sub,prompt,choices});
+ const positive=v.m>1e-9,negative=v.m<-1e-9;
+ const relationNow=()=>{
+   const a=m.path==="business"?K(v.x):fx(v.x), b=m.path==="business"?E(v.x):gx(v.x);
+   return a<b?"lower":a>b?"higher":"equal";
+ };
+ switch(m.id){
+  case "point":{
+   const y=fx(v.x);
+   return [
+    step("Beobachten","Graph und Koordinaten verbinden",`Welche Aussage passt zum markierten Punkt bei x=${fmt(v.x)}?`,[
+      choice(`Der Punkt lautet P(${fmt(v.x)}|${fmt(y)}).`,true,"x-Wert und Funktionswert bilden gemeinsam die Punktkoordinaten."),
+      choice(`Der Punkt lautet P(${fmt(y)}|${fmt(v.x)}).`,false,"Achte auf die Reihenfolge: zuerst x, dann f(x)."),
+      choice(`f(${fmt(y)})=${fmt(v.x)}.`,false,"Die eingesetzte Stelle ist hier x="+fmt(v.x)+".")]),
+    step("Benennen","Fachbegriffe zuordnen","Wie heißt der Wert, der zu einer eingesetzten Stelle x gehört?",[
+      choice("Funktionswert f(x)",true,"Genau: Zu jeder betrachteten Stelle x gehört der Funktionswert f(x)."),choice("Steigung m"),choice("y-Achsenabschnitt b")]),
+    step("Sag es genauer","Alltagssprache präzisieren","Welche Formulierung ist fachsprachlich am genauesten?",[
+      choice("Da oben ist der Punkt."),choice("Zum x-Wert gehört ein y-Wert."),choice("Zur Stelle x gehört der Funktionswert f(x); der Punkt hat die Form P(x|f(x)).",true,"Diese Formulierung verbindet Stelle, Funktionswert und Punkt präzise.")]),
+    step("Begründen","Darstellungen verknüpfen","Warum liegt P(x|f(x)) auf dem Graphen von f?",[
+      choice("Weil die zweite Koordinate genau der Funktionswert zur ersten Koordinate ist.",true,"Das ist die entscheidende Begründung."),choice("Weil jeder Punkt mit zwei Zahlen auf dem Graphen liegt."),choice("Weil x und f(x) immer gleich groß sind.")])
+   ];
+  }
+  case "intercept": return [
+   step("Beobachten","Achse lesen","Welche Bedingung gilt an jedem Punkt auf der y-Achse?",[choice("x=0",true,"Richtig: Auf der y-Achse ist die x-Koordinate 0."),choice("f(x)=0"),choice("m=0")]),
+   step("Benennen","Fachbegriff sichern","Wie heißt b in f(x)=mx+b?",[choice("y-Achsenabschnitt",true),choice("Nullstelle"),choice("Schnittpunktstelle")]),
+   step("Sag es genauer","Unpräzise Aussage verbessern","Welche Aussage ist mathematisch vollständig?",[choice("Der Graph startet bei b."),choice("Für den Schnittpunkt mit der y-Achse gilt x=0; deshalb ist f(0)=b.",true),choice("Auf der y-Achse ist f(x)=0.")]),
+   step("Begründen","Bedingung verwenden","Warum erhält man den y-Achsenabschnitt durch Einsetzen von x=0?",[choice("Weil jeder Punkt der y-Achse die x-Koordinate 0 besitzt.",true),choice("Weil dort die Steigung 0 ist."),choice("Weil b immer eine Nullstelle ist.")])
+  ];
+  case "slope":{
+   const dir=positive?"steigt":negative?"fällt":"verläuft waagerecht";
+   const sign=positive?"positiv":negative?"negativ":"0";
+   const change=v.m;
+   return [
+    step("Beobachten","Graph beschreiben",`m=${fmt(v.m)}. Wie verläuft der Graph?`,[
+      choice("Der Graph steigt von links nach rechts.",positive),choice("Der Graph fällt von links nach rechts.",negative),choice("Der Graph verläuft waagerecht.",!positive&&!negative)]),
+    step("Benennen","Steigung fachsprachlich deuten",`Welche Aussage passt zu m=${fmt(v.m)}?`,[
+      choice(`Die Steigung ist ${sign}.`,true,"Vorzeichen und Verlauf gehören zusammen."),choice("Die Steigung ist der y-Achsenabschnitt."),choice("m bezeichnet einen Punkt.")]),
+    step("Sag es genauer","„Die Gerade geht hoch/runter“ präzisieren",`Welche Formulierung beschreibt den Graphen fachsprachlich korrekt?`,[
+      choice(`Der Graph ${dir}; die Steigung ist ${sign}.`,true),choice("Die Linie geht irgendwie nach oben oder unten."),choice("m ist die Höhe des Graphen.")]),
+    step("Begründen","Änderungsrate ausdrücken",`Was bedeutet m=${fmt(v.m)} bei Δx=1?`,[
+      choice(`Wenn x um 1 zunimmt, verändert sich f(x) um ${fmt(change)}.`,true,"Damit wird die Steigung als konstante Änderungsrate beschrieben."),choice(`Wenn x um ${fmt(change)} zunimmt, verändert sich f(x) immer um 1.`),choice("Die Steigung beschreibt nur einen einzelnen Punkt.")])
+   ];
+  }
+  case "proportional": return [
+   step("Beobachten","Ursprung prüfen","Woran erkennt man im Graphen eine proportionale lineare Funktion?",[choice("Der Graph verläuft durch O(0|0).",true),choice("Der Graph schneidet die y-Achse oberhalb von 0."),choice("Die Steigung ist immer 1.")]),
+   step("Benennen","Bedingung nennen","Welche Bedingung gilt bei f(x)=mx+b für Proportionalität?",[choice("b=0",true),choice("m=0"),choice("x=0 für alle Punkte")]),
+   step("Sag es genauer","„Geht durch Null“ präzisieren","Welche Formulierung ist fachsprachlich korrekt?",[choice("Der Graph geht durch Null."),choice("Es gilt b=0 und damit f(0)=0; der Graph verläuft durch den Ursprung O(0|0).",true),choice("Die Nullstelle ist immer 0, deshalb ist jede lineare Funktion proportional.")]),
+   step("Begründen","Kennzeichen verknüpfen","Warum folgt aus b=0 der Verlauf durch den Ursprung?",[choice("Weil f(0)=m·0+0=0 gilt.",true),choice("Weil dann m ebenfalls 0 sein muss."),choice("Weil jede Gerade den Ursprung schneidet.")])
+  ];
+  case "zero": return [
+   step("Beobachten","x-Achse lesen","Welche Bedingung gilt an einer Nullstelle?",[choice("f(x<sub>N</sub>)=0",true),choice("x<sub>N</sub>=0 muss immer gelten."),choice("f(0)=b")]),
+   step("Benennen","Wert und Punkt unterscheiden","Was ist x<sub>N</sub>?",[choice("Die Nullstelle, also ein x-Wert.",true),choice("Der Nullstellenpunkt mit zwei Koordinaten."),choice("Der y-Achsenabschnitt.")]),
+   step("Sag es genauer","„Der Nullpunkt“ vermeiden","Welche Formulierung ist präzise?",[choice("Der Nullpunkt ist da, wo die Linie unten ist."),choice("Die Nullstelle x<sub>N</sub> erfüllt f(x<sub>N</sub>)=0; der zugehörige Punkt ist N(x<sub>N</sub>|0).",true),choice("Bei der Nullstelle gilt x=0.")]),
+   step("Begründen","Bedingung erklären","Warum setzt man zur Bestimmung der Nullstelle f(x)=0?",[choice("Weil auf der x-Achse der Funktionswert 0 ist.",true),choice("Weil auf der x-Achse x immer 0 ist."),choice("Weil die Steigung dort verschwindet.")])
+  ];
+  case "compare":{
+   const a=fx(v.x),b=gx(v.x), rel=a>b?"größer":a<b?"kleiner":"gleich groß";
+   return [
+    step("Beobachten","Gleiche Stelle vergleichen",`Bei x=${fmt(v.x)} gilt f(x)=${fmt(a)} und g(x)=${fmt(b)}. Welche Aussage stimmt?`,[
+      choice(`f(x) ist ${rel} als g(x).`,true),choice("Man kann die Werte nicht vergleichen, weil sie zu zwei Funktionen gehören."),choice("Die größere Steigung entscheidet immer über den größeren Funktionswert.")]),
+    step("Benennen","Vergleich fachsprachlich fassen","Was muss bei einem Funktionswertvergleich gleich sein?",[choice("Die betrachtete Stelle x",true),choice("Die Steigungen"),choice("Die y-Achsenabschnitte")]),
+    step("Sag es genauer","„Die orange Linie ist höher“ präzisieren","Welche Formulierung ist fachsprachlich besser?",[choice("Die orange Linie ist höher."),choice(`An der Stelle x=${fmt(v.x)} werden f(x) und g(x) für denselben x-Wert verglichen.`,true),choice("f ist grundsätzlich größer als g.")]),
+    step("Begründen","Vergleich absichern","Warum reicht die Aussage „f hat die größere Steigung“ nicht für jeden x-Wert?",[choice("Weil auch die y-Achsenabschnitte die Funktionswerte beeinflussen.",true),choice("Weil Steigungen nur bei Parabeln gelten."),choice("Weil Funktionswerte nicht vom Term abhängen.")])
+   ];
+  }
+  case "parallel": return [
+   step("Beobachten","Lagebeziehung erkennen","Welche Aussage beschreibt parallele, aber nicht identische Geraden?",[choice("Sie haben gleiche Steigung und verschiedene y-Achsenabschnitte.",true),choice("Sie haben verschiedene Steigungen und denselben y-Achsenabschnitt."),choice("Sie schneiden sich genau einmal.")]),
+   step("Benennen","Bedingungen unterscheiden","Wann sind zwei lineare Funktionen identisch?",[choice("m₁=m₂ und b₁=b₂",true),choice("m₁=m₂ und b₁≠b₂"),choice("m₁≠m₂")]),
+   step("Sag es genauer","„Die Linien laufen gleich“ präzisieren","Welche Aussage ist fachsprachlich korrekt?",[choice("Die Linien laufen gleich."),choice("Parallele Geraden besitzen dieselbe Steigung, aber unterschiedliche y-Achsenabschnitte.",true),choice("Parallele Geraden haben dieselben Funktionswerte.")]),
+   step("Begründen","Schnittpunkt ausschließen","Warum schneiden sich verschiedene parallele Geraden nicht?",[choice("Weil ihre Steigungen gleich sind und der Abstand durch unterschiedliche Achsenabschnitte konstant bleibt.",true),choice("Weil beide Steigungen 0 sein müssen."),choice("Weil parallele Geraden keine Funktion sind.")])
+  ];
+  case "intersection": return [
+   step("Beobachten","Gemeinsamen Punkt erkennen","Was gilt am Schnittpunkt zweier Funktionsgraphen?",[choice("Beide Funktionen haben bei derselben Stelle denselben Funktionswert.",true),choice("Beide Funktionen haben überall denselben Funktionswert."),choice("Beide Steigungen müssen gleich sein.")]),
+   step("Benennen","Stelle und Punkt unterscheiden","Was bezeichnet x<sub>S</sub>?",[choice("Die x-Koordinate des Schnittpunkts.",true),choice("Den gesamten Schnittpunkt."),choice("Den gemeinsamen y-Achsenabschnitt.")]),
+   step("Sag es genauer","„Da sind die Funktionen gleich“ präzisieren","Welche Formulierung ist vollständig?",[choice("Da sind die Funktionen gleich."),choice("Am Schnittpunkt gilt für dieselbe Stelle x<sub>S</sub>: f(x<sub>S</sub>)=g(x<sub>S</sub>).",true),choice("Am Schnittpunkt gilt f=g für alle x.")]),
+   step("Begründen","Rechenweg sprachlich ordnen","Warum setzt man f(x) und g(x) gleich?",[choice("Weil am Schnittpunkt beide Funktionswerte gleich sind; dadurch lässt sich zuerst x<sub>S</sub> bestimmen.",true),choice("Weil beide Steigungen gleich werden sollen."),choice("Weil der y-Achsenabschnitt immer 0 ist.")])
+  ];
+  case "difference": return [
+   step("Beobachten","Vorzeichen deuten","Was zeigt das Vorzeichen von g(x)−f(x)?",[choice("Welche der beiden Funktionen an derselben Stelle den größeren Funktionswert hat.",true),choice("Welche Funktion die größere Steigung hat."),choice("Wo die y-Achse liegt.")]),
+   step("Benennen","Abstand unterscheiden","Was beschreibt |g(x)−f(x)|?",[choice("Den vertikalen Abstand der Funktionswerte an derselben Stelle.",true),choice("Die Schnittpunktstelle."),choice("Die Summe der Steigungen.")]),
+   step("Sag es genauer","„Der Abstand ist minus drei“ präzisieren","Welche Aussage trennt Differenz und Abstand korrekt?",[choice("Der Abstand kann negativ sein."),choice("Die Differenz kann negativ sein; der Abstand ist ihr Betrag und daher nicht negativ.",true),choice("Differenz und Abstand sind immer dasselbe.")]),
+   step("Begründen","Vorzeichen nutzen","Warum bedeutet g(x)−f(x)>0, dass g(x)>f(x) gilt?",[choice("Weil das Subtrahieren von f(x) einen positiven Rest ergibt.",true),choice("Weil g dann immer die größere Steigung hat."),choice("Weil x positiv sein muss.")])
+  ];
+  case "costrevenue":{
+   const gxv=G(v.x),status=gxv>1e-9?"Gewinn":gxv<-1e-9?"Verlust":"weder Gewinn noch Verlust";
+   return [
+    step("Beobachten","Drei Größen gemeinsam lesen",`Bei x=${fmt(v.x)} ${state.quantityUnit} gilt G(x)=${euro(gxv)}. Was bedeutet das?`,[
+      choice(`Bei dieser Menge entsteht ${status}.`,true),choice("Die Fixkosten sind gleich dem Gewinn."),choice("Die Menge x ist selbst ein Geldbetrag.")]),
+    step("Benennen","Funktionen unterscheiden","Welche Zuordnung ist korrekt?",[choice("K(x): Gesamtkosten · E(x): Erlös · G(x): Gewinn/Verlust",true),choice("K(x): Gewinn · E(x): Kosten · G(x): Erlös"),choice("K(x), E(x) und G(x) bezeichnen alle dieselbe Größe.")]),
+    step("Sag es genauer","„Die blaue Linie ist höher“ präzisieren","Welche Formulierung bezieht sich eindeutig auf dieselbe Menge?",[choice("Die blaue Linie ist höher."),choice("Bei derselben Menge x werden E(x) und K(x) verglichen; ihre Differenz ist G(x)=E(x)−K(x).",true),choice("E ist immer größer als K.")]),
+    step("Begründen","Gewinn/Verlust ableiten","Warum ist G(x)=E(x)−K(x) die passende Größe?",[choice("Weil vom Erlös die Gesamtkosten abgezogen werden.",true),choice("Weil Kosten und Erlös addiert werden."),choice("Weil G(x) nur die Fixkosten beschreibt.")])
+   ];
+  }
+  case "profitdiff":{
+   const e=E(v.x),k=K(v.x), rel=e>k?">":e<k?"<":"=";
+   return [
+    step("Beobachten","Erlös und Kosten vergleichen",`Bei x=${fmt(v.x)} gilt E(x) ${rel} K(x). Welche Deutung passt?`,[
+      choice(rel===">"?"Es entsteht Gewinn.":rel==="<"?"Es entsteht Verlust.":"Es entsteht weder Gewinn noch Verlust.",true),choice("Die Aussage lässt sich nicht deuten."),choice("Es entsteht immer Gewinn, sobald produziert wird.")]),
+    step("Benennen","Differenz deuten","Welche Gleichung beschreibt Gewinn beziehungsweise Verlust?",[choice("G(x)=E(x)−K(x)",true),choice("G(x)=K(x)−E(x)"),choice("G(x)=E(x)+K(x)")]),
+    step("Sag es genauer","„Da ist mehr blau als orange“ präzisieren","Welche Aussage ist fachsprachlich korrekt?",[choice("Blau ist mehr als orange."),choice("Wenn E(x)>K(x) gilt, ist G(x)>0 und es entsteht Gewinn.",true),choice("Wenn E(x)>K(x) gilt, sind die Kosten positiv.")]),
+    step("Begründen","Vorzeichen erklären","Warum bedeutet G(x)<0 einen Verlust?",[choice("Weil dann E(x)−K(x)<0 und die Kosten größer als der Erlös sind.",true),choice("Weil negative Mengen verkauft werden."),choice("Weil die Fixkosten dann verschwinden.")])
+   ];
+  }
+  case "profitfunc": return [
+   step("Beobachten","Gewinnfunktion lesen","Welche Beziehung verbindet die drei Funktionen?",[choice("G(x)=E(x)−K(x)",true),choice("G(x)=K(x)−E(x)"),choice("G(x)=E(x)+K(x)")]),
+   step("Benennen","Parameter deuten","Was bedeutet die Steigung p−kᵥ der Gewinnfunktion?",[choice("Wie sich der Gewinn pro zusätzlicher Mengeneinheit verändert.",true),choice("Die Fixkosten bei x=0."),choice("Die Gewinnschwelle selbst.")]),
+   step("Sag es genauer","Herleitung fachsprachlich formulieren","Welche Aussage ist vollständig?",[choice("Gewinn ist Preis minus Kosten."),choice("Die Gewinnfunktion entsteht als Differenz von Erlös- und Kostenfunktion: G(x)=E(x)−K(x).",true),choice("G(x) ist dasselbe wie E(x).")]),
+   step("Begründen","Startwert verstehen","Warum gilt bei positiven Fixkosten G(0)=−K<sub>f</sub>?",[choice("Bei x=0 ist der Erlös 0, die Fixkosten bestehen aber weiterhin.",true),choice("Weil bei x=0 alle Kosten 0 sind."),choice("Weil p−kᵥ dann 0 sein muss.")])
+  ];
+  case "breakeven":{
+   const exists=be?.kind==="point";
+   return [
+    step("Beobachten","Schnittpunkt und Nullstelle verbinden",exists?`Die Gewinnschwelle liegt bei x<sub>GS</sub>=${fmt(be.x)}. Was gilt dort?`:"Was kennzeichnet eine Gewinnschwelle?",[
+      choice("E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und gleichzeitig G(x<sub>GS</sub>)=0.",true),choice("E(x<sub>GS</sub>)>K(x<sub>GS</sub>) und G(x<sub>GS</sub>)>0."),choice("K(x<sub>GS</sub>)=0.")]),
+    step("Benennen","Begriff sichern","Was ist die Gewinnschwelle?",[choice("Die Menge, bei der Erlös und Gesamtkosten gleich sind.",true),choice("Der größte mögliche Gewinn."),choice("Die Fixkosten bei x=0.")]),
+    step("Sag es genauer","„Da treffen sich die Linien“ präzisieren","Welche Aussage ist fachsprachlich vollständig?",[choice("Da treffen sich die Linien."),choice("An der Gewinnschwelle x<sub>GS</sub> schneiden sich Kosten- und Erlösfunktion; es gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>).",true),choice("Nach dem Schnittpunkt sind Kosten und Erlös identisch.")]),
+    step("Begründen","Zwei Bedingungen verknüpfen","Warum folgt aus E(x<sub>GS</sub>)=K(x<sub>GS</sub>) auch G(x<sub>GS</sub>)=0?",[choice("Weil G(x)=E(x)−K(x) gilt und gleiche Werte die Differenz 0 ergeben.",true),choice("Weil die Menge an der Gewinnschwelle 0 ist."),choice("Weil die Fixkosten dort verschwinden.")])
+   ];
+  }
+  case "domain":{
+   const discrete=state.quantityUnit==="Stück";
+   return [
+    step("Beobachten","Einheit beachten",`Welche Aussage passt zur Mengeneinheit ${state.quantityUnit}?`,[
+      choice(discrete?"Im Sachbereich sind ganze, nichtnegative Stückzahlen sinnvoll.":`Dezimalwerte können bei ${state.quantityUnit} im Sachbereich sinnvoll sein.`,true),
+      choice(discrete?"Jede reelle Zahl ist als Stückzahl praktisch möglich.":`Bei ${state.quantityUnit} sind grundsätzlich nur ganze Zahlen erlaubt.`),
+      choice("Die Einheit hat keinen Einfluss auf die Deutung des Sachbereichs.")]),
+    step("Benennen","Mathematik und Kontext trennen","Wie heißt die Menge der im konkreten Kontext sinnvollen x-Werte?",[choice("Sachbereich",true),choice("Wertebereich"),choice("Steigungsbereich")]),
+    step("Sag es genauer","„Ich runde die Gewinnschwelle“ präzisieren","Welche Aussage ist fachlich sauber?",[
+      choice(discrete?"Die mathematische Gewinnschwelle bleibt unverändert; anschließend wird sie für ganze Stückzahlen praktisch gedeutet.":`Die mathematische Gewinnschwelle kann bei ${state.quantityUnit} als Dezimalwert sachlich zulässig sein.`,true),
+      choice("Die mathematische Lösung wird einfach passend gerundet."),choice("Sachbereich und mathematische Lösung sind dasselbe.")]),
+    step("Begründen","Deutung begründen","Warum muss man mathematische Lösung und praktische Interpretation unterscheiden?",[choice("Weil der Anwendungskontext nicht jeden mathematisch möglichen x-Wert zulassen muss.",true),choice("Weil lineare Funktionen nur ganze Zahlen erlauben."),choice("Weil Einheiten die Gleichung verändern.")])
+   ];
+  }
+  case "own": return [
+   step("Beobachten","Parameter gezielt verändern","Was passiert typischerweise, wenn nur m verändert wird?",[choice("Die Steigung des Graphen verändert sich.",true),choice("Nur der y-Achsenabschnitt verändert sich."),choice("Der Funktionsterm bleibt unverändert.")]),
+   step("Benennen","Parameter unterscheiden","Welche Zuordnung ist korrekt?",[choice("m: Steigung · b: y-Achsenabschnitt",true),choice("m: y-Achsenabschnitt · b: Steigung"),choice("m und b sind Punktkoordinaten.")]),
+   step("Sag es genauer","Beobachtung präzisieren","Welche Aussage verbindet Term und Graph?",[choice("Wenn ich etwas am Term ändere, sieht der Graph anders aus."),choice("Verändere ich bei f(x)=mx+b nur m, ändert sich die Steigung; verändere ich nur b, verschiebt sich der y-Achsenabschnitt.",true),choice("m und b wirken immer gleich auf den Graphen.")]),
+   step("Begründen","Darstellungen verbinden","Warum ändern sich Graph und Wertetabelle zusammen mit dem Term?",[choice("Weil Term, Graph und Wertetabelle dieselbe Funktion in verschiedenen Darstellungen beschreiben.",true),choice("Weil jede Tabelle denselben Graphen hat."),choice("Weil nur der Browser die Werte verschiebt.")])
+  ];
+ }
+ return [];
+}
+
 function renderLanguage(){
- const m=currentModule(),ext=languageExtension(m),sens=sensitiveFor(m);
- $("view-language").innerHTML=`<div class="kicker">Sprachhilfe</div><h2>Fachsprache verstehen und nutzen</h2>
- <p class="mini">Gehe schrittweise vor: Begriff verstehen → Satz beginnen → mathematischen oder sachlichen Zusammenhang vollständig ausdrücken.</p>
- <div class="help-stack">
-  <div class="help-card"><button class="btn help-toggle">1 · Fachwörter</button><div class="help-content"><div class="chips">${wordsFor(m).map(w=>`<span>${w}</span>`).join("")}</div></div></div>
-  <div class="help-card"><button class="btn help-toggle">2 · Begriffe erklärt</button><div class="help-content"><div class="vocab-defs">${ext.defs.map(([w,d])=>`<div class="vocab-def"><strong>${w}: </strong><span>${d}</span></div>`).join("")}</div></div></div>
-  <div class="help-card"><button class="btn help-toggle">3 · Satzbausteine</button><div class="help-content"><div class="sentence-starters">${sens.starters.map(s=>`<div class="sentence-starter">${s}</div>`).join("")}</div></div></div>
-  <div class="help-card"><button class="btn help-toggle">4 · Strukturhilfe</button><div class="help-content">${structureText(m)}</div></div>
-  <div class="help-card"><button class="btn help-toggle">5 · Sprach-Tipp</button><div class="help-content"><div class="language-tip">${ext.tip}</div></div></div>
-  <div class="help-card"><button class="btn help-toggle">6 · Mögliche Zielformulierung</button><div class="help-content"><div class="goal-sentence">${sens.goal}</div></div></div>
- </div>`;
- $("view-language").querySelectorAll(".help-toggle").forEach(b=>b.addEventListener("click",()=>b.parentElement.classList.toggle("open")));
+ const m=currentModule(),ext=languageExtension(m),sens=sensitiveFor(m),practice=languagePracticeFor(m);
+ const k=key(),saved=state.languageAnswers[k]||{};
+ const stageKeys=["observe","name","precise","reason"];
+ const labels=["1","2","3","4"];
+ const stageHtml=practice.map((st,i)=>{
+   const sk=stageKeys[i],sel=Number.isInteger(saved[sk])?saved[sk]:null;
+   const selected=sel!==null?st.choices[sel]:null;
+   const done=!!selected?.correct;
+   const available=i===0 || practice.slice(0,i).every((prev,pi)=>{
+     const pk=stageKeys[pi],ps=Number.isInteger(saved[pk])?saved[pk]:null;
+     return ps!==null && !!prev.choices[ps]?.correct;
+   });
+   if(done){
+     return `<section class="language-step done compact"><div class="language-step-head"><div><div class="language-step-title">${labels[i]} · ${st.title}</div><div class="language-step-sub">${st.sub}</div><div class="lang-answer-summary">✓ ${selected.text}</div></div><span class="language-step-badge">erledigt</span></div></section>`;
+   }
+   if(!available){
+     return `<section class="language-step locked compact"><div class="language-step-head"><div><div class="language-step-title">${labels[i]} · ${st.title}</div><div class="language-step-sub">${st.sub}</div></div><span class="language-step-badge">danach</span></div></section>`;
+   }
+   const buttons=st.choices.map((c,ci)=>{
+     const cls=["lang-choice"];
+     if(sel===ci){cls.push("selected",c.correct?"correct":"wrong");}
+     return `<button type="button" class="${cls.join(" ")}" data-lang-stage="${sk}" data-lang-choice="${ci}" aria-pressed="${sel===ci}">${c.text}</button>`;
+   }).join("");
+   let feedback="";
+   if(selected){
+     const msg=selected.correct?(selected.feedback||"Richtig. Diese Formulierung ist fachlich passend."):(selected.feedback||"Noch nicht. Prüfe die Fachbegriffe und den mathematischen Zusammenhang noch einmal.");
+     feedback=`<div class="lang-feedback ${selected.correct?"good":"try"}">${selected.correct?"✓ ":"↻ "}${msg}</div>`;
+   }
+   return `<section class="language-step"><div class="language-step-head"><div><div class="language-step-title">${labels[i]} · ${st.title}</div><div class="language-step-sub">${st.sub}</div></div><span class="language-step-badge">jetzt</span></div><div class="lang-prompt">${st.prompt}</div><div class="lang-choice-grid">${buttons}</div>${feedback}</section>`;
+ }).join("");
+ $("view-language").innerHTML=`<div class="kicker">Sprache & Begründen</div><h2>Mathematik sehen, benennen und erklären</h2>
+ <p class="mini">Arbeite in vier Schritten: beobachten → fachsprachlich benennen → genauer sagen → begründen. Die Hilfen darunter brauchst du nur, wenn du festhängst.</p>
+ <div class="language-flow">${stageHtml}</div>
+ <div class="language-help"><button type="button" class="btn help-toggle">💡 Hilfe anzeigen: Fachwörter, Satzstarter und Struktur</button><div class="help-content">
+   <div class="language-help-grid">
+    <div class="language-help-block"><strong>Fachwörter</strong><div class="chips">${wordsFor(m).map(w=>`<span>${w}</span>`).join("")}</div></div>
+    <div class="language-help-block"><strong>Begriffe kurz erklärt</strong><div class="vocab-defs">${ext.defs.map(([w,d])=>`<div class="vocab-def"><strong>${w}: </strong><span>${d}</span></div>`).join("")}</div></div>
+    <div class="language-help-block"><strong>Satzstarter</strong><div class="sentence-starters">${sens.starters.map(x=>`<div class="sentence-starter">${x}</div>`).join("")}</div></div>
+    <div class="language-help-block"><strong>Strukturhilfe</strong>${structureText(m)}<div class="language-tip" style="margin-top:8px">${ext.tip}</div></div>
+   </div>
+   <div class="language-goal"><div class="goal-sentence"><strong>Lernziel:</strong> ${sens.goal}</div></div>
+ </div></div>`;
+ const root=$("view-language");
+ root.querySelectorAll("[data-lang-stage]").forEach(btn=>btn.addEventListener("click",()=>{
+   const sk=btn.dataset.langStage,ci=+btn.dataset.langChoice;
+   state.languageAnswers[k]??={}; state.languageAnswers[k][sk]=ci;
+   renderLanguage();
+ }));
+ const help=root.querySelector(".language-help>.help-toggle");
+ if(help)help.addEventListener("click",()=>help.parentElement.classList.toggle("open"));
 }
 
 function fx(x){const v=state.values;return v.m*x+v.b}
