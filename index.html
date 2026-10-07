@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V19b · Achsen und Funktionen konsistent beschriftet</title>
+<title>Lineare Funktionen – Lern-Dashboard V19c · Kompetenzgesteuerte Aufgabenpools</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -162,6 +162,23 @@ input[type="range"]{width:100%;margin-top:9px;min-height:38px;accent-color:var(-
 .practice-actions .btn{flex:1;min-width:120px}
 .practice-summary{border:1px solid #bce8d6;background:#f2fbf7;border-radius:14px;padding:13px}
 .practice-summary strong{display:block;margin-bottom:4px;color:#145c43}
+.practice-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:-2px}
+.practice-tag{display:inline-flex;align-items:center;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 8px;font-size:.72rem;font-weight:820;color:#475569}
+.practice-tag.level1{border-color:#bce8d6;background:#f2fbf7;color:#145c43}
+.practice-tag.level2{border-color:#bfd0ff;background:#f4f7ff;color:#173d9a}
+.practice-tag.level3{border-color:#d7c5fa;background:#faf7ff;color:#5b21b6}
+.math-frac{display:inline-flex;vertical-align:-.38em;flex-direction:column;align-items:stretch;text-align:center;line-height:1;font-family:"Cambria Math","STIX Two Math",serif;margin:0 .08em;min-width:1.25em}
+.math-frac .num{display:block;padding:0 .12em .08em}
+.math-frac .den{display:block;border-top:1.5px solid currentColor;padding:.08em .12em 0}
+.practice-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.practice-summary-box{border:1px solid #cfe0d8;background:#fff;border-radius:11px;padding:9px}
+.practice-summary-box strong{font-size:.79rem;margin:0 0 3px;color:var(--ink)}
+.practice-summary-box span{font-size:.8rem;color:#475569}
+.practice-competence-list{display:grid;gap:5px;margin-top:10px}
+.practice-competence-item{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;border-top:1px solid #dce8e1;padding-top:6px;font-size:.8rem}
+.practice-competence-item:first-child{border-top:0}
+.practice-next-tip{margin-top:10px;padding:9px 10px;border-radius:10px;background:#eef7ff;border:1px solid #c6def7;color:#24415f;font-size:.82rem;font-weight:720}
+@media(max-width:780px){.practice-summary-grid{grid-template-columns:1fr}}
 body.practice-mode .right{display:none}
 body.practice-mode .workspace{grid-template-areas:"center controls";grid-template-rows:auto}
 body.practice-mode .left-note{display:none}
@@ -669,56 +686,200 @@ const state={
  path:"basics", moduleIndex:0, mode:"math", view:"task", showPrevious:true,
  quantityUnit:"Stück", moneyUnit:"€",
  businessVisible:{K:true,E:true,G:true}, showBreakEven:false,
- values:{}, baseline:{}, locks:{}, hypotheses:{}, responses:{}, languageAnswers:{}, completed:new Set(), practiceSessions:{}
+ values:{}, baseline:{}, locks:{}, hypotheses:{}, responses:{}, languageAnswers:{}, completed:new Set(), practiceSessions:{}, practiceLastRound:{}
 };
 
 function listPathModules(path){return modules.filter(m=>m.path===path);}
 function currentModule(){return listPathModules(state.path)[state.moduleIndex];}
 function key(){return `${state.path}:${currentModule().id}`;}
 
-const practiceBanks={
- basics:[
-  {prompt:"Gegeben ist <strong>f(x)=2x+3</strong>. Bestimme <strong>f(4)</strong>.",type:"number",answer:11,hint:"Setze x=4 in den Funktionsterm ein.",feedback:"f(4)=2·4+3=11.",graph:{kind:"single",m:2,b:3,x:[-2,6],y:[-4,16]}},
-  {prompt:"Welche Aussage beschreibt bei <strong>f(x)=−2x+4</strong> die Steigung korrekt?",type:"mc",choices:["Der Graph steigt von links nach rechts.","Der Graph fällt von links nach rechts.","Der Graph ist waagerecht."],correct:1,hint:"Achte auf das Vorzeichen von m.",feedback:"m=−2 ist negativ. Deshalb fällt der Graph.",graph:{kind:"single",m:-2,b:4,x:[-4,6],y:[-10,14]}},
-  {prompt:"Welchen y-Achsenabschnitt besitzt <strong>f(x)=1,5x−2</strong>?",type:"number",answer:-2,hint:"Für den Schnittpunkt mit der y-Achse gilt x=0.",feedback:"f(0)=−2. Also ist b=−2.",graph:{kind:"single",m:1.5,b:-2,x:[-5,6],y:[-10,10]}},
-  {prompt:"Welche Funktion ist proportional?",type:"mc",choices:["f(x)=3x","f(x)=3x+2","f(x)=2"],correct:0,hint:"Bei einer proportionalen Funktion gilt b=0.",feedback:"f(x)=3x hat den y-Achsenabschnitt 0 und verläuft durch den Ursprung.",graph:{kind:"single",m:3,b:0,x:[-4,4],y:[-12,12]}},
-  {prompt:"Bestimme die Nullstelle von <strong>f(x)=2x−6</strong>.",type:"number",answer:3,hint:"Setze f(x<sub>N</sub>)=0 und löse nach x<sub>N</sub> auf.",feedback:"0=2x−6 ⇒ x<sub>N</sub>=3.",graph:{kind:"single",m:2,b:-6,x:[-2,6],y:[-10,8],markZero:true}},
-  {prompt:"Liegt der Punkt <strong>P(2|7)</strong> auf dem Graphen von <strong>f(x)=2x+3</strong>?",type:"mc",choices:["Ja","Nein"],correct:0,hint:"Berechne f(2).",feedback:"f(2)=2·2+3=7. Deshalb liegt P(2|7) auf dem Graphen.",graph:{kind:"single",m:2,b:3,x:[-2,6],y:[-4,16],point:[2,7]}}
- ],
- compare:[
-  {prompt:"Gegeben sind <strong>f(x)=2x+1</strong> und <strong>g(x)=2x−3</strong>. Wie liegen die Geraden?",type:"mc",choices:["parallel","identisch","sie schneiden sich"],correct:0,hint:"Vergleiche zuerst die Steigungen.",feedback:"Beide Geraden haben m=2, aber verschiedene y-Achsenabschnitte. Sie sind parallel.",graph:{kind:"double",m:2,b:1,n:2,c:-3,x:[-4,6],y:[-12,14]}},
-  {prompt:"Gegeben sind <strong>f(x)=x+1</strong> und <strong>g(x)=−x+5</strong>. Bestimme die Schnittpunktstelle <strong>x<sub>S</sub></strong>.",type:"number",answer:2,hint:"Setze f(x<sub>S</sub>)=g(x<sub>S</sub>).",feedback:"x+1=−x+5 ⇒ 2x=4 ⇒ x<sub>S</sub>=2.",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
-  {prompt:"Für denselben Schnittpunkt aus f(x)=x+1 und g(x)=−x+5: Wie groß ist der gemeinsame Funktionswert?",type:"number",answer:3,hint:"Setze x<sub>S</sub>=2 in eine der beiden Funktionen ein.",feedback:"f(2)=3 und g(2)=3. Der Schnittpunkt ist S(2|3).",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
-  {prompt:"Bei <strong>x=3</strong> gelten f(x)=2x+1 und g(x)=x+4. Welche Aussage ist richtig?",type:"mc",choices:["f(3)>g(3)","f(3)<g(3)","f(3)=g(3)"],correct:2,hint:"Berechne beide Funktionswerte für denselben x-Wert.",feedback:"f(3)=7 und g(3)=7. Beide Funktionswerte sind gleich.",graph:{kind:"double",m:2,b:1,n:1,c:4,x:[-2,6],y:[-4,14],markX:3}},
-  {prompt:"Gegeben sind f(x)=x+2 und g(x)=3x−2. Bestimme bei <strong>x=2</strong> die Differenz <strong>g(x)−f(x)</strong>.",type:"number",answer:0,hint:"Berechne zuerst beide Funktionswerte bei x=2.",feedback:"f(2)=4 und g(2)=4. Daher ist g(2)−f(2)=0.",graph:{kind:"double",m:1,b:2,n:3,c:-2,x:[-2,5],y:[-8,14],markX:2}}
- ],
- business:[
-  {prompt:"Es gilt <strong>K(x)=4x+300</strong> und <strong>E(x)=8x</strong>. Bestimme den Gewinn bei <strong>x=50</strong> Stück.",type:"number",answer:-100,hint:"Nutze G(x)=E(x)−K(x).",feedback:"E(50)=400, K(50)=500. Also G(50)=−100 €: Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
-  {prompt:"Für K(x)=4x+300 und E(x)=8x: Bestimme die Gewinnschwelle <strong>x<sub>GS</sub></strong>.",type:"number",answer:75,hint:"Setze E(x<sub>GS</sub>)=K(x<sub>GS</sub>).",feedback:"8x=4x+300 ⇒ 4x=300 ⇒ x<sub>GS</sub>=75.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markBreakEven:true}},
-  {prompt:"Bei x=50 Stück gilt für dasselbe Modell K(50)=500 € und E(50)=400 €. Was bedeutet das?",type:"mc",choices:["Gewinn","Verlust","Gewinnschwelle"],correct:1,hint:"Vergleiche E(x) und K(x).",feedback:"E(50)<K(50). Deshalb entsteht Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
-  {prompt:"Wann gibt es bei positiven Fixkosten <strong>keine positive Gewinnschwelle</strong>?",type:"mc",choices:["Wenn p>k<sub>v</sub>","Wenn p≤k<sub>v</sub>","Immer bei K<sub>f</sub>>0"],correct:1,hint:"Die Erlösfunktion muss die Kostenfunktion irgendwann einholen können.",feedback:"Bei p≤k<sub>v</sub> steigt E(x) nicht schneller als K(x). Eine positive Gewinnschwelle entsteht dann nicht.",graph:{kind:"business",kv:6,Kf:300,p:5,x:[0,150],y:[-700,1200]}},
-  {prompt:"K(x)=4,5x+300 und E(x)=9x. Welche Steigung besitzt die Gewinnfunktion G(x)?",type:"number",answer:4.5,hint:"Die Steigung von G ist p−k<sub>v</sub>.",feedback:"9−4,5=4,5. Also G(x)=4,5x−300.",graph:{kind:"business",kv:4.5,Kf:300,p:9,x:[0,150],y:[-500,1500]}},
-  {prompt:"Die mathematische Gewinnschwelle liegt bei <strong>x<sub>GS</sub>=73,4</strong>. x beschreibt Stückzahlen. Ab welcher ganzen Stückzahl ist bei positiver Gewinnsteigung Gewinn möglich?",type:"number",answer:74,hint:"Die mathematische Lösung bleibt 73,4. Gesucht ist die erste ganze Stückzahl darüber.",feedback:"73,4 Stück sind nicht möglich. 74 ist die erste ganze Stückzahl mit x>x<sub>GS</sub>.",graph:{kind:"business",kv:4.3,Kf:315.62,p:8.6,x:[0,150],y:[-500,1500],markBreakEven:true}}
- ]
+function fractionHTML(n,d){
+ const neg=(n<0)!=(d<0),an=Math.abs(n),ad=Math.abs(d),spoken=`${neg?"minus ":""}${an} durch ${ad}`;
+ return `${neg?"−":""}<span class="math-frac" role="math" aria-label="${spoken}"><span class="num">${an}</span><span class="den">${ad}</span></span>`;
+}
+const F=fractionHTML;
+const levelInfo={
+ 1:{label:"Sichern",afb:"AFB I"},
+ 2:{label:"Anwenden",afb:"AFB II"},
+ 3:{label:"Übertragen & Begründen",afb:"AFB III"}
 };
-practiceBanks.mixed=[
- practiceBanks.basics[0],practiceBanks.compare[0],practiceBanks.business[0],practiceBanks.basics[4],
- practiceBanks.compare[1],practiceBanks.business[1],practiceBanks.basics[3],practiceBanks.business[5]
-];
-function practiceBank(){return practiceBanks[currentModule().practiceSet]||[];}
+
+// Jede Übungsrunde wird kompetenzgesteuert aus vorab geprüften Varianten zusammengestellt.
+// Die Schwierigkeit wird nicht durch Zufallszahlen erzeugt: Kompetenz, Anforderungsniveau,
+// Darstellungsform und Zahlentyp sind für jede Variante festgelegt.
+const practicePools={
+ basics:{slots:[
+  {competence:"Funktionswert & Punkt",level:1,variants:[
+   {id:"b-val-1",representation:"Term",numberType:"ganze Zahlen",prompt:"Gegeben ist <strong>f(x)=2x+3</strong>. Bestimme <strong>f(4)</strong>.",type:"number",answer:11,hint:"Setze x=4 in den Funktionsterm ein.",feedback:"f(4)=2·4+3=11.",graph:{kind:"single",m:2,b:3,x:[-2,6],y:[-4,16]}},
+   {id:"b-val-2",representation:"Term",numberType:"negative Zahl",prompt:"Gegeben ist <strong>f(x)=−3x+5</strong>. Bestimme <strong>f(−2)</strong>.",type:"number",answer:11,hint:"Setze x=−2 ein und beachte das Vorzeichen.",feedback:"f(−2)=−3·(−2)+5=11.",graph:{kind:"single",m:-3,b:5,x:[-4,4],y:[-8,18],markX:-2}},
+   {id:"b-val-3",representation:"Term",numberType:"Bruch",prompt:`Gegeben ist <strong>f(x)=${F(1,2)}x+2</strong>. Bestimme <strong>f(6)</strong>.`,type:"number",answer:5,hint:`${F(1,2)}·6=3. Addiere anschließend 2.`,feedback:`f(6)=${F(1,2)}·6+2=5.`,graph:{kind:"single",m:.5,b:2,x:[-4,8],y:[-2,8],markX:6}}
+  ]},
+  {competence:"y-Achsenabschnitt",level:1,variants:[
+   {id:"b-int-1",representation:"Term",numberType:"Dezimalzahl",prompt:"Welchen y-Achsenabschnitt besitzt <strong>f(x)=1,5x−2</strong>?",type:"number",answer:-2,hint:"Für den Schnittpunkt mit der y-Achse gilt x=0.",feedback:"f(0)=−2. Also ist b=−2.",graph:{kind:"single",m:1.5,b:-2,x:[-5,6],y:[-10,10]}},
+   {id:"b-int-2",representation:"Term",numberType:"Bruch",prompt:`Welchen y-Achsenabschnitt besitzt <strong>f(x)=${F(-3,4)}x+5</strong>?`,type:"number",answer:5,hint:"Der y-Achsenabschnitt ist der Funktionswert bei x=0.",feedback:"f(0)=5. Daher ist b=5.",graph:{kind:"single",m:-.75,b:5,x:[-6,6],y:[-2,12]}},
+   {id:"b-int-3",representation:"Graph & Term",numberType:"ganze Zahlen",prompt:"Bei <strong>f(x)=−2x−4</strong> schneidet der Graph die y-Achse bei welchem Funktionswert?",type:"number",answer:-4,hint:"Setze x=0.",feedback:"f(0)=−4. Der y-Achsenabschnitt ist b=−4.",graph:{kind:"single",m:-2,b:-4,x:[-5,5],y:[-14,8]}}
+  ]},
+  {competence:"Steigung",level:2,variants:[
+   {id:"b-slope-1",representation:"Term → Graph",numberType:"negative Zahl",prompt:"Welche Aussage beschreibt bei <strong>f(x)=−2x+4</strong> die Steigung korrekt?",type:"mc",choices:["Der Graph steigt von links nach rechts.","Der Graph fällt von links nach rechts.","Der Graph ist waagerecht."],correct:1,hint:"Achte auf das Vorzeichen von m.",feedback:"m=−2 ist negativ. Deshalb fällt der Graph von links nach rechts.",graph:{kind:"single",m:-2,b:4,x:[-4,6],y:[-10,14]}},
+   {id:"b-slope-2",representation:"Term → Änderung",numberType:"Bruch",prompt:`Für <strong>f(x)=${F(3,4)}x−1</strong> wird x um 4 erhöht. Um wie viel ändert sich f(x)?`,type:"number",answer:3,hint:`Nutze Δf=m·Δx=${F(3,4)}·4.`,feedback:`Δf=${F(3,4)}·4=3.`,graph:{kind:"single",m:.75,b:-1,x:[-4,8],y:[-5,7]}},
+   {id:"b-slope-3",representation:"Tabelle → Term",numberType:"Bruch",prompt:`In einer Tabelle stehen die Punkte <strong>P(0|3)</strong> und <strong>Q(2|2)</strong>. Bestimme die Steigung m.`,type:"number",answer:-.5,hint:"Nutze m=Δf/Δx=(2−3)/(2−0). Du kannst einen Bruch wie −1/2 eingeben.",feedback:`m=${F(-1,2)}. Pro Schritt nach rechts nimmt f(x) um ${F(1,2)} ab.`,graph:{kind:"single",m:-.5,b:3,x:[-4,8],y:[-2,6],point:[2,2]}}
+  ]},
+  {competence:"Proportionalität",level:2,variants:[
+   {id:"b-prop-1",representation:"Termauswahl",numberType:"ganze Zahlen",prompt:"Welche Funktion ist proportional?",type:"mc",choices:["f(x)=3x","f(x)=3x+2","f(x)=2"],correct:0,hint:"Bei einer proportionalen Funktion gilt b=0.",feedback:"f(x)=3x hat den y-Achsenabschnitt 0 und verläuft durch den Ursprung.",graph:{kind:"single",m:3,b:0,x:[-4,4],y:[-12,12]}},
+   {id:"b-prop-2",representation:"Punkte → Term",numberType:"Bruch",prompt:`Ein proportionaler Graph verläuft durch <strong>O(0|0)</strong> und <strong>P(4|−3)</strong>. Welcher Term passt?`,type:"mc",choices:[`f(x)=${F(-3,4)}x`,`f(x)=${F(-4,3)}x`,`f(x)=${F(-3,4)}x+4`],correct:0,hint:"Bei Proportionalität gilt b=0. Bestimme m aus Δf/Δx.",feedback:`m=${F(-3,4)} und b=0. Also f(x)=${F(-3,4)}x.`,graph:{kind:"single",m:-.75,b:0,x:[-5,5],y:[-5,5],point:[4,-3]}},
+   {id:"b-prop-3",representation:"Begründung",numberType:"Dezimalzahl",prompt:"Warum ist <strong>f(x)=2,5x</strong> proportional?",type:"mc",choices:["Weil die Steigung positiv ist.","Weil b=0 gilt und der Graph durch O(0|0) verläuft.","Weil 2,5 eine Dezimalzahl ist."],correct:1,hint:"Entscheidend ist nicht das Vorzeichen von m, sondern der y-Achsenabschnitt.",feedback:"Für proportionale Funktionen gilt b=0 ⇔ f(0)=0.",graph:{kind:"single",m:2.5,b:0,x:[-4,4],y:[-10,10]}}
+  ]},
+  {competence:"Nullstelle",level:2,variants:[
+   {id:"b-zero-1",representation:"Term → Gleichung",numberType:"ganze Zahlen",prompt:"Bestimme die Nullstelle von <strong>f(x)=2x−6</strong>.",type:"number",answer:3,hint:"Setze f(x<sub>N</sub>)=0 und löse nach x<sub>N</sub> auf.",feedback:"0=2x−6 ⇒ x<sub>N</sub>=3.",graph:{kind:"single",m:2,b:-6,x:[-2,6],y:[-10,8],markZero:true}},
+   {id:"b-zero-2",representation:"Term → Gleichung",numberType:"Bruch",prompt:`Bestimme die Nullstelle von <strong>f(x)=${F(-3,4)}x+3</strong>.`,type:"number",answer:4,hint:`Setze 0=${F(-3,4)}x+3.`,feedback:`0=${F(-3,4)}x+3 ⇒ x<sub>N</sub>=4.`,graph:{kind:"single",m:-.75,b:3,x:[-3,7],y:[-3,6],markZero:true}},
+   {id:"b-zero-3",representation:"Term → Gleichung",numberType:"Bruch",prompt:`Bestimme die Nullstelle von <strong>f(x)=${F(1,2)}x+5</strong>.`,type:"number",answer:-10,hint:`Setze f(x<sub>N</sub>)=0. Dann gilt ${F(1,2)}x=−5.`,feedback:`0=${F(1,2)}x+5 ⇒ x<sub>N</sub>=−10.`,graph:{kind:"single",m:.5,b:5,x:[-12,4],y:[-2,8],markZero:true}}
+  ]},
+  {competence:"Präzise begründen",level:3,variants:[
+   {id:"b-transfer-1",representation:"Fehlerdiagnose",numberType:"Fachsprache",prompt:"Ein Schüler sagt: <strong>„x<sub>N</sub> ist der Punkt auf der x-Achse.“</strong> Welche Korrektur ist fachsprachlich präzise?",type:"mc",choices:["x<sub>N</sub> ist der Funktionswert der Nullstelle.","x<sub>N</sub> ist der x-Wert der Nullstelle; der Nullstellenpunkt heißt N(x<sub>N</sub>|0).","x<sub>N</sub> ist der y-Achsenabschnitt."],correct:1,hint:"Unterscheide Zahl und Punkt.",feedback:"x<sub>N</sub> bezeichnet den x-Wert. Der Punkt auf dem Graphen ist N(x<sub>N</sub>|0).",graph:{kind:"single",m:1,b:-2,x:[-3,6],y:[-5,5],markZero:true}},
+   {id:"b-transfer-2",representation:"Fehlerdiagnose",numberType:"Fachsprache",prompt:"Zu <strong>f(x)=−2x+4</strong> sagt jemand: „Der y-Achsenabschnitt ist −2.“ Was wurde verwechselt?",type:"mc",choices:["−2 ist die Steigung m; der y-Achsenabschnitt ist b=4.","−2 ist die Nullstelle; der y-Achsenabschnitt ist b=0.","Die Aussage ist korrekt."],correct:0,hint:"Vergleiche mit der Form f(x)=mx+b.",feedback:"In f(x)=mx+b steht der Faktor vor x für m. Hier gilt m=−2 und b=4.",graph:{kind:"single",m:-2,b:4,x:[-4,6],y:[-10,14]}},
+   {id:"b-transfer-3",representation:"Begründung",numberType:"Sonderfall",prompt:"Eine lineare Funktion hat <strong>m=0</strong> und <strong>b=3</strong>. Welche Aussage ist vollständig richtig?",type:"mc",choices:["Der Graph ist waagerecht und besitzt keine Nullstelle.","Der Graph steigt, weil b positiv ist.","Die Funktion ist proportional, weil m=0 gilt."],correct:0,hint:"f(x)=3 ist konstant. Prüfe zusätzlich, ob f(x)=0 jemals erfüllt wird.",feedback:"f(x)=3 ist konstant und ungleich 0. Der Graph ist waagerecht und besitzt keine Nullstelle.",graph:{kind:"single",m:0,b:3,x:[-6,6],y:[-2,7]}}
+  ]}
+ ]},
+ compare:{slots:[
+  {competence:"Funktionswerte vergleichen",level:1,variants:[
+   {id:"c-value-1",representation:"Termvergleich",numberType:"ganze Zahlen",prompt:"Bei <strong>x=3</strong> gelten f(x)=2x+1 und g(x)=x+4. Welche Aussage ist richtig?",type:"mc",choices:["f(3)>g(3)","f(3)<g(3)","f(3)=g(3)"],correct:2,hint:"Berechne beide Funktionswerte für denselben x-Wert.",feedback:"f(3)=7 und g(3)=7. Beide Funktionswerte sind gleich.",graph:{kind:"double",m:2,b:1,n:1,c:4,x:[-2,6],y:[-4,14],markX:3}},
+   {id:"c-value-2",representation:"Termvergleich",numberType:"negative Zahl",prompt:"Bei <strong>x=−2</strong> gelten f(x)=−x+3 und g(x)=2x+1. Welche Aussage ist richtig?",type:"mc",choices:["f(−2)>g(−2)","f(−2)<g(−2)","f(−2)=g(−2)"],correct:0,hint:"Setze x=−2 in beide Terme ein.",feedback:"f(−2)=5 und g(−2)=−3. Daher gilt f(−2)>g(−2).",graph:{kind:"double",m:-1,b:3,n:2,c:1,x:[-5,5],y:[-10,12],markX:-2}},
+   {id:"c-value-3",representation:"Termvergleich",numberType:"Bruch",prompt:`Bei <strong>x=4</strong> gelten f(x)=${F(1,2)}x+2 und g(x)=x. Welche Aussage ist richtig?`,type:"mc",choices:["f(4)>g(4)","f(4)<g(4)","f(4)=g(4)"],correct:2,hint:"Berechne beide Funktionswerte bei x=4.",feedback:"f(4)=4 und g(4)=4. Beide Funktionswerte sind gleich.",graph:{kind:"double",m:.5,b:2,n:1,c:0,x:[-2,7],y:[-3,8],markX:4}}
+  ]},
+  {competence:"Lagebeziehung",level:1,variants:[
+   {id:"c-rel-1",representation:"Termvergleich",numberType:"ganze Zahlen",prompt:"Gegeben sind <strong>f(x)=2x+1</strong> und <strong>g(x)=2x−3</strong>. Wie liegen die Geraden?",type:"mc",choices:["parallel","identisch","sie schneiden sich"],correct:0,hint:"Vergleiche zuerst die Steigungen, dann die y-Achsenabschnitte.",feedback:"Beide Geraden haben m=2, aber verschiedene y-Achsenabschnitte. Sie sind parallel.",graph:{kind:"double",m:2,b:1,n:2,c:-3,x:[-4,6],y:[-12,14]}},
+   {id:"c-rel-2",representation:"Termvergleich",numberType:"Bruch",prompt:`Gegeben sind f(x)=${F(-3,4)}x+2 und g(x)=${F(-3,4)}x+2. Wie liegen die Geraden?`,type:"mc",choices:["parallel, aber verschieden","identisch","sie schneiden sich genau einmal"],correct:1,hint:"Vergleiche sowohl m als auch b.",feedback:"Steigung und y-Achsenabschnitt stimmen überein. Die Geraden sind identisch.",graph:{kind:"double",m:-.75,b:2,n:-.75,c:2,x:[-6,6],y:[-5,8]}},
+   {id:"c-rel-3",representation:"Termvergleich",numberType:"Bruch & ganze Zahl",prompt:`Gegeben sind f(x)=${F(1,2)}x−1 und g(x)=−2x+4. Wie liegen die Geraden?`,type:"mc",choices:["parallel","identisch","sie schneiden sich genau einmal"],correct:2,hint:"Unterschiedliche Steigungen bedeuten genau einen Schnittpunkt.",feedback:`${F(1,2)}≠−2. Die Geraden besitzen genau einen Schnittpunkt.`,graph:{kind:"double",m:.5,b:-1,n:-2,c:4,x:[-4,6],y:[-8,12]}}
+  ]},
+  {competence:"Schnittpunktstelle",level:2,variants:[
+   {id:"c-xs-1",representation:"Gleichsetzen",numberType:"ganze Zahlen",prompt:"Gegeben sind <strong>f(x)=x+1</strong> und <strong>g(x)=−x+5</strong>. Bestimme die Schnittpunktstelle <strong>x<sub>S</sub></strong>.",type:"number",answer:2,hint:"Setze f(x<sub>S</sub>)=g(x<sub>S</sub>).",feedback:"x+1=−x+5 ⇒ 2x=4 ⇒ x<sub>S</sub>=2.",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
+   {id:"c-xs-2",representation:"Gleichsetzen",numberType:"Bruch",prompt:`Bestimme die Schnittpunktstelle von f(x)=${F(1,2)}x+1 und g(x)=−x+4.`,type:"number",answer:2,hint:`Setze ${F(1,2)}x+1=−x+4.`,feedback:`${F(3,2)}x=3 ⇒ x<sub>S</sub>=2.`,graph:{kind:"double",m:.5,b:1,n:-1,c:4,x:[-4,7],y:[-5,9],markIntersection:true}},
+   {id:"c-xs-3",representation:"Gleichsetzen",numberType:"Brüche",prompt:`Bestimme die Schnittpunktstelle von f(x)=${F(-3,4)}x+5 und g(x)=${F(1,4)}x+1.`,type:"number",answer:4,hint:`Bringe die x-Terme auf eine Seite. ${F(-3,4)}x−${F(1,4)}x=−x.`,feedback:"−x=−4 ⇒ x<sub>S</sub>=4.",graph:{kind:"double",m:-.75,b:5,n:.25,c:1,x:[-3,8],y:[-2,9],markIntersection:true}}
+  ]},
+  {competence:"Schnittpunkt vollständig",level:2,variants:[
+   {id:"c-yS-1",representation:"x-Wert → Funktionswert",numberType:"ganze Zahlen",prompt:"Für f(x)=x+1 und g(x)=−x+5 gilt x<sub>S</sub>=2. Wie groß ist der gemeinsame Funktionswert?",type:"number",answer:3,hint:"Setze x<sub>S</sub>=2 in eine der beiden Funktionen ein.",feedback:"f(2)=3 und g(2)=3. Der Schnittpunkt ist S(2|3).",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
+   {id:"c-yS-2",representation:"Gleichsetzen & Einsetzen",numberType:"ganze Zahlen",prompt:"f(x)=2x−1 und g(x)=−x+8 schneiden sich bei x<sub>S</sub>=3. Bestimme den gemeinsamen Funktionswert.",type:"number",answer:5,hint:"Setze x=3 in f oder g ein.",feedback:"f(3)=5 und g(3)=5. Also S(3|5).",graph:{kind:"double",m:2,b:-1,n:-1,c:8,x:[-2,7],y:[-6,12],markIntersection:true}},
+   {id:"c-yS-3",representation:"Gleichsetzen & Einsetzen",numberType:"Brüche",prompt:`f(x)=${F(-1,2)}x+4 und g(x)=${F(1,2)}x+2 schneiden sich bei x<sub>S</sub>=2. Bestimme den gemeinsamen Funktionswert.`,type:"number",answer:3,hint:"Setze x=2 in einen der beiden Terme ein.",feedback:"f(2)=3 und g(2)=3. Also S(2|3).",graph:{kind:"double",m:-.5,b:4,n:.5,c:2,x:[-4,7],y:[-2,7],markIntersection:true}}
+  ]},
+  {competence:"Differenz zweier Funktionen",level:2,variants:[
+   {id:"c-diff-1",representation:"Term → Differenz",numberType:"ganze Zahlen",prompt:"Gegeben sind f(x)=x+2 und g(x)=3x−2. Bestimme bei <strong>x=2</strong> die Differenz <strong>g(x)−f(x)</strong>.",type:"number",answer:0,hint:"Berechne zuerst beide Funktionswerte bei x=2.",feedback:"f(2)=4 und g(2)=4. Daher ist g(2)−f(2)=0.",graph:{kind:"double",m:1,b:2,n:3,c:-2,x:[-2,5],y:[-8,14],markX:2}},
+   {id:"c-diff-2",representation:"Term → Differenz",numberType:"Bruch",prompt:`Bei x=4 gelten f(x)=${F(-1,2)}x+5 und g(x)=x+2. Bestimme g(4)−f(4).`,type:"number",answer:3,hint:"Berechne f(4) und g(4) getrennt.",feedback:"f(4)=3 und g(4)=6. Also g(4)−f(4)=3.",graph:{kind:"double",m:-.5,b:5,n:1,c:2,x:[-2,7],y:[-4,10],markX:4}},
+   {id:"c-diff-3",representation:"Term → Differenz",numberType:"Bruch",prompt:`Bei x=2 gelten f(x)=2x−1 und g(x)=${F(1,2)}x+5. Bestimme g(2)−f(2).`,type:"number",answer:3,hint:"Berechne beide Funktionswerte an derselben Stelle x=2.",feedback:"f(2)=3 und g(2)=6. Also beträgt die Differenz 3.",graph:{kind:"double",m:2,b:-1,n:.5,c:5,x:[-2,6],y:[-4,12],markX:2}}
+  ]},
+  {competence:"Präzise begründen",level:3,variants:[
+   {id:"c-transfer-1",representation:"Fehlerdiagnose",numberType:"Fachsprache",prompt:"Ein Schüler sagt: <strong>„Zwei Geraden mit gleichem y-Achsenabschnitt sind parallel.“</strong> Wie beurteilst du das?",type:"mc",choices:["Richtig, der y-Achsenabschnitt entscheidet über Parallelität.","Nicht ausreichend: Für Parallelität müssen die Steigungen gleich und die y-Achsenabschnitte verschieden sein.","Richtig, wenn beide Steigungen positiv sind."],correct:1,hint:"Welche Parameter entscheiden über die Lagebeziehung?",feedback:"Parallelität wird durch gleiche Steigungen und verschiedene y-Achsenabschnitte beschrieben.",graph:{kind:"double",m:1,b:2,n:-1,c:2,x:[-5,5],y:[-5,8]}},
+   {id:"c-transfer-2",representation:"Fehlerdiagnose",numberType:"Fachsprache",prompt:"Zur Schnittpunktberechnung sagt jemand: <strong>„Ich setze die beiden Steigungen gleich.“</strong> Welche Korrektur ist richtig?",type:"mc",choices:["Man setzt die vollständigen Funktionswerte gleich: f(x<sub>S</sub>)=g(x<sub>S</sub>).","Man setzt nur die y-Achsenabschnitte gleich.","Man setzt immer x=0."],correct:0,hint:"Am Schnittpunkt besitzen beide Funktionen denselben Funktionswert bei derselben Stelle.",feedback:"Die Bedingung lautet f(x<sub>S</sub>)=g(x<sub>S</sub>).",graph:{kind:"double",m:2,b:-1,n:-1,c:5,x:[-3,6],y:[-6,10],markIntersection:true}},
+   {id:"c-transfer-3",representation:"Sprachpräzision",numberType:"Fachsprache",prompt:"Welche Formulierung ist für einen Schnittpunkt fachsprachlich am präzisesten?",type:"mc",choices:["f und g sind gleich.","Bei der Schnittpunktstelle x<sub>S</sub> gilt f(x<sub>S</sub>)=g(x<sub>S</sub>); die Funktionen müssen deshalb nicht identisch sein.","Die beiden Steigungen sind am Schnittpunkt gleich."],correct:1,hint:"Unterscheide die Gleichheit zweier Funktionswerte von der Gleichheit ganzer Funktionen.",feedback:"Am Schnittpunkt stimmen die Funktionswerte an genau derselben Stelle überein.",graph:{kind:"double",m:1,b:0,n:-2,c:6,x:[-3,6],y:[-6,10],markIntersection:true}}
+  ]}
+ ]},
+ business:{slots:[
+  {competence:"Gewinn berechnen",level:1,variants:[
+   {id:"e-gain-1",representation:"Sachterm → Rechnung",numberType:"ganze Zahlen",prompt:"Es gilt <strong>K(x)=4x+300</strong> und <strong>E(x)=8x</strong>. Bestimme den Gewinn bei <strong>x=50</strong> Stück.",type:"number",answer:-100,hint:"Nutze G(x)=E(x)−K(x).",feedback:"E(50)=400, K(50)=500. Also G(50)=−100 €: Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
+   {id:"e-gain-2",representation:"Sachterm → Rechnung",numberType:"ganze Zahlen",prompt:"Es gilt K(x)=3x+120 und E(x)=7x. Bestimme G(40).",type:"number",answer:40,hint:"Berechne E(40)−K(40).",feedback:"E(40)=280 und K(40)=240. Daher G(40)=40 €.",graph:{kind:"business",kv:3,Kf:120,p:7,x:[0,120],y:[-250,900],markX:40}},
+   {id:"e-gain-3",representation:"Sachterm → Rechnung",numberType:"Bruch",prompt:`Es gilt K(x)=${F(5,2)}x+200 und E(x)=6x. Bestimme G(40).`,type:"number",answer:-60,hint:`Berechne zuerst K(40)=${F(5,2)}·40+200 und E(40).`,feedback:"K(40)=300 und E(40)=240. Daher G(40)=−60 €.",graph:{kind:"business",kv:2.5,Kf:200,p:6,x:[0,120],y:[-300,800],markX:40}}
+  ]},
+  {competence:"Gewinn oder Verlust deuten",level:1,variants:[
+   {id:"e-meaning-1",representation:"Werte → Bedeutung",numberType:"ganze Zahlen",prompt:"Bei x=50 Stück gilt K(50)=500 € und E(50)=400 €. Was bedeutet das?",type:"mc",choices:["Gewinn","Verlust","Gewinnschwelle"],correct:1,hint:"Vergleiche E(x) und K(x).",feedback:"E(50)<K(50). Deshalb entsteht Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
+   {id:"e-meaning-2",representation:"Werte → Bedeutung",numberType:"gleiche Werte",prompt:"Bei einer bestimmten Menge gilt <strong>E(x)=420 €</strong> und <strong>K(x)=420 €</strong>. Welche Aussage passt?",type:"mc",choices:["Es entsteht Gewinn.","Es entsteht Verlust.","Es gilt G(x)=0; die Menge liegt an einer Gewinnschwelle, sofern dort der Übergang von Verlust zu Gewinn erfolgt."],correct:2,hint:"Nutze G(x)=E(x)−K(x).",feedback:"E(x)=K(x) bedeutet G(x)=0. Im üblichen Modell mit positiver Gewinnsteigung ist das die Gewinnschwelle.",graph:{kind:"business",kv:3,Kf:210,p:6,x:[0,140],y:[-300,900],markBreakEven:true}},
+   {id:"e-meaning-3",representation:"Werte → Bedeutung",numberType:"ganze Zahlen",prompt:"Bei x=80 Stück gilt E(80)=560 € und K(80)=480 €. Was bedeutet das?",type:"mc",choices:["Gewinn","Verlust","Weder Gewinn noch Verlust"],correct:0,hint:"Wenn E(x)>K(x), ist G(x) positiv.",feedback:"E(80)>K(80). Daher ist G(80)>0: Es entsteht Gewinn.",graph:{kind:"business",kv:4,Kf:160,p:7,x:[0,130],y:[-250,950],markX:80}}
+  ]},
+  {competence:"Gewinnfunktion",level:2,variants:[
+   {id:"e-gfun-1",representation:"Terme → Gewinnfunktion",numberType:"Dezimalzahl",prompt:"K(x)=4,5x+300 und E(x)=9x. Welche Steigung besitzt die Gewinnfunktion G(x)?",type:"number",answer:4.5,hint:"Die Steigung von G ist p−k<sub>v</sub>.",feedback:"9−4,5=4,5. Also G(x)=4,5x−300.",graph:{kind:"business",kv:4.5,Kf:300,p:9,x:[0,150],y:[-500,1500]}},
+   {id:"e-gfun-2",representation:"Terme → Gewinnfunktion",numberType:"Brüche",prompt:`K(x)=${F(5,2)}x+180 und E(x)=${F(13,2)}x. Welche Gewinnfunktion ist richtig?`,type:"mc",choices:["G(x)=4x−180","G(x)=9x+180","G(x)=4x+180"],correct:0,hint:`${F(13,2)}−${F(5,2)}=4 und G(0)=−180.`,feedback:"G(x)=E(x)−K(x)=4x−180.",graph:{kind:"business",kv:2.5,Kf:180,p:6.5,x:[0,120],y:[-300,900]}},
+   {id:"e-gfun-3",representation:"Sonderfall",numberType:"gleiche Steigungen",prompt:"K(x)=3x+250 und E(x)=3x. Welche Gewinnfunktion entsteht?",type:"mc",choices:["G(x)=−250","G(x)=6x+250","G(x)=250"],correct:0,hint:"Subtrahiere K(x) von E(x). Die x-Terme heben sich auf.",feedback:"G(x)=3x−(3x+250)=−250. Der Verlust bleibt konstant.",graph:{kind:"business",kv:3,Kf:250,p:3,x:[0,150],y:[-350,700]}}
+  ]},
+  {competence:"Gewinnschwelle",level:2,variants:[
+   {id:"e-be-1",representation:"Gleichsetzen",numberType:"ganze Zahlen",prompt:"Für K(x)=4x+300 und E(x)=8x: Bestimme die Gewinnschwelle <strong>x<sub>GS</sub></strong>.",type:"number",answer:75,hint:"Setze E(x<sub>GS</sub>)=K(x<sub>GS</sub>).",feedback:"8x=4x+300 ⇒ 4x=300 ⇒ x<sub>GS</sub>=75.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markBreakEven:true}},
+   {id:"e-be-2",representation:"Gleichsetzen",numberType:"Bruch",prompt:`K(x)=${F(5,2)}x+210 und E(x)=6x. Bestimme x<sub>GS</sub>.`,type:"number",answer:60,hint:`6x−${F(5,2)}x=210.`,feedback:`${F(7,2)}x=210 ⇒ x<sub>GS</sub>=60.`,graph:{kind:"business",kv:2.5,Kf:210,p:6,x:[0,120],y:[-300,850],markBreakEven:true}},
+   {id:"e-be-3",representation:"Gleichsetzen",numberType:"Dezimalzahlen",prompt:"K(x)=1,5x+270 und E(x)=4,5x. Bestimme x<sub>GS</sub>.",type:"number",answer:90,hint:"4,5x−1,5x=270.",feedback:"3x=270 ⇒ x<sub>GS</sub>=90.",graph:{kind:"business",kv:1.5,Kf:270,p:4.5,x:[0,150],y:[-350,800],markBreakEven:true}}
+  ]},
+  {competence:"Existenz & Sachbereich",level:2,variants:[
+   {id:"e-domain-1",representation:"Bedingung beurteilen",numberType:"Parametervergleich",prompt:"Wann gibt es bei positiven Fixkosten <strong>keine positive Gewinnschwelle</strong>?",type:"mc",choices:["Wenn p>k<sub>v</sub>","Wenn p≤k<sub>v</sub>","Immer bei K<sub>f</sub>>0"],correct:1,hint:"Die Erlösfunktion muss die Kostenfunktion irgendwann einholen können.",feedback:"Bei p≤k<sub>v</sub> steigt E(x) nicht schneller als K(x). Eine positive Gewinnschwelle entsteht dann nicht.",graph:{kind:"business",kv:6,Kf:300,p:5,x:[0,150],y:[-700,1200]}},
+   {id:"e-domain-2",representation:"Sachbereich Stück",numberType:"Dezimalzahl",prompt:"Die mathematische Gewinnschwelle liegt bei <strong>x<sub>GS</sub>=73,4</strong>. x beschreibt Stückzahlen. Ab welcher ganzen Stückzahl ist bei positiver Gewinnsteigung Gewinn möglich?",type:"number",answer:74,hint:"Die mathematische Lösung bleibt 73,4. Gesucht ist die erste ganze Stückzahl darüber.",feedback:"73,4 Stück sind nicht möglich. 74 ist die erste ganze Stückzahl mit x>x<sub>GS</sub>.",graph:{kind:"business",kv:4.3,Kf:315.62,p:8.6,x:[0,150],y:[-500,1500],markBreakEven:true}},
+   {id:"e-domain-3",representation:"Sachbereich kontinuierlich",numberType:"Dezimalzahl",prompt:"Die Gewinnschwelle liegt bei <strong>18,75 kg</strong>. Welche Aussage ist im kontinuierlichen Sachbereich korrekt?",type:"mc",choices:["Sie muss auf 19 kg gerundet werden.","18,75 kg kann als Gewinnschwelle direkt sinnvoll sein; für x>18,75 kg entsteht bei positiver Gewinnsteigung Gewinn.","Es dürfen nur ganze Kilogramm verwendet werden."],correct:1,hint:"Bei kg sind Dezimalwerte grundsätzlich zulässig.",feedback:"Anders als bei Stückzahlen kann 18,75 kg eine sachlich zulässige Menge sein.",graph:{kind:"business",kv:2,Kf:75,p:6,x:[0,60],y:[-100,400],markBreakEven:true}}
+  ]},
+  {competence:"Modell beurteilen",level:3,variants:[
+   {id:"e-transfer-1",representation:"Aussage beurteilen",numberType:"Fachsprache",prompt:"Ein Schüler sagt: <strong>„An der Gewinnschwelle macht das Unternehmen bereits Gewinn.“</strong> Wie beurteilst du die Aussage?",type:"mc",choices:["Richtig, weil E(x)>K(x) gilt.","Falsch: An der Gewinnschwelle gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0.","Richtig, weil dort die Kosten null sind."],correct:1,hint:"Was bedeutet die Bedingung G(x<sub>GS</sub>)=0?",feedback:"An der Gewinnschwelle entsteht weder Gewinn noch Verlust. Positiver Gewinn folgt erst danach, sofern die Gewinnsteigung positiv ist.",graph:{kind:"business",kv:3,Kf:240,p:7,x:[0,120],y:[-350,900],markBreakEven:true}},
+   {id:"e-transfer-2",representation:"Modellkritik",numberType:"Sonderfall",prompt:"Bei positiven Fixkosten gilt <strong>p=k<sub>v</sub></strong>. Jemand behauptet: „Die Erlösgerade holt die Kostengerade nur sehr weit rechts ein.“ Welche Bewertung ist richtig?",type:"mc",choices:["Richtig; man muss nur weit genug nach rechts gehen.","Falsch; E und K haben gleiche Steigung, K liegt wegen der Fixkosten dauerhaft höher. Es gibt keine positive Gewinnschwelle.","Richtig, sobald x ganzzahlig ist."],correct:1,hint:"Vergleiche die Steigungen von E und K und beachte K<sub>f</sub>>0.",feedback:"Bei p=k<sub>v</sub> bleiben die Geraden parallel. Positive Fixkosten verhindern einen Schnittpunkt im positiven Sachbereich.",graph:{kind:"business",kv:5,Kf:200,p:5,x:[0,150],y:[-350,900]}},
+   {id:"e-transfer-3",representation:"Sachbereich beurteilen",numberType:"Dezimalzahl",prompt:"Rechnerisch ergibt sich <strong>x<sub>GS</sub>=61,3 Stück</strong>. Eine Schülerin schreibt: „Die Gewinnschwelle ist 61 Stück.“ Welche Korrektur ist richtig?",type:"mc",choices:["61 ist richtig, weil man immer abrundet.","Die mathematische Gewinnschwelle bleibt 61,3; bei positiver Gewinnsteigung ist 62 die erste ganze Stückzahl mit G(x)>0.","Die mathematische Gewinnschwelle wird auf 62 geändert."],correct:1,hint:"Trenne mathematische Lösung und praktische Deutung im Sachbereich Stück.",feedback:"Die mathematische Lösung wird nicht gerundet. Praktisch ist 62 die erste ganze Stückzahl oberhalb der Schwelle.",graph:{kind:"business",kv:3.2,Kf:245.2,p:7.2,x:[0,130],y:[-350,1000],markBreakEven:true}}
+  ]}
+ ]},
+ mixed:{slots:[
+  // Eigener Transferpool: keine Variante stammt aus den drei Übungsbereichen oben.
+  {competence:"Funktionswert",level:1,variants:[
+   {id:"m-val-1",representation:"Term",numberType:"Bruch",prompt:`Gegeben ist f(x)=${F(-3,4)}x+5. Bestimme f(4).`,type:"number",answer:2,hint:`${F(-3,4)}·4=−3. Addiere anschließend 5.`,feedback:`f(4)=${F(-3,4)}·4+5=2.`,graph:{kind:"single",m:-.75,b:5,x:[-4,8],y:[-3,10],markX:4}},
+   {id:"m-val-2",representation:"Term",numberType:"Bruch",prompt:`Gegeben ist f(x)=${F(5,2)}x−1. Bestimme f(2).`,type:"number",answer:4,hint:`${F(5,2)}·2=5.`,feedback:`f(2)=${F(5,2)}·2−1=4.`,graph:{kind:"single",m:2.5,b:-1,x:[-3,5],y:[-9,12],markX:2}}
+  ]},
+  {competence:"Steigung aus Daten",level:2,variants:[
+   {id:"m-slope-1",representation:"Punkte → Steigung",numberType:"Bruch",prompt:"Die Gerade verläuft durch <strong>P(0|2)</strong> und <strong>Q(6|5)</strong>. Bestimme m.",type:"number",answer:.5,hint:"m=(5−2)/(6−0). Du kannst 1/2 oder 0,5 eingeben.",feedback:`m=${F(3,6)}=${F(1,2)}.`,graph:{kind:"single",m:.5,b:2,x:[-3,9],y:[-1,8],point:[6,5]}},
+   {id:"m-slope-2",representation:"Tabelle → Steigung",numberType:"Bruch",prompt:"Eine Wertetabelle enthält P(−2|4) und Q(2|2). Welche Steigung hat die lineare Funktion?",type:"number",answer:-.5,hint:"m=(2−4)/(2−(−2)).",feedback:`m=${F(-2,4)}=${F(-1,2)}.`,graph:{kind:"single",m:-.5,b:3,x:[-6,6],y:[-1,7],point:[-2,4]}}
+  ]},
+  {competence:"Nullstelle",level:2,variants:[
+   {id:"m-zero-1",representation:"Term → Bedingung",numberType:"Bruch",prompt:`Bestimme x<sub>N</sub> für f(x)=${F(2,3)}x−4.`,type:"number",answer:6,hint:`Setze 0=${F(2,3)}x−4.`,feedback:`${F(2,3)}x=4 ⇒ x<sub>N</sub>=6.`,graph:{kind:"single",m:2/3,b:-4,x:[-3,9],y:[-7,4],markZero:true}},
+   {id:"m-zero-2",representation:"Term → Bedingung",numberType:"Bruch",prompt:`Bestimme x<sub>N</sub> für f(x)=${F(-5,4)}x+10.`,type:"number",answer:8,hint:`Setze 0=${F(-5,4)}x+10.`,feedback:`${F(-5,4)}x=−10 ⇒ x<sub>N</sub>=8.`,graph:{kind:"single",m:-1.25,b:10,x:[-2,11],y:[-4,13],markZero:true}}
+  ]},
+  {competence:"Schnittpunkt",level:2,variants:[
+   {id:"m-int-1",representation:"Gleichsetzen",numberType:"Brüche",prompt:`f(x)=${F(1,3)}x+2 und g(x)=${F(-2,3)}x+7. Bestimme x<sub>S</sub>.`,type:"number",answer:5,hint:"Setze f(x<sub>S</sub>)=g(x<sub>S</sub>). Die Differenz der Steigungen beträgt 1.",feedback:"x<sub>S</sub>=5.",graph:{kind:"double",m:1/3,b:2,n:-2/3,c:7,x:[-3,9],y:[-1,10],markIntersection:true}},
+   {id:"m-int-2",representation:"Gleichsetzen",numberType:"Bruch",prompt:`f(x)=${F(-1,2)}x+6 und g(x)=x. Bestimme x<sub>S</sub>.`,type:"number",answer:4,hint:`${F(-1,2)}x+6=x.`,feedback:`6=${F(3,2)}x ⇒ x<sub>S</sub>=4.`,graph:{kind:"double",m:-.5,b:6,n:1,c:0,x:[-3,8],y:[-3,9],markIntersection:true}}
+  ]},
+  {competence:"Fachsprache präzisieren",level:3,variants:[
+   {id:"m-lang-1",representation:"Sprachtransfer",numberType:"Fachsprache",prompt:"Welche Aussage beschreibt einen Schnittpunkt präzise, ohne zu behaupten, dass die Funktionen identisch sind?",type:"mc",choices:["f und g sind gleich.","Bei x<sub>S</sub> besitzen beide Funktionen denselben Funktionswert: f(x<sub>S</sub>)=g(x<sub>S</sub>).","Die beiden Steigungen sind am Schnittpunkt gleich."],correct:1,hint:"Beziehe die Gleichheit auf denselben x-Wert und die Funktionswerte.",feedback:"Die Gleichheit gilt an der Schnittpunktstelle für die Funktionswerte; die Funktionen können sonst verschieden sein.",graph:{kind:"double",m:.5,b:1,n:-1,c:4,x:[-4,7],y:[-5,8],markIntersection:true}},
+   {id:"m-lang-2",representation:"Sprachtransfer",numberType:"Fachsprache",prompt:"Welche Formulierung unterscheidet Nullstelle und Nullstellenpunkt korrekt?",type:"mc",choices:["x<sub>N</sub> ist der Punkt, N ist die Zahl.","x<sub>N</sub> ist der x-Wert mit f(x<sub>N</sub>)=0; der zugehörige Punkt heißt N(x<sub>N</sub>|0).","Nullstelle und y-Achsenabschnitt sind dasselbe."],correct:1,hint:"Unterscheide Zahl und Punkt.",feedback:"Die Nullstelle ist der x-Wert; der Nullstellenpunkt enthält beide Koordinaten.",graph:{kind:"single",m:-1,b:3,x:[-3,7],y:[-5,7],markZero:true}}
+  ]},
+  {competence:"Gewinnlage",level:1,variants:[
+   {id:"m-biz-1",representation:"Kosten & Erlös → Gewinn",numberType:"Bruch",prompt:`K(x)=${F(7,4)}x+160 und E(x)=4x. Bestimme G(80).`,type:"number",answer:20,hint:"G(80)=E(80)−K(80).",feedback:"E(80)=320, K(80)=300. Also G(80)=20 €.",graph:{kind:"business",kv:1.75,Kf:160,p:4,x:[0,120],y:[-220,520],markX:80}},
+   {id:"m-biz-2",representation:"Kosten & Erlös → Gewinn",numberType:"Dezimalzahlen",prompt:"K(x)=3,5x+140 und E(x)=5,5x. Bestimme G(60).",type:"number",answer:-20,hint:"Berechne E(60)−K(60).",feedback:"E(60)=330, K(60)=350. Also G(60)=−20 €.",graph:{kind:"business",kv:3.5,Kf:140,p:5.5,x:[0,110],y:[-220,650],markX:60}}
+  ]},
+  {competence:"Gewinnschwelle",level:2,variants:[
+   {id:"m-be-1",representation:"Gleichsetzen",numberType:"Brüche",prompt:`K(x)=${F(9,4)}x+180 und E(x)=${F(21,4)}x. Bestimme x<sub>GS</sub>.`,type:"number",answer:60,hint:`${F(21,4)}−${F(9,4)}=3.`,feedback:"3x=180 ⇒ x<sub>GS</sub>=60.",graph:{kind:"business",kv:2.25,Kf:180,p:5.25,x:[0,120],y:[-260,700],markBreakEven:true}},
+   {id:"m-be-2",representation:"Gleichsetzen",numberType:"Brüche",prompt:`K(x)=${F(5,3)}x+200 und E(x)=${F(20,3)}x. Bestimme x<sub>GS</sub>.`,type:"number",answer:40,hint:`${F(20,3)}−${F(5,3)}=5.`,feedback:"5x=200 ⇒ x<sub>GS</sub>=40.",graph:{kind:"business",kv:5/3,Kf:200,p:20/3,x:[0,100],y:[-260,700],markBreakEven:true}}
+  ]},
+  {competence:"Sachbereich & Modell",level:3,variants:[
+   {id:"m-domain-1",representation:"Sachbereich Stück",numberType:"Dezimalzahl",prompt:"Rechnerisch ergibt sich x<sub>GS</sub>=47,5 Stück. Welche Aussage verbindet Mathematik und Sachbereich korrekt?",type:"mc",choices:["Die mathematische Gewinnschwelle wird auf 48 geändert.","Die mathematische Gewinnschwelle bleibt 47,5; bei positiver Gewinnsteigung ist 48 die erste ganze Stückzahl mit positivem Gewinn.","47 Stück sind die Gewinnschwelle, weil man abrundet."],correct:1,hint:"Die mathematische Lösung und die praktische Deutung sind zwei verschiedene Aussagen.",feedback:"47,5 bleibt die mathematische Gewinnschwelle. Für Stückzahlen ist 48 die erste ganze Menge darüber.",graph:{kind:"business",kv:2,Kf:190,p:6,x:[0,100],y:[-250,650],markBreakEven:true}},
+   {id:"m-domain-2",representation:"Sachbereich kg",numberType:"Dezimalzahl",prompt:"Rechnerisch ergibt sich x<sub>GS</sub>=47,5 kg. Welche Aussage ist im kontinuierlichen Sachbereich korrekt?",type:"mc",choices:["Man muss auf 48 kg runden.","47,5 kg kann direkt die Gewinnschwelle sein; positiver Gewinn entsteht bei positiver Gewinnsteigung für x>47,5 kg.","Nur ganze Kilogramm sind zulässig."],correct:1,hint:"Bei kg können Dezimalwerte sachlich sinnvoll sein.",feedback:"Im kontinuierlichen Sachbereich muss die mathematische Lösung nicht auf eine ganze Zahl gerundet werden.",graph:{kind:"business",kv:2,Kf:190,p:6,x:[0,100],y:[-250,650],markBreakEven:true}}
+  ]}
+ ]}
+};
+
+function pickVariant(slot,avoidIds=[]){
+ const fresh=slot.variants.filter(v=>!avoidIds.includes(v.id));
+ const pool=fresh.length?fresh:slot.variants;
+ const picked=pool[Math.floor(Math.random()*pool.length)];
+ return {...picked,competence:slot.competence,level:slot.level,levelLabel:levelInfo[slot.level].label,afb:levelInfo[slot.level].afb};
+}
+function buildPracticeRound(setName,avoidIds=[]){
+ const spec=practicePools[setName]; if(!spec)return [];
+ return spec.slots.map(slot=>pickVariant(slot,avoidIds));
+}
+function practiceSetName(){return currentModule().practiceSet;}
 function practiceSession(){
- const id=currentModule().id,bank=practiceBank();
- if(!state.practiceSessions[id]) state.practiceSessions[id]={index:0,responses:{},firstTryCorrect:0};
- const ss=state.practiceSessions[id];
+ const id=currentModule().id,setName=practiceSetName();
+ if(!state.practiceSessions[id]){
+   const avoid=state.practiceLastRound[id]||[];
+   state.practiceSessions[id]={index:0,responses:{},firstTryCorrect:0,round:buildPracticeRound(setName,avoid),roundNo:1};
+ }
+ const ss=state.practiceSessions[id],bank=ss.round||[];
  if(ss.index>=bank.length) ss.index=Math.max(0,bank.length-1);
  return ss;
 }
+function practiceBank(){return practiceSession().round||[];}
 function currentPracticeQuestion(){
  if(currentModule().path!=="practice") return null;
  const bank=practiceBank(),ss=practiceSession(); return bank[ss.index]||null;
 }
-function resetPracticeSession(id=currentModule().id){state.practiceSessions[id]={index:0,responses:{},firstTryCorrect:0};}
-function parsePracticeNumber(raw){const n=Number(String(raw??"").trim().replace(",","."));return Number.isFinite(n)?n:null;}
+function resetPracticeSession(id=currentModule().id){
+ const old=state.practiceSessions[id];
+ if(old?.round?.length) state.practiceLastRound[id]=old.round.map(q=>q.id);
+ delete state.practiceSessions[id];
+ return practiceSession();
+}
+function parsePracticeNumber(raw){
+ const t=String(raw??"").trim().replace(/−/g,"-").replace(/,/g,".").replace(/\s+/g,"");
+ if(!t)return null;
+ const frac=t.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\/([+-]?(?:\d+(?:\.\d+)?|\.\d+))$/);
+ if(frac){const a=Number(frac[1]),b=Number(frac[2]);return Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(b)>1e-12?a/b:null;}
+ const n=Number(t);return Number.isFinite(n)?n:null;
+}
 function answerMatches(q,value){return q.type==="number"?value!==null&&Math.abs(value-q.answer)<1e-6:false;}
 function practiceGraphValues(q){
  const g=q?.graph||{};
@@ -1502,6 +1663,12 @@ function renderCalc(){
 
 function renderRight(){if(currentModule().path==="practice"){$("tabs").innerHTML="";return;}renderTabs();renderTask();renderLanguage();renderTable();renderExplain();renderCalc();}
 
+function practiceLevelClass(level){return `level${level}`;}
+function practiceRoundIntro(m){
+ return m.id==="practice_mixed"
+   ? "Eigener Transferpool: Die konkreten Aufgaben werden nicht aus den vorherigen Übungsrunden wiederholt."
+   : "Kompetenzgesteuerte Runde: Zu jeder Kompetenz wird eine geprüfte Variante gewählt. Eine neue Runde verwendet möglichst andere Varianten.";
+}
 function renderPracticePane(){
  const wrap=$("controls"),m=currentModule(),bank=practiceBank(),ss=practiceSession(),q=bank[ss.index];
  $("leftKicker").textContent="Üben & Sichern";
@@ -1513,13 +1680,19 @@ function renderPracticePane(){
  if(q.type==="mc"){
    answerHtml=`<div class="practice-choice-grid">${q.choices.map((c,i)=>{const cls=["practice-choice"];if(r.choice===i)cls.push("selected",r.correct?"correct":"wrong");return `<button type="button" class="${cls.join(" ")}" data-practice-choice="${i}">${c}</button>`}).join("")}</div>`;
  }else{
-   answerHtml=`<div class="practice-number-row"><input class="practice-number" id="practiceNumber" inputmode="decimal" autocomplete="off" placeholder="Ergebnis eingeben" value="${r.value??""}"><button type="button" class="btn primary" id="practiceCheck">Prüfen</button></div>`;
+   answerHtml=`<div class="practice-number-row"><input class="practice-number" id="practiceNumber" inputmode="text" autocomplete="off" placeholder="Ergebnis, z. B. 3/4 oder 0,75" value="${r.value??""}"><button type="button" class="btn primary" id="practiceCheck">Prüfen</button></div>`;
  }
  const feedback=r.attempts?`<div class="practice-feedback ${r.correct?"good":"try"}">${r.correct?"✓ ":"↻ "}${r.correct?q.feedback:"Noch nicht richtig. Nutze bei Bedarf den Hinweis und versuche es erneut."}</div>`:"";
  const hint=r.hint?`<div class="practice-hint"><strong>Hinweis:</strong> ${q.hint}</div>`:"";
  const atEnd=ss.index===bank.length-1;
  const next=r.correct?`<button type="button" class="btn primary" id="practiceNext">${atEnd?"Auswertung anzeigen":"Nächste Aufgabe →"}</button>`:"";
- wrap.innerHTML=`<div class="practice-card"><div class="practice-meta"><span class="practice-progress">Aufgabe ${ss.index+1} von ${bank.length}</span><span class="practice-score">${completed} richtig gelöst</span></div><div class="practice-question">${q.prompt}</div>${answerHtml}${feedback}${hint}<div class="practice-actions"><button type="button" class="btn small" id="practiceHint">💡 Hinweis</button>${next}</div><div class="mini">Du kannst eine falsche Antwort direkt verbessern. Im gemischten Selbstcheck wird zusätzlich gezählt, wie viele Aufgaben beim ersten Versuch richtig waren.</div></div>`;
+ wrap.innerHTML=`<div class="practice-card">
+   <div class="practice-meta"><span class="practice-progress">Aufgabe ${ss.index+1} von ${bank.length}</span><span class="practice-score">${completed} bearbeitet</span></div>
+   <div class="practice-tags"><span class="practice-tag">${q.competence}</span><span class="practice-tag ${practiceLevelClass(q.level)}">${q.levelLabel} · ${q.afb}</span><span class="practice-tag">${q.representation}</span><span class="practice-tag">${q.numberType}</span></div>
+   <div class="practice-question">${q.prompt}</div>${answerHtml}${feedback}${hint}
+   <div class="practice-actions"><button type="button" class="btn small" id="practiceHint">💡 Hinweis</button>${next}</div>
+   <div class="mini">${practiceRoundIntro(m)} Mathematik und Sprache werden getrennt unterstützt: Ein Hinweis erleichtert den Zugang, verändert aber nicht die mathematische Anforderung.</div>
+ </div>`;
  const saveResponse=(patch)=>{ss.responses[ss.index]={...r,...patch};};
  wrap.querySelectorAll('[data-practice-choice]').forEach(btn=>btn.addEventListener('click',()=>{
    const choice=+btn.dataset.practiceChoice,first=(ss.responses[ss.index]?.attempts||0)===0,correct=choice===q.correct;
@@ -1540,10 +1713,29 @@ function renderPracticePane(){
  });
 }
 function renderPracticeSummary(){
- const wrap=$("controls"),m=currentModule(),bank=practiceBank(),ss=practiceSession(),correct=Object.values(ss.responses).filter(r=>r.correct).length;
+ const wrap=$("controls"),m=currentModule(),bank=practiceBank(),ss=practiceSession();
  $("leftKicker").textContent="Üben & Sichern";
  $("leftTitle").textContent=m.title;
- wrap.innerHTML=`<div class="practice-summary"><strong>Übungsreihe abgeschlossen</strong><div>${correct} von ${bank.length} Aufgaben wurden richtig gelöst.</div>${m.id==="practice_mixed"?`<div style="margin-top:5px">Beim ersten Versuch richtig: <strong>${ss.firstTryCorrect} von ${bank.length}</strong>.</div>`:""}<div class="mini" style="margin-top:7px">Fehler sind hier Teil des Übens. Du kannst die Reihe jederzeit noch einmal bearbeiten.</div></div><div class="practice-actions"><button type="button" class="btn primary" id="practiceRestart">Noch einmal starten</button></div>`;
+ const responses=bank.map((q,i)=>({q,r:ss.responses[i]||{}}));
+ const firstTry=responses.filter(x=>x.r.correct&&x.r.attempts===1).length;
+ const hints=responses.filter(x=>x.r.hint).length;
+ const levels=[1,2,3].map(level=>{
+   const items=responses.filter(x=>x.q.level===level),ft=items.filter(x=>x.r.correct&&x.r.attempts===1).length;
+   return {level,total:items.length,first:ft};
+ });
+ const weakest=levels.filter(x=>x.total).sort((a,b)=>(a.first/a.total)-(b.first/b.total))[0];
+ const nextTip=weakest&&weakest.first<weakest.total
+   ? `Für die nächste Runde lohnt sich besonders: <strong>${levelInfo[weakest.level].label}</strong>. Achte dabei auf die Hinweise nur dann, wenn du sie wirklich brauchst.`
+   : "Die Aufgaben saßen überwiegend schon beim ersten Versuch. In einer neuen Runde bekommst du möglichst andere Varianten.";
+ const levelHtml=levels.filter(x=>x.total).map(x=>`<div class="practice-summary-box"><strong>${levelInfo[x.level].label} · ${levelInfo[x.level].afb}</strong><span>${x.first} von ${x.total} beim ersten Versuch</span></div>`).join("");
+ const compHtml=responses.map(({q,r})=>`<div class="practice-competence-item"><span>${q.competence}</span><strong>${r.correct&&r.attempts===1?"✓ direkt":r.correct?"↻ nach Korrektur":"–"}${r.hint?" · mit Hinweis":""}</strong></div>`).join("");
+ wrap.innerHTML=`<div class="practice-summary"><strong>Übungsrunde abgeschlossen</strong>
+   <div>Beim ersten Versuch richtig: <strong style="display:inline">${firstTry} von ${bank.length}</strong>. Genutzte Hinweise: <strong style="display:inline">${hints}</strong>.</div>
+   <div class="practice-summary-grid">${levelHtml}</div>
+   <div class="practice-competence-list">${compHtml}</div>
+   <div class="practice-next-tip">${nextTip}</div>
+   <div class="mini" style="margin-top:8px">Die Auswertung beschreibt die Bearbeitung dieser Runde – sie ist keine feste Einstufung deiner Person.</div>
+ </div><div class="practice-actions"><button type="button" class="btn primary" id="practiceRestart">Neue Aufgabenrunde starten</button></div>`;
  $("practiceRestart").addEventListener('click',()=>{resetPracticeSession();setDefaults();renderAll();resetManipulationScroll();});
 }
 
