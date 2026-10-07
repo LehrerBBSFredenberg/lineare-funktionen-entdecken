@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V15 · Label höher gesetzt</title>
+<title>Lineare Funktionen – Lern-Dashboard V16 · Klarere Gewinnschwelle</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -1259,7 +1259,7 @@ function drawChart(){
    svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#fff",stroke:"#c86b09","stroke-width":4}));
    svg.appendChild(svgEl("text",{x:X+10,y:Y-10,fill:"#111827","font-size":13,"font-weight":800},`P(${fmt(x)}|${fmt(y)})`));
  }
- if(m.id==="intercept"||m.id==="proportional"||(m.id==="costrevenue"&&state.businessVisible.K)){
+ if(m.id==="intercept"||m.id==="proportional"){
    const y=f(0),X=sx(0),Y=sy(y); if(Y>=p.t&&Y<=H-p.b){
      svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:7,fill:"#fff",stroke:"#c86b09","stroke-width":4}));
      if(m.id==="intercept") svgIndexedText(svg,X+10,Y-10,"S","y",`(0|${fmt(y)})`,{fill:"#7c3f05","font-size":12,"font-weight":800});
