@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V19 · Üben & Sichern</title>
+<title>Lineare Funktionen – Lern-Dashboard V19b · Achsen und Funktionen konsistent beschriftet</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -682,23 +682,23 @@ const practiceBanks={
   {prompt:"Welche Aussage beschreibt bei <strong>f(x)=−2x+4</strong> die Steigung korrekt?",type:"mc",choices:["Der Graph steigt von links nach rechts.","Der Graph fällt von links nach rechts.","Der Graph ist waagerecht."],correct:1,hint:"Achte auf das Vorzeichen von m.",feedback:"m=−2 ist negativ. Deshalb fällt der Graph.",graph:{kind:"single",m:-2,b:4,x:[-4,6],y:[-10,14]}},
   {prompt:"Welchen y-Achsenabschnitt besitzt <strong>f(x)=1,5x−2</strong>?",type:"number",answer:-2,hint:"Für den Schnittpunkt mit der y-Achse gilt x=0.",feedback:"f(0)=−2. Also ist b=−2.",graph:{kind:"single",m:1.5,b:-2,x:[-5,6],y:[-10,10]}},
   {prompt:"Welche Funktion ist proportional?",type:"mc",choices:["f(x)=3x","f(x)=3x+2","f(x)=2"],correct:0,hint:"Bei einer proportionalen Funktion gilt b=0.",feedback:"f(x)=3x hat den y-Achsenabschnitt 0 und verläuft durch den Ursprung.",graph:{kind:"single",m:3,b:0,x:[-4,4],y:[-12,12]}},
-  {prompt:"Bestimme die Nullstelle von <strong>f(x)=2x−6</strong>.",type:"number",answer:3,hint:"Setze f(x_N)=0 und löse nach x_N auf.",feedback:"0=2x−6 ⇒ x_N=3.",graph:{kind:"single",m:2,b:-6,x:[-2,6],y:[-10,8],markZero:true}},
+  {prompt:"Bestimme die Nullstelle von <strong>f(x)=2x−6</strong>.",type:"number",answer:3,hint:"Setze f(x<sub>N</sub>)=0 und löse nach x<sub>N</sub> auf.",feedback:"0=2x−6 ⇒ x<sub>N</sub>=3.",graph:{kind:"single",m:2,b:-6,x:[-2,6],y:[-10,8],markZero:true}},
   {prompt:"Liegt der Punkt <strong>P(2|7)</strong> auf dem Graphen von <strong>f(x)=2x+3</strong>?",type:"mc",choices:["Ja","Nein"],correct:0,hint:"Berechne f(2).",feedback:"f(2)=2·2+3=7. Deshalb liegt P(2|7) auf dem Graphen.",graph:{kind:"single",m:2,b:3,x:[-2,6],y:[-4,16],point:[2,7]}}
  ],
  compare:[
   {prompt:"Gegeben sind <strong>f(x)=2x+1</strong> und <strong>g(x)=2x−3</strong>. Wie liegen die Geraden?",type:"mc",choices:["parallel","identisch","sie schneiden sich"],correct:0,hint:"Vergleiche zuerst die Steigungen.",feedback:"Beide Geraden haben m=2, aber verschiedene y-Achsenabschnitte. Sie sind parallel.",graph:{kind:"double",m:2,b:1,n:2,c:-3,x:[-4,6],y:[-12,14]}},
-  {prompt:"Gegeben sind <strong>f(x)=x+1</strong> und <strong>g(x)=−x+5</strong>. Bestimme die Schnittpunktstelle <strong>x_S</strong>.",type:"number",answer:2,hint:"Setze f(x_S)=g(x_S).",feedback:"x+1=−x+5 ⇒ 2x=4 ⇒ x_S=2.",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
-  {prompt:"Für denselben Schnittpunkt aus f(x)=x+1 und g(x)=−x+5: Wie groß ist der gemeinsame Funktionswert?",type:"number",answer:3,hint:"Setze x_S=2 in eine der beiden Funktionen ein.",feedback:"f(2)=3 und g(2)=3. Der Schnittpunkt ist S(2|3).",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
+  {prompt:"Gegeben sind <strong>f(x)=x+1</strong> und <strong>g(x)=−x+5</strong>. Bestimme die Schnittpunktstelle <strong>x<sub>S</sub></strong>.",type:"number",answer:2,hint:"Setze f(x<sub>S</sub>)=g(x<sub>S</sub>).",feedback:"x+1=−x+5 ⇒ 2x=4 ⇒ x<sub>S</sub>=2.",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
+  {prompt:"Für denselben Schnittpunkt aus f(x)=x+1 und g(x)=−x+5: Wie groß ist der gemeinsame Funktionswert?",type:"number",answer:3,hint:"Setze x<sub>S</sub>=2 in eine der beiden Funktionen ein.",feedback:"f(2)=3 und g(2)=3. Der Schnittpunkt ist S(2|3).",graph:{kind:"double",m:1,b:1,n:-1,c:5,x:[-3,7],y:[-4,10],markIntersection:true}},
   {prompt:"Bei <strong>x=3</strong> gelten f(x)=2x+1 und g(x)=x+4. Welche Aussage ist richtig?",type:"mc",choices:["f(3)>g(3)","f(3)<g(3)","f(3)=g(3)"],correct:2,hint:"Berechne beide Funktionswerte für denselben x-Wert.",feedback:"f(3)=7 und g(3)=7. Beide Funktionswerte sind gleich.",graph:{kind:"double",m:2,b:1,n:1,c:4,x:[-2,6],y:[-4,14],markX:3}},
   {prompt:"Gegeben sind f(x)=x+2 und g(x)=3x−2. Bestimme bei <strong>x=2</strong> die Differenz <strong>g(x)−f(x)</strong>.",type:"number",answer:0,hint:"Berechne zuerst beide Funktionswerte bei x=2.",feedback:"f(2)=4 und g(2)=4. Daher ist g(2)−f(2)=0.",graph:{kind:"double",m:1,b:2,n:3,c:-2,x:[-2,5],y:[-8,14],markX:2}}
  ],
  business:[
   {prompt:"Es gilt <strong>K(x)=4x+300</strong> und <strong>E(x)=8x</strong>. Bestimme den Gewinn bei <strong>x=50</strong> Stück.",type:"number",answer:-100,hint:"Nutze G(x)=E(x)−K(x).",feedback:"E(50)=400, K(50)=500. Also G(50)=−100 €: Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
-  {prompt:"Für K(x)=4x+300 und E(x)=8x: Bestimme die Gewinnschwelle <strong>x_GS</strong>.",type:"number",answer:75,hint:"Setze E(x_GS)=K(x_GS).",feedback:"8x=4x+300 ⇒ 4x=300 ⇒ x_GS=75.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markBreakEven:true}},
+  {prompt:"Für K(x)=4x+300 und E(x)=8x: Bestimme die Gewinnschwelle <strong>x<sub>GS</sub></strong>.",type:"number",answer:75,hint:"Setze E(x<sub>GS</sub>)=K(x<sub>GS</sub>).",feedback:"8x=4x+300 ⇒ 4x=300 ⇒ x<sub>GS</sub>=75.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markBreakEven:true}},
   {prompt:"Bei x=50 Stück gilt für dasselbe Modell K(50)=500 € und E(50)=400 €. Was bedeutet das?",type:"mc",choices:["Gewinn","Verlust","Gewinnschwelle"],correct:1,hint:"Vergleiche E(x) und K(x).",feedback:"E(50)<K(50). Deshalb entsteht Verlust.",graph:{kind:"business",kv:4,Kf:300,p:8,x:[0,150],y:[-500,1400],markX:50}},
-  {prompt:"Wann gibt es bei positiven Fixkosten <strong>keine positive Gewinnschwelle</strong>?",type:"mc",choices:["Wenn p>k_v","Wenn p≤k_v","Immer bei K_f>0"],correct:1,hint:"Die Erlösfunktion muss die Kostenfunktion irgendwann einholen können.",feedback:"Bei p≤k_v steigt E(x) nicht schneller als K(x). Eine positive Gewinnschwelle entsteht dann nicht.",graph:{kind:"business",kv:6,Kf:300,p:5,x:[0,150],y:[-700,1200]}},
-  {prompt:"K(x)=4,5x+300 und E(x)=9x. Welche Steigung besitzt die Gewinnfunktion G(x)?",type:"number",answer:4.5,hint:"Die Steigung von G ist p−k_v.",feedback:"9−4,5=4,5. Also G(x)=4,5x−300.",graph:{kind:"business",kv:4.5,Kf:300,p:9,x:[0,150],y:[-500,1500]}},
-  {prompt:"Die mathematische Gewinnschwelle liegt bei <strong>x_GS=73,4</strong>. x beschreibt Stückzahlen. Ab welcher ganzen Stückzahl ist bei positiver Gewinnsteigung Gewinn möglich?",type:"number",answer:74,hint:"Die mathematische Lösung bleibt 73,4. Gesucht ist die erste ganze Stückzahl darüber.",feedback:"73,4 Stück sind nicht möglich. 74 ist die erste ganze Stückzahl mit x>x_GS.",graph:{kind:"business",kv:4.3,Kf:315.62,p:8.6,x:[0,150],y:[-500,1500],markBreakEven:true}}
+  {prompt:"Wann gibt es bei positiven Fixkosten <strong>keine positive Gewinnschwelle</strong>?",type:"mc",choices:["Wenn p>k<sub>v</sub>","Wenn p≤k<sub>v</sub>","Immer bei K<sub>f</sub>>0"],correct:1,hint:"Die Erlösfunktion muss die Kostenfunktion irgendwann einholen können.",feedback:"Bei p≤k<sub>v</sub> steigt E(x) nicht schneller als K(x). Eine positive Gewinnschwelle entsteht dann nicht.",graph:{kind:"business",kv:6,Kf:300,p:5,x:[0,150],y:[-700,1200]}},
+  {prompt:"K(x)=4,5x+300 und E(x)=9x. Welche Steigung besitzt die Gewinnfunktion G(x)?",type:"number",answer:4.5,hint:"Die Steigung von G ist p−k<sub>v</sub>.",feedback:"9−4,5=4,5. Also G(x)=4,5x−300.",graph:{kind:"business",kv:4.5,Kf:300,p:9,x:[0,150],y:[-500,1500]}},
+  {prompt:"Die mathematische Gewinnschwelle liegt bei <strong>x<sub>GS</sub>=73,4</strong>. x beschreibt Stückzahlen. Ab welcher ganzen Stückzahl ist bei positiver Gewinnsteigung Gewinn möglich?",type:"number",answer:74,hint:"Die mathematische Lösung bleibt 73,4. Gesucht ist die erste ganze Stückzahl darüber.",feedback:"73,4 Stück sind nicht möglich. 74 ist die erste ganze Stückzahl mit x>x<sub>GS</sub>.",graph:{kind:"business",kv:4.3,Kf:315.62,p:8.6,x:[0,150],y:[-500,1500],markBreakEven:true}}
  ]
 };
 practiceBanks.mixed=[
@@ -1577,6 +1577,24 @@ function svgLabelBox(svg,x,y,lines,opts={}){
  return g;
 }
 
+function curveLabelPoint(fn,xmin,xmax,ymin,ymax){
+ const candidates=[.92,.84,.76,.68,.60,.52,.44,.36,.28,.20,.12];
+ for(const t of candidates){
+   const x=xmin+(xmax-xmin)*t,y=fn(x);
+   if(Number.isFinite(y)&&y>=ymin&&y<=ymax) return {x,y};
+ }
+ return null;
+}
+function appendCurveLabel(svg,sx,sy,fn,label,color,xmin,xmax,ymin,ymax,dy=0){
+ const pt=curveLabelPoint(fn,xmin,xmax,ymin,ymax); if(!pt)return;
+ svg.appendChild(svgEl("text",{x:sx(pt.x)-7,y:sy(pt.y)+dy,"text-anchor":"end",fill:color,"font-size":13,"font-weight":850,stroke:"#fff","stroke-width":4,"paint-order":"stroke","stroke-linejoin":"round"},label));
+}
+function appendAxisTitles(svg,W,H,p,xAxisY,xLabel,yLabel){
+ svg.appendChild(svgEl("text",{x:W-p.r+2,y:Math.max(p.t+15,Math.min(H-12,xAxisY-10)),"text-anchor":"end",fill:"#1e293b","font-size":14,"font-weight":850,stroke:"#fff","stroke-width":3,"paint-order":"stroke"},xLabel));
+ const yy=(p.t+H-p.b)/2;
+ svg.appendChild(svgEl("text",{x:24,y:yy,"text-anchor":"middle",fill:"#1e293b","font-size":14,"font-weight":850,transform:`rotate(-90 24 ${yy})`,stroke:"#fff","stroke-width":3,"paint-order":"stroke"},yLabel));
+}
+
 function relation(){
  const v=state.values;if(!("n" in v))return null;
  if(Math.abs(v.m-v.n)<1e-9)return Math.abs(v.b-(v.c??0))<1e-9?{kind:"identical"}:{kind:"parallel"};
@@ -1597,16 +1615,17 @@ function drawPracticeChart(svg){
  svg.appendChild(svgEl("line",{x1:p.l,y1:x0,x2:W-p.r,y2:x0,stroke:"#334155","stroke-width":2.2}));
  svg.appendChild(svgEl("line",{x1:y0,y1:H-p.b,x2:y0,y2:p.t,stroke:"#334155","stroke-width":2.2}));
  const pathFor=fn=>{let d="";for(let i=0;i<=220;i++){const x=xmin+(xmax-xmin)*i/220,y=fn(x);d+=(i?"L":"M")+sx(x).toFixed(2)+","+sy(y).toFixed(2);}return d;};
- const addLine=(fn,color,label)=>{svg.appendChild(svgEl("path",{d:pathFor(fn),fill:"none",stroke:color,"stroke-width":4,"stroke-linecap":"round"}));const x=xmax-(xmax-xmin)*.08,y=fn(x);if(y>=ymin&&y<=ymax)svg.appendChild(svgEl("text",{x:sx(x)-4,y:sy(y)-7,"text-anchor":"end",fill:color,"font-size":13,"font-weight":850},label));};
+ const addLine=(fn,color,label,dy=0)=>{svg.appendChild(svgEl("path",{d:pathFor(fn),fill:"none",stroke:color,"stroke-width":4,"stroke-linecap":"round"}));appendCurveLabel(svg,sx,sy,fn,label,color,xmin,xmax,ymin,ymax,dy);};
  if(g.kind==="business"){
    const K=x=>(g.kv??4)*x+(g.Kf??300),E=x=>(g.p??8)*x,G=x=>E(x)-K(x);
-   addLine(K,"#c86b09","K(x)");addLine(E,"#2457d6","E(x)");addLine(G,"#0f766e","G(x)");
-   svg.appendChild(svgEl("text",{x:W-p.r,y:x0-10,"text-anchor":"end",fill:"#1e293b","font-size":14,"font-weight":850},"x [Stück]"));
+   addLine(K,"#c86b09","K(x)",-8);addLine(E,"#2457d6","E(x)",8);addLine(G,"#0f766e","G(x)",-8);
+   appendAxisTitles(svg,W,H,p,x0,"x [Stück]","K(x), E(x), G(x) [€]");
    if(g.markX!=null){const X=sx(g.markX);svg.appendChild(svgEl("line",{x1:X,y1:p.t,x2:X,y2:H-p.b,stroke:"#64748b","stroke-dasharray":"5 5"}));svg.appendChild(svgEl("text",{x:X,y:Math.min(H-10,x0+40),"text-anchor":"middle",fill:"#475569","font-size":12,"font-weight":800},`x=${fmt(g.markX)}`));}
    if(g.markBreakEven&&Math.abs((g.p??8)-(g.kv??4))>1e-9){const xb=(g.Kf??300)/((g.p??8)-(g.kv??4));if(xb>=xmin&&xb<=xmax){const X=sx(xb),Y=sy(K(xb));svg.appendChild(svgEl("circle",{cx:X,cy:Y,r:8,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));svgIndexedText(svg,X+12,Y-12,"x","GS",`=${fmt(xb)}`,{fill:"#6d28d9","font-size":13,"font-weight":850});}}
  }else{
-   const f=x=>(g.m??2)*x+(g.b??3); addLine(f,"#c86b09","f(x)");
-   if(g.kind==="double"){const h=x=>(g.n??-1)*x+(g.c??5);addLine(h,"#2457d6","g(x)");if(g.markIntersection&&Math.abs((g.m??2)-(g.n??-1))>1e-9){const xi=((g.c??5)-(g.b??3))/((g.m??2)-(g.n??-1)),yi=f(xi);svg.appendChild(svgEl("circle",{cx:sx(xi),cy:sy(yi),r:7,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));}}
+   const f=x=>(g.m??2)*x+(g.b??3); addLine(f,"#c86b09","f(x)",-8);
+   if(g.kind==="double"){const h=x=>(g.n??-1)*x+(g.c??5);addLine(h,"#2457d6","g(x)",9);if(g.markIntersection&&Math.abs((g.m??2)-(g.n??-1))>1e-9){const xi=((g.c??5)-(g.b??3))/((g.m??2)-(g.n??-1)),yi=f(xi);svg.appendChild(svgEl("circle",{cx:sx(xi),cy:sy(yi),r:7,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));}}
+   appendAxisTitles(svg,W,H,p,x0,"x",g.kind==="double"?"f(x), g(x)":"f(x)");
    if(g.markZero&&Math.abs(g.m??2)>1e-9){const xn=-(g.b??3)/(g.m??2);svg.appendChild(svgEl("circle",{cx:sx(xn),cy:sy(0),r:7,fill:"#fff",stroke:"#111827","stroke-width":3}));}
    if(g.point){svg.appendChild(svgEl("circle",{cx:sx(g.point[0]),cy:sy(g.point[1]),r:7,fill:"#fff",stroke:"#7c3aed","stroke-width":4}));svg.appendChild(svgEl("text",{x:sx(g.point[0])+10,y:sy(g.point[1])-10,fill:"#4c1d95","font-size":12,"font-weight":850},`P(${fmt(g.point[0])}|${fmt(g.point[1])})`));}
    if(g.markX!=null){const X=sx(g.markX);svg.appendChild(svgEl("line",{x1:X,y1:p.t,x2:X,y2:H-p.b,stroke:"#64748b","stroke-dasharray":"5 5"}));}
@@ -1644,11 +1663,7 @@ function drawChart(){
 
  const xAxisLabel=state.mode==="app"?`x [${state.quantityUnit}]`:"x";
  const yAxisLabel=state.mode==="app"?`K(x), E(x), G(x) [${state.moneyUnit}]`:("n" in v?"f(x), g(x)":"f(x)");
- svg.appendChild(svgEl("text",{x:W-p.r+2,y:xAxisY-10,"text-anchor":"end",fill:"#1e293b","font-size":14,"font-weight":850},xAxisLabel));
- if(state.mode==="app"){
-   const yy=(p.t+H-p.b)/2;
-   svg.appendChild(svgEl("text",{x:24,y:yy,"text-anchor":"middle",fill:"#1e293b","font-size":14,"font-weight":850,transform:`rotate(-90 24 ${yy})`},yAxisLabel));
- }else svg.appendChild(svgEl("text",{x:yAxisX+12,y:p.t+8,fill:"#1e293b","font-size":14,"font-weight":850},yAxisLabel));
+ appendAxisTitles(svg,W,H,p,xAxisY,xAxisLabel,yAxisLabel);
 
  const pathFor=fn=>{let d="";for(let i=0;i<=260;i++){const x=xmin+(xmax-xmin)*i/260,y=fn(x);d+=(i?"L":"M")+sx(x).toFixed(2)+","+sy(y).toFixed(2);}return d;};
  const f=x=>state.mode==="app"?K(x):fx(x), g=x=>state.mode==="app"?E(x):gx(x);
@@ -1670,13 +1685,12 @@ function drawChart(){
    if(hasSecond)svg.appendChild(svgEl("path",{d:pathFor(g),fill:"none",stroke:"#2457d6","stroke-width":4,"stroke-linecap":"round"}));
  }
 
- const lx=xmax-(xmax-xmin)*0.07;
- const addCurveLabel=(txt,fn,color,dy=0)=>{const yy=fn(lx);if(yy>=ymin&&yy<=ymax)svg.appendChild(svgEl("text",{x:sx(lx)-6,y:sy(yy)+dy,"text-anchor":"end",fill:color,"font-size":13,"font-weight":850},txt));};
+ const addCurveLabel=(txt,fn,color,dy=0)=>appendCurveLabel(svg,sx,sy,fn,txt,color,xmin,xmax,ymin,ymax,dy);
  if(m.path==="business"){
-   if(state.businessVisible.K)addCurveLabel("K(x)",K,"#c86b09",-7);
-   if(state.businessVisible.E)addCurveLabel("E(x)",E,"#2457d6",-7);
-   if(state.businessVisible.G)addCurveLabel("G(x)",G,"#0f766e",-7);
- }else{addCurveLabel("f(x)",fx,"#c86b09",-7);if("n" in v)addCurveLabel("g(x)",gx,"#2457d6",-7);}
+   if(state.businessVisible.K)addCurveLabel("K(x)",K,"#c86b09",-8);
+   if(state.businessVisible.E)addCurveLabel("E(x)",E,"#2457d6",8);
+   if(state.businessVisible.G)addCurveLabel("G(x)",G,"#0f766e",-8);
+ }else{addCurveLabel("f(x)",fx,"#c86b09",-8);if("n" in v)addCurveLabel("g(x)",gx,"#2457d6",9);}
 
  // module-specific marks
  if(m.id==="point"){
