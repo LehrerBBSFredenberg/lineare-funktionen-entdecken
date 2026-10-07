@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lineare Funktionen – Lern-Dashboard V12 · Großer Graph und flüssige Regler</title>
+<title>Lineare Funktionen – Lern-Dashboard V13 · Regler rechts und Gewinnhinweise</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -36,21 +36,21 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus
 }
 .workspace{
   display:grid;
-  grid-template-columns:minmax(0,2.15fr) minmax(310px,1fr);
+  grid-template-columns:minmax(0,2.15fr) minmax(300px,.92fr);
   grid-template-areas:
-    "center right"
-    "controls right";
+    "center controls"
+    "right right";
   grid-template-rows:auto auto;
   align-items:start;
   gap:12px;margin-top:12px;min-height:calc(100vh - 150px)
 }
 .center{grid-area:center;min-width:0}
-.left{grid-area:controls}
+.left{grid-area:controls;position:sticky;top:92px}
 .right{grid-area:right;align-self:stretch}
 .panel,.chart-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
 .left,.right{padding:15px}.left{display:grid;gap:12px}.right{display:flex;flex-direction:column;min-width:0}
-#controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
-#formulas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+#controls{display:grid;grid-template-columns:1fr;gap:10px}
+#formulas{display:grid;grid-template-columns:1fr;gap:8px}
 .left>.btn{justify-self:start}.left-note{margin-top:0}
 .kicker{font-size:.71rem;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);font-weight:850}
 h2{font-size:1.05rem;margin:2px 0 0}
@@ -161,6 +161,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
       "right";
     min-height:auto
   }
+  .left{position:static}
   .right-body{min-height:300px}
   #chart{height:clamp(520px,60vh,670px);min-height:520px}
   #controls{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
@@ -196,7 +197,7 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
   <button class="path-btn" data-path="workshop">Funktionswerkstatt</button>
 </nav>
 
-<div class="mobile-note">Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst: großer Graph → Regler → Lernkarte.</div>
+<div class="mobile-note">Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst: großer Graph → Regler → Lernkarte. Auf großen Bildschirmen liegen die Regler rechts neben dem Graphen.</div>
 
 <main class="workspace">
   <aside class="panel left">
@@ -647,6 +648,25 @@ function businessBreakEvenData(){
  const x=F/d,y=(v.m??0)*x+F;
  return {kind:"point",x,y,text:`Gewinnschwelle bei x<sub>GS</sub>=${fmt(x)}. Dort gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0.`};
 }
+function currentBusinessStatusText(){
+ const x=state.values.x, gx=G(x), be=businessBreakEvenData();
+ const amount = `${fmt(x)} ${state.quantityUnit}`;
+ let current = gx>1e-9
+   ? `Bei x=${amount} entsteht Gewinn: G(x)=${euro(gx)}.`
+   : gx<-1e-9
+     ? `Bei x=${amount} entsteht Verlust: G(x)=${euro(gx)}.`
+     : `Bei x=${amount} gilt G(x)=0: weder Gewinn noch Verlust.`;
+
+ if(be.kind==="point"){
+   if(Math.abs(x-be.x)<1e-9) return current+` Das ist genau die Gewinnschwelle x<sub>GS</sub>=${fmt(be.x)}.`;
+   if(x<be.x) return current+` Die Gewinnschwelle liegt erst bei x<sub>GS</sub>=${fmt(be.x)}.`;
+   return current+` Die Gewinnschwelle wurde bereits bei x<sub>GS</sub>=${fmt(be.x)} überschritten.`;
+ }
+ if(be.kind==="none") return current+" Es gibt keine positive Gewinnschwelle im Sachbereich.";
+ if(be.kind==="all") return current+" E(x) und K(x) stimmen für alle x überein; deshalb gilt G(x)=0 für alle x.";
+ return current;
+}
+
 function businessXMax(){
  const be=businessBreakEvenData();
  // Die betrachtete Menge x darf die Achsenskalierung nicht während des Ziehens verändern.
@@ -1310,10 +1330,10 @@ function renderBusinessGraphControls(){
  const be=businessBreakEvenData();
  if(state.showBreakEven){
    $("businessGuideNote").innerHTML=be.kind==="point"
-     ? `Markiert wird dieselbe Menge x<sub>GS</sub>: oben gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>), unten G(x<sub>GS</sub>)=0.`
-     : be.text;
+     ? `Markiert wird dieselbe Menge x<sub>GS</sub>: oben gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>), unten G(x<sub>GS</sub>)=0. <strong>Aktuell:</strong> ${currentBusinessStatusText()}`
+     : `${be.text} <strong>Aktuell:</strong> ${currentBusinessStatusText()}`;
  }else{
-   $("businessGuideNote").innerHTML="Tippe auf K(x), E(x) oder G(x), um den jeweiligen Graphen ein- oder auszublenden. Mit „Gewinnschwelle anzeigen“ werden alle drei Funktionen eingeblendet; Schnittpunkt und Nullstelle werden bei x<sub>GS</sub> verbunden.";
+   $("businessGuideNote").innerHTML=`Tippe auf K(x), E(x) oder G(x), um den jeweiligen Graphen ein- oder auszublenden. Mit „Gewinnschwelle anzeigen“ werden alle drei Funktionen eingeblendet; Schnittpunkt und Nullstelle werden bei x<sub>GS</sub> verbunden. <strong>Aktuell:</strong> ${currentBusinessStatusText()}`;
  }
 }
 
@@ -1351,11 +1371,11 @@ function insightText(){
  if(m.id==="parallel"){const r=relation();return r.kind==="parallel"?"Bedingung parallel: m₁=m₂ und b₁≠b₂.":r.kind==="identical"?"Bedingung identisch: m₁=m₂ und b₁=b₂.":"m₁≠m₂: Die Geraden besitzen genau einen Schnittpunkt.";}
  if(m.id==="intersection"){return intersectionInfo();}
  if(m.id==="difference")return `g(${fmt(v.x)})−f(${fmt(v.x)})=${fmt(gx(v.x)-fx(v.x))}.`;
- if(m.id==="costrevenue"){const be=businessBreakEvenData();return `Bei x=${fmt(v.x)} gilt K(x)=${euro(K(v.x))}, E(x)=${euro(E(v.x))} und G(x)=${euro(G(v.x))}. ${be.text}`;}
- if(m.id==="profitdiff")return `G(${fmt(v.x)})=${euro(G(v.x))}. ${G(v.x)>0?"Gewinn":G(v.x)<0?"Verlust":"Weder Gewinn noch Verlust"}.`;
- if(m.id==="profitfunc"){const be=businessBreakEvenData();return `G(x)=${fmt(v.n-v.m)}x−${fmt(v.b)} und G(0)=${euro(-v.b)}. ${be.text}`;}
- if(m.id==="breakeven")return breakEven().text;
- if(m.id==="domain"){const be=breakEven();return be.text;}
+ if(m.id==="costrevenue"){return `Bei x=${fmt(v.x)} gilt K(x)=${euro(K(v.x))}, E(x)=${euro(E(v.x))} und G(x)=${euro(G(v.x))}. ${currentBusinessStatusText()}`;}
+ if(m.id==="profitdiff")return `G(${fmt(v.x)})=${euro(G(v.x))}. ${currentBusinessStatusText()}`;
+ if(m.id==="profitfunc")return `G(x)=${fmt(v.n-v.m)}x−${fmt(v.b)} und G(0)=${euro(-v.b)}. ${currentBusinessStatusText()}`;
+ if(m.id==="breakeven")return `${breakEven().text} ${currentBusinessStatusText()}`;
+ if(m.id==="domain"){const be=breakEven();return `${be.text} ${currentBusinessStatusText()}`;}
  return "";
 }
 function renderMenu(){
