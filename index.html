@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- Interne Version: V23 · Designsystem-Audit umgesetzt. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mathematik-Lernwelt · V22</title>
+<title>Mathematik-Lernwelt</title>
 <style>
 :root{
   --bg:#f3f6fb; --card:#ffffff; --ink:#172033; --muted:#64748b; --line:#dbe3ee;
@@ -344,6 +345,88 @@ button.topic-card{cursor:pointer}.topic-card:hover{transform:translateY(-2px);bo
 @media(max-width:1050px){.portal-hero{grid-template-columns:1fr}.hero-math{min-height:200px}.topic-world{grid-template-columns:1fr}.topic-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.portal-home{padding:10px 10px 24px}.portal-header{padding:6px 0 10px}.portal-actions .portal-link:nth-child(1){display:none}.portal-hero{padding:20px 17px;border-radius:20px}.portal-hero h1{font-size:2.25rem}.portal-hero p{font-size:.93rem}.hero-math{min-height:165px}.topic-intro{align-items:flex-start;flex-direction:column;margin-top:20px}.status-legend{justify-content:flex-start}.topic-group{padding:12px}.topic-grid,.topic-grid.analysis{grid-template-columns:1fr}.topic-card{min-height:126px}.mini-graph{width:88px;height:54px}.portal-footer{align-items:flex-start;flex-direction:column}}
 
+
+
+/* V23 · ruhig-editorial-mathematisches Designsystem */
+:root{
+  --brand:#2457d6;
+  --discover:#2457d6; --discover-soft:#edf3ff;
+  --compare:#6d39c6; --compare-soft:#f3eeff;
+  --apply:#0f766e; --apply-soft:#eaf8f3;
+  --workshop:#a85700; --workshop-soft:#fff3e7;
+  --practice:#a42d55; --practice-soft:#fff0f3;
+  --external:#425d86; --external-soft:#eef3f8;
+  --planned:#64748b; --planned-soft:#f1f5f9;
+}
+/* Ebene 1: klare Schutzräume und Statushierarchie */
+.portal-hero{position:relative;isolation:isolate}
+.portal-hero>div:first-child{position:relative;z-index:2;min-width:0}
+.portal-hero .hero-math{z-index:1;min-width:0}
+.topic-card{min-height:170px;background:#fff;padding:15px 15px 78px}
+.topic-card p{max-width:none;padding-right:0;margin-top:7px;font-size:.78rem}
+.topic-card .mini-graph{right:12px;bottom:10px;width:104px;height:66px}
+.topic-card[data-open-topic="linear"]{background:linear-gradient(145deg,#fff 0%,#f0fbf7 100%);border-color:#a7dcc8;box-shadow:0 10px 24px rgba(15,118,110,.09)}
+.topic-card[data-open-topic="linear"] h4{color:#0b5f57}
+.topic-card[data-topic-status="building"]{background:linear-gradient(145deg,#fff 0%,#fff8e8 100%);border-color:#efd28e;color:#39465a}
+.topic-card[data-topic-status="planned"]{background:var(--planned-soft);border-color:#d8e0e9;color:#526176}
+.topic-card[data-topic-status="planned"] p{color:#738095}
+.topic-card[data-topic-status="planned"] .mini-graph{opacity:.46;filter:grayscale(.35)}
+.status-pill.available{background:#ddf7ea;border-color:#8bd1b0;color:#096b4c}
+.status-pill.building{background:#fff0c8;border-color:#efc96a;color:#7a4d00}
+.status-pill.planned{background:#e8edf3;border-color:#cbd5df;color:#556171}
+/* Ebene 2: editorial statt grauer Kachelteppich */
+.topic-hero{overflow:hidden;background:linear-gradient(120deg,#fff 0%,#f7faff 52%,#eef4ff 100%);border-color:#d5e2f2;box-shadow:0 12px 34px rgba(30,61,111,.07)}
+.topic-hero-copy{min-width:0;position:relative;z-index:2}
+.topic-lead{font-size:1rem;line-height:1.6;max-width:760px!important;color:#42526a!important}
+.representation-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.representation-row span{padding:6px 9px;border-radius:999px;background:#fff;border:1px solid #d8e3f1;color:#385175;font-size:.75rem;font-weight:800}
+.topic-illustration{background:linear-gradient(160deg,rgba(255,255,255,.98),rgba(235,243,255,.9));border:1px solid #d7e3f2;box-shadow:inset 0 0 40px rgba(36,87,214,.03)}
+.explanation-strip{margin-top:14px;padding:15px 16px;border:1px solid #c8d8ea;border-radius:17px;background:linear-gradient(120deg,#f8fbff,#eef4fa);box-shadow:0 7px 20px rgba(48,76,118,.05)}
+.explanation-strip-copy{display:flex;gap:12px;align-items:flex-start}.explanation-icon{width:38px;height:38px;flex:0 0 auto;border-radius:12px;background:var(--external);color:#fff;display:grid;place-items:center;font-size:.85rem}.explanation-strip h2{margin:1px 0 3px;font-size:1rem;color:#263e62}.explanation-strip p{margin:0;color:#58697f;font-size:.82rem;line-height:1.5}.explanation-actions{display:flex;gap:7px;flex-wrap:wrap;margin:11px 0 0 50px}.explain-shortcut{border:1px solid #b9c8dc;background:#fff;color:#304d76;border-radius:10px;padding:8px 10px;font-weight:800;font-size:.78rem;min-height:39px}.explain-shortcut:hover{border-color:#6f8eb7;background:#f8fbff}.explanation-privacy{margin:8px 0 0 50px!important;font-size:.72rem!important;color:#718096!important}
+.learning-map{gap:13px;margin-top:15px}.learning-band{border-width:1px;box-shadow:none;background:#fff}.learning-band-head{padding:15px 16px 9px}.learning-band h2{font-size:1.04rem}.learning-band p{font-size:.8rem;line-height:1.45}.learning-steps{padding:4px 16px 15px 66px;gap:8px}.learning-step{border-radius:10px;background:rgba(255,255,255,.9);min-height:42px;padding:9px 11px;box-shadow:0 2px 7px rgba(15,23,42,.03);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}.learning-step:hover{transform:translateY(-1px);box-shadow:0 5px 12px rgba(15,23,42,.06)}
+.learning-band.basics{background:linear-gradient(100deg,var(--discover-soft),#fff 42%);border-color:#c9d8fb}.learning-band.basics .learning-band-icon{background:var(--discover);color:#fff}.learning-band.basics .learning-step{border-color:#bdd0fa;color:#173f9d}
+.learning-band.compare{background:linear-gradient(100deg,var(--compare-soft),#fff 42%);border-color:#d8c8f5}.learning-band.compare .learning-band-icon{background:var(--compare);color:#fff}.learning-band.compare .learning-step{border-color:#d0bdf2;color:#5830a5}
+.learning-band.apply{background:linear-gradient(100deg,var(--apply-soft),#fff 42%);border-color:#b9dfd7}.learning-band.apply .learning-band-icon{background:var(--apply);color:#fff}.learning-band.apply .learning-step{border-color:#aad9cf;color:#0b655e}
+.learning-band.workshop{background:linear-gradient(100deg,var(--workshop-soft),#fff 42%);border-color:#f1d3ad}.learning-band.workshop .learning-band-icon{background:var(--workshop);color:#fff}.learning-band.workshop .learning-step{border-color:#eccb9f;color:#874600}
+.learning-band.practice{background:linear-gradient(100deg,var(--practice-soft),#fff 42%);border-color:#edc6d2}.learning-band.practice .learning-band-icon{background:var(--practice);color:#fff}.learning-band.practice .learning-step{border-color:#e8bdca;color:#8f274a}
+/* Ebene 3: einheitliche Farbfamilie je Lernbereich */
+#linearWorkspaceApp .pathbar{display:none!important}
+#linearWorkspaceApp{--section:var(--discover);--section-soft:var(--discover-soft);--section-border:#c9d8fb}
+#linearWorkspaceApp[data-learning-path="compare"]{--section:var(--compare);--section-soft:var(--compare-soft);--section-border:#d8c8f5}
+#linearWorkspaceApp[data-learning-path="business"]{--section:var(--apply);--section-soft:var(--apply-soft);--section-border:#b9dfd7}
+#linearWorkspaceApp[data-learning-path="workshop"]{--section:var(--workshop);--section-soft:var(--workshop-soft);--section-border:#f1d3ad}
+#linearWorkspaceApp[data-learning-path="practice"]{--section:var(--practice);--section-soft:var(--practice-soft);--section-border:#edc6d2}
+#linearWorkspaceApp .top{border-color:var(--section-border);box-shadow:0 10px 28px rgba(28,52,87,.07)}
+#linearWorkspaceApp .workspace-topic-sub,#linearWorkspaceApp .workspace-breadcrumb button{color:var(--section)}
+#linearWorkspaceApp .modulebar{background:var(--section-soft);border-color:var(--section-border);padding:9px 10px}
+#linearWorkspaceApp .modulebar-label{background:transparent;color:#536279}
+#linearWorkspaceApp .module-step{border-color:var(--section-border);background:#fff;color:#34445b}
+#linearWorkspaceApp .module-step:hover{background:#fff;border-color:var(--section)}
+#linearWorkspaceApp .module-step[aria-current="step"]{background:var(--section);border-color:var(--section);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--section) 22%,transparent)}
+#linearWorkspaceApp .kicker{color:var(--section)}
+#linearWorkspaceApp .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-bottom:12px}
+#linearWorkspaceApp .tab{min-height:61px;border-radius:12px;padding:8px 9px;text-align:left;background:#fff;border:1px solid #dbe3ee;color:#34445b;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;white-space:normal;line-height:1.15}
+#linearWorkspaceApp .tab .tab-main{font-weight:850;font-size:.79rem;display:flex;align-items:center;gap:5px}
+#linearWorkspaceApp .tab .tab-sub{font-size:.66rem;color:#718096;font-weight:650;line-height:1.2}
+#linearWorkspaceApp .tab[aria-selected="true"]{background:var(--section-soft)!important;color:var(--section)!important;border-color:var(--section)!important;box-shadow:inset 0 -3px 0 var(--section)}
+#linearWorkspaceApp .tab[aria-selected="true"] .tab-sub{color:#536279}
+#linearWorkspaceApp .panel,#linearWorkspaceApp .chart-card{border-color:#dfe6ef;box-shadow:0 8px 24px rgba(25,42,75,.055)}
+#linearWorkspaceApp .right{background:linear-gradient(180deg,#fff,#fbfcff)}
+#linearWorkspaceApp .linear-overview-return{border-color:var(--section-border);color:var(--section);background:var(--section-soft)}
+#linearWorkspaceApp .btn.primary{background:var(--section);border-color:var(--section)}
+@media(max-width:900px){
+  .explanation-actions,.explanation-privacy{margin-left:0!important}
+  .topic-hero{grid-template-columns:1fr}.topic-illustration{min-height:170px!important}
+  #linearWorkspaceApp .tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .topic-card{padding-bottom:72px}.topic-card .mini-graph{width:92px;height:58px}
+  .learning-steps{padding-left:12px}.explanation-strip{padding:13px}.explanation-strip-copy{gap:9px}.explanation-actions{display:grid;grid-template-columns:1fr 1fr}.explain-shortcut{text-align:left}
+  #linearWorkspaceApp .tabs{display:flex;overflow-x:auto;gap:7px;padding-bottom:5px;scroll-snap-type:x proximity}
+  #linearWorkspaceApp .tab{flex:0 0 150px;scroll-snap-align:start;min-height:58px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -359,9 +442,9 @@ button.topic-card{cursor:pointer}.topic-card:hover{transform:translateY(-2px);bo
 
   <section class="portal-hero">
     <div>
-      <div class="portal-eyebrow">Mathematik verstehen · Darstellungen verbinden</div>
-      <h1>Mathematik Schritt für Schritt verstehen.</h1>
-      <p>Entdecke Zusammenhänge am Graphen, nutze klare Fachsprache, arbeite mit Materialien und sichere dein Wissen mit passenden Übungen.</p>
+      <div class="portal-eyebrow">Mathematik entdecken · Darstellungen verbinden</div>
+      <h1>Mathematik verstehen. Darstellungen verbinden. Sicher anwenden.</h1>
+      <p>Entdecke Zusammenhänge an Graphen, Funktionstermen und Tabellen. Beschreibe Beobachtungen mit mathematischer Fachsprache, übe gezielt und überprüfe dein Wissen.</p>
       <div class="portal-hero-actions">
         <button class="portal-primary" data-open-topic="linear">Lineare Funktionen öffnen</button>
         <button class="portal-secondary" data-scroll-topics>Themenübersicht ansehen</button>
@@ -437,16 +520,35 @@ button.topic-card{cursor:pointer}.topic-card:hover{transform:translateY(-2px);bo
     <button class="portal-link" type="button" data-back-portal>← Startseite</button>
   </div>
   <section class="topic-hero">
-    <div><div class="portal-eyebrow">Themenübersicht</div><h1>Lineare Funktionen</h1><p>Geraden verstehen, darstellen, vergleichen und in Sachzusammenhängen anwenden. Wähle einen Lernschritt – du kannst jederzeit zur Übersicht zurückkehren.</p></div>
-    <div class="hero-math" aria-hidden="true"><svg viewBox="0 0 520 220" width="100%" height="100%"><path d="M35 180H490M100 205V22" stroke="#cbd7e7" stroke-width="2"/><path d="M62 177L455 45" stroke="#2457d6" stroke-width="4" fill="none"/><path d="M58 55L440 182" stroke="#7c3aed" stroke-width="3.5" fill="none"/><circle cx="258" cy="111" r="6" fill="#fff" stroke="#17325e" stroke-width="3"/><text x="278" y="100" fill="#17325e" font-size="20" font-family="Cambria Math,serif">S</text><text x="320" y="63" fill="#2457d6" font-size="22" font-family="Cambria Math,serif">f(x)=mx+b</text></svg></div>
+    <div class="topic-hero-copy">
+      <div class="portal-eyebrow">Themenübersicht</div>
+      <h1>Lineare Funktionen</h1>
+      <p class="topic-lead">Hier untersuchst du lineare Funktionen aus verschiedenen Darstellungen. Du verbindest Graph, Funktionsterm, Tabelle und sprachliche Beschreibung. Wähle einen Lernbereich und arbeite Schritt für Schritt oder steige gezielt bei einem Thema ein.</p>
+      <div class="representation-row" aria-label="Darstellungen verbinden"><span>Graph</span><span>Funktionsterm</span><span>Tabelle</span><span>Sprache</span></div>
+    </div>
+    <div class="hero-math topic-illustration" aria-hidden="true">
+      <svg viewBox="0 0 520 220" width="100%" height="100%">
+        <defs><pattern id="topicGrid23" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#e5edf8" stroke-width="1"/></pattern></defs>
+        <rect width="520" height="220" fill="url(#topicGrid23)"/>
+        <path d="M34 177H492M92 205V20" stroke="#9fb1c9" stroke-width="1.6"/>
+        <path d="M55 178L452 48" stroke="#2457d6" stroke-width="4.2" stroke-linecap="round" fill="none"/>
+        <path d="M63 66L438 169" stroke="#6d39c6" stroke-width="3.2" stroke-linecap="round" fill="none" opacity=".88"/>
+        <path d="M302 98L388 70L388 98Z" fill="#2457d6" opacity=".10" stroke="#2457d6" stroke-width="1.5"/>
+        <text x="331" y="61" fill="#2457d6" font-size="19" font-family="Cambria Math,serif">f(x)=mx+b</text>
+      </svg>
+    </div>
+  </section>
+  <section class="explanation-strip" aria-labelledby="extraExplainHeading">
+    <div class="explanation-strip-copy"><div class="explanation-icon" aria-hidden="true">▶</div><div><h2 id="extraExplainHeading">Zusätzliche Erklärungen &amp; Erklärvideos</h2><p>Ein Zusammenhang ist noch nicht klar? Manchmal hilft eine zweite Darstellung oder eine andere Erklärung. Zu ausgewählten Themen findest du hier geprüfte Erklärvideos und externe Lernangebote. Sie ergänzen die Lernmodule.</p></div></div>
+    <div class="explanation-actions"><button class="explain-shortcut" data-open-module-view="basics:slope:explain">Steigung</button><button class="explain-shortcut" data-open-module-view="basics:zero:explain">Nullstelle</button><button class="explain-shortcut" data-open-module-view="compare:intersection:explain">Schnittpunkt</button><button class="explain-shortcut" data-open-module-view="business:costrevenue:explain">Kosten · Erlös · Gewinn</button></div>
+    <p class="explanation-privacy">Externe Angebote sind gekennzeichnet und werden erst nach deiner aktiven Auswahl geöffnet oder geladen.</p>
   </section>
   <div class="learning-map" aria-label="Lernbereiche">
-    <section class="learning-band basics"><div class="learning-band-head"><div class="learning-band-icon">ƒ</div><div><h2>Entdecken &amp; Verstehen</h2><p>Grundlagen von Geraden und Funktionswerten aufbauen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="basics:point">Punkt &amp; Funktionswert</button><button class="learning-step" data-open-module="basics:intercept">y-Achsenabschnitt</button><button class="learning-step" data-open-module="basics:slope">Steigung</button><button class="learning-step" data-open-module="basics:proportional">Proportional oder nicht?</button><button class="learning-step" data-open-module="basics:zero">Nullstelle</button></div></section>
-    <section class="learning-band compare"><div class="learning-band-head"><div class="learning-band-icon">⇄</div><div><h2>Vergleichen &amp; Zusammenhänge erkennen</h2><p>Geraden miteinander vergleichen und gemeinsame Strukturen erkennen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="compare:compare">Funktionen vergleichen</button><button class="learning-step" data-open-module="compare:parallel">Parallel oder identisch?</button><button class="learning-step" data-open-module="compare:intersection">Schnittpunkt</button><button class="learning-step" data-open-module="compare:difference">Differenz zweier Funktionen</button></div></section>
-    <section class="learning-band apply"><div class="learning-band-head"><div class="learning-band-icon">€</div><div><h2>Anwenden</h2><p>Lineare Funktionen in wirtschaftlichen Sachzusammenhängen nutzen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="business:costrevenue">Kosten, Erlös &amp; Gewinn</button><button class="learning-step" data-open-module="business:profitdiff">Gewinn als Differenz</button><button class="learning-step" data-open-module="business:profitfunc">Gewinnfunktion</button><button class="learning-step" data-open-module="business:breakeven">Gewinnschwelle</button><button class="learning-step" data-open-module="business:domain">Sachbereich</button></div></section>
-    <section class="learning-band workshop"><div class="learning-band-head"><div class="learning-band-icon">⌁</div><div><h2>Ausprobieren</h2><p>Eigene Funktionen verändern und mathematische Wirkungen beobachten.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="workshop:own">Funktionswerkstatt öffnen</button></div></section>
-    <section class="learning-band practice"><div class="learning-band-head"><div class="learning-band-icon">✓</div><div><h2>Üben &amp; Sichern</h2><p>Aufgaben bearbeiten, Rückmeldung erhalten und Wissen selbst prüfen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="practice:practice_basics">Grundlagen üben</button><button class="learning-step" data-open-module="practice:practice_compare">Geraden vergleichen</button><button class="learning-step" data-open-module="practice:practice_business">Kosten · Erlös · Gewinn</button><button class="learning-step" data-open-module="practice:practice_mixed">Gemischter Selbstcheck</button></div></section>
-    <section class="learning-band external"><div class="learning-band-head"><div class="learning-band-icon">↗</div><div><h2>Noch einmal anders erklärt</h2><p>Kuratierte externe Lernangebote ergänzen die eigenen Erklärungen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module-view="basics:slope:explain">Steigung – zusätzliche Erklärung</button><button class="learning-step" data-open-module-view="basics:zero:explain">Nullstelle – zusätzliche Erklärung</button><button class="learning-step" data-open-module-view="compare:intersection:explain">Schnittpunkt – weiterlernen</button><button class="learning-step" data-open-module-view="business:costrevenue:explain">Kosten · Erlös · Gewinn – weiterlernen</button></div><div class="external-note"><strong>Hinweis:</strong> Externe Angebote werden klar gekennzeichnet und erst nach aktivem Klick geöffnet bzw. geladen.</div></section>
+    <section class="learning-band basics"><div class="learning-band-head"><div class="learning-band-icon">ƒ</div><div><h2>Entdecken &amp; Verstehen</h2><p>Graphen, Funktionsterme und Funktionswerte miteinander verbinden.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="basics:point">Punkt &amp; Funktionswert</button><button class="learning-step" data-open-module="basics:intercept">y-Achsenabschnitt</button><button class="learning-step" data-open-module="basics:slope">Steigung</button><button class="learning-step" data-open-module="basics:proportional">Proportional oder nicht?</button><button class="learning-step" data-open-module="basics:zero">Nullstelle</button></div></section>
+    <section class="learning-band compare"><div class="learning-band-head"><div class="learning-band-icon">⇄</div><div><h2>Vergleichen &amp; Zusammenhänge erkennen</h2><p>Geraden vergleichen, Beziehungen erkennen und mathematisch begründen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="compare:compare">Funktionen vergleichen</button><button class="learning-step" data-open-module="compare:parallel">Parallel oder identisch?</button><button class="learning-step" data-open-module="compare:intersection">Schnittpunkt</button><button class="learning-step" data-open-module="compare:difference">Differenz zweier Funktionen</button></div></section>
+    <section class="learning-band apply"><div class="learning-band-head"><div class="learning-band-icon">€</div><div><h2>Anwenden</h2><p>Lineare Funktionen auf Kosten, Erlös und Gewinn in Sachzusammenhängen anwenden.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="business:costrevenue">Kosten, Erlös &amp; Gewinn</button><button class="learning-step" data-open-module="business:profitdiff">Gewinn als Differenz</button><button class="learning-step" data-open-module="business:profitfunc">Gewinnfunktion</button><button class="learning-step" data-open-module="business:breakeven">Gewinnschwelle</button><button class="learning-step" data-open-module="business:domain">Sachbereich</button></div></section>
+    <section class="learning-band workshop"><div class="learning-band-head"><div class="learning-band-icon">⌁</div><div><h2>Ausprobieren</h2><p>Parameter verändern, Wirkungen beobachten und Vermutungen überprüfen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="workshop:own">Funktionswerkstatt öffnen</button></div></section>
+    <section class="learning-band practice"><div class="learning-band-head"><div class="learning-band-icon">✓</div><div><h2>Üben &amp; Sichern</h2><p>Bearbeite unterschiedliche Aufgaben, erhalte Rückmeldung und prüfe im Selbstcheck, was schon sicher ist. Wenn du vorher eine Erklärung brauchst, nutze die zusätzlichen Erklärungen und Erklärvideos oben auf dieser Seite.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="practice:practice_basics">Grundlagen üben</button><button class="learning-step" data-open-module="practice:practice_compare">Geraden vergleichen</button><button class="learning-step" data-open-module="practice:practice_business">Kosten · Erlös · Gewinn</button><button class="learning-step" data-open-module="practice:practice_mixed">Gemischter Selbstcheck</button></div></section>
   </div>
   <div class="linear-topic-footer"><span>Sprache &amp; Begründen bleibt in jedem passenden Lernmodul sichtbar.</span><button class="portal-link" type="button" data-info="privacy">Datenschutz</button></div>
 </section>
@@ -1400,6 +1502,8 @@ function renderModuleBar(){
 
 function renderHeader(){
  const arr=listPathModules(state.path),m=currentModule();
+ const workspace=document.getElementById("linearWorkspaceApp");if(workspace)workspace.dataset.learningPath=state.path;
+ document.title=`${m.title} | Mathematik-Lernwelt`;
  $("pathSubtitle").textContent=`${paths[state.path].label} · ${m.title}`;
  const crumb=$("crumbModule");if(crumb)crumb.textContent=m.title;
  const wt=$("workspaceTitle");if(wt)wt.textContent=m.title;
@@ -1409,12 +1513,19 @@ function renderHeader(){
 }
 
 function renderTabs(){
- const names={task:"Auftrag",language:"💬 Sprache & Begründen",table:"Tabelle",explain:"Erklärung",calc:"Rechnung"};
+ const info={
+  task:["1 · Auftrag","untersuchen"],
+  language:["2 · Sprache & Begründen","beschreiben und erklären"],
+  table:["3 · Tabelle","Werte darstellen"],
+  explain:["4 · Erklärung","Zusammenhang verstehen"],
+  calc:["5 · Rechnung","rechnerisch bestimmen"]
+ };
  const m=currentModule(),tabs=$("tabs");tabs.innerHTML="";
  if(!m.tabs.includes(state.view)) state.view="task";
  m.tabs.forEach(name=>{
-   const b=document.createElement("button");b.className="tab";b.dataset.view=name;b.id=`tab-${name}`;b.textContent=names[name];b.setAttribute("role","tab");b.setAttribute("aria-controls",`view-${name}`);
-   b.setAttribute("aria-selected",name===state.view);
+   const b=document.createElement("button");b.className="tab";b.dataset.view=name;b.id=`tab-${name}`;
+   b.innerHTML=`<span class="tab-main">${info[name][0]}</span><span class="tab-sub">${info[name][1]}</span>`;
+   b.setAttribute("role","tab");b.setAttribute("aria-controls",`view-${name}`);b.setAttribute("aria-selected",name===state.view);
    b.addEventListener("click",()=>switchView(name));tabs.appendChild(b);
  });
  document.querySelectorAll(".view").forEach(v=>{const active=v.id===`view-${state.view}`;v.classList.toggle("active",active);v.setAttribute("aria-hidden",String(!active));if(active)v.setAttribute("aria-labelledby",`tab-${state.view}`);});
@@ -2372,11 +2483,13 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&graphFocus)setGraph
 
 
 function showPortal(){
+ document.title="Mathematik-Lernwelt";
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
  if(portal)portal.hidden=false;if(overview)overview.hidden=true;if(linear)linear.hidden=true;
  document.body.classList.remove("graph-focus");window.scrollTo({top:0,behavior:"smooth"});
 }
 function showLinearOverview(){
+ document.title="Lineare Funktionen | Mathematik-Lernwelt";
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
  if(portal)portal.hidden=true;if(overview)overview.hidden=false;if(linear)linear.hidden=true;
  const ss=document.getElementById("startScreen");if(ss)ss.classList.remove("open");
