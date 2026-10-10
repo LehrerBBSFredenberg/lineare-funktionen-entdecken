@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V28 · Funktionswerkstatt entfernt, Lernstruktur gestrafft. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V29 · Direktsprung zu Erklärmedien verbessert. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -595,7 +595,8 @@ input[type="range"]{touch-action:pan-x}
 
 /* Erklärmedien direkt nach der eigenen Erklärung */
 .external-aids{margin:14px 0 4px;padding:0;border-top:0}
-.external-aids.media-box{border:1px solid #c9d8ea;border-radius:17px;background:linear-gradient(135deg,#f8fbff,#eef4fa);padding:15px;box-shadow:0 5px 16px rgba(48,76,118,.05)}
+.external-aids.media-box{border:1px solid #c9d8ea;border-radius:17px;background:linear-gradient(135deg,#f8fbff,#eef4fa);padding:15px;box-shadow:0 5px 16px rgba(48,76,118,.05);scroll-margin-top:96px}
+.aid-jump-context{display:inline-flex;align-items:center;gap:7px;margin:0 0 10px;padding:6px 9px;border-radius:999px;background:#e7eef9;color:#304d76;font-size:.72rem;font-weight:850;letter-spacing:.01em}
 .media-box-head{display:flex;gap:11px;align-items:flex-start;margin-bottom:11px}
 .media-box-icon{width:38px;height:38px;border-radius:12px;background:var(--external);color:#fff;display:grid;place-items:center;flex:0 0 auto;font-size:.92rem}
 .media-box h3{margin:0 0 3px;font-size:1rem;color:#263e62}
@@ -607,7 +608,8 @@ input[type="range"]{touch-action:pan-x}
 .media-box .aid-link,.media-box .aid-load{min-height:42px}
 
 /* Sprungziele sollen unter Browserleisten nicht knapp am Rand kleben. */
-#linearWorkspaceApp .right,#linearWorkspaceApp .right-body,#view-explain,.external-aids{scroll-margin-top:18px}
+#linearWorkspaceApp .right,#linearWorkspaceApp .right-body,#view-explain{scroll-margin-top:18px}
+.external-aids{scroll-margin-top:96px}
 
 /* Tablet / iPad */
 @media(max-width:1100px){
@@ -2076,7 +2078,7 @@ function externalAidsFor(m){
 }
 function externalAidsHtml(m){
  const aids=externalAidsFor(m); if(!aids.length)return "";
- return `<section class="external-aids media-box" aria-label="Zusätzliche Erklärung oder Erklärvideo"><div class="media-box-head"><div class="media-box-icon" aria-hidden="true">▶</div><div><h3>Noch nicht klar? Anders erklärt</h3><p class="media-intro">Manchmal hilft eine zweite Darstellung oder eine andere Erklärung. Diese Angebote ergänzen die Erklärung der Lernplattform.</p></div></div><div class="aid-grid">${aids.map((a,i)=>a.type==="link"?`<div class="aid-card"><strong>${a.title}</strong><p>${a.source} · ${a.desc}</p><a class="aid-link" href="${a.url}" target="_blank" rel="noopener noreferrer">${a.source==="Cornelsen"?"Erklärvideos bei Cornelsen öffnen ↗":"Zusätzliche Erklärung öffnen ↗"}</a><div class="external-note">Du verlässt die Lernplattform. Es gelten die Datenschutzregeln des externen Anbieters.</div></div>`:`<div class="aid-card"><strong>${a.title}</strong><p>${a.source} · ${a.desc}</p><div class="video-consent" id="videoConsent-${i}"><div class="external-note">Das Video wird noch nicht geladen. Erst nach deinem Klick wird eine Verbindung zu YouTube hergestellt; dabei können Daten an YouTube übertragen werden.</div><button class="aid-load" data-youtube-id="${a.videoId}" data-video-target="videoConsent-${i}">Erklärvideo laden</button> <a class="aid-link" href="https://www.youtube.com/watch?v=${a.videoId}" target="_blank" rel="noopener noreferrer">Auf YouTube öffnen ↗</a></div></div>`).join("")}</div></section>`;
+ return `<section class="external-aids media-box" id="externalAidBox" tabindex="-1" aria-label="Zusätzliche Erklärung oder Erklärvideo"><div class="aid-jump-context">${m.title} · zusätzliche Erklärung</div><div class="media-box-head"><div class="media-box-icon" aria-hidden="true">▶</div><div><h3>Noch nicht klar? Anders erklärt</h3><p class="media-intro">Manchmal hilft eine zweite Darstellung oder eine andere Erklärung. Diese Angebote ergänzen die Erklärung der Lernplattform.</p></div></div><div class="aid-grid">${aids.map((a,i)=>a.type==="link"?`<div class="aid-card"><strong>${a.title}</strong><p>${a.source} · ${a.desc}</p><a class="aid-link" href="${a.url}" target="_blank" rel="noopener noreferrer">${a.source==="Cornelsen"?"Erklärvideos bei Cornelsen öffnen ↗":"Zusätzliche Erklärung öffnen ↗"}</a><div class="external-note">Du verlässt die Lernplattform. Es gelten die Datenschutzregeln des externen Anbieters.</div></div>`:`<div class="aid-card"><strong>${a.title}</strong><p>${a.source} · ${a.desc}</p><div class="video-consent" id="videoConsent-${i}"><div class="external-note">Das Video wird noch nicht geladen. Erst nach deinem Klick wird eine Verbindung zu YouTube hergestellt; dabei können Daten an YouTube übertragen werden.</div><button class="aid-load" data-youtube-id="${a.videoId}" data-video-target="videoConsent-${i}">Erklärvideo laden</button> <a class="aid-link" href="https://www.youtube.com/watch?v=${a.videoId}" target="_blank" rel="noopener noreferrer">Auf YouTube öffnen ↗</a></div></div>`).join("")}</div></section>`;
 }
 function comparisonPanelHtml(m){
  if(!["intercept","zero"].includes(m.id)) return "";
@@ -2660,8 +2662,16 @@ function openLinearModule(spec,view="task",options={}){
  if(portal)portal.hidden=true;if(overview)overview.hidden=true;if(linear)linear.hidden=false;
  const ss=document.getElementById("startScreen");if(ss)ss.classList.remove("open");
  updateUrl();renderAll();
- if(options.scrollTarget==="explain"){
-   requestAnimationFrame(()=>setTimeout(()=>document.getElementById("view-explain")?.scrollIntoView({block:"start",behavior:"smooth"}),40));
+ if(options.scrollTarget==="media"){
+   const jumpToMedia=()=>{
+     const target=document.getElementById("externalAidBox");
+     if(!target)return;
+     target.scrollIntoView({block:"start",behavior:"auto"});
+     try{target.focus({preventScroll:true});}catch(_){target.focus();}
+   };
+   requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(jumpToMedia,80)));
+ }else if(options.scrollTarget==="explain"){
+   requestAnimationFrame(()=>setTimeout(()=>document.getElementById("view-explain")?.scrollIntoView({block:"start",behavior:"auto"}),80));
  }else window.scrollTo({top:0,behavior:"smooth"});
 }
 function openPortalModal(kind,name=""){
@@ -2693,7 +2703,7 @@ function openPortalModal(kind,name=""){
 function closePortalModal(){const modal=document.getElementById("portalModal");if(modal)modal.hidden=true;document.body.style.overflow="";}
 document.querySelectorAll("[data-open-topic='linear']").forEach(b=>b.addEventListener("click",showLinearOverview));
 document.querySelectorAll("[data-open-module]").forEach(b=>b.addEventListener("click",()=>openLinearModule(b.dataset.openModule)));
-document.querySelectorAll("[data-open-module-view]").forEach(b=>b.addEventListener("click",()=>{const [p,id,v]=b.dataset.openModuleView.split(":");openLinearModule(`${p}:${id}`,v,{scrollTarget:"explain"});}));
+document.querySelectorAll("[data-open-module-view]").forEach(b=>b.addEventListener("click",()=>{const [p,id,v]=b.dataset.openModuleView.split(":");openLinearModule(`${p}:${id}`,v,{scrollTarget:"media"});}));
 document.querySelectorAll("[data-linear-overview]").forEach(b=>b.addEventListener("click",showLinearOverview));
 document.querySelectorAll("[data-back-portal]").forEach(b=>b.addEventListener("click",showPortal));
 document.querySelectorAll("[data-topic-status]").forEach(b=>b.addEventListener("click",()=>openPortalModal(b.dataset.topicStatus,b.dataset.topicName)));
