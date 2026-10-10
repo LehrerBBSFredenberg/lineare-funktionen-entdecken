@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V26 · Responsive Navigation, Erklärmedien und iOS-Scroll-Fix. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V27 · Umschaltbare Graph-Hilfe in Übungen. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -162,6 +162,7 @@ input[type="range"]{width:100%;margin-top:9px;min-height:38px;accent-color:var(-
 .practice-hint{border-left:4px solid #8aa8f8;background:#f8faff;border-radius:9px;padding:9px 10px;font-size:.84rem;color:#334155}
 .practice-actions{display:flex;gap:8px;flex-wrap:wrap}
 .practice-actions .btn{flex:1;min-width:120px}
+.practice-actions #practiceGraphHelp[aria-pressed="true"]{background:#eef7f4;border-color:#8bcab7;color:#0f5e4f}
 .practice-summary{border:1px solid #bce8d6;background:#f2fbf7;border-radius:14px;padding:13px}
 .practice-summary strong{display:block;margin-bottom:4px;color:#145c43}
 .practice-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:-2px}
@@ -1417,7 +1418,7 @@ function currentPracticeResponse(){
 }
 function practiceGraphVisible(){
  const r=currentPracticeResponse();
- return !!(r.graphShown || r.attempts>0);
+ return r.graphVisible===true;
 }
 function practiceSolutionMarkersVisible(){
  const r=currentPracticeResponse();
@@ -2276,7 +2277,7 @@ function renderPracticePane(){
  const hint=r.hint?`<div class="practice-hint"><strong>Hinweis:</strong> ${q.hint}</div>`:"";
  const atEnd=ss.index===bank.length-1;
  const next=r.correct?`<button type="button" class="btn primary" id="practiceNext">${atEnd?"Auswertung anzeigen":"Nächste Aufgabe →"}</button>`:"";
- const graphHelp=!practiceGraphVisible()?`<button type="button" class="btn small" id="practiceGraphHelp">📈 Graph als Hilfe anzeigen</button>`:"";
+ const graphHelp=practiceGraphVisible()?`<button type="button" class="btn small" id="practiceGraphHelp" aria-pressed="true">✓ Graph-Hilfe sichtbar · wieder ausblenden</button>`:`<button type="button" class="btn small" id="practiceGraphHelp" aria-pressed="false">📈 Graph als Hilfe anzeigen</button>`;
  wrap.innerHTML=`<div class="practice-card">
    <div class="practice-meta"><span class="practice-progress">Aufgabe ${ss.index+1} von ${bank.length}</span><span class="practice-score">${completed} richtig gelöst</span></div>
    <div class="practice-tags"><span class="practice-tag">${q.competence}</span><span class="practice-tag ${practiceLevelClass(q.level)}">${q.levelLabel}</span><span class="practice-tag">${q.representation}</span><span class="practice-tag">${q.numberType}</span></div>
@@ -2297,7 +2298,11 @@ function renderPracticePane(){
    saveResponse({value:raw,correct,attempts:(ss.responses[ss.index]?.attempts||0)+1}); renderPracticePane(); renderCenter();
  });
  const inp=$("practiceNumber");if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')$("practiceCheck")?.click();});
- const graphBtn=$("practiceGraphHelp");if(graphBtn)graphBtn.addEventListener('click',()=>{saveResponse({graphShown:true});renderPracticePane();renderCenter();});
+ const graphBtn=$("practiceGraphHelp");if(graphBtn)graphBtn.addEventListener('click',()=>{
+   const nowVisible=practiceGraphVisible();
+   saveResponse({graphVisible:!nowVisible,graphShown:true});
+   renderPracticePane();renderCenter();
+ });
  const hintBtn=$("practiceHint");if(hintBtn)hintBtn.addEventListener('click',()=>{saveResponse({hint:true});renderPracticePane();});
  const nextBtn=$("practiceNext");if(nextBtn)nextBtn.addEventListener('click',()=>{
    if(atEnd){renderPracticeSummary();return;}
@@ -2571,7 +2576,7 @@ function renderBusinessGraphControls(){
  const m=currentModule(),box=$("businessGraphControls"),panel=$("businessGraphPanel"),chip=$("scaleChip"),prev=$("previousBtn");
  if(m.path!=="business"){
    box.innerHTML=""; panel.setAttribute("hidden",""); panel.style.display="none";
-   if(m.path==="practice"){prev.style.display="none";chip.textContent=practiceGraphVisible()?"✓ Übungsgraph eingeblendet":"◌ Graph als Hilfe";}
+   if(m.path==="practice"){prev.style.display="none";chip.textContent=practiceGraphVisible()?"✓ Graph-Hilfe sichtbar":"◌ Graph als Hilfe";}
    else{prev.style.display="";chip.textContent="🔒 Skala fixiert";prev.setAttribute("aria-pressed",String(state.showPrevious)); prev.textContent=state.showPrevious?"Vorher sichtbar":"Vorher aus";}
    return;
  }
@@ -2624,8 +2629,8 @@ function renderCenter(){
  if(m.path==="practice"){
    const visible=practiceGraphVisible();
    $("chartKicker").textContent="Übungsgraph";
-   $("chartSub").textContent=visible?"Der Graph dient jetzt als zusätzliche Darstellung zur Kontrolle oder Hilfe.":"Der Graph bleibt zunächst ausgeblendet, damit du die Aufgabe zuerst selbstständig bearbeitest.";
-   $("insight").innerHTML=visible?"Vergleiche deine Überlegung mit dem Graphen. Lösungspunkte werden erst nach einem Antwortversuch markiert.":"Du kannst den Graphen bei Bedarf bewusst als Hilfe einblenden.";
+   $("chartSub").textContent=visible?"Der Graph ist als zusätzliche Hilfe eingeblendet. Du kannst ihn jederzeit wieder ausblenden.":"Der Graph bleibt zunächst ausgeblendet, damit du die Aufgabe zuerst selbstständig bearbeitest.";
+   $("insight").innerHTML=visible?"Vergleiche deine Überlegung mit dem Graphen. Lösungspunkte werden erst nach einem Antwortversuch markiert. Wenn du die Hilfe nicht mehr brauchst, blende den Graphen wieder aus.":"Du kannst den Graphen bei Bedarf bewusst als Hilfe einblenden.";
  }else{
    $("chartKicker").textContent="Mathematische Wirkung";
    $("chartSub").textContent=m.path==="business"?"Die Skala reagiert auf Kosten, Preis und Gewinnschwelle. Beim Ziehen von x bewegt sich nur die Mengenmarkierung – die Skala bleibt ruhig.":"Die Achsenskalierung bleibt innerhalb des Moduls stabil.";
