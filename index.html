@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V27 · Umschaltbare Graph-Hilfe in Übungen. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V28 · Funktionswerkstatt entfernt, Lernstruktur gestrafft. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -237,9 +237,6 @@ th:first-child,td:first-child{text-align:left}th{font-size:.7rem;letter-spacing:
 .term-editor{display:grid;gap:8px;margin-top:9px}
 .term-editor label{font-weight:850;font-size:.9rem}
 .term-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.term-input{flex:1;min-width:210px;border:2px solid #9ab2ff;border-radius:12px;padding:10px 12px;font-family:"Cambria Math","STIX Two Math",serif;font-size:1.08rem;background:#fff}
-.term-status{font-size:.82rem;font-weight:760;min-height:1.3em}
-.term-status.good{color:var(--green)}.term-status.bad{color:var(--bad)}
 .speech-note{margin-top:7px;padding:7px 9px;border-radius:10px;background:#f1f5ff;border:1px solid #cbd8ff;color:#334155;font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:.78rem}
 .mobile-note{display:none;background:#fff8e8;border:1px solid #f0d39b;border-radius:12px;padding:9px 11px;font-size:.82rem;color:#7a4b00;margin-top:10px}
 @media(max-width:1180px){
@@ -318,7 +315,7 @@ button.topic-card{cursor:pointer}.topic-card:hover{transform:translateY(-2px);bo
 .topic-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:20px;align-items:center;border:1px solid #d8e3f3;border-radius:24px;padding:22px 24px;background:linear-gradient(135deg,#fbfdff 0%,#edf4ff 64%,#f8fbff 100%);box-shadow:var(--shadow)}
 .topic-hero h1{font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.04;margin:4px 0 9px;letter-spacing:-.025em}.topic-hero p{margin:0;color:#536279;max-width:720px}.topic-hero .hero-math{min-height:190px}
 .learning-map{display:grid;gap:11px;margin-top:16px}.learning-band{border:1px solid #dbe5f0;border-radius:17px;background:#fff;overflow:hidden;box-shadow:0 6px 18px rgba(25,42,75,.05)}
-.learning-band-head{display:flex;gap:12px;align-items:flex-start;padding:13px 15px 8px}.learning-band-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#edf3ff;color:#2457d6;font-weight:950;flex:0 0 auto}.learning-band h2{font-size:1rem;margin:0}.learning-band p{font-size:.78rem;color:#66758a;margin:2px 0 0}.learning-steps{display:flex;gap:7px;flex-wrap:wrap;padding:2px 15px 14px 65px}.learning-step{border:1px solid #d8e2ef;background:#fbfcff;color:#263850;border-radius:999px;padding:8px 11px;font-weight:780;font-size:.8rem;min-height:38px}.learning-step:hover{border-color:#8facf1;background:#f2f6ff}.learning-band.compare .learning-band-icon{background:#f1edff;color:#6d39c6}.learning-band.apply .learning-band-icon{background:#eaf8f3;color:#0f766e}.learning-band.workshop .learning-band-icon{background:#fff3e7;color:#b65d00}.learning-band.practice .learning-band-icon{background:#fff0f3;color:#b7355e}.learning-band.external .learning-band-icon{background:#eef2f7;color:#526176}
+.learning-band-head{display:flex;gap:12px;align-items:flex-start;padding:13px 15px 8px}.learning-band-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#edf3ff;color:#2457d6;font-weight:950;flex:0 0 auto}.learning-band h2{font-size:1rem;margin:0}.learning-band p{font-size:.78rem;color:#66758a;margin:2px 0 0}.learning-steps{display:flex;gap:7px;flex-wrap:wrap;padding:2px 15px 14px 65px}.learning-step{border:1px solid #d8e2ef;background:#fbfcff;color:#263850;border-radius:999px;padding:8px 11px;font-weight:780;font-size:.8rem;min-height:38px}.learning-step:hover{border-color:#8facf1;background:#f2f6ff}.learning-band.compare .learning-band-icon{background:#f1edff;color:#6d39c6}.learning-band.apply .learning-band-icon{background:#eaf8f3;color:#0f766e}.learning-band.practice .learning-band-icon{background:#fff0f3;color:#b7355e}.learning-band.external .learning-band-icon{background:#eef2f7;color:#526176}
 .external-note{font-size:.78rem;color:#66758a;padding:0 15px 14px 65px}.external-note strong{color:#334155}.linear-topic-footer{margin-top:16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;color:#64748b;font-size:.78rem}
 #linearWorkspaceApp{max-width:1480px}
 #linearWorkspaceApp .top{position:sticky;top:8px;border-radius:16px;padding:10px 14px;grid-template-columns:minmax(0,1fr) auto}
@@ -354,7 +351,6 @@ button.topic-card{cursor:pointer}.topic-card:hover{transform:translateY(-2px);bo
   --discover:#2457d6; --discover-soft:#edf3ff;
   --compare:#6d39c6; --compare-soft:#f3eeff;
   --apply:#0f766e; --apply-soft:#eaf8f3;
-  --workshop:#a85700; --workshop-soft:#fff3e7;
   --practice:#a42d55; --practice-soft:#fff0f3;
   --external:#425d86; --external-soft:#eef3f8;
   --planned:#64748b; --planned-soft:#f1f5f9;
@@ -388,14 +384,12 @@ button.topic-card{cursor:pointer}.topic-card:hover{transform:translateY(-2px);bo
 .learning-band.basics{background:linear-gradient(100deg,var(--discover-soft),#fff 42%);border-color:#c9d8fb}.learning-band.basics .learning-band-icon{background:var(--discover);color:#fff}.learning-band.basics .learning-step{border-color:#bdd0fa;color:#173f9d}
 .learning-band.compare{background:linear-gradient(100deg,var(--compare-soft),#fff 42%);border-color:#d8c8f5}.learning-band.compare .learning-band-icon{background:var(--compare);color:#fff}.learning-band.compare .learning-step{border-color:#d0bdf2;color:#5830a5}
 .learning-band.apply{background:linear-gradient(100deg,var(--apply-soft),#fff 42%);border-color:#b9dfd7}.learning-band.apply .learning-band-icon{background:var(--apply);color:#fff}.learning-band.apply .learning-step{border-color:#aad9cf;color:#0b655e}
-.learning-band.workshop{background:linear-gradient(100deg,var(--workshop-soft),#fff 42%);border-color:#f1d3ad}.learning-band.workshop .learning-band-icon{background:var(--workshop);color:#fff}.learning-band.workshop .learning-step{border-color:#eccb9f;color:#874600}
 .learning-band.practice{background:linear-gradient(100deg,var(--practice-soft),#fff 42%);border-color:#edc6d2}.learning-band.practice .learning-band-icon{background:var(--practice);color:#fff}.learning-band.practice .learning-step{border-color:#e8bdca;color:#8f274a}
 /* Ebene 3: einheitliche Farbfamilie je Lernbereich */
 #linearWorkspaceApp .pathbar{display:none!important}
 #linearWorkspaceApp{--section:var(--discover);--section-soft:var(--discover-soft);--section-border:#c9d8fb}
 #linearWorkspaceApp[data-learning-path="compare"]{--section:var(--compare);--section-soft:var(--compare-soft);--section-border:#d8c8f5}
 #linearWorkspaceApp[data-learning-path="business"]{--section:var(--apply);--section-soft:var(--apply-soft);--section-border:#b9dfd7}
-#linearWorkspaceApp[data-learning-path="workshop"]{--section:var(--workshop);--section-soft:var(--workshop-soft);--section-border:#f1d3ad}
 #linearWorkspaceApp[data-learning-path="practice"]{--section:var(--practice);--section-soft:var(--practice-soft);--section-border:#edc6d2}
 #linearWorkspaceApp .top{border-color:var(--section-border);box-shadow:0 10px 28px rgba(28,52,87,.07)}
 #linearWorkspaceApp .workspace-topic-sub,#linearWorkspaceApp .workspace-breadcrumb button{color:var(--section)}
@@ -794,7 +788,6 @@ input[type="range"]{touch-action:pan-x}
     <section class="learning-band basics"><div class="learning-band-head"><div class="learning-band-icon">ƒ</div><div><h2>Entdecken &amp; Verstehen</h2><p>Graphen, Funktionsterme und Funktionswerte miteinander verbinden.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="basics:point">Punkt &amp; Funktionswert</button><button class="learning-step" data-open-module="basics:slope">Steigung</button><button class="learning-step" data-open-module="basics:intercept">y-Achsenabschnitt</button><button class="learning-step" data-open-module="basics:zero">Nullstelle</button><button class="learning-step" data-open-module="basics:proportional">Proportional oder nicht?</button></div></section>
     <section class="learning-band apply"><div class="learning-band-head"><div class="learning-band-icon">€</div><div><h2>Anwenden · Kosten, Erlös &amp; Gewinn</h2><p>Nutze lineare Funktionen in einem wirtschaftlichen Sachzusammenhang. Deute Steigungen, Anfangswerte, Gewinn und Gewinnschwelle.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="business:costrevenue">Kosten, Erlös &amp; Gewinn</button><button class="learning-step" data-open-module="business:profitdiff">Gewinn als Differenz</button><button class="learning-step" data-open-module="business:profitfunc">Gewinnfunktion</button><button class="learning-step" data-open-module="business:breakeven">Gewinnschwelle</button><button class="learning-step" data-open-module="business:domain">Sachbereich</button></div></section>
     <section class="learning-band compare"><div class="learning-band-head"><div class="learning-band-icon">⇄</div><div><h2>Vergleichen &amp; Zusammenhänge erkennen</h2><p>Geraden vergleichen, Beziehungen erkennen und mathematisch begründen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="compare:compare">Funktionen vergleichen</button><button class="learning-step" data-open-module="compare:parallel">Parallel oder identisch?</button><button class="learning-step" data-open-module="compare:intersection">Schnittpunkt</button><button class="learning-step" data-open-module="compare:difference">Differenz zweier Funktionen</button></div></section>
-    <section class="learning-band workshop"><div class="learning-band-head"><div class="learning-band-icon">⌁</div><div><h2>Ausprobieren</h2><p>Parameter verändern, Wirkungen beobachten und Vermutungen überprüfen.</p></div></div><div class="learning-steps"><button class="learning-step" data-open-module="workshop:own">Funktionswerkstatt öffnen</button></div></section>
     <section class="learning-band practice"><div class="learning-band-head"><div class="learning-band-icon">✓</div><div><h2>Üben &amp; Sichern</h2><p>Bearbeite unterschiedliche Aufgaben, erhalte direkte Rückmeldung und überprüfe im Selbstcheck, was schon sicher ist. Wenn du Unterstützung brauchst, nutze zuerst die zusätzlichen Erklärungen, Erklärvideos und externen Lernhilfen oben auf dieser Seite.</p><div class="practice-video-note"><strong>Vor dem Üben möglich:</strong> Erklärvideos und zusätzliche Erklärungen helfen dir, bevor du in die Aufgaben startest oder wenn du beim Üben festhängst.</div></div></div><div class="learning-steps"><button class="learning-step" data-open-module="practice:practice_basics">Grundlagen üben</button><button class="learning-step" data-open-module="practice:practice_compare">Geraden vergleichen</button><button class="learning-step" data-open-module="practice:practice_business">Kosten · Erlös · Gewinn</button><button class="learning-step" data-open-module="practice:practice_mixed">Gemischter Selbstcheck</button></div></section>
   </div>
   <div class="linear-topic-footer"><span>Sprache &amp; Begründen bleibt in jedem passenden Lernmodul sichtbar.</span><button class="portal-link" type="button" data-info="privacy">Datenschutz</button></div>
@@ -813,9 +806,8 @@ input[type="range"]{touch-action:pan-x}
 
 <nav class="pathbar" aria-label="Lernpfade">
   <button class="path-btn active" data-path="basics">Grundlagen</button>
-  <button class="path-btn" data-path="compare">Geraden vergleichen</button>
   <button class="path-btn" data-path="business">Kosten · Erlös · Gewinn</button>
-  <button class="path-btn" data-path="workshop">Funktionswerkstatt</button>
+  <button class="path-btn" data-path="compare">Geraden vergleichen</button>
   <button class="path-btn" data-path="practice">Üben &amp; Sichern</button>
 </nav>
 <nav class="modulebar" id="moduleBar" aria-label="Teilmodule des gewählten Lernpfads"></nav>
@@ -889,9 +881,8 @@ input[type="range"]{touch-action:pan-x}
     <p style="margin:0;color:var(--muted)">Du kannst später jederzeit zwischen den Lernpfaden wechseln.</p>
     <div class="path-choice">
       <button data-start="basics"><strong>Grundlagen</strong><span>Punkte, Steigung, Achsenschnittpunkte</span></button>
-      <button data-start="compare"><strong>Geraden vergleichen</strong><span>Parallelität, Schnittpunkt, Differenz</span></button>
       <button data-start="business"><strong>Kosten · Erlös · Gewinn</strong><span>Mathematische Strukturen anwenden</span></button>
-      <button data-start="workshop"><strong>Funktionswerkstatt</strong><span>Eigene lineare Funktion eingeben und untersuchen</span></button>
+      <button data-start="compare"><strong>Geraden vergleichen</strong><span>Parallelität, Schnittpunkt, Differenz</span></button>
       <button data-start="practice"><strong>Üben &amp; Sichern</strong><span>Kurze Aufgaben bearbeiten und direkt Rückmeldung erhalten</span></button>
     </div>
   </div>
@@ -906,9 +897,8 @@ const euro=n=>`${fmt(n)} ${state?.moneyUnit??"€"}`;
 
 const paths={
   basics:{label:"Grundlagen", subtitle:"Punkte, Steigung, Achsenschnittpunkte und Nullstellen"},
-  compare:{label:"Geraden vergleichen", subtitle:"Lagebeziehungen, Schnittpunkte und Differenzen"},
   business:{label:"Kosten · Erlös · Gewinn", subtitle:"Lineare Funktionen im Sachkontext"},
-  workshop:{label:"Funktionswerkstatt", subtitle:"Eigene lineare Funktion eingeben und direkt untersuchen"},
+  compare:{label:"Geraden vergleichen", subtitle:"Lagebeziehungen, Schnittpunkte und Differenzen"},
   practice:{label:"Üben & Sichern", subtitle:"Selbstständig anwenden, prüfen und festigen"}
 };
 
@@ -947,7 +937,7 @@ const modules=[
  structure:"Bedingung: x=0. Dann gilt f(0)=___. Der Schnittpunkt mit der y-Achse ist S<sub>y</sub>(0|___).",
  modelMath:"Für jeden Punkt auf der y-Achse gilt x=0. Deshalb setzt man x=0. Bei f(x)=mx+b erhält man f(0)=b. Der Schnittpunkt mit der y-Achse ist S<sub>y</sub>(0|b).",
  modelApp:"Für die Kostenfunktion gilt bei x=0: K(0)=K<sub>f</sub>. Der Schnittpunkt S<sub>y</sub>(0|K<sub>f</sub>) zeigt die Fixkosten. Verändert sich nur K<sub>f</sub>, bleibt die Steigung unverändert und der Graph verschiebt sich parallel.",
- explainMath:[["Bedingung","Ein Punkt liegt auf der y-Achse, wenn seine x-Koordinate 0 ist. Deshalb gilt für den y-Achsenabschnitt: x=0."],["Einsetzen","Für f(x)=mx+b folgt f(0)=m·0+b=b."],["Punkt und Bezeichnung","Der Schnittpunkt mit der y-Achse heißt S<sub>y</sub>(0|f(0))=S<sub>y</sub>(0|b)."],["Veränderung","Ändert sich nur b, bleibt m gleich; der Graph wird parallel nach oben oder unten verschoben."]],
+ explainMath:[["Bedingung","Ein Punkt liegt auf der y-Achse, wenn seine x-Koordinate 0 ist. Deshalb gilt für den y-Achsenabschnitt: x=0."],["Einsetzen","Für f(x)=mx+b folgt f(0)=m·0+b=b."],["Punkt und Bezeichnung","Der Schnittpunkt mit der y-Achse heißt S<sub>y</sub>(0|f(0))=S<sub>y</sub>(0|b)."],["Veränderung","Ändert sich nur b, bleibt m gleich; der Graph wird parallel nach oben oder unten verschoben."],["Darstellungen verbinden","Term, Graph und Wertetabelle beschreiben dieselbe Funktion. Verändere nur b und prüfe, wie sich dieselbe Änderung in allen Darstellungen zeigt."]],
  explainApp:[["Bedingung","Auch im Sachkontext gilt für den Schnittpunkt mit der senkrechten Achse x=0."],["Fixkosten","Bei K(x)=kᵥx+K<sub>f</sub> gilt K(0)=K<sub>f</sub>. Deshalb ist S<sub>y</sub>(0|K<sub>f</sub>) der Achsenschnittpunkt der Kostenfunktion."],["Bedeutung","Bei 0 Mengeneinheiten fallen bereits die Fixkosten K<sub>f</sub> an."],["Folge","Ändert sich nur K<sub>f</sub>, bleibt kᵥ unverändert und K(x) verschiebt sich parallel."]],
  table:null, calc:null
 },
@@ -966,7 +956,7 @@ const modules=[
  structure:"m = <span class='math-frac'><span class='num'>f(x<sub>2</sub>)−f(x<sub>1</sub>)</span><span class='den'>x<sub>2</sub>−x<sub>1</sub></span></span> = ___.",
  modelMath:"Für zwei Punkte P<sub>1</sub>(x<sub>1</sub>|f(x<sub>1</sub>)) und P<sub>2</sub>(x<sub>2</sub>|f(x<sub>2</sub>)) gilt m=<span class='math-frac'><span class='num'>f(x<sub>2</sub>)−f(x<sub>1</sub>)</span><span class='den'>x<sub>2</sub>−x<sub>1</sub></span></span>. Bei m>0 steigt der Graph, bei m<0 fällt er, bei m=0 verläuft er waagerecht.",
  modelApp:"Die Steigung der Kostenfunktion gibt an, um wie viele Euro die Gesamtkosten pro zusätzlichem Stück steigen.",
- explainMath:[["Steigungsformel","Für P<sub>1</sub>(x<sub>1</sub>|f(x<sub>1</sub>)) und P<sub>2</sub>(x<sub>2</sub>|f(x<sub>2</sub>)) gilt m=<span class='math-frac'><span class='num'>f(x<sub>2</sub>)−f(x<sub>1</sub>)</span><span class='den'>x<sub>2</sub>−x<sub>1</sub></span></span>."],["Sprechweise","m ist gleich f von x zwei minus f von x eins, geteilt durch x zwei minus x eins."],["Vorzeichen","m>0: steigend; m<0: fallend; m=0: waagerecht."],["Betrag","Je größer |m| ist, desto steiler verläuft die Gerade."]],
+ explainMath:[["Steigungsformel","Für P<sub>1</sub>(x<sub>1</sub>|f(x<sub>1</sub>)) und P<sub>2</sub>(x<sub>2</sub>|f(x<sub>2</sub>)) gilt m=<span class='math-frac'><span class='num'>f(x<sub>2</sub>)−f(x<sub>1</sub>)</span><span class='den'>x<sub>2</sub>−x<sub>1</sub></span></span>."],["Sprechweise","m ist gleich f von x zwei minus f von x eins, geteilt durch x zwei minus x eins."],["Vorzeichen","m>0: steigend; m<0: fallend; m=0: waagerecht."],["Betrag","Je größer |m| ist, desto steiler verläuft die Gerade."],["Darstellungen verbinden","Term, Graph und Wertetabelle beschreiben dieselbe Funktion. Verändere nur m und prüfe, wie sich die Änderung in Graph und Wertetabelle zeigt, während b gleich bleibt."]],
  explainApp:[["Einheit","Bei der Kostenfunktion lautet die Einheit der Steigung €/Stück."],["Deutung","m=4 bedeutet: Pro zusätzlichem Stück steigen die Kosten um 4 €."],["Grenze des Sachkontexts","Negative variable Kosten sind in diesem Modell nicht sinnvoll, obwohl negative Steigungen mathematisch möglich sind."]],
  table:"slope", calc:null
 },
@@ -1171,24 +1161,6 @@ const modules=[
  explainApp:[["Stückzahlen","Für Stückzahlen gilt praktisch x∈ℕ₀."],["Nicht runden ohne Deutung","Die mathematische Lösung bleibt 73,4. Erst die praktische Aussage lautet: ab 74 Stück positiver Gewinn."],["Wichtig","Mathematische Lösung und praktische Interpretation sind zwei verschiedene Aussagen."]],
  table:null, calc:"domain"
 },
-{path:"workshop",id:"own",title:"Eigene Funktion ausprobieren",tabs:["task","language","table","explain"],
- vars:{m:2,b:1,x:2}, active:"m", ranges:{x:[-6,6],y:[-42,42]},
- controls:["m","b","x"],
- taskMath:"Gib eine eigene lineare Funktion ein oder verändere die Regler. Beobachte gleichzeitig Term, Graph und Wertetabelle.",
- taskApp:"Die Funktionswerkstatt arbeitet bewusst innermathematisch.",
- hypothesis:"Wenn ich im Term nur m verändere, ändert sich die Steigung des Graphen.",
- options:["Stimmt","Stimmt nicht","Unsicher"],correct:"Stimmt",
- experimentMath:"Probiere zum Beispiel f(x)=-3x+4, f(x)=0,5x-2 oder f(x)=5. Sperre einzelne Größen, wenn du sie konstant halten möchtest.",
- experimentApp:"Nutze für Kosten und Erlös den Lernpfad Kosten · Erlös · Gewinn.",
- words:["f von x","Funktionswert","Steigung m","y-Achsenabschnitt b","Wertetabelle"],
- starter:"Ich verändere ___ und beobachte, dass …",
- structure:"Mein Term lautet f(x)=___. Die Steigung ist m=___ und der y-Achsenabschnitt ist b=___.",
- modelMath:"Term, Regler, Graph und Wertetabelle beschreiben dieselbe lineare Funktion. Ändert sich m oder b, verändern sich die anderen Darstellungen passend mit.",
- modelApp:"Die Funktionswerkstatt ist für den innermathematischen Blick gedacht.",
- explainMath:[["Lesart","f(x) spricht man „f von x“. f(x) ist der Funktionswert an der Stelle x."],["Form","Eine lineare Funktion kann als f(x)=mx+b geschrieben werden."],["Darstellungen","Term, Parameter, Graph und Wertetabelle zeigen denselben Zusammenhang auf verschiedene Arten."]],
- explainApp:[["Hinweis","Für Sachkontexte nutze den Lernpfad Kosten · Erlös · Gewinn."]],
- table:"point", calc:null
-},
 {path:"practice",id:"practice_basics",title:"Grundlagen üben",tabs:["task"],practiceSet:"basics",practiceOnly:true,
  vars:{m:2,b:3,x:2},active:"x",ranges:{x:[-6,6],y:[-12,14]},controls:[],words:[],structure:"",modelMath:"",modelApp:"",explainMath:[],explainApp:[]
 },
@@ -1210,7 +1182,7 @@ modules.forEach(m=>{
     const pos=m.tabs.indexOf("explain");
     m.tabs.splice(pos>=0?pos:m.tabs.length,0,"table");
   }
-  if(["basics","compare","workshop"].includes(m.path)) m.ranges={x:[-6,6],y:[-42,42]};
+  if(["basics","compare"].includes(m.path)) m.ranges={x:[-6,6],y:[-42,42]};
   // K, E und G werden im Anwendungspfad gemeinsam dargestellt; G startet bei -K<sub>f</sub>.
   if(m.path==="business") m.ranges={x:[0,150],y:[-650,2500]};
 });
@@ -1227,7 +1199,6 @@ function listPathModules(path){
   basics:["point","slope","intercept","zero","proportional"],
   compare:["compare","parallel","intersection","difference"],
   business:["costrevenue","profitdiff","profitfunc","breakeven","domain"],
-  workshop:["own"],
   practice:["practice_basics","practice_compare","practice_business","practice_mixed"]
  };
  const arr=modules.filter(m=>m.path===path);
@@ -1616,26 +1587,6 @@ function linearTermText(){
  if(!mx) return fmt(b);
  return `${mx} ${b>=0?"+":"−"} ${fmt(Math.abs(b))}`;
 }
-function syncWorkshopInput(){
- if(currentModule().id!=="own") return;
- const input=$("termInput");
- if(input) input.value=`f(x) = ${linearTermText()}`;
- const status=$("termStatus");
- if(status){status.textContent=`Erkannt: m = ${fmt(state.values.m)}, b = ${fmt(state.values.b)}`;status.className="term-status good";}
-}
-function parseLinearTerm(raw){
- let t=String(raw||"").trim().toLowerCase().replace(/,/g,".").replace(/\s+/g,"").replace(/·|\*/g,"");
- t=t.replace(/^f\(x\)=/,"").replace(/^y=/,"");
- if(!t) return null;
- if(/^[-+]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(t)) return {m:0,b:Number(t)};
- const hit=t.match(/^([+-]?(?:(?:\d+(?:\.\d+)?)|(?:\.\d+))?)x(?:([+-](?:\d+(?:\.\d+)?|\.\d+)))?$/);
- if(!hit) return null;
- let a=hit[1];
- let m=a===""||a==="+"?1:a==="-"?-1:Number(a);
- let b=hit[2]?Number(hit[2]):0;
- if(!Number.isFinite(m)||!Number.isFinite(b)||m < -5||m > 5||b < -10||b > 10) return {rangeError:true,m,b};
- return {m,b};
-}
 
 let sliderFrame=0;
 let pendingSliderNames=new Set();
@@ -1685,7 +1636,6 @@ function renderControls(){
    input.addEventListener("input",e=>{
      state.values[name]=+e.target.value;
      div.querySelector(".value").textContent=displayValue(name,state.values[name]);
-     syncWorkshopInput();
      scheduleSliderFrame(name);
    });
    input.addEventListener("change",()=>{
@@ -1837,36 +1787,6 @@ function explainBlocks(m){return m.id==="domain"&&state.mode==="app"?domainCopy(
 
 function renderTask(){
  const m=currentModule(),sel=state.hypotheses[key()]||"";
- if(m.id==="own"){
-   $("view-task").innerHTML=`
-   <div class="kicker">Funktionswerkstatt</div><h2>${m.title}</h2>
-   <div class="cardbox"><strong>Eigene lineare Funktion</strong>
-     <div class="term-editor">
-       <label for="termInput">Funktion eingeben</label>
-       <div class="term-row"><input id="termInput" class="term-input" value="f(x) = ${linearTermText()}" inputmode="text" autocomplete="off" spellcheck="false"></div>
-       <div class="mini">Beispiele: f(x)=-3x+4 · f(x)=0,5x-2 · f(x)=5. Zulässig sind hier m von −5 bis +5 und b von −10 bis +10.</div>
-       <div id="termStatus" class="term-status good">Erkannt: m = ${fmt(state.values.m)}, b = ${fmt(state.values.b)}</div>
-     </div>
-   </div>
-   <div class="cardbox"><strong>Untersuche</strong>${m.experimentMath}</div>
-   <div class="cardbox"><strong>Beobachtung formulieren</strong>
-     <textarea id="studentText" placeholder="Was verändert sich am Graphen und in der Tabelle?">${state.responses[key()]||""}</textarea>
-     <button class="btn small" id="markDone" style="margin-top:7px">Beobachtung festhalten</button>
-     <div class="feedback" id="doneFeedback">${state.completed.has(key())?"✓ Modul bearbeitet":""}</div>
-   </div>`;
-   const inp=$("termInput"), status=$("termStatus");
-   inp.addEventListener("input",()=>{
-     const parsed=parseLinearTerm(inp.value);
-     if(!parsed){status.textContent='Noch nicht erkannt. Nutze z. B. f(x)=-3x+4.';status.className="term-status bad";return;}
-     if(parsed.rangeError){status.textContent='Der Term ist linear, liegt aber außerhalb der Werkstatt-Bereiche: m −5…+5, b −10…+10.';status.className="term-status bad";return;}
-     state.values.m=parsed.m;state.values.b=parsed.b;
-     status.textContent=`Erkannt: m = ${fmt(parsed.m)}, b = ${fmt(parsed.b)}`;status.className="term-status good";
-     renderControls();renderFormulas();renderTable();renderCalc();renderCenter();
-   });
-   $("studentText").addEventListener("input",e=>state.responses[key()]=e.target.value);
-   $("markDone").addEventListener("click",()=>{state.responses[key()]=$("studentText").value;if(state.responses[key()].trim())state.completed.add(key());renderTask();renderMenu();});
-   return;
- }
  $("view-task").innerHTML=`
  <div class="kicker">Forscherauftrag</div><h2>${m.title}</h2>
  <div class="cardbox"><strong>Auftrag</strong>${taskText(m)}</div>
@@ -1900,31 +1820,6 @@ const languageExtensions={
  profitfunc:{defs:[["Gewinnfunktion G(x)","Ordnet jeder Menge x den Gewinn oder Verlust zu."],["Gewinnsteigerung p−kᵥ","Zunahme des Gewinns pro zusätzlicher Mengeneinheit."],["G(0)=−K<sub>f</sub>","Ohne Verkauf entsprechen die Fixkosten einem anfänglichen Verlust."]],tip:"Nutze konsequent G(x): Die Gewinnfunktion ordnet jeder Menge x einen Gewinn oder Verlust zu. Deute anschließend Steigung und Startwert im Sachkontext.",explain:"Die Gewinnfunktion entsteht durch Subtraktion der gesamten Kostenfunktion von der Erlösfunktion."},
  breakeven:{defs:[["Gewinnschwelle","Menge, bei der E(x)=K(x) gilt."],["Schnittpunkt von E(x) und K(x)","Graphische Sicht auf die Gewinnschwelle."],["Nullstelle von G(x)","Bei derselben Menge gilt G(x)=0."],["gleicher x-Wert","Verbindet Schnittpunkt und Nullstelle mathematisch."]],tip:"Nutze bewusst beide Sichtweisen und den Index: An x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und gleichzeitig G(x<sub>GS</sub>)=0.",explain:"Die Gewinnschwelle verknüpft zwei Darstellungen: Schnittpunkt von Kosten und Erlös sowie Nullstelle der Gewinnfunktion."},
  domain:{defs:[["Sachbereich","Alle x-Werte, die in der realen Situation sinnvoll sind."],["ganzzahlig","Bei Stückzahlen sind meist nur ganze Zahlen sinnvoll."],["mathematische Lösung","Kann zwischen zwei ganzen Stückzahlen liegen."],["praktische Mindestmenge","Erste ganze Menge, bei der tatsächlich positiver Gewinn entsteht."]],tip:"Unterscheide mathematische Lösung und praktische Interpretation im Sachkontext.",explain:"Eine mathematische Lösung muss zum Sachbereich und zur verwendeten Einheit passen, bevor sie im Sachkontext gedeutet wird."},
- own:{defs:[["Funktionsterm","Rechenvorschrift, z. B. f(x)=−3x+4."],["Parameter m","Bestimmt die Steigung."],["Parameter b","Bestimmt den Achsenabschnitt f(0)."],["Darstellungswechsel","Term, Graph und Wertetabelle zeigen dieselbe Funktion."]],tip:"Beschreibe nach einer Änderung immer, welcher Parameter verändert wurde und was sich am Graphen verändert.",explain:"Die Funktionswerkstatt verbindet symbolische, graphische und tabellarische Darstellung einer linearen Funktion."}
-};
-function languageExtension(m){
- if(m.id==="domain"&&state.mode==="app"){
-   const d=domainCopy(); return {defs:d.defs,tip:d.tip,explain:d.langExplain};
- }
- return languageExtensions[m.id]||{defs:[],tip:"",explain:""};
-}
-
-const sensitiveLanguage={
- point:{starters:["Für x = … gilt f(…) = … .","Der Funktionswert an der Stelle … ist … .","Der zugehörige Punkt lautet P(…|…)."],goal:"Ich kann zu einer Stelle x den Funktionswert f(x) bestimmen und den zugehörigen Punkt P(x|f(x)) angeben.",extra:[["Sprechen und schreiben","f(3) liest man „f von 3“. Die Zahl 3 ist die Stelle; f(3) ist der zugehörige Funktionswert."],["Darstellungen verbinden","Stelle x, Funktionswert f(x) und Punkt P(x|f(x)) gehören immer zusammen."]]},
- intercept:{starters:["Für den Schnittpunkt mit der y-Achse gilt x=0.","Setze ich x=0 ein, erhalte ich f(0)=… .","Der Schnittpunkt mit der y-Achse lautet S<sub>y</sub>(0|…).","Wenn nur b verändert wird, bleibt die Steigung … ."],goal:"Ich kann die Bedingung x=0 für den Schnittpunkt mit der y-Achse erklären, f(0) bestimmen und den Punkt S<sub>y</sub>(0|f(0)) angeben.",extra:[["Bedingung zuerst","Ein Punkt liegt auf der y-Achse, wenn x=0 gilt."],["Term und Punkt verbinden","Bei f(x)=mx+b ist f(0)=b. Deshalb lautet der Achsenschnittpunkt S<sub>y</sub>(0|b)."],["Veränderung beschreiben","Wenn nur b verändert wird, bleibt m gleich und der Graph verschiebt sich parallel."]]},
- slope:{starters:["Wenn x um … zunimmt, verändert sich f(x) um … .","Die Steigung m = … bedeutet: … .","Da m … 0 ist, verläuft der Graph … ."],goal:"Ich kann die Steigung m als Änderung des Funktionswertes pro Änderung von x beschreiben und das Vorzeichen von m deuten.",extra:[["Steigung lesen","m>0 bedeutet steigend, m<0 bedeutet fallend und m=0 bedeutet waagerecht."],["Änderungsrate","Die Steigung beschreibt nicht einen einzelnen Punkt, sondern eine konstante Änderung entlang der gesamten Geraden."]]},
- proportional:{starters:["Die Funktion ist proportional, weil b=0 gilt.","Aus b=0 folgt f(0)=0.","Deshalb verläuft der Graph durch den Ursprung O(0|0).","Bei b≠0 ist die Funktion nicht proportional."],goal:"Ich kann die Bedingung b=0 beziehungsweise f(0)=0 nutzen, um zu begründen, ob eine lineare Funktion proportional ist.",extra:[["Gleichwertige Kennzeichen","b=0, f(0)=0 und der Verlauf durch O(0|0) beschreiben denselben Sachverhalt."],["Nicht jede lineare Funktion ist proportional","f(x)=mx+b ist nur im Spezialfall b=0 proportional."]]},
- zero:{starters:["Für eine Nullstelle setzt man zuerst f(x)=0.","Ich löse die Gleichung f(x)=0 und erhalte x<sub>N</sub>=… .","Der Nullstellenpunkt lautet N(x<sub>N</sub>|0).","Der Graph schneidet die x-Achse, weil der Funktionswert dort 0 ist."],goal:"Ich kann die Bedingung f(x)=0 nutzen, die Nullstelle x<sub>N</sub> bestimmen und sie vom Nullstellenpunkt N(x<sub>N</sub>|0) unterscheiden.",extra:[["Bedingung zuerst","Auf der x-Achse ist der Funktionswert 0. Deshalb setzt man f(x)=0."],["Nullstelle oder Punkt?","x<sub>N</sub> ist ein x-Wert; N(x<sub>N</sub>|0) ist ein Punkt mit zwei Koordinaten."],["Nicht verwechseln","Beim y-Achsenabschnitt setzt man x=0; bei der Nullstelle setzt man f(x)=0."]]},
- compare:{starters:["An der Stelle x = … gilt f(x) = … und g(x) = … .","Damit ist f(x) … als g(x).","Für den Vergleich betrachte ich beide Funktionen bei demselben x-Wert."],goal:"Ich kann die Funktionswerte f(x) und g(x) an derselben Stelle x vergleichen und meine Aussage mit den Funktionswerten begründen.",extra:[["Gleiche Stelle","Ein Vergleich ist nur eindeutig, wenn f(x) und g(x) zur selben Stelle x gehören."],["Nicht verwechseln","Eine größere Steigung bedeutet nicht automatisch, dass der Funktionswert an jeder Stelle größer ist."]]},
- parallel:{starters:["Für parallele Geraden gilt m₁=m₂ und b₁≠b₂.","Für identische Geraden gilt m₁=m₂ und b₁=b₂.","Da m₁ … m₂ gilt, besitzen die Geraden … ."],goal:"Ich kann die Bedingungen für parallele, identische und sich schneidende Geraden mithilfe von Steigung und y-Achsenabschnitt unterscheiden.",extra:[["Bedingung parallel","m₁=m₂ und b₁≠b₂."],["Bedingung identisch","m₁=m₂ und b₁=b₂."],["Bedingung Schnittpunkt","Bei m₁≠m₂ besitzen zwei lineare Funktionen genau einen Schnittpunkt."]]},
- intersection:{starters:["Am Schnittpunkt gilt f(x<sub>S</sub>)=g(x<sub>S</sub>).","Durch Gleichsetzen bestimme ich zuerst x<sub>S</sub>=… .","Bei x<sub>S</sub> besitzen beide Funktionen den Funktionswert … .","Der Schnittpunkt lautet S(x<sub>S</sub>|…)."],goal:"Ich kann die Bedingung f(x<sub>S</sub>)=g(x<sub>S</sub>) nutzen, zuerst die Schnittpunktstelle x<sub>S</sub> und danach den gemeinsamen Funktionswert bestimmen.",extra:[["Warum gleichsetzen?","Am Schnittpunkt haben beide Graphen bei derselben Stelle x<sub>S</sub> denselben Funktionswert."],["Reihenfolge","Zuerst x<sub>S</sub> durch Gleichsetzen bestimmen, danach x<sub>S</sub> in f oder g einsetzen."],["Punkt angeben","Der Schnittpunkt kann als S(x<sub>S</sub>|f(x<sub>S</sub>)) geschrieben werden."]]},
- difference:{starters:["An der Stelle x = … gilt g(x)−f(x) = … .","Die Differenz ist positiv/negativ, deshalb liegt … höher.","Der Betrag der Differenz beträgt … ."],goal:"Ich kann die Differenz g(x)−f(x) verwenden, um zwei Funktionswerte an derselben Stelle zu vergleichen.",extra:[["Vorzeichen","Das Vorzeichen zeigt, welcher Funktionswert größer ist."],["Betrag","Der Betrag |g(x)−f(x)| beschreibt den vertikalen Abstand der beiden Graphen an derselben Stelle."]]},
- costrevenue:{starters:["Bei der Menge x = … gilt K(x) = … und E(x) = … .","Der Gewinn beträgt G(x)=E(x)−K(x)=… .","Die Einheit von K(x), E(x) und G(x) ist … ."],goal:"Ich kann für dieselbe Menge x die Gesamtkosten K(x), den Erlös E(x) und den Gewinn oder Verlust G(x) bestimmen und sachgerecht deuten.",extra:[["Funktionssprache","Sprich vollständig: K(x) „K von x“, E(x) „E von x“ und G(x) „G von x“. Alle drei Werte beziehen sich auf dieselbe Menge x."],["Drei Größen","K(x) sind die Gesamtkosten, E(x) ist der Erlös und G(x)=E(x)−K(x) ist der Gewinn beziehungsweise Verlust."]]},
- profitdiff:{starters:["Bei x = … gilt E(x) = … und K(x) = … .","Da E(x) größer/kleiner als K(x) ist, gilt G(x) … 0.","G(x)=E(x)−K(x)=… ."],goal:"Ich kann Gewinn und Verlust als Differenz G(x)=E(x)−K(x) erklären und mit E(x) und K(x) begründen.",extra:[["Gewinn oder Verlust","E(x)>K(x) bedeutet Gewinn; E(x)<K(x) bedeutet Verlust; E(x)=K(x) bedeutet weder Gewinn noch Verlust."],["Gleiche Menge","E(x) und K(x) müssen sich immer auf dieselbe Menge x beziehen."]]},
- profitfunc:{starters:["Aus E(x)=… und K(x)=… folgt G(x)=E(x)−K(x)=… .","Für den y-Achsenabschnitt setze ich x=0 und erhalte G(0)=… .","Für die Gewinnschwelle gilt G(x<sub>GS</sub>)=0.","Pro zusätzlicher Mengeneinheit verändert sich G(x) um … ."],goal:"Ich kann G(x)=E(x)−K(x) herleiten, mit x=0 den y-Achsenabschnitt bestimmen und mit G(x<sub>GS</sub>)=0 die Bedingung für die Gewinnschwelle angeben.",extra:[["Startwert","Bedingung x=0: Bei positiven Fixkosten gilt G(0)=−K<sub>f</sub><0."],["Nullstelle","Bedingung G(x<sub>GS</sub>)=0: Dort liegt die Gewinnschwelle."],["Steigung der Gewinnfunktion","Die Steigung p−kᵥ zeigt, wie sich G(x) pro zusätzlicher Mengeneinheit verändert."]]},
- breakeven:{starters:["Bedingung am Schnittpunkt: E(x<sub>GS</sub>)=K(x<sub>GS</sub>).","Bedingung an der Nullstelle der Gewinnfunktion: G(x<sub>GS</sub>)=0.","Beide Bedingungen beziehen sich auf dieselbe Menge x<sub>GS</sub>.","Eine positive Gewinnschwelle existiert nur, wenn … ."],goal:"Ich kann die Gewinnschwelle x<sub>GS</sub> mit den beiden gleichwertigen Bedingungen E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und G(x<sub>GS</sub>)=0 erklären.",extra:[["Zwei Bedingungen – eine Menge","Schnittpunkt von E(x) und K(x) und Nullstelle von G(x) besitzen denselben x-Wert x<sub>GS</sub>."],["Fachsprachlich vollständig","Schreibe E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und nicht nur E=K."],["Existenz","Bei positiven Fixkosten muss p>kᵥ gelten, damit E(x) K(x) im positiven Sachbereich erreichen kann."]]},
- domain:{starters:["Im Sachbereich darf x nur … sein.","Die mathematische Gewinnschwelle liegt bei x<sub>GS</sub> = … .","Für ganze Stückzahlen bedeutet das praktisch: … ."],goal:"Ich kann eine mathematische Lösung an den Sachbereich und die verwendete Mengeneinheit anpassen und zwischen rechnerischer Lösung und praktischer Deutung unterscheiden.",extra:[["Sachbereich","Nicht jeder mathematisch mögliche x-Wert ist im Sachkontext sinnvoll."],["Einheit beachten","Bei Stückzahlen sind meist ganze Zahlen nötig; bei kg oder m können auch Dezimalwerte sinnvoll sein."]]},
- own:{starters:["Im Term f(x)=mx+b ist m = … und b = … .","Wenn ich m verändere, dann … .","Wenn ich b verändere, dann … ."],goal:"Ich kann einen linearen Funktionsterm eingeben und die Zusammenhänge zwischen Term, Parametern, Graph und Wertetabelle beschreiben.",extra:[["Vier Darstellungen","Term, Parameter, Graph und Wertetabelle beschreiben dieselbe lineare Funktion."],["Gezielt verändern","Verändere möglichst nur einen Parameter und beschreibe anschließend genau dessen Wirkung."]]}
 };
 function sensitiveFor(m){
  if(m.id==="domain"&&state.mode==="app"){
@@ -2071,12 +1966,6 @@ function languagePracticeFor(m){
     step("Begründen","Deutung begründen","Warum muss man mathematische Lösung und praktische Interpretation unterscheiden?",[choice("Weil der Anwendungskontext nicht jeden mathematisch möglichen x-Wert zulassen muss.",true),choice("Weil lineare Funktionen nur ganze Zahlen erlauben."),choice("Weil Einheiten die Gleichung verändern.")])
    ];
   }
-  case "own": return [
-   step("Beobachten","Parameter gezielt verändern","Was passiert typischerweise, wenn nur m verändert wird?",[choice("Die Steigung des Graphen verändert sich.",true),choice("Nur der y-Achsenabschnitt verändert sich."),choice("Der Funktionsterm bleibt unverändert.")]),
-   step("Benennen","Parameter unterscheiden","Welche Zuordnung ist korrekt?",[choice("m: Steigung · b: y-Achsenabschnitt",true),choice("m: y-Achsenabschnitt · b: Steigung"),choice("m und b sind Punktkoordinaten.")]),
-   step("Sag es genauer","Beobachtung präzisieren","Welche Aussage verbindet Term und Graph?",[choice("Wenn ich etwas am Term ändere, sieht der Graph anders aus."),choice("Verändere ich bei f(x)=mx+b nur m, ändert sich die Steigung; verändere ich nur b, verschiebt sich der y-Achsenabschnitt.",true),choice("m und b wirken immer gleich auf den Graphen.")]),
-   step("Begründen","Darstellungen verbinden","Warum ändern sich Graph und Wertetabelle zusammen mit dem Term?",[choice("Weil Term, Graph und Wertetabelle dieselbe Funktion in verschiedenen Darstellungen beschreiben.",true),choice("Weil jede Tabelle denselben Graphen hat."),choice("Weil nur der Browser die Werte verschiebt.")])
-  ];
  }
  return [];
 }
@@ -2641,7 +2530,6 @@ function renderCenter(){
 
 function insightText(){
  const m=currentModule(),v=state.values;
- if(m.id==="own")return `Aktuell: f(x)=${linearTermText()}. Steigung m=${fmt(v.m)}, y-Achsenabschnitt b=${fmt(v.b)}.`;
  if(m.id==="point"){const y=state.mode==="app"?K(v.x):fx(v.x);return `${state.mode==="app"?"K":"f"}(${fmt(v.x)})=${fmt(y)}. Der zugehörige Punkt ist P(${fmt(v.x)}|${fmt(y)}).`;}
  if(m.id==="intercept")return state.mode==="app"?`Bedingung: x=0. K(0)=${fmt(v.b)}. Schnittpunkt: S<sub>y</sub>(0|${fmt(v.b)}).`:`Bedingung: x=0. f(0)=${fmt(v.b)}. Schnittpunkt: S<sub>y</sub>(0|${fmt(v.b)}).`;
  if(m.id==="slope")return `Für P<sub>1</sub>(x<sub>1</sub>|f(x<sub>1</sub>)) und P<sub>2</sub>(x<sub>2</sub>|f(x<sub>2</sub>)) gilt m=<span class='math-frac'><span class='num'>f(x<sub>2</sub>)−f(x<sub>1</sub>)</span><span class='den'>x<sub>2</sub>−x<sub>1</sub></span></span>. Im eingezeichneten Steigungsdreieck ist Δx=2 und Δf(x)=${fmt(v.m*2)}; damit ist m=${fmt(v.m)}.`;
