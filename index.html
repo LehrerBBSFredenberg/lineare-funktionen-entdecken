@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V31 · Wahl zwischen eigener Erklärung, weiterer Erklärung und Video. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V32 · Eigene Erklärungen auf Mobilgeräten wiederhergestellt. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -1843,11 +1843,15 @@ const languageExtensions={
  breakeven:{defs:[["Gewinnschwelle","Menge, bei der E(x)=K(x) gilt."],["Schnittpunkt von E(x) und K(x)","Graphische Sicht auf die Gewinnschwelle."],["Nullstelle von G(x)","Bei derselben Menge gilt G(x)=0."],["gleicher x-Wert","Verbindet Schnittpunkt und Nullstelle mathematisch."]],tip:"Nutze bewusst beide Sichtweisen und den Index: An x<sub>GS</sub> gilt E(x<sub>GS</sub>)=K(x<sub>GS</sub>) und gleichzeitig G(x<sub>GS</sub>)=0.",explain:"Die Gewinnschwelle verknüpft zwei Darstellungen: Schnittpunkt von Kosten und Erlös sowie Nullstelle der Gewinnfunktion."},
  domain:{defs:[["Sachbereich","Alle x-Werte, die in der realen Situation sinnvoll sind."],["ganzzahlig","Bei Stückzahlen sind meist nur ganze Zahlen sinnvoll."],["mathematische Lösung","Kann zwischen zwei ganzen Stückzahlen liegen."],["praktische Mindestmenge","Erste ganze Menge, bei der tatsächlich positiver Gewinn entsteht."]],tip:"Unterscheide mathematische Lösung und praktische Interpretation im Sachkontext.",explain:"Eine mathematische Lösung muss zum Sachbereich und zur verwendeten Einheit passen, bevor sie im Sachkontext gedeutet wird."},
 };
+function languageExtension(m){
+ const ext=languageExtensions[m.id];
+ return ext||{defs:[],tip:"",explain:""};
+}
 function sensitiveFor(m){
  if(m.id==="domain"&&state.mode==="app"){
    const d=domainCopy(); return {starters:d.starters,goal:d.goal,extra:d.extra};
  }
- return sensitiveLanguage[m.id]||{starters:[m.starter],goal:modelText(m),extra:[]};
+ return {starters:m.starter?[m.starter]:[],goal:modelText(m)||"",extra:[]};
 }
 
 
