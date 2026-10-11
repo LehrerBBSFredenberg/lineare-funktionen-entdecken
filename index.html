@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V32 · Eigene Erklärungen auf Mobilgeräten wiederhergestellt. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V33 · Defekte Cornelsen-Videoverweise durch geprüfte Serlo-Videoangebote ersetzt. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -2094,13 +2094,14 @@ function renderTable(){
 }
 function externalAidsFor(m){
  const common={
-  cornelsenVideo:{type:"link",role:"video",title:"Erklärvideos zu linearen Funktionen",source:"Cornelsen",desc:"Externe Lernvideos zu Graph, Steigung, Funktionsgleichung und Nullstelle.",url:"https://www.cornelsen.de/empfehlungen/lernvideos/mathematik/mittlere-schulformen/funktionen"},
+  serloSlopeVideo:{type:"link",role:"video",title:"Lineare Funktionen zeichnen und ablesen",source:"Serlo · Video",desc:"Videoerklärung zu Steigung, y-Achsenabschnitt und dem Zeichnen bzw. Ablesen linearer Funktionen.",url:"https://de.serlo.org/mathe/87089/lineare-funktionen-zeichnen-und-ablesen"},
   serloZero:{type:"link",role:"explanation",title:"Funktionsgleichung und Nullstelle",source:"Serlo",desc:"Weitere Erklärung mit Aufgaben zur Nullstelle einer linearen Funktion.",url:"https://de.serlo.org/mathe/82417/funktionsgleichung-nullstelle-einer-linearen-funktion"},
+  serloZeroVideo:{type:"link",role:"video",title:"Nullstellen bei linearen Funktionen",source:"Serlo · Video",desc:"Videoerklärung zur Bedeutung und Berechnung der Nullstelle einer linearen Funktion.",url:"https://de.serlo.org/mathe/92618/lineare-funktionen-nullstellen-berechnen-was-sind-nullstellen-zusammenfassung-teil-3"},
   serloIntersect:{type:"link",role:"explanation",title:"Nullstellen und Schnittpunkte üben",source:"Serlo",desc:"Weitere Erklärung und Aufgaben mit Strategien zu Schnittpunkten linearer Funktionen.",url:"https://de.serlo.org/mathe/26396/aufgaben-zu-linearen-funktionen-nullstellen-achsenschnittpunkten-ua"},
   businessVideo:{type:"youtube",role:"video",title:"Erlös – Kosten – Gewinn",source:"Keine Angst vor Mathe · YouTube",desc:"Zusätzliche Videoerklärung zur wirtschaftlichen Anwendung linearer Funktionen.",videoId:"RUiY8Owk2O8"}
  };
- if(m.id==="slope"||m.id==="intercept")return [common.cornelsenVideo];
- if(m.id==="zero")return [common.serloZero,common.cornelsenVideo];
+ if(m.id==="slope"||m.id==="intercept")return [common.serloSlopeVideo];
+ if(m.id==="zero")return [common.serloZero,common.serloZeroVideo];
  if(m.id==="intersection")return [common.serloIntersect];
  if(["costrevenue","profitdiff","profitfunc","breakeven"].includes(m.id))return [common.businessVideo];
  return [];
