@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V33 · Defekte Cornelsen-Videoverweise durch geprüfte Serlo-Videoangebote ersetzt. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V34 · Android-Zurücktaste und Browser-History hierarchisch integriert. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -1457,19 +1457,30 @@ function setDefaults(){
 function pathIndexByModuleId(path,id){
  const arr=listPathModules(path); return Math.max(0,arr.findIndex(m=>m.id===id));
 }
-function updateUrl(){
- // Beim lokalen Testen auf Android (file://) darf die Navigation nicht an history.replaceState scheitern.
- // URL-Parameter werden deshalb nur auf einer echten Webadresse aktualisiert.
- if(location.protocol!=="http:" && location.protocol!=="https:") return;
+const HISTORY_KEY="mathematikLernweltV34";
+function historyAvailable(){return location.protocol==="http:"||location.protocol==="https:";}
+function cleanAppUrl(){
+ const u=new URL(location.href);u.searchParams.delete("pfad");u.searchParams.delete("modul");return u;
+}
+function moduleAppUrl(path=state.path,id=currentModule().id){
+ const u=cleanAppUrl();u.searchParams.set("pfad",path);u.searchParams.set("modul",id);return u;
+}
+function appHistoryState(screen,extra={}){return {[HISTORY_KEY]:true,screen,...extra};}
+function writeAppHistory(screen,mode="replace",extra={}){
+ if(!historyAvailable()) return;
  try{
-   const m=currentModule();
-   const u=new URL(location.href);
-   u.searchParams.set("pfad",state.path);
-   u.searchParams.set("modul",m.id);
-   history.replaceState(null,"",u);
+   const payload=appHistoryState(screen,extra);
+   const url=screen==="module"?moduleAppUrl(extra.path,extra.id):cleanAppUrl();
+   if(mode==="push") history.pushState(payload,"",url);
+   else history.replaceState(payload,"",url);
  }catch(err){
-   // Navigation muss auch dann weiterlaufen, wenn der Browser URL-Änderungen blockiert.
+   // Die Navigation selbst darf niemals an der History-API scheitern.
  }
+}
+function updateUrl(){
+ // Modulwechsel innerhalb derselben Lernansicht erzeugen keinen neuen Zurück-Schritt.
+ const m=currentModule();
+ writeAppHistory("module","replace",{path:state.path,id:m.id,view:state.view});
 }
 function readUrl(){
  try{
@@ -2128,7 +2139,7 @@ function activateExternalAidButtons(root=document){
    });
  });
 }
-function openLearningMedia(spec){
+function openLearningMedia(spec,options={}){
  const [path,id]=String(spec||"").split(":");
  const m=modules.find(x=>x.path===path&&x.id===id);
  if(!m)return;
@@ -2146,8 +2157,9 @@ function openLearningMedia(spec){
  const noExtra=!aids.length?`<div class="media-dialog-note">Für dieses Thema ist aktuell kein zusätzliches externes Angebot hinterlegt. Die eigene Erklärung bleibt direkt verfügbar.</div>`:"";
  body.innerHTML=`<p class="media-dialog-intro"><strong>${m.title}</strong>: Wähle nur den Erklärweg, der dir gerade hilft. Nicht jedes Thema braucht zusätzlich ein Video.</p>${noExtra}<div class="media-choice-grid">${own}${further}${videos}</div><div class="media-dialog-actions"><button class="btn" type="button" data-media-close>Zur Themenübersicht zurück</button></div>`;
  modal.hidden=false;document.body.style.overflow="hidden";
+ if(options.historyMode!=="none") writeAppHistory("modal",options.historyMode||"push",{modalType:"media",spec});
  activateExternalAidButtons(body);
- body.querySelector("[data-media-open-module]")?.addEventListener("click",()=>{closePortalModal();openLinearModule(spec,"explain",{scrollTarget:"explain"});});
+ body.querySelector("[data-media-open-module]")?.addEventListener("click",()=>{hidePortalModal();openLinearModule(spec,"explain",{scrollTarget:"explain",historyMode:"replace"});});
  body.querySelector("[data-media-close]")?.addEventListener("click",closePortalModal);
  requestAnimationFrame(()=>document.getElementById("portalModalClose")?.focus());
 }
@@ -2664,7 +2676,7 @@ document.querySelectorAll(".path-btn").forEach(b=>{
  });
 });
 $("menuBtn").addEventListener("click",()=>$("moduleMenu").classList.toggle("open"));
-$("overviewBtn").addEventListener("click",()=>showLinearOverview());
+$("overviewBtn").addEventListener("click",()=>showLinearOverview({historyMode:"replace"}));
 $("resetBtn").addEventListener("click",()=>{if(currentModule().path==="practice")resetPracticeSession();setDefaults();renderAll();});
 $("previousBtn").addEventListener("click",()=>{if(currentModule().path==="business")return;state.showPrevious=!state.showPrevious;renderCenter();});
 function resetManipulationScroll(){const panel=document.querySelector(".left");if(panel)panel.scrollTop=0;}
@@ -2704,29 +2716,35 @@ $("focusGraphBtn").addEventListener("click",()=>setGraphFocus(!graphFocus));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&graphFocus)setGraphFocus(false);});
 
 
-function showPortal(){
+function showPortal(options={}){
  document.title="Mathematik-Lernwelt";
+ hidePortalModal();
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
  if(portal)portal.hidden=false;if(overview)overview.hidden=true;if(linear)linear.hidden=true;
  document.body.classList.remove("graph-focus");window.scrollTo({top:0,behavior:"smooth"});
+ if(options.historyMode!=="none") writeAppHistory("portal",options.historyMode||"push");
 }
-function showLinearOverview(){
+function showLinearOverview(options={}){
  document.title="Lineare Funktionen | Mathematik-Lernwelt";
+ hidePortalModal();
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
  if(portal)portal.hidden=true;if(overview)overview.hidden=false;if(linear)linear.hidden=true;
  const ss=document.getElementById("startScreen");if(ss)ss.classList.remove("open");
  document.body.classList.remove("graph-focus");window.scrollTo({top:0,behavior:"smooth"});
+ if(options.historyMode!=="none") writeAppHistory("overview",options.historyMode||"push");
 }
-function openLinearExperience(){showLinearOverview();}
+function openLinearExperience(){showLinearOverview({historyMode:"push"});}
 function openLinearModule(spec,view="task",options={}){
  const [path,id]=String(spec||"").split(":");
  if(!paths[path])return;
  const idx=pathIndexByModuleId(path,id);if(idx<0)return;
  state.path=path;state.moduleIndex=idx;setDefaults();state.view=currentModule().tabs.includes(view)?view:"task";
+ hidePortalModal();
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
  if(portal)portal.hidden=true;if(overview)overview.hidden=true;if(linear)linear.hidden=false;
  const ss=document.getElementById("startScreen");if(ss)ss.classList.remove("open");
- updateUrl();renderAll();
+ renderAll();
+ if(options.historyMode!=="none") writeAppHistory("module",options.historyMode||"push",{path,id:currentModule().id,view:state.view});
  if(options.scrollTarget==="media"){
    const jumpToMedia=()=>{
      const target=document.getElementById("externalAidBox");
@@ -2739,7 +2757,7 @@ function openLinearModule(spec,view="task",options={}){
    requestAnimationFrame(()=>setTimeout(()=>document.getElementById("view-explain")?.scrollIntoView({block:"start",behavior:"auto"}),80));
  }else window.scrollTo({top:0,behavior:"smooth"});
 }
-function openPortalModal(kind,name=""){
+function openPortalModal(kind,name="",options={}){
  const modal=document.getElementById("portalModal"),title=document.getElementById("portalModalTitle"),body=document.getElementById("portalModalBody"),kicker=document.getElementById("portalModalKicker");if(!modal)return;
  modal.querySelector(".portal-modal-card")?.classList.remove("media-dialog-card");
  kicker.textContent="Information";
@@ -2751,7 +2769,7 @@ function openPortalModal(kind,name=""){
    body.innerHTML=`<p>Dieses Themenfeld gehört zur zukünftigen Mathematik-Lernwelt, ist aber noch nicht freigeschaltet.</p><p>Die Karte bleibt sichtbar, damit die Struktur der Plattform transparent ist und später ohne Umbau erweitert werden kann.</p>`;
  }else if(kind==="privacy"){
    title.textContent="Datenschutz";kicker.textContent="Datensparsame Plattform";
-   body.innerHTML=`<div class="privacy-block"><strong>Keine Analyse- oder Werbetracker</strong>Diese Version bindet keine Analysewerkzeuge, Werbenetzwerke oder externen Schriftarten ein und setzt selbst keine Cookies.</div><div class="privacy-block"><strong>Hosting über GitHub Pages</strong>Beim Aufruf der Seite verarbeitet der Hostinganbieter technisch erforderliche Verbindungsdaten, insbesondere IP-Adressen, um die Website auszuliefern und abzusichern.</div><div class="privacy-block"><strong>Externe Lernseiten</strong>Links zu Serlo, Cornelsen oder anderen Anbietern öffnen deren Website erst nach einem aktiven Klick. Dann gelten die Datenschutzbestimmungen des jeweiligen Anbieters.</div><div class="privacy-block"><strong>YouTube nur nach aktivem Klick</strong>Ein YouTube-Player wird nicht automatisch geladen. Erst nach „Video laden“ wird eine Verbindung zu YouTube hergestellt. Eingebettet wird über den erweiterten Datenschutzmodus von youtube-nocookie.com.</div><div class="privacy-block privacy-warning"><strong>Vor öffentlicher Freigabe ergänzen</strong>Die vollständigen Kontaktdaten der datenschutzrechtlich verantwortlichen Stelle müssen noch festgelegt werden. Kläre dafür, ob Schule/Schulträger oder eine andere Stelle als Betreiber auftritt. Diese Datei enthält bewusst keine erfundenen persönlichen Angaben.</div>`;
+   body.innerHTML=`<div class="privacy-block"><strong>Keine Analyse- oder Werbetracker</strong>Diese Version bindet keine Analysewerkzeuge, Werbenetzwerke oder externen Schriftarten ein und setzt selbst keine Cookies.</div><div class="privacy-block"><strong>Hosting über GitHub Pages</strong>Beim Aufruf der Seite verarbeitet der Hostinganbieter technisch erforderliche Verbindungsdaten, insbesondere IP-Adressen, um die Website auszuliefern und abzusichern.</div><div class="privacy-block"><strong>Externe Lernseiten</strong>Links zu Serlo oder anderen Anbietern öffnen deren Website erst nach einem aktiven Klick. Dann gelten die Datenschutzbestimmungen des jeweiligen Anbieters.</div><div class="privacy-block"><strong>YouTube nur nach aktivem Klick</strong>Ein YouTube-Player wird nicht automatisch geladen. Erst nach „Video laden“ wird eine Verbindung zu YouTube hergestellt. Eingebettet wird über den erweiterten Datenschutzmodus von youtube-nocookie.com.</div><div class="privacy-block privacy-warning"><strong>Vor öffentlicher Freigabe ergänzen</strong>Die vollständigen Kontaktdaten der datenschutzrechtlich verantwortlichen Stelle müssen noch festgelegt werden. Kläre dafür, ob Schule/Schulträger oder eine andere Stelle als Betreiber auftritt. Diese Datei enthält bewusst keine erfundenen persönlichen Angaben.</div>`;
  }else if(kind==="provider"){
    title.textContent="Anbieterinformationen";
    body.innerHTML=`<div class="privacy-block privacy-warning"><strong>Noch zu vervollständigen</strong>Wer die Website offiziell betreibt (z. B. Schule/Schulträger), muss vor der öffentlichen Freigabe verbindlich festgelegt werden. Erst dann können Name, Anschrift, Kontakt und gegebenenfalls weitere Pflichtangaben korrekt eingetragen werden.</div><p>Die technische Plattform soll deshalb keine privaten Kontaktdaten erfinden oder automatisch veröffentlichen.</p>`;
@@ -2763,23 +2781,47 @@ function openPortalModal(kind,name=""){
    body.innerHTML=`<p>Wähle zuerst ein mathematisches Thema. <strong>Verfügbar</strong> öffnet einen Lernbereich. <strong>Im Aufbau</strong> zeigt, was bereits vorbereitet wird. <strong>Geplant</strong> kennzeichnet zukünftige Themen.</p><p>Innerhalb eines Themas führt die Themenübersicht zu konkreten Lernmodulen, Übungen und zusätzlichen Erklärungen.</p>`;
  }
  modal.hidden=false;document.body.style.overflow="hidden";
+ if(options.historyMode!=="none") writeAppHistory("modal",options.historyMode||"push",{modalType:"info",kind,name});
  const first=modal.querySelector("button");if(first)first.focus();
- const go=modal.querySelector("[data-modal-open-linear]");if(go)go.addEventListener("click",()=>{closePortalModal();showLinearOverview();});
+ const go=modal.querySelector("[data-modal-open-linear]");if(go)go.addEventListener("click",()=>{hidePortalModal();showLinearOverview({historyMode:"replace"});});
 }
-function closePortalModal(){const modal=document.getElementById("portalModal");if(modal){modal.hidden=true;modal.querySelector(".portal-modal-card")?.classList.remove("media-dialog-card");}document.body.style.overflow="";}
-document.querySelectorAll("[data-open-topic='linear']").forEach(b=>b.addEventListener("click",showLinearOverview));
-document.querySelectorAll("[data-open-module]").forEach(b=>b.addEventListener("click",()=>openLinearModule(b.dataset.openModule)));
-document.querySelectorAll("[data-open-module-view]").forEach(b=>b.addEventListener("click",()=>{const [p,id,v]=b.dataset.openModuleView.split(":");openLinearModule(`${p}:${id}`,v,{scrollTarget:"explain"});}));
-document.querySelectorAll("[data-open-media]").forEach(b=>b.addEventListener("click",()=>openLearningMedia(b.dataset.openMedia)));
-document.querySelectorAll("[data-linear-overview]").forEach(b=>b.addEventListener("click",showLinearOverview));
-document.querySelectorAll("[data-back-portal]").forEach(b=>b.addEventListener("click",showPortal));
+function hidePortalModal(){const modal=document.getElementById("portalModal");if(modal){modal.hidden=true;modal.querySelector(".portal-modal-card")?.classList.remove("media-dialog-card");}document.body.style.overflow="";}
+function closePortalModal(){
+ if(historyAvailable()&&history.state?.[HISTORY_KEY]&&history.state.screen==="modal"){history.back();return;}
+ hidePortalModal();
+}
+function restoreAppHistoryState(entry){
+ if(!entry||!entry[HISTORY_KEY]) return;
+ if(entry.screen==="portal"){showPortal({historyMode:"none"});return;}
+ if(entry.screen==="overview"){showLinearOverview({historyMode:"none"});return;}
+ if(entry.screen==="module"){
+   openLinearModule(`${entry.path}:${entry.id}`,entry.view||"task",{historyMode:"none"});return;
+ }
+ if(entry.screen==="modal"){
+   if(entry.modalType==="media") openLearningMedia(entry.spec,{historyMode:"none"});
+   else openPortalModal(entry.kind,entry.name||"",{historyMode:"none"});
+ }
+}
+window.addEventListener("popstate",e=>restoreAppHistoryState(e.state));
+document.querySelectorAll("[data-open-topic='linear']").forEach(b=>b.addEventListener("click",()=>showLinearOverview({historyMode:"push"})));
+document.querySelectorAll("[data-open-module]").forEach(b=>b.addEventListener("click",()=>openLinearModule(b.dataset.openModule,"task",{historyMode:"push"})));
+document.querySelectorAll("[data-open-module-view]").forEach(b=>b.addEventListener("click",()=>{const [p,id,v]=b.dataset.openModuleView.split(":");openLinearModule(`${p}:${id}`,v,{scrollTarget:"explain",historyMode:"push"});}));
+document.querySelectorAll("[data-open-media]").forEach(b=>b.addEventListener("click",()=>openLearningMedia(b.dataset.openMedia,{historyMode:"push"})));
+document.querySelectorAll("[data-linear-overview]").forEach(b=>b.addEventListener("click",()=>showLinearOverview({historyMode:"replace"})));
+document.querySelectorAll("[data-back-portal]").forEach(b=>b.addEventListener("click",()=>showPortal({historyMode:"replace"})));
 document.querySelectorAll("[data-topic-status]").forEach(b=>b.addEventListener("click",()=>openPortalModal(b.dataset.topicStatus,b.dataset.topicName)));
 document.querySelectorAll("[data-info]").forEach(b=>b.addEventListener("click",()=>openPortalModal(b.dataset.info)));
 const portalClose=document.getElementById("portalModalClose");if(portalClose)portalClose.addEventListener("click",closePortalModal);
 const portalModal=document.getElementById("portalModal");if(portalModal)portalModal.addEventListener("click",e=>{if(e.target===portalModal)closePortalModal();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&portalModal&&!portalModal.hidden)closePortalModal();});
 document.querySelectorAll("[data-scroll-topics]").forEach(b=>b.addEventListener("click",()=>document.getElementById("topicsStart")?.scrollIntoView({behavior:"smooth",block:"start"})));
-const openedDirectly=readUrl();setDefaults();renderAll();if(openedDirectly){document.getElementById("portalHome").hidden=true;document.getElementById("linearTopicOverview").hidden=true;document.getElementById("linearExperience").hidden=false;$("startScreen").classList.remove("open");}
+const openedDirectly=readUrl();setDefaults();renderAll();
+if(openedDirectly){
+ document.getElementById("portalHome").hidden=true;document.getElementById("linearTopicOverview").hidden=true;document.getElementById("linearExperience").hidden=false;$("startScreen").classList.remove("open");
+ writeAppHistory("module","replace",{path:state.path,id:currentModule().id,view:state.view});
+}else{
+ writeAppHistory("portal","replace");
+}
 })();
 </script>
 </body>
