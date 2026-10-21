@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V34 · Android-Zurücktaste und Browser-History hierarchisch integriert. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V44 · Android-Graphfokus korrigiert: echte Fokusansicht ohne Leerraum, Bedienleiste oben, mobile Reihenfolge bereinigt. Lineare Funktionen bleiben unverändert auf V34. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -665,6 +665,200 @@ input[type="range"]{touch-action:pan-x}
 
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+
+/* V35 · Quadratische Funktionen – isolierter Lernbereich auf Basis der V34-UX */
+.q-topic-home{max-width:1460px;margin:0 auto;padding:20px 18px 34px}
+.q-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.q-breadcrumbs{display:flex;align-items:center;gap:8px;font-size:.84rem;color:#627188}.q-breadcrumbs button{border:0;background:transparent;color:#31558c;font-weight:800;padding:6px;cursor:pointer}
+.q-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:28px;align-items:center;padding:28px 30px;border:1px solid #e0d6f4;border-radius:28px;background:linear-gradient(120deg,#fff 0%,#faf7ff 52%,#f2edff 100%);box-shadow:var(--shadow-card)}
+.q-hero h1{font-size:clamp(2.1rem,3.6vw,3.35rem);line-height:1.03;margin:6px 0 12px;letter-spacing:-.04em}.q-hero p{color:#526176;line-height:1.65;max-width:760px}.q-reps{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.q-reps span{border:1px solid #ddd0f5;background:#fff;border-radius:999px;padding:6px 10px;font-size:.75rem;color:#59319b;font-weight:800}
+.q-hero-art{min-height:230px;border:1px solid #ded4ef;border-radius:22px;background:rgba(255,255,255,.72);overflow:hidden}.q-hero-art svg{width:100%;height:100%;display:block}
+.q-map{display:grid;gap:14px;margin-top:18px}.q-band{border:1px solid #e0d8ee;border-radius:19px;background:#fff;overflow:hidden}.q-band.active{border-color:#c8b3ed;background:linear-gradient(180deg,#fff,#fbf9ff)}.q-band-head{display:flex;gap:13px;align-items:flex-start;padding:16px 17px 10px}.q-band-icon{width:40px;height:40px;border-radius:12px;background:#f2ebff;color:#6d39c6;display:grid;place-items:center;font-weight:900}.q-band h2{font-size:1.03rem;margin:0 0 3px}.q-band p{margin:0;color:#607088;font-size:.82rem}.q-steps{display:flex;gap:8px;flex-wrap:wrap;padding:4px 17px 16px 70px}.q-step{border:1px solid #ddd6e8;background:#fff;border-radius:11px;padding:9px 12px;font-size:.8rem;font-weight:800;color:#30394a;min-height:42px}.q-step.available{border-color:#cbb8ef;color:#5d32a0;background:#fcfaff}.q-step[disabled]{cursor:not-allowed;color:#7a8798;background:#f7f8fb}
+.q-progress-note{margin:18px 0 0;padding:12px 14px;border:1px solid #ddd6e8;border-radius:13px;background:#fbfaff;color:#59677a;font-size:.82rem}
+
+#quadraticExperience{--q:#6d39c6;--qsoft:#f3eeff}.q-app{max-width:1540px;margin:auto;padding:12px}.q-top{display:grid;grid-template-columns:minmax(260px,1fr) auto;gap:12px;align-items:center;padding:14px 16px;background:rgba(255,255,255,.95);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-soft);position:sticky;top:8px;z-index:39}.q-top h1{margin:2px 0 0;font-size:1.28rem}.q-top p{margin:2px 0 0;color:#627188;font-size:.82rem}.q-top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.q-modulebar{margin-top:10px;padding:10px 11px;border:1px solid #d8caef;border-radius:15px;background:#faf8ff}.q-modulebar-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px}.q-modulebar-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;font-weight:900;color:#6b5a86}.q-modulebar-current{font-size:.8rem;font-weight:850;color:#6d39c6}.q-modulegrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.q-modulebtn{min-height:54px;border:1px solid #ddd6e8;background:#fff;border-radius:12px;padding:8px 10px;text-align:left;font-weight:800;font-size:.76rem;color:#3f4656}.q-modulebtn[aria-current="step"]{background:#6d39c6;color:#fff;border-color:#6d39c6}.q-mobile-note{display:none;margin-top:10px;padding:9px 11px;border:1px solid #ead6a4;border-radius:12px;background:#fff8e8;color:#795100;font-size:.79rem}
+.q-workspace{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(300px,.92fr);grid-template-areas:"graph controls" "learn learn";gap:14px;margin-top:14px}.q-graph-card{grid-area:graph;border:1px solid var(--line);border-radius:19px;background:#fff;padding:15px;box-shadow:var(--shadow-soft)}.q-controls{grid-area:controls;border:1px solid var(--line);border-radius:19px;background:#fff;padding:17px;box-shadow:var(--shadow-soft);align-self:start}.q-learn{grid-area:learn;border:1px solid var(--line);border-radius:19px;background:#fff;padding:17px;box-shadow:var(--shadow-soft)}.q-chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}.q-chart-head h2{margin:0;font-size:1.04rem}.q-chart-head p{margin:3px 0 0;color:#68788d;font-size:.8rem}.q-chart-tools{display:flex;gap:7px;flex-wrap:wrap}.q-btn{border:1px solid var(--line);background:#fff;color:#27364c;border-radius:11px;padding:8px 10px;font-weight:800;min-height:42px}.q-btn.primary{background:#6d39c6;border-color:#6d39c6;color:#fff}.q-btn:focus-visible,.q-tab:focus-visible,.q-modulebtn:focus-visible,.q-step:focus-visible{outline:3px solid #111827;outline-offset:2px}.q-plot{width:100%;height:clamp(430px,58vh,650px);display:block;border-radius:14px;background:#fbfcff}.q-legend{display:flex;gap:13px;flex-wrap:wrap;margin-top:7px;font-size:.78rem;color:#64748b}.q-insight{margin-top:8px;padding:10px 11px;border-radius:12px;border:1px solid var(--line);background:#fbfcfe;font-size:.87rem}.q-control{border:1px solid var(--line);border-radius:14px;background:#fcfdff;padding:11px;margin-bottom:9px}.q-control label{display:flex;justify-content:space-between;gap:8px;font-size:.84rem;font-weight:850}.q-control input[type="range"]{width:100%;margin-top:9px;accent-color:#6d39c6}.q-formula{padding:11px;border:1px solid #ded5ef;background:#faf8ff;border-radius:13px;margin-bottom:10px;font-family:"Cambria Math",Georgia,serif;font-size:1.04rem}.q-mini{font-size:.8rem;color:#68788d;line-height:1.5}.q-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}.q-tab{border:1px solid #ddd6e8;background:#fff;border-radius:13px;padding:9px 10px;min-height:60px;text-align:left}.q-tab[aria-selected="true"]{background:#6d39c6;color:#fff;border-color:#6d39c6}.q-tab strong{display:block;font-size:.8rem}.q-tab span{font-size:.67rem;opacity:.8}.q-view{display:none}.q-view.active{display:block}.q-view h2{margin:0 0 9px}.q-card,.q-rule{border:1px solid var(--line);border-radius:14px;background:#fbfcfe;padding:12px;margin:9px 0}.q-card strong,.q-rule strong{display:block;margin-bottom:5px}.q-choice-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.q-choice{border:1px solid #d7dce5;background:#fff;border-radius:10px;padding:8px 10px;font-weight:750}.q-choice.correct{border-color:#9fd6c1;background:#eefaf5}.q-choice.wrong{border-color:#efb5ad;background:#fff3f1}.q-lang-step{border:1px solid #ded6eb;border-radius:14px;background:#fcfbff;padding:12px;margin:9px 0}.q-lang-step.locked{opacity:.55}.q-lang-head{display:flex;justify-content:space-between;gap:10px}.q-lang-badge{font-size:.7rem;color:#6d39c6;font-weight:900}.q-table{width:100%;border-collapse:collapse}.q-table th,.q-table td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}.q-table th:first-child,.q-table td:first-child{text-align:left}.q-comparison{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #ded5ef;border-radius:15px;overflow:hidden;margin:10px 0}.q-comparison>div{padding:13px;background:#fcfbff}.q-comparison>div+div{border-left:1px solid #ded5ef}.q-comparison h3{margin:0 0 7px;font-size:.9rem;color:#56318d}.q-navline{display:flex;justify-content:space-between;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+body.q-graph-focus .q-app{max-width:1900px}body.q-graph-focus .q-workspace{grid-template-columns:1fr;grid-template-areas:"graph"}body.q-graph-focus .q-controls,body.q-graph-focus .q-learn,body.q-graph-focus .q-modulebar,body.q-graph-focus .q-mobile-note{display:none}body.q-graph-focus .q-plot{height:calc(100dvh - 150px);min-height:560px}
+@media(max-width:1100px){.q-modulegrid{grid-template-columns:repeat(3,minmax(0,1fr))}.q-hero{grid-template-columns:1fr}.q-hero-art{min-height:200px}}
+@media(max-width:780px){.q-topic-home,.q-app{padding-left:max(7px,env(safe-area-inset-left));padding-right:max(7px,env(safe-area-inset-right));padding-bottom:max(14px,env(safe-area-inset-bottom))}.q-header{align-items:flex-start}.q-hero{padding:21px 17px}.q-workspace{grid-template-columns:1fr;grid-template-areas:"graph" "controls" "learn"}.q-top{position:static;grid-template-columns:1fr}.q-top-actions{justify-content:flex-start}.q-modulegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.q-modulebar-head{display:block}.q-modulebar-current{margin-top:3px}.q-mobile-note{display:block}.q-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.q-plot{height:420px}.q-comparison{grid-template-columns:1fr}.q-comparison>div+div{border-left:0;border-top:1px solid #ded5ef}.q-steps{padding-left:17px}.q-chart-head{display:block}.q-chart-tools{margin-top:8px}}
+@media(max-width:480px){.q-modulegrid{grid-template-columns:1fr 1fr}.q-modulebtn{font-size:.72rem}.q-plot{height:360px}}
+
+
+/* V36 · Quadratische Funktionen – konsequente V34-Layout- und Bedienparität
+   WICHTIG: Dieser Block wirkt nur im quadratischen Bereich. Die V34-Regeln der linearen Funktionen bleiben unverändert. */
+#quadraticTopicOverview.linear-topic-home{max-width:1460px}
+#quadraticTopicOverview .topic-hero{background:linear-gradient(120deg,#ffffff 0%,#f7faff 52%,#edf4ff 100%);border-color:#d5e2f2}
+#quadraticTopicOverview .topic-illustration{min-height:210px!important}
+#quadraticTopicOverview .learning-band.basics{background:linear-gradient(100deg,var(--discover-soft),#fff 42%);border-color:#c9d8fb}
+#quadraticTopicOverview .learning-band.compare{background:linear-gradient(100deg,var(--compare-soft),#fff 42%);border-color:#d8c8f5}
+#quadraticTopicOverview .learning-band.apply{background:linear-gradient(100deg,var(--apply-soft),#fff 42%);border-color:#b9dfd7}
+#quadraticTopicOverview .learning-band.practice{background:linear-gradient(100deg,var(--practice-soft),#fff 42%);border-color:#edc6d2}
+#quadraticTopicOverview .learning-step[disabled]{cursor:not-allowed;opacity:.66;background:#f8fafc;color:#66758a;border-color:#d8e0e9;box-shadow:none;transform:none}
+#quadraticTopicOverview .quadratic-progress-note{margin:17px 0 0;padding:12px 14px;border:1px dashed #b9c8df;border-radius:16px;background:#f8fbff;color:#536279;font-size:.82rem;line-height:1.5}
+#quadraticTopicOverview .quadratic-progress-note strong{color:#334155}
+#quadraticTopicOverview .quadratic-shortcut{min-height:64px}
+
+/* Arbeitsraum: dieselben V34-Komponenten, Abstände, Farblogik und Responsivität wie bei den linearen Funktionen. */
+#quadraticWorkspaceApp{max-width:1540px;--section:var(--discover);--section-soft:var(--discover-soft);--section-border:#c9d8fb}
+#quadraticWorkspaceApp .top{position:sticky;top:8px;border-radius:18px;padding:14px 16px;grid-template-columns:minmax(0,1fr) auto;border-color:var(--section-border);box-shadow:var(--shadow-soft)}
+#quadraticWorkspaceApp .workspace-breadcrumb{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.73rem;color:#66758a;font-weight:760;margin-bottom:3px}
+#quadraticWorkspaceApp .workspace-breadcrumb button{border:0;background:transparent;color:var(--section);padding:0;font:inherit;cursor:pointer}
+#quadraticWorkspaceApp .brand h1{font-size:1.28rem;letter-spacing:-.022em}
+#quadraticWorkspaceApp .workspace-topic-sub{font-size:.82rem!important;color:#627188}
+#quadraticWorkspaceApp .progress{display:flex;align-items:center;gap:8px}
+#quadraticWorkspaceApp .linear-overview-return{border-color:var(--section-border);color:var(--section);background:var(--section-soft)}
+#quadraticWorkspaceApp .pathbar{display:none!important}
+#quadraticWorkspaceApp .modulebar{display:block!important;overflow:visible!important;overscroll-behavior:auto!important;margin-top:10px;padding:11px 12px 12px;border-radius:15px;gap:7px;box-shadow:none;background:var(--section-soft);border-color:var(--section-border)}
+#quadraticWorkspaceApp .modulebar-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:9px;padding:0 2px}
+#quadraticWorkspaceApp .modulebar-title{font-size:.78rem;font-weight:900;letter-spacing:.035em;text-transform:uppercase;color:#536279}
+#quadraticWorkspaceApp .modulebar-current{font-size:.8rem;font-weight:820;color:var(--section);text-align:right}
+#quadraticWorkspaceApp .modulebar-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;min-width:0}
+#quadraticWorkspaceApp .module-step{width:100%;min-width:0;min-height:52px;border-radius:12px;justify-content:flex-start;white-space:normal;text-align:left;line-height:1.22;padding:8px 10px;border-color:var(--section-border);background:#fff;color:#34445b}
+#quadraticWorkspaceApp .module-step:hover{background:#fff;border-color:var(--section)}
+#quadraticWorkspaceApp .module-step[aria-current="step"]{background:var(--section);border-color:var(--section);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--section) 22%,transparent)}
+#quadraticWorkspaceApp .module-step .module-no{display:grid;place-items:center;flex:0 0 27px;width:27px;height:27px;border-radius:999px;background:var(--section-soft);color:var(--section);font-size:.7rem;font-weight:900;opacity:1}
+#quadraticWorkspaceApp .module-step[aria-current="step"] .module-no{background:rgba(255,255,255,.22);color:#fff}
+#quadraticWorkspaceApp .module-step .module-name{min-width:0;font-size:.76rem;font-weight:820}
+#quadraticWorkspaceApp .workspace{gap:14px;margin-top:14px}
+#quadraticWorkspaceApp .panel,#quadraticWorkspaceApp .chart-card{border-radius:19px;border-color:#dfe6ef;box-shadow:var(--shadow-soft)}
+#quadraticWorkspaceApp .left,#quadraticWorkspaceApp .right{padding:17px}
+#quadraticWorkspaceApp .chart-card{padding:15px}
+#quadraticWorkspaceApp .chart-head{padding:2px 2px 9px}
+#quadraticWorkspaceApp .chart-sub{line-height:1.45}
+#quadraticWorkspaceApp #qPlot{display:block;width:100%;height:clamp(590px,66vh,720px);min-height:590px;flex:none;border-radius:14px;background:#fbfcff}
+#quadraticWorkspaceApp .legend{padding:6px 4px 0}
+#quadraticWorkspaceApp .formula{background:#fafcff}
+#quadraticWorkspaceApp .kicker{color:var(--section)}
+#quadraticWorkspaceApp .btn.primary{background:var(--section);border-color:var(--section)}
+#quadraticWorkspaceApp .tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:14px;padding-bottom:0;border-bottom:0}
+#quadraticWorkspaceApp .tab{position:relative;overflow:hidden;min-height:64px;padding:9px 10px;border-radius:13px;box-shadow:0 2px 7px rgba(24,34,53,.025);text-align:left;background:#fff;border:1px solid #dbe3ee;color:#34445b;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;white-space:normal;line-height:1.15}
+#quadraticWorkspaceApp .tab .tab-main{font-weight:850;font-size:.8rem;display:flex;align-items:center;gap:5px}
+#quadraticWorkspaceApp .tab .tab-sub{font-size:.67rem;line-height:1.25;color:#69798f;font-weight:650}
+#quadraticWorkspaceApp .tab[data-view="task"]{border-color:#c9d8fb;background:linear-gradient(180deg,#fff,#f4f7ff)}
+#quadraticWorkspaceApp .tab[data-view="language"]{border-color:#decff8;background:linear-gradient(180deg,#fff,#faf7ff)}
+#quadraticWorkspaceApp .tab[data-view="table"]{border-color:#bfe7dc;background:linear-gradient(180deg,#fff,#f3fcf9)}
+#quadraticWorkspaceApp .tab[data-view="explain"]{border-color:#f0d7b2;background:linear-gradient(180deg,#fff,#fff8ef)}
+#quadraticWorkspaceApp .tab[data-view="explore"]{border-color:#c7d2fe;background:linear-gradient(180deg,#fff,#f5f7ff)}
+#quadraticWorkspaceApp .tab[data-view="task"] .tab-main{color:#1c4aaf}
+#quadraticWorkspaceApp .tab[data-view="language"] .tab-main{color:#6d39c6}
+#quadraticWorkspaceApp .tab[data-view="table"] .tab-main{color:#0f766e}
+#quadraticWorkspaceApp .tab[data-view="explain"] .tab-main{color:#a85700}
+#quadraticWorkspaceApp .tab[data-view="explore"] .tab-main{color:#4338ca}
+#quadraticWorkspaceApp .explore-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:10px}
+#quadraticWorkspaceApp .explore-formulas{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+#quadraticWorkspaceApp .explore-formulas .formula{flex:1;min-width:230px;margin:0}
+#quadraticWorkspaceApp .graph-label{font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:12px;font-weight:800}
+#quadraticWorkspaceApp .tab[aria-selected="true"]{background:var(--section-soft)!important;color:var(--section)!important;border-color:var(--section)!important;box-shadow:inset 0 -3px 0 var(--section)}
+#quadraticWorkspaceApp .tab[aria-selected="true"] .tab-main{color:var(--section)!important}
+#quadraticWorkspaceApp .tab[aria-selected="true"] .tab-sub{color:#536279}
+#quadraticWorkspaceApp .right-body{padding-top:10px;min-height:480px;flex:1}
+#quadraticWorkspaceApp .cardbox,#quadraticWorkspaceApp .rule{border-radius:14px;background:#fbfcfe}
+#quadraticWorkspaceApp .control{border-radius:14px;background:#fcfdff}
+#quadraticWorkspaceApp .language-step{border-radius:15px;background:#fcfdff}
+#quadraticWorkspaceApp .language-step.done{border-color:#a8dbc8;background:#f5fbf8}
+#quadraticWorkspaceApp .language-step.locked{background:#f8fafc;opacity:.68}
+#quadraticWorkspaceApp .language-step-title{font-weight:900;color:#173d9a}
+#quadraticWorkspaceApp .language-step-sub{font-size:.79rem;color:var(--muted);margin-top:2px}
+#quadraticWorkspaceApp .language-step-badge{flex:0 0 auto;border-radius:999px;background:var(--blueSoft);color:#173d9a;border:1px solid #bfd0ff;padding:3px 7px;font-size:.72rem;font-weight:850}
+#quadraticWorkspaceApp .language-step.done .language-step-badge{background:#e9f8f1;color:#0f6b4c;border-color:#bce8d6}
+#quadraticWorkspaceApp .mobile-note{display:none}
+
+body.q-graph-focus #quadraticWorkspaceApp{max-width:1900px}
+body.q-graph-focus #quadraticWorkspaceApp .workspace{grid-template-columns:1fr;grid-template-areas:"center";grid-template-rows:auto}
+body.q-graph-focus #quadraticWorkspaceApp .left,body.q-graph-focus #quadraticWorkspaceApp .right{display:none}
+body.q-graph-focus #quadraticWorkspaceApp .modulebar,body.q-graph-focus #quadraticWorkspaceApp .mobile-note{display:none}
+body.q-graph-focus #quadraticWorkspaceApp .chart-card{min-height:calc(100vh - 110px)}
+body.q-graph-focus #quadraticWorkspaceApp #qPlot{height:clamp(620px,74vh,820px);min-height:620px}
+
+@media(max-width:1180px){
+ #quadraticWorkspaceApp .workspace{grid-template-columns:1fr;grid-template-areas:"center" "controls" "right";min-height:auto}
+ #quadraticWorkspaceApp .left{position:static;max-height:none;overflow:visible;scrollbar-gutter:auto}
+ #quadraticWorkspaceApp #qPlot{height:clamp(520px,60vh,670px);min-height:520px}
+ #quadraticWorkspaceApp #qControls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+}
+@media(max-width:1100px){#quadraticWorkspaceApp .modulebar-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:820px){
+ #quadraticWorkspaceApp .modulebar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #quadraticWorkspaceApp .module-step{min-height:56px}
+ #quadraticWorkspaceApp .tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;overflow:visible!important;scroll-snap-type:none!important;padding-bottom:0!important}
+ #quadraticWorkspaceApp .tab{flex:auto!important;width:100%;min-width:0;min-height:58px}
+ #quadraticWorkspaceApp .left{overflow:visible!important;max-height:none!important}
+}
+@media(max-width:780px){
+ #quadraticWorkspaceApp .app{padding-left:max(7px,env(safe-area-inset-left));padding-right:max(7px,env(safe-area-inset-right));padding-bottom:max(14px,env(safe-area-inset-bottom))}
+ #quadraticWorkspaceApp .top{position:static;grid-template-columns:1fr;align-items:flex-start}
+ #quadraticWorkspaceApp .progress{justify-content:flex-start;flex-wrap:wrap}
+ #quadraticWorkspaceApp .workspace{grid-template-columns:1fr;grid-template-areas:"center" "controls" "right";min-height:auto}
+ #quadraticWorkspaceApp #qPlot{height:auto;min-height:0;max-height:none}
+ #quadraticWorkspaceApp .chart-head{gap:8px}
+ #quadraticWorkspaceApp .chart-tools{justify-content:flex-end}
+ #quadraticWorkspaceApp .mobile-note{display:block}
+}
+@media(max-width:520px){
+ #quadraticWorkspaceApp .modulebar{padding:10px}
+ #quadraticWorkspaceApp .modulebar-head{display:block;margin-bottom:8px}
+ #quadraticWorkspaceApp .modulebar-current{text-align:left;margin-top:3px}
+ #quadraticWorkspaceApp .modulebar-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #quadraticWorkspaceApp .module-step{padding:8px;min-height:58px;align-items:center}
+ #quadraticWorkspaceApp .module-step .module-no{width:25px;height:25px;flex-basis:25px}
+ #quadraticWorkspaceApp .module-step .module-name{font-size:.74rem}
+}
+@supports(height:100dvh){body.q-graph-focus #quadraticWorkspaceApp .chart-card{min-height:calc(100dvh - 110px)}}
+
+
+/* V44 · Android/Mobil: Graphfokus wirklich als Fokusansicht */
+@media(max-width:780px){
+  /* Normale mobile Reihenfolge: Kopf/Bedienung vor dem Graphen. */
+  #quadraticWorkspaceApp .chart-card{display:flex;flex-direction:column}
+  #quadraticWorkspaceApp .chart-head{order:0!important;align-items:flex-start;margin-bottom:6px}
+  #quadraticWorkspaceApp #qPlot{order:1!important}
+  #quadraticWorkspaceApp .legend{order:2!important}
+  #quadraticWorkspaceApp .insight{order:3!important}
+
+  /* Fokusmodus: nur die Graphkarte, ohne künstliche Hochformat-Leerfläche. */
+  body.q-graph-focus{overflow:hidden}
+  body.q-graph-focus #quadraticWorkspaceApp{max-width:none;width:100%;padding:0}
+  body.q-graph-focus #quadraticWorkspaceApp .top{display:none!important}
+  body.q-graph-focus #quadraticWorkspaceApp .workspace{display:block!important;margin:0!important;min-height:0!important}
+  body.q-graph-focus #quadraticWorkspaceApp .chart-card{
+    position:fixed;inset:0;z-index:500;
+    width:100vw;height:100dvh;min-height:0!important;
+    border:0;border-radius:0;box-shadow:none;
+    padding:max(10px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+    overflow:auto;background:#fff;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp .chart-head{
+    order:0!important;position:relative;z-index:2;
+    display:flex!important;align-items:center!important;justify-content:space-between;
+    gap:8px;margin:0 0 8px;padding:0 2px 4px;background:#fff;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp .chart-head>div:first-child{min-width:0}
+  body.q-graph-focus #quadraticWorkspaceApp .chart-head h2{font-size:1rem;margin:0}
+  body.q-graph-focus #quadraticWorkspaceApp .chart-sub{display:none}
+  body.q-graph-focus #quadraticWorkspaceApp .chart-tools{margin:0!important;display:flex;gap:6px;flex-wrap:nowrap;justify-content:flex-end}
+  body.q-graph-focus #quadraticWorkspaceApp .chart-tools .btn{min-height:40px;padding:7px 9px;white-space:nowrap}
+  body.q-graph-focus #quadraticWorkspaceApp #qPlot{
+    order:1!important;display:block!important;
+    width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+    aspect-ratio:760/500;flex:0 0 auto!important;margin:0!important;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp .legend,
+  body.q-graph-focus #quadraticWorkspaceApp .insight{display:none!important}
+}
+
+@media(max-width:420px){
+  body.q-graph-focus #quadraticWorkspaceApp .chart-head h2{font-size:.92rem}
+  body.q-graph-focus #quadraticWorkspaceApp .chart-tools .btn{font-size:.76rem;padding:6px 8px}
+}
+
+@media(max-width:780px) and (orientation:landscape){
+  body.q-graph-focus #quadraticWorkspaceApp .chart-card{overflow:hidden}
+  body.q-graph-focus #quadraticWorkspaceApp #qPlot{
+    height:calc(100dvh - 58px)!important;width:auto!important;max-width:100%!important;
+    aspect-ratio:760/500;margin:0 auto!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -688,19 +882,21 @@ input[type="range"]{touch-action:pan-x}
         <button class="portal-secondary" data-scroll-topics>Themenübersicht ansehen</button>
       </div>
     </div>
-    <div class="hero-math" aria-label="Mathematische Visualisierung mit Gerade, Parabel, Tangente und Fläche">
-      <svg viewBox="0 0 520 250" role="img" aria-label="Koordinatensystem mit verschiedenen Funktionsgraphen">
-        <defs><pattern id="heroGrid" width="26" height="25" patternUnits="userSpaceOnUse"><path d="M26 0H0V25" fill="none" stroke="#dfe8f7" stroke-width="1"/></pattern></defs>
+    <div class="hero-math" aria-label="Mathematische Visualisierung mit Gerade, Parabel und weiterer Funktion">
+      <svg viewBox="0 0 520 250" role="img" aria-label="Koordinatensystem mit einer linearen, einer quadratischen und einer weiteren Funktion">
+        <defs>
+          <pattern id="heroGrid" width="26" height="25" patternUnits="userSpaceOnUse"><path d="M26 0H0V25" fill="none" stroke="#dfe8f7" stroke-width="1"/></pattern>
+          <clipPath id="heroPlotClip"><rect x="22" y="14" width="476" height="214" rx="16"/></clipPath>
+        </defs>
         <rect width="520" height="250" fill="url(#heroGrid)"/>
         <path d="M25 205H500M70 230V20" stroke="#8ea1bd" stroke-width="1.7"/>
-        <path d="M24 205 L494 72" fill="none" stroke="#2457d6" stroke-width="4" stroke-linecap="round"/>
-        <path d="M115 205 Q260 10 410 205" fill="none" stroke="#7c3aed" stroke-width="3.5"/>
-        <path d="M205 176 C275 55 335 70 460 160" fill="none" stroke="#0f766e" stroke-width="3"/>
-        <path d="M315 116 L452 68" fill="none" stroke="#c86b09" stroke-width="3"/>
-        <path d="M130 205 C170 170 210 142 248 134 C270 130 292 142 312 160 L312 205 Z" fill="#2457d6" opacity=".08"/>
-        <circle cx="312" cy="123" r="5" fill="#c86b09"/>
+        <g clip-path="url(#heroPlotClip)">
+          <path d="M18 206 L496 78" fill="none" stroke="#2457d6" stroke-width="4" stroke-linecap="round"/>
+          <path d="M108 205 Q258 36 408 205" fill="none" stroke="#7c3aed" stroke-width="3.8" stroke-linecap="round"/>
+          <path d="M214 196 C252 112 302 70 348 92 C392 112 430 152 466 182" fill="none" stroke="#0f766e" stroke-width="3.4" stroke-linecap="round"/>
+        </g>
       </svg>
-      <div class="hero-formula">f(x)=mx+b</div>
+      <div class="hero-formula">y=f(x)</div>
       <div class="hero-note">Graph · Term · Tabelle · Sprache</div>
     </div>
   </section>
@@ -720,8 +916,8 @@ input[type="range"]{touch-action:pan-x}
           <div class="topic-card-top"><h4>Lineare Funktionen</h4><span class="status-pill available">Verfügbar</span></div><p>Geraden, Steigung, Schnittpunkte sowie Kosten, Erlös und Gewinn.</p>
           <svg class="mini-graph" viewBox="0 0 100 60" aria-hidden="true"><path d="M8 52H94M16 57V5" stroke="#c9d4e5"/><path d="M10 50L90 12" stroke="#2457d6" stroke-width="3" fill="none"/></svg>
         </button>
-        <button class="topic-card disabledish" data-topic-status="building" data-topic-name="Quadratische Funktionen">
-          <div class="topic-card-top"><h4>Quadratische Funktionen</h4><span class="status-pill building">Im Aufbau</span></div><p>Parabeln, Scheitelpunkt, Nullstellen und sprachsensible Materialien.</p>
+        <button class="topic-card" data-open-topic="quadratic">
+          <div class="topic-card-top"><h4>Quadratische Funktionen</h4><span class="status-pill available">Verfügbar</span></div><p>Parabeln entdecken, Scheitelpunktform verstehen und Darstellungen verbinden.</p>
           <svg class="mini-graph" viewBox="0 0 100 60" aria-hidden="true"><path d="M8 52H94M16 57V5" stroke="#c9d4e5"/><path d="M18 12Q52 58 88 12" stroke="#7c3aed" stroke-width="3" fill="none"/></svg>
         </button>
         <button class="topic-card disabledish" data-topic-status="planned" data-topic-name="Funktionen 3. Grades"><div class="topic-card-top"><h4>Funktionen 3. Grades</h4><span class="status-pill planned">Geplant</span></div><p>Kubische Verläufe und typische Eigenschaften.</p><svg class="mini-graph" viewBox="0 0 100 60" aria-hidden="true"><path d="M8 52H94M16 57V5" stroke="#c9d4e5"/><path d="M12 48C34 48 34 12 52 30S70 52 92 8" stroke="#60789f" stroke-width="3" fill="none"/></svg></button>
@@ -750,6 +946,120 @@ input[type="range"]{touch-action:pan-x}
 <div class="portal-modal" id="portalModal" hidden role="dialog" aria-modal="true" aria-labelledby="portalModalTitle">
   <div class="portal-modal-card"><div class="portal-modal-head"><div><div class="portal-eyebrow" id="portalModalKicker">Information</div><h2 id="portalModalTitle">Hinweis</h2></div><button class="modal-close" id="portalModalClose" aria-label="Dialog schließen">×</button></div><div id="portalModalBody"></div></div>
 </div>
+
+
+
+<section class="linear-topic-home" id="quadraticTopicOverview" hidden aria-label="Themenübersicht Quadratische Funktionen">
+  <div class="linear-topic-header">
+    <div class="breadcrumbs"><button type="button" data-q-back-portal>Mathematik-Lernwelt</button><span aria-hidden="true">›</span><strong>Quadratische Funktionen</strong></div>
+    <button class="portal-link" type="button" data-q-back-portal>← Startseite</button>
+  </div>
+
+  <section class="topic-hero">
+    <div class="topic-hero-copy">
+      <div class="portal-eyebrow">Themenübersicht</div>
+      <h1>Quadratische Funktionen</h1>
+      <p class="topic-lead">Hier untersuchst du quadratische Funktionen aus verschiedenen Darstellungen. Du verbindest Graph, Funktionsterm, Tabelle und sprachliche Beschreibung. Wähle einen Lernbereich und arbeite Schritt für Schritt. Die erste Ausbaustufe führt von der Geraden zur Parabel bis zur Scheitelpunktform.</p>
+      <div class="representation-row" aria-label="Darstellungen verbinden"><span>Graph</span><span>Funktionsterm</span><span>Tabelle</span><span>Sprache</span></div>
+    </div>
+    <div class="hero-math topic-illustration" aria-hidden="true">
+      <svg viewBox="0 0 520 220" width="100%" height="100%">
+        <defs>
+          <linearGradient id="qTopicCardBg36" x1="0" x2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef4ff"/></linearGradient>
+          <pattern id="qTopicGrid36" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#e7eef9" stroke-width="1"/></pattern>
+          <clipPath id="qTopicPlotClip36"><rect x="34" y="30" width="188" height="160" rx="14"/></clipPath>
+        </defs>
+        <rect width="520" height="220" rx="20" fill="url(#qTopicCardBg36)"/>
+        <rect x="24" y="20" width="208" height="180" rx="18" fill="#ffffff" stroke="#d8e4f3"/>
+        <rect x="252" y="20" width="244" height="84" rx="18" fill="#ffffff" stroke="#d8e4f3"/>
+        <rect x="252" y="118" width="244" height="82" rx="18" fill="#ffffff" stroke="#d8e4f3"/>
+        <rect x="34" y="30" width="188" height="160" rx="14" fill="url(#qTopicGrid36)"/>
+        <path d="M48 168H210M92 184V42" stroke="#a7b8cf" stroke-width="1.5"/>
+        <g clip-path="url(#qTopicPlotClip36)">
+          <path d="M56 76 Q128 216 200 76" stroke="#6d39c6" stroke-width="4.1" stroke-linecap="round" fill="none"/>
+          <path d="M128 36V188" stroke="#6d39c6" stroke-width="1.8" stroke-dasharray="5 4" opacity=".42"/>
+        </g>
+        <circle cx="128" cy="146" r="5" fill="#a42d55"/>
+        <text x="139" y="141" fill="#6d39c6" font-size="12" font-weight="800">S(1|1)</text>
+        <text x="265" y="45" fill="#2457d6" font-size="16" font-weight="800">Term</text>
+        <text x="265" y="68" fill="#22324b" font-size="18" font-family="Cambria Math,serif">f(x)=(x−1)²+1</text>
+        <text x="265" y="88" fill="#5f6f84" font-size="12" font-weight="700">u=1 · v=1</text>
+        <text x="265" y="139" fill="#6d39c6" font-size="16" font-weight="800">Sprache</text>
+        <rect x="266" y="148" width="210" height="34" rx="10" fill="#f6f8ff" stroke="#d7def7"/>
+        <text x="280" y="169" fill="#3b4c68" font-size="13">„S(u|v)=S(1|1) ist der Scheitelpunkt.“</text>
+        <text x="381" y="45" fill="#0f766e" font-size="16" font-weight="800">Tabelle</text>
+        <rect x="374" y="52" width="108" height="42" rx="9" fill="#f3fbf8" stroke="#cfe0da"/>
+        <path d="M374 73H482M400 52V94M427 52V94M454 52V94" stroke="#cfe0da" stroke-width="1"/>
+        <text x="387" y="67" text-anchor="middle" fill="#315b51" font-size="11" font-weight="800">x</text>
+        <text x="413" y="67" text-anchor="middle" fill="#315b51" font-size="11">0</text><text x="440" y="67" text-anchor="middle" fill="#315b51" font-size="11">1</text><text x="468" y="67" text-anchor="middle" fill="#315b51" font-size="11">2</text>
+        <text x="387" y="88" text-anchor="middle" fill="#315b51" font-size="10" font-weight="800">f(x)</text>
+        <text x="413" y="88" text-anchor="middle" fill="#315b51" font-size="11">2</text><text x="440" y="88" text-anchor="middle" fill="#315b51" font-size="11">1</text><text x="468" y="88" text-anchor="middle" fill="#315b51" font-size="11">2</text>
+      </svg>
+    </div>
+  </section>
+
+  <section class="explanation-strip" aria-labelledby="qExtraExplainHeading">
+    <div class="explanation-strip-copy"><div class="explanation-icon" aria-hidden="true">↔</div><div><h2 id="qExtraExplainHeading">Darstellungen bewusst verbinden</h2><p>Wie bei den linearen Funktionen arbeitest du nicht nur mit einem Term. Du wechselst gezielt zwischen Graph, Funktionsterm, Tabelle und Fachsprache. Die Schnellzugriffe führen direkt in die bereits umgesetzten Lernmodule.</p></div></div>
+    <div class="explanation-actions">
+      <button class="explain-shortcut quadratic-shortcut" data-q-open="0"><span>Gerade → Parabel</span><small>Funktionsklassen vergleichen</small></button>
+      <button class="explain-shortcut quadratic-shortcut" data-q-open="1"><span>Normalparabel</span><small>Scheitelpunkt &amp; Symmetrie</small></button>
+      <button class="explain-shortcut quadratic-shortcut" data-q-open="2"><span>Parameter a</span><small>Öffnung &amp; Breite</small></button>
+      <button class="explain-shortcut quadratic-shortcut" data-q-open="4"><span>Scheitelpunktform</span><small>Term sicher lesen</small></button>
+    </div>
+    <p class="explanation-privacy">Die zusätzlichen Wege bleiben innerhalb der Lernplattform; externe Inhalte werden in dieser Ausbaustufe nicht automatisch geladen.</p>
+  </section>
+
+  <div class="learning-map" aria-label="Lernbereiche">
+    <section class="learning-band basics"><div class="learning-band-head"><div class="learning-band-icon">∪</div><div><h2>Entdecken &amp; Verstehen</h2><p>Von der Geraden zur Parabel, Normalparabel, Parameter und Scheitelpunktform.</p></div></div><div class="learning-steps">
+      <button class="learning-step" data-q-open="0">Von der Geraden zur Parabel</button><button class="learning-step" data-q-open="1">Normalparabel &amp; Scheitelpunkt</button><button class="learning-step" data-q-open="2">Öffnung, Streckung &amp; Stauchung</button><button class="learning-step" data-q-open="3">Parabel verschieben</button><button class="learning-step" data-q-open="4">Scheitelpunktform lesen</button>
+    </div></section>
+    <section class="learning-band compare"><div class="learning-band-head"><div class="learning-band-icon">⇄</div><div><h2>Darstellungen &amp; Umformen</h2><p>Polynomform, Scheitelpunktform, quadratische Ergänzung und passende Darstellungen.</p></div></div><div class="learning-steps"><button class="learning-step" disabled>Polynomform lesen · im Aufbau</button><button class="learning-step" disabled>Formen umwandeln · im Aufbau</button></div></section>
+    <section class="learning-band basics"><div class="learning-band-head"><div class="learning-band-icon">0</div><div><h2>Achsenschnittpunkte, Nullstellen &amp; Schnittpunkte</h2><p>x=0, f(x)=0 und f(x)=g(x) werden sauber unterschieden.</p></div></div><div class="learning-steps"><button class="learning-step" disabled>Achsenschnittpunkte · im Aufbau</button><button class="learning-step" disabled>Nullstellen · im Aufbau</button><button class="learning-step" disabled>Schnittpunkte · im Aufbau</button></div></section>
+    <section class="learning-band apply"><div class="learning-band-head"><div class="learning-band-icon">↗</div><div><h2>Anwenden &amp; Modellieren</h2><p>Parabeln aus Punkten, Sachbilder und Optimierungsprobleme mathematisch modellieren.</p></div></div><div class="learning-steps"><button class="learning-step" disabled>Modellieren · im Aufbau</button><button class="learning-step" disabled>Optimieren · im Aufbau</button></div></section>
+    <section class="learning-band practice"><div class="learning-band-head"><div class="learning-band-icon">✓</div><div><h2>Üben &amp; Sichern</h2><p>Aufgaben bearbeiten, direkte Rückmeldung erhalten und Darstellungen als Hilfe nutzen.</p></div></div><div class="learning-steps"><button class="learning-step" disabled>Übungsbereiche · im Aufbau</button></div></section>
+  </div>
+  <div class="quadratic-progress-note"><strong>Aktueller Ausbau:</strong> Der erste Lernblock bis zur Scheitelpunktform ist interaktiv umgesetzt. Die weiteren Lernbereiche bleiben sichtbar, sind aber bewusst noch nicht freigeschaltet.</div>
+  <div class="linear-topic-footer"><span>Sprache &amp; Begründen bleibt in jedem passenden Lernmodul sichtbar.</span><button class="portal-link" type="button" data-info="privacy">Datenschutz</button></div>
+</section>
+
+<div id="quadraticExperience" hidden>
+<div class="app" id="quadraticWorkspaceApp" data-learning-path="basics">
+<header class="top">
+  <div class="brand">
+    <div class="workspace-breadcrumb"><button type="button" data-q-back-portal>Mathematik-Lernwelt</button><span>›</span><button type="button" data-q-overview>Quadratische Funktionen</button><span>›</span><strong id="qCrumb">Lernmodul</strong></div>
+    <h1 id="qTitle">Quadratische Funktionen</h1>
+    <p class="workspace-topic-sub" id="qSubtitle">Entdecken &amp; Verstehen</p>
+  </div>
+  <div class="progress"><button class="linear-overview-return" type="button" data-q-overview>← Themenübersicht</button><span id="qProgress">Modul 1 von 5</span></div>
+</header>
+
+<nav class="modulebar" aria-label="Teilmodule des gewählten Lernpfads"><div class="modulebar-head"><div class="modulebar-title">Teilmodule · Entdecken &amp; Verstehen</div><div class="modulebar-current" id="qModuleCurrent"></div></div><div class="modulebar-grid" id="qModuleGrid"></div></nav>
+<div class="mobile-note">Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst untereinander: Graph → Regler → Lernkarte. Die Teilmodule bleiben oberhalb vollständig sichtbar und benötigen kein horizontales Wischen.</div>
+
+<main class="workspace">
+  <section class="center">
+    <div class="chart-card">
+      <div class="chart-head"><div><h2 id="qGraphTitle">Parabel untersuchen</h2><div class="chart-sub" id="qGraphSub">Verändere gezielt nur die Größen, die zum Modul gehören.</div></div><div class="chart-tools"><button class="btn small" type="button" id="qReset">↺ Zurücksetzen</button><button class="btn small focus-btn" type="button" id="qFocus" aria-pressed="false">⛶ Graph groß</button></div></div>
+      <svg id="qPlot" viewBox="0 0 760 500" role="img" aria-label="Koordinatensystem mit quadratischer Funktion"></svg>
+      <div class="legend" id="qLegend"></div><div class="insight" id="qInsight"></div>
+    </div>
+  </section>
+
+  <aside class="panel left">
+    <div><div class="kicker">Gezielt verändern</div><h2>Steuerung</h2></div>
+    <div id="qFormula" class="formula"></div>
+    <div id="qControls"></div>
+    <div class="left-note" id="qControlNote"></div>
+  </aside>
+
+  <aside class="panel right">
+    <div class="tabs" id="qTabs" role="tablist" aria-label="Lernansichten"></div>
+    <div class="right-body" id="qViews"></div>
+    <div class="navline"><button class="btn small" id="qPrev">← vorher</button><button class="btn small" type="button" data-q-overview>Übersicht</button><button class="btn small primary" id="qNext">weiter →</button></div>
+  </aside>
+</main>
+</div>
+</div><!-- /quadraticExperience -->
 
 
 <section class="linear-topic-home" id="linearTopicOverview" hidden aria-label="Themenübersicht Lineare Funktionen">
@@ -2720,6 +3030,7 @@ function showPortal(options={}){
  document.title="Mathematik-Lernwelt";
  hidePortalModal();
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
+ const qOverview=document.getElementById("quadraticTopicOverview"),qExperience=document.getElementById("quadraticExperience");if(qOverview)qOverview.hidden=true;if(qExperience)qExperience.hidden=true;
  if(portal)portal.hidden=false;if(overview)overview.hidden=true;if(linear)linear.hidden=true;
  document.body.classList.remove("graph-focus");window.scrollTo({top:0,behavior:"smooth"});
  if(options.historyMode!=="none") writeAppHistory("portal",options.historyMode||"push");
@@ -2728,6 +3039,7 @@ function showLinearOverview(options={}){
  document.title="Lineare Funktionen | Mathematik-Lernwelt";
  hidePortalModal();
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
+ const qOverview=document.getElementById("quadraticTopicOverview"),qExperience=document.getElementById("quadraticExperience");if(qOverview)qOverview.hidden=true;if(qExperience)qExperience.hidden=true;
  if(portal)portal.hidden=true;if(overview)overview.hidden=false;if(linear)linear.hidden=true;
  const ss=document.getElementById("startScreen");if(ss)ss.classList.remove("open");
  document.body.classList.remove("graph-focus");window.scrollTo({top:0,behavior:"smooth"});
@@ -2741,6 +3053,7 @@ function openLinearModule(spec,view="task",options={}){
  state.path=path;state.moduleIndex=idx;setDefaults();state.view=currentModule().tabs.includes(view)?view:"task";
  hidePortalModal();
  const portal=document.getElementById("portalHome"),overview=document.getElementById("linearTopicOverview"),linear=document.getElementById("linearExperience");
+ const qOverview=document.getElementById("quadraticTopicOverview"),qExperience=document.getElementById("quadraticExperience");if(qOverview)qOverview.hidden=true;if(qExperience)qExperience.hidden=true;
  if(portal)portal.hidden=true;if(overview)overview.hidden=true;if(linear)linear.hidden=false;
  const ss=document.getElementById("startScreen");if(ss)ss.classList.remove("open");
  renderAll();
@@ -2824,5 +3137,147 @@ if(openedDirectly){
 }
 })();
 </script>
+
+<script>
+(()=>{
+"use strict";
+const q$=id=>document.getElementById(id);
+const QKEY="mathematikQuadratischV35";
+const qModules=[
+ {id:"compare",title:"Von der Geraden zur Parabel",defaults:{a:0,h:0,k:0,x:2,m:2,b:0},controls:["a"],compareLine:true,
+  task:"Starte bei a=0. Dann gilt f(x)=g(x)=2x. Verändere a langsam in positive und negative Richtung. Beobachte, wann aus der Geraden eine Parabel wird und wie sich Öffnung und Krümmung verändern.",hyp:"Bei a=0 verschwindet der quadratische Anteil. Dann ist f linear. Für a≠0 ist f eine quadratische Funktion.",
+  explain:[["Kernidee","Eine Gerade besitzt eine konstante Steigung. Bei einer quadratischen Funktion verändert sich die Änderungsrate; ihr Graph ist eine Parabel."],["Nicht nur das Bild","Der Unterschied ist nicht bloß „gerade oder krumm“. Bei gleichen x-Schritten ändern sich die Funktionswerte einer linearen Funktion immer um denselben Betrag; bei f(x)=x² ändern sich diese Differenzen."],["Brücke zur nächsten Station","Die Normalparabel f(x)=x² ist das Grundmodell, von dem wir anschließend ausgehen."]],
+  lang:["Die Gerade verändert ihren Funktionswert bei gleichen x-Schritten immer um denselben Betrag.","Parabel","Bei f(x)=x² sind die Änderungen der Funktionswerte bei gleichen x-Schritten nicht konstant.","Deshalb kann f(x)=x² nicht durch eine Gerade mit konstanter Steigung beschrieben werden."]},
+ {id:"normal",title:"Normalparabel & Scheitelpunkt",defaults:{a:1,h:0,k:0,x:2},controls:["x"],
+  task:"Bewege x. Verknüpfe die Stelle x mit dem Funktionswert f(x)=x² und dem Punkt P(x|f(x)). Beobachte außerdem den spiegelbildlichen Punkt.",hyp:"Die Normalparabel ist achsensymmetrisch zur f(x)-Achse; ihr Scheitelpunkt ist S(0|0).",
+  explain:[["Normalparabel","Der Graph von f(x)=x² heißt Normalparabel."],["Scheitelpunkt","Der tiefste Punkt ist S(0|0). Die Symmetrieachse ist x=0."],["Symmetrie","Für entgegengesetzte x-Werte gilt f(−x)=f(x). Deshalb liegen P(x|f(x)) und P(−x|f(x)) auf gleicher Höhe."],["Fachsprache","Wir sprechen vom Funktionswert f(x), nicht nur vom „y-Wert“."]],
+  lang:["Die beiden markierten Punkte liegen auf gleicher Höhe.","Symmetrieachse","Zur Stelle x gehört der Funktionswert f(x); zur Stelle −x gehört derselbe Funktionswert.","Weil (−x)²=x² gilt, ist die Normalparabel achsensymmetrisch zu x=0."]},
+ {id:"a",title:"Öffnung, Streckung & Stauchung",defaults:{a:1,h:0,k:0,x:2},controls:["a"],showBase:true,
+  task:"Verändere nur a in f(x)=ax². Beobachte Öffnungsrichtung und Breite der Parabel im Vergleich zur Normalparabel.",hyp:"Das Vorzeichen von a bestimmt die Öffnungsrichtung; der Betrag |a| beeinflusst die Breite.",
+  explain:[["Öffnungsrichtung","Für a>0 ist die Parabel nach oben geöffnet. Für a<0 ist sie nach unten geöffnet."],["Streckung","Für |a|>1 ist die Parabel im Vergleich zur Normalparabel schmaler; sie wird in f(x)-Richtung gestreckt."],["Stauchung","Für 0<|a|<1 ist die Parabel breiter; sie wird in f(x)-Richtung gestaucht."],["Grenzfall a=0","Bei a=0 verschwindet das Quadratglied. Dann liegt keine quadratische Funktion mehr vor. Deshalb lässt der Regler diesen Wert nicht als gültige quadratische Einstellung stehen."]],
+  lang:["Die Parabel verändert Öffnungsrichtung oder Breite.","Parameter a","Für a<0 ist die Parabel nach unten geöffnet; für |a|>1 ist sie schmaler als die Normalparabel.","Das Vorzeichen von a steuert die Öffnungsrichtung und |a| die Streckung bzw. Stauchung."]},
+ {id:"shift",title:"Parabel verschieben",defaults:{a:1,h:1,k:2,x:2},controls:["h","k"],showBase:true,
+  task:"Verändere u und v getrennt. Beobachte, wie sich der Scheitelpunkt und die gesamte Parabel verschieben.",hyp:"In f(x)=a(x−u)²+v kann man den Scheitelpunkt S(u|v) direkt an u und v erkennen.",
+  explain:[["Horizontale Verschiebung","u ist die x-Koordinate des Scheitelpunkts. Wird nur u verändert, wandert die Parabel nach links oder rechts."],["Vertikale Verschiebung","v ist die y-Koordinate des Scheitelpunkts. Wird nur v verändert, wandert die Parabel nach oben oder unten."],["Vorzeichen lesen","In (x−u) steht ein Minuszeichen fest in der Form. Deshalb bedeutet beispielsweise (x−3)²: u=3."],["Graph bleibt Parabel","Die Verschiebung ändert die Lage, nicht die grundsätzliche Form der Parabel."]],
+  lang:["Der Scheitelpunkt wandert mit der Parabel.","Scheitelpunkt S(u|v)","In f(x)=a(x−u)²+v ist u die horizontale und v die vertikale Scheitelkoordinate.","Die Scheitelpunktform macht die Lage des Scheitelpunkts direkt ablesbar."]},
+ {id:"read",title:"Scheitelpunktform lesen",defaults:{a:-1.5,h:-2,k:3,x:1},controls:["a","h","k"],showBase:false,
+  task:"Lies zuerst aus dem Term die drei Informationen a, u und v ab. Prüfe anschließend am Graphen, ob Öffnung, Breite und Scheitelpunkt dazu passen.",hyp:"Die Scheitelpunktform verbindet Term und Graph unmittelbar: a beschreibt Form und Öffnung, S(u|v) die Lage.",
+  explain:[["Form","Wir verwenden f(x)=a(x−u)²+v."],["Scheitelpunkt ablesen","Der Scheitelpunkt lautet S(u|v)."],["Parameter a","a bestimmt Öffnungsrichtung und Streckung bzw. Stauchung."],["Darstellungen verbinden","Term, Graph, Wertetabelle und sprachliche Beschreibung beziehen sich auf dieselbe Funktion. Eine Änderung im Term muss in allen Darstellungen konsistent sichtbar sein."]],
+  lang:["Im Term sind Form und Lage der Parabel codiert.","Scheitelpunktform","Aus u und v lese ich S(u|v) ab; a beschreibt Öffnung und Breite.","Darum ist die Scheitelpunktform besonders hilfreich, wenn Lage und Form der Parabel untersucht werden."]}
+];
+const qState={index:0,view:"task",values:{},lang:{}};
+function qFmt(n){if(Math.abs(n)<1e-9)n=0;return Number.isInteger(n)?String(n):n.toFixed(2).replace(/\.?0+$/,'').replace('.',',')}
+function qCurrent(){return qModules[qState.index]}
+function qFx(x){const v=qState.values;if(qCurrent().compareLine)return v.a*x*x+(v.m??2)*x+(v.b??0);return v.a*(x-v.h)*(x-v.h)+v.k}
+function qResetValues(){qState.values={m:2,b:0,...qCurrent().defaults};qState.lang={};}
+function qSignedTerm(coef,symbol){if(Math.abs(coef)<1e-9)return '';const abs=Math.abs(coef),num=Math.abs(abs-1)<1e-9?'':qFmt(abs);return `${coef<0?'−':'+'}${num}${symbol}`}
+function qFormula(){const v=qState.values;if(qCurrent().compareLine){const parts=[];if(Math.abs(v.a)>1e-9)parts.push(`${v.a<0?'−':''}${Math.abs(Math.abs(v.a)-1)<1e-9?'':qFmt(Math.abs(v.a))}x²`);const m=v.m??2,b=v.b??0;if(Math.abs(m)>1e-9)parts.push(`${parts.length?(m<0?'−':'+'):(m<0?'−':'')}${Math.abs(Math.abs(m)-1)<1e-9?'':qFmt(Math.abs(m))}x`);if(Math.abs(b)>1e-9)parts.push(`${parts.length?(b<0?'−':'+'):(b<0?'−':'')}${qFmt(Math.abs(b))}`);return `f(x)=${parts.join('')||'0'}`;}const a=v.a,h=v.h,k=v.k;const ac=Math.abs(Math.abs(a)-1)<1e-9?'':qFmt(Math.abs(a));const lead=a<0?'−':'';const core=h===0?`${lead}${ac}x²`:`${lead}${ac}(x ${h>0?'−':'+'} ${qFmt(Math.abs(h))})²`;const tail=k===0?'':` ${k>0?'+':'−'} ${qFmt(Math.abs(k))}`;return `f(x)=${core||'0'}${tail}`}
+function qLineFormula(){const v=qState.values;const m=v.m??2,b=v.b??0;let body='';if(Math.abs(m)>1e-9)body=`${m<0?'−':''}${Math.abs(Math.abs(m)-1)<1e-9?'':qFmt(Math.abs(m))}x`;if(Math.abs(b)>1e-9)body+=`${body?(b<0?'−':'+'):(b<0?'−':'')}${qFmt(Math.abs(b))}`;return `g(x)=${body||'0'}`}
+function qGx(x){const v=qState.values;return (v.m??2)*x+(v.b??0)}
+function qHideLinear(){const l1=q$('linearTopicOverview'),l2=q$('linearExperience');if(l1)l1.hidden=true;if(l2)l2.hidden=true;}
+function qHistoryAvailable(){return location.protocol==='http:'||location.protocol==='https:'}
+function qUrl(screen){const u=new URL(location.href);u.searchParams.delete('pfad');u.searchParams.delete('modul');u.searchParams.delete('thema');u.searchParams.delete('qmodul');if(screen==='overview')u.searchParams.set('thema','quadratisch');if(screen==='module'){u.searchParams.set('thema','quadratisch');u.searchParams.set('qmodul',qCurrent().id)}return u}
+function qWrite(screen,mode='push'){if(!qHistoryAvailable())return;const state={[QKEY]:true,screen,index:qState.index,view:qState.view};history[mode==='replace'?'replaceState':'pushState'](state,'',qUrl(screen))}
+function qShowOverview(mode='push'){document.body.classList.remove('q-graph-focus');if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='⛶ Graph groß';}qHideLinear();q$('portalHome').hidden=true;q$('quadraticExperience').hidden=true;q$('quadraticTopicOverview').hidden=false;document.title='Quadratische Funktionen | Mathematik-Lernwelt';window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none')qWrite('overview',mode)}
+function qShowPortal(mode='replace'){document.body.classList.remove('q-graph-focus');if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='⛶ Graph groß';}q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;qHideLinear();q$('portalHome').hidden=false;document.title='Mathematik-Lernwelt';window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none'&&qHistoryAvailable())history.replaceState({mathematikLernweltV34:true,screen:'portal'},'',qUrl('portal'))}
+function qOpen(i,mode='push'){qState.index=Math.max(0,Math.min(qModules.length-1,Number(i)||0));qState.view='task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none')qWrite('module',mode)}
+function qRenderHeader(){const m=qCurrent();q$('qTitle').textContent=m.title;q$('qCrumb').textContent=m.title;q$('qProgress').textContent=`Modul ${qState.index+1} von ${qModules.length}`;q$('qModuleCurrent').textContent=`${qState.index+1} von ${qModules.length} · ${m.title}`;q$('qModuleGrid').innerHTML=qModules.map((x,i)=>`<button class="module-step" data-qi="${i}" aria-current="${i===qState.index?'step':'false'}"><span class="module-no">${i+1}</span><span class="module-name">${x.title}</span></button>`).join('');q$('qModuleGrid').querySelectorAll('[data-qi]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qi,'replace')));}
+function qRenderControls(){const m=qCurrent(),v=qState.values;q$('qFormula').textContent=qFormula();const specs={a:['a','Formparameter a',-3,3,.25],h:['h','Scheitelkoordinate u',-5,5,.5],k:['k','Scheitelkoordinate v',-5,5,.5],x:['x','betrachtete Stelle x',-5,5,.5],m:['m','Steigung m der Geraden',-4,4,.25],b:['b','y-Achsenabschnitt b der Geraden',-6,6,.5]};q$('qControls').innerHTML=m.controls.map(key=>{const [k,label,min,max,step]=specs[key];let val=v[key];return `<div class="control"><div class="control-top"><label for="q-${k}">${label}</label><output class="value" id="q-out-${k}">${qFmt(val)}</output></div><input id="q-${k}" data-q-control="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('');q$('qControlNote').innerHTML=m.compareLine?'<strong>Wichtig:</strong> a=0 ist hier ausdrücklich erlaubt. Dann verschwindet der quadratische Anteil und f(x) ist dieselbe Gerade wie g(x).':m.id==='a'?'<strong>Hinweis:</strong> In diesem Parabel-Modul wird a=0 übersprungen, weil dann keine quadratische Funktion mehr vorliegt.':'Verändere möglichst nur die im Auftrag genannte Größe und beobachte gezielt.';q$('qControls').querySelectorAll('[data-q-control]').forEach(r=>r.addEventListener('input',()=>{let value=+r.value;if(r.dataset.qControl==='a'&&!m.compareLine&&Math.abs(value)<.001){value=value<0?-.25:.25;r.value=String(value)}qState.values[r.dataset.qControl]=value;q$('q-out-'+r.dataset.qControl).textContent=qFmt(value);q$('qFormula').textContent=qFormula();qDraw();qRenderTable();qRenderTaskInsight();}));}
+function qSvgPoint(x,y,b){const px=b.l+(x-b.xmin)/(b.xmax-b.xmin)*b.w,py=b.t+b.h-(y-b.ymin)/(b.ymax-b.ymin)*b.h;return [px,py]}
+function qDraw(){
+ const svg=q$('qPlot'),m=qCurrent(),v=qState.values;
+ const B={l:55,t:25,w:665,h:425,xmin:-6,xmax:6,ymin:-10,ymax:12};
+ let s=`<defs><clipPath id="qPlotClip"><rect x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}"/></clipPath><marker id="qAxisArrow" markerWidth="8" markerHeight="8" refX="6.6" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#64748b"/></marker></defs><rect width="760" height="500" fill="#fbfcff"/><rect x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}" fill="#fff" stroke="#e5eaf1"/>`;
+ for(let x=-6;x<=6;x++){
+   const [px]=qSvgPoint(x,0,B);
+   if(x!==0)s+=`<line x1="${px}" y1="${B.t}" x2="${px}" y2="${B.t+B.h}" stroke="#e8edf4" stroke-width="1"/>`;
+   if(x!==0)s+=`<text x="${px}" y="${B.t+B.h+20}" text-anchor="middle" font-size="11" fill="#6b7788">${x}</text>`;
+ }
+ for(let y=-10;y<=12;y+=2){
+   const [,py]=qSvgPoint(0,y,B);
+   if(y!==0)s+=`<line x1="${B.l}" y1="${py}" x2="${B.l+B.w}" y2="${py}" stroke="#e8edf4" stroke-width="1"/>`;
+   if(y!==0)s+=`<text x="${B.l-10}" y="${py+4}" text-anchor="end" font-size="11" fill="#6b7788">${y}</text>`;
+ }
+ const [qX0,qY0]=qSvgPoint(0,0,B);
+ s+=`<line x1="${B.l}" y1="${qY0}" x2="${B.l+B.w-3}" y2="${qY0}" stroke="#64748b" stroke-width="1.9" marker-end="url(#qAxisArrow)"/>`;
+ s+=`<line x1="${qX0}" y1="${B.t+B.h}" x2="${qX0}" y2="${B.t+3}" stroke="#64748b" stroke-width="1.9" marker-end="url(#qAxisArrow)"/>`;
+ function axisPill(x,y,label){const w=Math.max(30,18+label.length*7);return `<g><rect x="${x}" y="${y}" width="${w}" height="22" rx="8" fill="#fff" fill-opacity=".96" stroke="#cbd5e1"/><text x="${x+w/2}" y="${y+15}" text-anchor="middle" font-size="12" font-weight="800" fill="#475569">${label}</text></g>`}
+ const qOrdinateLabel=m.compareLine?'f(x), g(x)':m.showBase?'f(x), n(x)':'f(x)';
+ s+=axisPill(B.l+B.w-42,qY0-30,'x');
+ s+=axisPill(qX0+8,B.t+6,qOrdinateLabel);
+ function pathFor(fn){let d='';for(let i=0;i<=360;i++){const x=B.xmin+(B.xmax-B.xmin)*i/360,y=fn(x),[px,py]=qSvgPoint(x,y,B);d+=(i?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)}return d}
+ function graphLabel(fn,x,text,color,opts={}){
+   let y=fn(x);if(!Number.isFinite(y))return '';
+   y=Math.max(B.ymin+.35,Math.min(B.ymax-.35,y));
+   const [ax,ay]=qSvgPoint(x,y,B),w=Math.max(84,Math.min(220,24+text.length*6.3)),h=24;
+   const placement=opts.placement||'above-right';
+   let bx=placement.includes('left')?ax-w-16:ax+16;
+   let by=placement.includes('below')?ay+16:ay-h-16;
+   bx=Math.max(B.l+5,Math.min(B.l+B.w-w-5,bx));by=Math.max(B.t+5,Math.min(B.t+B.h-h-5,by));
+   const cx=ax<bx?bx:ax>bx+w?bx+w:Math.max(bx+6,Math.min(bx+w-6,ax));
+   const cy=ay<by?by:ay>by+h?by+h:Math.max(by+5,Math.min(by+h-5,ay));
+   return `<g><line x1="${ax}" y1="${ay}" x2="${cx}" y2="${cy}" stroke="${color}" stroke-width="1.5" opacity=".7"/><circle cx="${ax}" cy="${ay}" r="3.2" fill="${color}"/><rect x="${bx}" y="${by}" width="${w}" height="${h}" rx="8" fill="#fff" stroke="${color}" stroke-opacity=".5"/><text class="graph-label" x="${bx+8}" y="${by+16}" fill="${color}">${text}</text></g>`;
+ }
+ function parabolaLabelX(){
+   const a=Math.max(.25,Math.abs(v.a||1));
+   const offset=Math.min(3.2,Math.max(1.2,2.25/Math.sqrt(a)));
+   let x=(v.h||0)+offset;
+   if(x>B.xmax-.7)x=(v.h||0)-offset;
+   return Math.max(B.xmin+.7,Math.min(B.xmax-.7,x));
+ }
+ function lineLabelX(){
+   const mm=v.m??2,bb=v.b??0;
+   let x=4.2;
+   const y=mm*x+bb;
+   if(y>B.ymax-1.2 || y<B.ymin+1.2){
+     if(Math.abs(mm)>1e-9)x=((B.ymax-2)-bb)/mm;
+   }
+   return Math.max(B.xmin+.8,Math.min(B.xmax-.8,x));
+ }
+ s+='<g clip-path="url(#qPlotClip)">';
+ if(m.showBase)s+=`<path d="${pathFor(x=>x*x)}" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 6"/>`;
+ if(m.compareLine){
+   const same=Math.abs(v.a)<1e-9;
+   s+=`<path d="${pathFor(qGx)}" fill="none" stroke="#2457d6" stroke-width="3.4" stroke-linecap="round"/>`;
+   if(!same)s+=`<path d="${pathFor(qFx)}" fill="none" stroke="#6d39c6" stroke-width="3.8" stroke-linecap="round"/>`;
+ }else s+=`<path d="${pathFor(qFx)}" fill="none" stroke="#6d39c6" stroke-width="3.8" stroke-linecap="round"/>`;
+ s+='</g>';
+ if(m.compareLine){
+   if(Math.abs(v.a)<1e-9){s+=graphLabel(qGx,lineLabelX(),`f(x)=g(x)=${qLineFormula().replace('g(x)=','')}`,'#2457d6',{placement:(v.m??2)>=0?'above-left':'above-right'});}
+   else{
+    s+=graphLabel(qGx,lineLabelX(),qLineFormula(),'#2457d6',{placement:(v.m??2)>=0?'above-left':'above-right'});
+    const px=parabolaLabelX(),slope=2*v.a*px+(v.m??2);
+    s+=graphLabel(qFx,px,qFormula(),'#6d39c6',{placement:slope>=0?'below-right':'below-left'});
+   }
+ }else{
+   if(m.showBase)s+=graphLabel(x=>x*x,-2.2,'Normalparabel n(x)=x²','#64748b',{dx:-165,dy:-18});
+   s+=graphLabel(qFx,parabolaLabelX(),qFormula(),'#6d39c6',{dx:14,dy:v.a<0?-34:8});
+   const [sx,sy]=qSvgPoint(v.h,v.k,B);
+   s+=`<line x1="${sx}" y1="${B.t}" x2="${sx}" y2="${B.t+B.h}" stroke="#6d39c6" stroke-dasharray="6 6" opacity=".35"/><circle cx="${sx}" cy="${sy}" r="5.5" fill="#a42d55"/>`;
+   const sp=`S(${qFmt(v.h)}|${qFmt(v.k)})`,sw=Math.max(88,24+sp.length*6.2),sbx=Math.max(B.l+5,Math.min(B.l+B.w-sw-5,sx+10)),sby=Math.max(B.t+5,Math.min(B.t+B.h-27,sy-32));
+   s+=`<line x1="${sx}" y1="${sy}" x2="${sbx}" y2="${sby+12}" stroke="#a42d55" stroke-width="1.5" opacity=".65"/><rect x="${sbx}" y="${sby}" width="${sw}" height="24" rx="8" fill="#fff" stroke="#d8b4ce"/><text x="${sbx+8}" y="${sby+16}" font-size="12" fill="#8f274a" font-weight="800">${sp}</text>`;
+   if(m.id==='normal'){
+     const x=v.x,y=qFx(x),p1=qSvgPoint(x,y,B),p2=qSvgPoint(-x,y,B);
+     s+=`<circle cx="${p1[0]}" cy="${p1[1]}" r="5" fill="#2457d6"/><circle cx="${p2[0]}" cy="${p2[1]}" r="5" fill="#0f766e"/>`;
+   }
+ }
+ svg.innerHTML=s;
+ q$('qLegend').innerHTML=m.compareLine?(Math.abs(v.a)<1e-9?`<span class="f2">f(x)=g(x)=${qLineFormula().replace('g(x)=','')}</span>`:`<span class="f2">${qLineFormula()}</span><span class="f1">${qFormula()}</span>`):`${m.showBase?'<span class="old">Normalparabel n(x)=x²</span>':''}<span class="f1">${qFormula()}</span><span class="f3">Scheitelpunkt S</span>`;
+ qRenderTaskInsight();
+}
+function qRenderTaskInsight(){const m=qCurrent(),v=qState.values;let text=m.hyp;if(m.compareLine){text=Math.abs(v.a)<1e-9?`a=0: Der quadratische Term verschwindet. Deshalb gilt ${qFormula()} und der Graph von f fällt genau mit ${qLineFormula()} zusammen.`:`a=${qFmt(v.a)}≠0: f enthält einen x²-Term und ist quadratisch; g bleibt linear. Am Graphen siehst du die Krümmung von f.`;}if(m.id==='a'){text=`Aktuell: a=${qFmt(v.a)}. Die Parabel ist ${v.a>0?'nach oben':'nach unten'} geöffnet und ${Math.abs(v.a)>1?'schmaler (gestreckt)':Math.abs(v.a)<1?'breiter (gestaucht)':'gleich breit wie die Normalparabel'}.`}if(m.id==='shift'||m.id==='read')text=`Aktuell ist der Scheitelpunkt S(${qFmt(v.h)}|${qFmt(v.k)}). ${v.a<0?'Die Parabel ist nach unten geöffnet.':'Die Parabel ist nach oben geöffnet.'}`;if(m.id==='normal')text=`Bei x=${qFmt(v.x)} gilt f(x)=${qFmt(qFx(v.x))}. Wegen der Symmetrie gilt auch f(${-v.x===0?'0':qFmt(-v.x)})=${qFmt(qFx(v.x))}.`;q$('qInsight').innerHTML=text;}
+function qRenderTabs(){const tabs=[['task','🧭 Auftrag','untersuchen'],['language','💬 Sprache & Begründen','präzise formulieren'],['table','▦ Tabelle','Werte verbinden'],['explain','💡 Erklärung','Zusammenhang verstehen'],['explore','🎛 Freies Erkunden','alle Parameter verändern']];q$('qTabs').innerHTML=tabs.map(([id,a,b])=>`<button class="tab" data-q-view="${id}" data-view="${id}" role="tab" aria-selected="${qState.view===id}"><span class="tab-main">${a}</span><span class="tab-sub">${b}</span></button>`).join('');q$('qTabs').querySelectorAll('[data-q-view]').forEach(b=>b.addEventListener('click',()=>{qState.view=b.dataset.qView;qRenderTabs();qRenderViews()}));}
+function qRenderViews(){const m=qCurrent();q$('qViews').innerHTML=`<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="cardbox"><strong>Auftrag</strong>${m.task}</div><div class="cardbox"><strong>Vermutung</strong>${m.hyp}</div><div class="cardbox"><strong>Beobachtung formulieren</strong>Notiere oder sprich für dich: Was verändert sich – und was bleibt gleich?</div></section><section class="view ${qState.view==='language'?'active':''}" id="qv-language" role="tabpanel"></section><section class="view ${qState.view==='table'?'active':''}" id="qv-table" role="tabpanel"></section><section class="view ${qState.view==='explain'?'active':''}" id="qv-explain" role="tabpanel"><div class="kicker">Erklärung</div><h2>Zusammenhang verstehen</h2>${m.explain.map(([h,t])=>`<div class="rule"><strong>${h}</strong>${t}</div>`).join('')}<div class="rule"><strong>Eigene Erklärung der Lernplattform</strong>Diese Erklärung gehört vollständig zur Lernplattform. Externe Erklärungen und Videos werden erst in einer späteren, gesondert geprüften Ausbaustufe ergänzt.</div></section><section class="view ${qState.view==='explore'?'active':''}" id="qv-explore" role="tabpanel"></section>`;qRenderLanguage();qRenderTable();qRenderExplore();}
+function qRenderLanguage(){const box=q$('qv-language');if(!box)return;const m=qCurrent(),labels=['1 · Beobachten','2 · Benennen','3 · Sag es genauer','4 · Begründen'];const prompts=['Was fällt dir am Graphen auf?','Welcher Fachbegriff passt?','Welche Formulierung ist fachsprachlich genauer?','Wie begründest du den Zusammenhang?'];let unlocked=0;while(qState.lang[unlocked])unlocked++;box.innerHTML=`<div class="kicker">Sprache & Begründen</div><h2>Mathematik sehen, benennen und erklären</h2><p class="mini">Arbeite die vier Schritte nacheinander durch.</p>`+labels.map((lab,i)=>{const done=!!qState.lang[i],available=i<=unlocked;return `<div class="language-step ${done?'done':''} ${available?'':'locked'}"><div class="language-step-head"><div><div class="language-step-title">${lab}</div><div class="language-step-sub">${prompts[i]}</div></div><span class="language-step-badge">${done?'erledigt':available?'jetzt':'danach'}</span></div>${done?`<div class="lang-answer-summary">✓ ${m.lang[i]}</div>`:available?`<button class="btn small" data-q-lang="${i}">Beispielantwort prüfen</button>`:''}</div>`}).join('');box.querySelectorAll('[data-q-lang]').forEach(b=>b.addEventListener('click',()=>{qState.lang[+b.dataset.qLang]=true;qRenderLanguage()}));}
+function qRenderTable(){const box=q$('qv-table');if(!box)return;const m=qCurrent(),v=qState.values;if(m.compareLine){const xs=[-2,-1,0,1,2];box.innerHTML=`<div class="kicker">Vergleichstabelle</div><h2>Gerade und quadratische Funktion an denselben Stellen vergleichen</h2><p class="mini">Jede Spalte gehört zu demselben x-Wert. So siehst du direkt, wann beide Funktionen gleiche oder unterschiedliche Werte liefern.</p><table><thead><tr><th>x</th>${xs.map(x=>`<th>${qFmt(x)}</th>`).join('')}</tr></thead><tbody><tr><td>${qLineFormula()}</td>${xs.map(x=>`<td>${qFmt(qGx(x))}</td>`).join('')}</tr><tr><td>${qFormula()}</td>${xs.map(x=>`<td>${qFmt(qFx(x))}</td>`).join('')}</tr><tr><td>Differenz f(x)−g(x)</td>${xs.map(x=>`<td><strong>${qFmt(qFx(x)-qGx(x))}</strong></td>`).join('')}</tr></tbody></table><div class="cardbox"><strong>${Math.abs(v.a)<1e-9?'Beobachtung bei a=0':'Beobachtung'}</strong>${Math.abs(v.a)<1e-9?'Alle Differenzen sind 0. Beide Terme beschreiben dieselbe Gerade.':`Die Differenz ist a·x². Bei x=0 ist sie 0; mit wachsendem |x| wird der Einfluss des quadratischen Terms sichtbar.`}</div>`;return;}const xs=[v.h-2,v.h-1,v.h,v.h+1,v.h+2];box.innerHTML=`<div class="kicker">Wertetabelle</div><h2>Term, Tabelle und Graph verbinden</h2><table><thead><tr><th>x</th>${xs.map(x=>`<th>${qFmt(x)}</th>`).join('')}</tr></thead><tbody><tr><td>f(x)</td>${xs.map(x=>`<td>${qFmt(qFx(x))}</td>`).join('')}</tr></tbody></table><div class="cardbox"><strong>Prüffrage</strong>Vergleiche Werte in gleichem Abstand links und rechts von u=${qFmt(v.h)}. Was fällt dir auf?</div>`;}
+function qRenderExplore(){const box=q$('qv-explore');if(!box)return;const m=qCurrent(),v=qState.values;const specs={a:['Formparameter a',-3,3,.25],h:['Scheitelkoordinate u',-5,5,.5],k:['Scheitelkoordinate v',-5,5,.5],m:['Steigung m der Geraden',-4,4,.25],b:['y-Achsenabschnitt b der Geraden',-6,6,.5]};const keys=m.compareLine?['a','m','b']:['a','h','k'];box.innerHTML=`<div class="kicker">Freies Erkunden</div><h2>Wie in einem dynamischen Graphen: alle Parameter selbst verändern</h2><p class="mini">Hier bist du nicht auf den Forscherauftrag beschränkt. Verändere mehrere Parameter gleichzeitig und beobachte direkt den Graphen.</p><div class="explore-formulas"><div class="formula" id="qExploreF">${qFormula()}</div>${m.compareLine?`<div class="formula" id="qExploreG">${qLineFormula()}</div>`:''}</div><div class="explore-grid">${keys.map(key=>{const [label,min,max,step]=specs[key];return `<div class="control"><div class="control-top"><label for="q-ex-${key}">${label}</label><output class="value" id="q-ex-out-${key}">${qFmt(v[key]??(key==='m'?2:0))}</output></div><input id="q-ex-${key}" data-q-explore="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${v[key]??(key==='m'?2:0)}"></div>`}).join('')}</div><div class="cardbox"><strong>Arbeitsidee</strong>Verändere zuerst nur einen Parameter, danach zwei oder mehrere gleichzeitig. Formuliere jeweils, was sich am Graphen ändert und was gleich bleibt.</div>`;box.querySelectorAll('[data-q-explore]').forEach(r=>r.addEventListener('input',()=>{let value=+r.value;if(r.dataset.qExplore==='a'&&!m.compareLine&&Math.abs(value)<.001){value=value<0?-.25:.25;r.value=String(value)}qState.values[r.dataset.qExplore]=value;q$('q-ex-out-'+r.dataset.qExplore).textContent=qFmt(value);q$('qFormula').textContent=qFormula();if(q$('qExploreF'))q$('qExploreF').textContent=qFormula();if(q$('qExploreG'))q$('qExploreG').textContent=qLineFormula();qDraw();qRenderTable();qRenderTaskInsight();}));}
+function qRenderAll(){qRenderHeader();qRenderControls();qRenderTabs();qRenderViews();qDraw();q$('qPrev').disabled=qState.index===0;q$('qNext').disabled=qState.index===qModules.length-1;}
+q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'↩ Ansicht zurück':'⛶ Graph groß';if(on){requestAnimationFrame(()=>{const card=q$('qPlot')?.closest('.chart-card');if(card)card.scrollTop=0;});}});q$('qPrev').addEventListener('click',()=>{if(qState.index>0)qOpen(qState.index-1,'replace')});q$('qNext').addEventListener('click',()=>{if(qState.index<qModules.length-1)qOpen(qState.index+1,'replace')});
+document.querySelectorAll('[data-open-topic="quadratic"]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-open]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qOpen,'push')));document.querySelectorAll('[data-q-overview]').forEach(b=>b.addEventListener('click',()=>qShowOverview('replace')));document.querySelectorAll('[data-q-back-portal]').forEach(b=>b.addEventListener('click',()=>{if(qHistoryAvailable()&&history.state?.[QKEY])history.back();else qShowPortal('replace')}));
+window.addEventListener('popstate',e=>{const st=e.state;if(st?.[QKEY]){if(st.screen==='overview')qShowOverview('none');else if(st.screen==='module'){qState.index=st.index||0;qState.view=st.view||'task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();}return;}if(!q$('quadraticTopicOverview').hidden||!q$('quadraticExperience').hidden){q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('q-graph-focus')){document.body.classList.remove('q-graph-focus');q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='⛶ Graph groß'}});
+})();
+</script>
+
 </body>
 </html>
