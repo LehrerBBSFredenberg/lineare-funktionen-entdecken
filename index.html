@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V47 · Android-Steuerung graphnah integriert: aktive Regler direkt im Graph-Panel; Desktop-Seitensteuerung bleibt erhalten. Lineare Funktionen bleiben unverändert auf V34. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V49 · Plattformübergreifend: Regler dauerhaft im Graphpanel auf Desktop, Android, iOS und Tablet; Auftrag / Alle Parameter responsiv. Lineare Funktionen bleiben unverändert auf V34. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -864,6 +864,10 @@ body.q-graph-focus #quadraticWorkspaceApp #qPlot{height:clamp(620px,74vh,820px);
 #quadraticWorkspaceApp .q-graph-stage{position:relative}
 #quadraticWorkspaceApp .q-inline-controls{display:none}
 #quadraticWorkspaceApp .q-inline-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:.76rem;font-weight:900;color:#536279}
+#quadraticWorkspaceApp .q-inline-modes{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 8px}
+#quadraticWorkspaceApp .q-inline-mode{border:1px solid #cbd7ea;background:#fff;color:#40516b;border-radius:999px;padding:6px 10px;font-size:.72rem;font-weight:850;min-height:34px}
+#quadraticWorkspaceApp .q-inline-mode[aria-pressed="true"]{background:#2457d6;border-color:#2457d6;color:#fff}
+#quadraticWorkspaceApp .q-inline-mode-hint{font-size:.7rem;color:#64748b;margin-left:auto;align-self:center}
 #quadraticWorkspaceApp .q-inline-formula{font-family:"Cambria Math",Georgia,serif;font-size:.9rem;font-weight:700;color:#172033;text-align:right}
 #quadraticWorkspaceApp .q-inline-note{font-size:.74rem;line-height:1.4;color:#68788d;margin-top:6px}
 #quadraticWorkspaceApp .q-inline-controls .control{margin:0}
@@ -883,11 +887,100 @@ body.q-graph-focus #quadraticWorkspaceApp #qPlot{height:clamp(620px,74vh,820px);
 @media(max-width:520px){
   #quadraticWorkspaceApp .q-inline-head{display:block}
   #quadraticWorkspaceApp .q-inline-formula{text-align:left;margin-top:2px;font-size:.86rem}
+  #quadraticWorkspaceApp .q-inline-modes{display:grid;grid-template-columns:1fr 1fr}
+  #quadraticWorkspaceApp .q-inline-mode{text-align:center}
   #quadraticWorkspaceApp .q-inline-controls #qInlineControls{grid-template-columns:1fr}
 }
 body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{display:block!important}
 body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{display:flex;flex-direction:column}
 body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{flex:0 0 auto;order:2}
+
+/* V49 · Plattformübergreifend: Graph und Regler bilden eine gemeinsame Interaktionseinheit */
+#quadraticWorkspaceApp .workspace{
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-areas:"center" "right"!important;
+  grid-template-rows:auto auto!important;
+}
+#quadraticWorkspaceApp .panel.left{display:none!important}
+#quadraticWorkspaceApp .q-inline-controls{
+  display:block!important;
+  border-top:1px solid #dbe3ee;
+  background:linear-gradient(180deg,#fbfcff,#f7f9fd);
+  padding:10px 12px 11px;
+  margin:0;
+  border-radius:0 0 13px 13px;
+}
+#quadraticWorkspaceApp .q-graph-stage{
+  overflow:hidden;
+  border-radius:14px;
+  background:#fbfcff;
+  border:1px solid #edf1f6;
+}
+#quadraticWorkspaceApp .q-graph-stage #qPlot{border-radius:0!important}
+#quadraticWorkspaceApp .q-inline-head{align-items:center;margin-bottom:7px}
+#quadraticWorkspaceApp .q-inline-modes{margin-bottom:8px}
+#quadraticWorkspaceApp .q-inline-controls #qInlineControls{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+#quadraticWorkspaceApp .q-inline-controls .control{padding:9px 10px;background:#fff}
+#quadraticWorkspaceApp .q-inline-controls input[type="range"]{margin-top:6px}
+#quadraticWorkspaceApp .q-inline-note{margin-top:7px}
+@media(max-width:1180px){
+  #quadraticWorkspaceApp .q-inline-controls #qInlineControls{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:780px){
+  #quadraticWorkspaceApp .chart-card{padding:12px}
+  #quadraticWorkspaceApp .q-inline-controls{padding:9px 9px 10px}
+  #quadraticWorkspaceApp .q-inline-head{display:flex}
+  #quadraticWorkspaceApp .q-inline-formula{text-align:right;margin-top:0}
+}
+@media(max-width:560px){
+  #quadraticWorkspaceApp .q-inline-head{display:block}
+  #quadraticWorkspaceApp .q-inline-formula{text-align:left;margin-top:3px;font-size:.86rem}
+  #quadraticWorkspaceApp .q-inline-modes{display:grid;grid-template-columns:1fr 1fr}
+  #quadraticWorkspaceApp .q-inline-mode{text-align:center}
+  #quadraticWorkspaceApp .q-inline-controls #qInlineControls{grid-template-columns:1fr}
+}
+body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{display:block!important}
+body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{display:flex;flex-direction:column}
+body.q-graph-focus #quadraticWorkspaceApp #qPlot{order:1}
+body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{order:2;flex:0 0 auto}
+
+/* V49 · Touch- und Querformat-Feinschliff für iOS/Android/Tablet */
+#quadraticWorkspaceApp .q-inline-controls input[type="range"]{
+  width:100%;min-height:34px;accent-color:#2457d6;touch-action:pan-y;
+}
+#quadraticWorkspaceApp .q-inline-mode{min-height:40px}
+@media(max-width:780px){
+  #quadraticWorkspaceApp .mobile-note{display:block}
+}
+@media(max-width:900px) and (orientation:landscape){
+  body.q-graph-focus #quadraticWorkspaceApp .chart-card{overflow:auto!important}
+  body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{
+    display:grid!important;
+    grid-template-columns:minmax(0,1.65fr) minmax(260px,.75fr);
+    align-items:stretch;
+    height:calc(100dvh - 62px);
+    min-height:0;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp #qPlot{
+    width:100%!important;height:100%!important;min-height:0!important;
+    aspect-ratio:auto!important;object-fit:contain;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{
+    border-top:0;border-left:1px solid #dbe3ee;border-radius:0;
+    overflow:auto;min-width:0;padding:9px;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls #qInlineControls{grid-template-columns:1fr}
+  body.q-graph-focus #quadraticWorkspaceApp .q-inline-head{display:block}
+  body.q-graph-focus #quadraticWorkspaceApp .q-inline-formula{text-align:left;margin-top:3px}
+  body.q-graph-focus #quadraticWorkspaceApp .q-inline-modes{display:grid;grid-template-columns:1fr 1fr}
+}
+@media(min-width:901px){
+  #quadraticWorkspaceApp .q-inline-controls #qInlineControls{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 
 </style>
 </head>
@@ -1066,7 +1159,7 @@ body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{flex:0 0 auto;order
 </header>
 
 <nav class="modulebar" aria-label="Teilmodule des gewählten Lernpfads"><div class="modulebar-head"><div class="modulebar-title">Teilmodule · Entdecken &amp; Verstehen</div><div class="modulebar-current" id="qModuleCurrent"></div></div><div class="modulebar-grid" id="qModuleGrid"></div></nav>
-<div class="mobile-note">Auf kleinen Bildschirmen liegen die aktiven Regler direkt am Graphen. So siehst du die Veränderung und ihre Wirkung ohne langen Scrollweg. Die Lernkarte folgt darunter.</div>
+<div class="mobile-note">Graph und Regler gehören zusammen: Die Steuerung sitzt direkt am Koordinatensystem. „Auftrag“ zeigt nur die gerade untersuchte Größe; „Alle Parameter“ öffnet die freie GeoGebra-artige Steuerung. Die Lernkarte folgt danach.</div>
 
 <main class="workspace">
   <section class="center">
@@ -1076,6 +1169,10 @@ body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{flex:0 0 auto;order
         <svg id="qPlot" viewBox="0 0 760 500" role="img" aria-label="Koordinatensystem mit quadratischer Funktion"></svg>
         <div class="q-inline-controls" id="qInlineControlsPanel" aria-label="Graphnahe Steuerung">
           <div class="q-inline-head"><span>Direkt am Graphen verändern</span><div id="qInlineFormula" class="q-inline-formula"></div></div>
+          <div class="q-inline-modes" role="group" aria-label="Art der Steuerung">
+            <button type="button" class="q-inline-mode" data-q-inline-mode="guided" aria-pressed="true">Auftrag</button>
+            <button type="button" class="q-inline-mode" data-q-inline-mode="free" aria-pressed="false">Alle Parameter</button>
+          </div>
           <div id="qInlineControls"></div>
           <div class="q-inline-note" id="qInlineControlNote"></div>
         </div>
@@ -3000,7 +3097,7 @@ function renderAll(resetControls=true){
  document.body.classList.toggle("practice-mode",state.path==="practice");
  document.body.classList.toggle("practice-graph-hidden",state.path==="practice"&&!practiceGraphVisible());
  const mobileNote=document.querySelector(".mobile-note");
- if(mobileNote) mobileNote.textContent=state.path==="practice"?"Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst: Aufgabe → bei Bedarf Graph als Hilfe → Rückmeldung.":"Auf kleinen Bildschirmen liegen die aktiven Regler direkt am Graphen. So siehst du die Veränderung und ihre Wirkung ohne langen Scrollweg. Die Lernkarte folgt darunter.";
+ if(mobileNote) mobileNote.textContent=state.path==="practice"?"Auf kleinen Bildschirmen folgt die Arbeitsfolge bewusst: Aufgabe → bei Bedarf Graph als Hilfe → Rückmeldung.":"Graph und Regler gehören zusammen: Die Steuerung sitzt direkt am Koordinatensystem. „Auftrag“ zeigt nur die gerade untersuchte Größe; „Alle Parameter“ öffnet die freie GeoGebra-artige Steuerung. Die Lernkarte folgt danach.";
  renderHeader();if(resetControls)renderControls();else renderControls();renderFormulas();renderRight();renderCenter();renderMenu();
  $("prevModule").disabled=state.moduleIndex===0;
  $("nextModule").disabled=state.moduleIndex===listPathModules(state.path).length-1;
@@ -3204,7 +3301,7 @@ const qModules=[
   explain:[["Form","Wir verwenden f(x)=a(x−u)²+v."],["Scheitelpunkt ablesen","Der Scheitelpunkt lautet S(u|v)."],["Parameter a","a bestimmt Öffnungsrichtung und Streckung bzw. Stauchung."],["Darstellungen verbinden","Term, Graph, Wertetabelle und sprachliche Beschreibung beziehen sich auf dieselbe Funktion. Eine Änderung im Term muss in allen Darstellungen konsistent sichtbar sein."]],
   lang:["Im Term sind Form und Lage der Parabel codiert.","Scheitelpunktform","Aus u und v lese ich S(u|v) ab; a beschreibt Öffnung und Breite.","Darum ist die Scheitelpunktform besonders hilfreich, wenn Lage und Form der Parabel untersucht werden."]}
 ];
-const qState={index:0,view:"task",values:{},lang:{}};
+const qState={index:0,view:"task",values:{},lang:{},inlineMode:"guided"};
 function qFmt(n){if(Math.abs(n)<1e-9)n=0;return Number.isInteger(n)?String(n):n.toFixed(2).replace(/\.?0+$/,'').replace('.',',')}
 function qCurrent(){return qModules[qState.index]}
 function qFx(x){const v=qState.values;if(qCurrent().compareLine)return v.a*x*x+(v.m??2)*x+(v.b??0);return v.a*(x-v.h)*(x-v.h)+v.k}
@@ -3219,19 +3316,26 @@ function qUrl(screen){const u=new URL(location.href);u.searchParams.delete('pfad
 function qWrite(screen,mode='push'){if(!qHistoryAvailable())return;const state={[QKEY]:true,screen,index:qState.index,view:qState.view};history[mode==='replace'?'replaceState':'pushState'](state,'',qUrl(screen))}
 function qShowOverview(mode='push'){document.body.classList.remove('q-graph-focus');if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='⛶ Graph groß';}qHideLinear();q$('portalHome').hidden=true;q$('quadraticExperience').hidden=true;q$('quadraticTopicOverview').hidden=false;document.title='Quadratische Funktionen | Mathematik-Lernwelt';window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none')qWrite('overview',mode)}
 function qShowPortal(mode='replace'){document.body.classList.remove('q-graph-focus');if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='⛶ Graph groß';}q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;qHideLinear();q$('portalHome').hidden=false;document.title='Mathematik-Lernwelt';window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none'&&qHistoryAvailable())history.replaceState({mathematikLernweltV34:true,screen:'portal'},'',qUrl('portal'))}
-function qOpen(i,mode='push'){qState.index=Math.max(0,Math.min(qModules.length-1,Number(i)||0));qState.view='task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none')qWrite('module',mode)}
+function qOpen(i,mode='push'){qState.index=Math.max(0,Math.min(qModules.length-1,Number(i)||0));qState.view='task';qState.inlineMode='guided';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none')qWrite('module',mode)}
 function qRenderHeader(){const m=qCurrent();q$('qTitle').textContent=m.title;q$('qCrumb').textContent=m.title;q$('qProgress').textContent=`Modul ${qState.index+1} von ${qModules.length}`;q$('qModuleCurrent').textContent=`${qState.index+1} von ${qModules.length} · ${m.title}`;q$('qModuleGrid').innerHTML=qModules.map((x,i)=>`<button class="module-step" data-qi="${i}" aria-current="${i===qState.index?'step':'false'}"><span class="module-no">${i+1}</span><span class="module-name">${x.title}</span></button>`).join('');q$('qModuleGrid').querySelectorAll('[data-qi]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qi,'replace')));}
 function qRenderControls(){
  const m=qCurrent(),v=qState.values;
  const specs={a:['a','Formparameter a',-3,3,.25],h:['h','Scheitelkoordinate u',-5,5,.5],k:['k','Scheitelkoordinate v',-5,5,.5],x:['x','betrachtete Stelle x',-5,5,.5],m:['m','Steigung m der Geraden',-4,4,.25],b:['b','y-Achsenabschnitt b der Geraden',-6,6,.5]};
- const note=m.compareLine?'<strong>Wichtig:</strong> a=0 ist hier ausdrücklich erlaubt. Dann verschwindet der quadratische Anteil und f(x) ist dieselbe Gerade wie g(x).':m.id==='a'?'<strong>Hinweis:</strong> In diesem Parabel-Modul wird a=0 übersprungen, weil dann keine quadratische Funktion mehr vorliegt.':'Verändere möglichst nur die im Auftrag genannte Größe und beobachte gezielt.';
- function markup(prefix){return m.controls.map(key=>{const [k,label,min,max,step]=specs[key];const val=v[key];return `<div class="control"><div class="control-top"><label for="${prefix}-${k}">${label}</label><output class="value" data-q-output="${k}">${qFmt(val)}</output></div><input id="${prefix}-${k}" data-q-control="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('')}
+ const guidedNote=m.compareLine?'<strong>Auftrag:</strong> Verändere nur a. Bei a=0 fällt f mit g zusammen.':m.id==='a'?'<strong>Auftrag:</strong> Verändere nur a und vergleiche mit der Normalparabel.':'<strong>Auftrag:</strong> Verändere nur die im Modul untersuchten Größen.';
+ const freeNote=m.compareLine?'<strong>Freies Erkunden:</strong> Verändere a, m und b gleichzeitig.':m.id==='normal'?'<strong>Freies Erkunden:</strong> Verändere zusätzlich a, u und v; x steuert den markierten Punkt.':'<strong>Freies Erkunden:</strong> Verändere a, u und v gleichzeitig.';
+ const freeKeys=m.compareLine?['a','m','b']:m.id==='normal'?['a','h','k','x']:['a','h','k'];
+ function markup(prefix,keys){return keys.map(key=>{const [k,label,min,max,step]=specs[key];const val=v[key];return `<div class="control"><div class="control-top"><label for="${prefix}-${k}">${label}</label><output class="value" data-q-output="${k}">${qFmt(val)}</output></div><input id="${prefix}-${k}" data-q-control="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('')}
  q$('qFormula').textContent=qFormula();
- q$('qControls').innerHTML=markup('q');
- q$('qControlNote').innerHTML=note;
+ q$('qControls').innerHTML=markup('q',m.controls);
+ q$('qControlNote').innerHTML=m.compareLine?'<strong>Wichtig:</strong> a=0 ist hier ausdrücklich erlaubt. Dann verschwindet der quadratische Anteil und f(x) ist dieselbe Gerade wie g(x).':m.id==='a'?'<strong>Hinweis:</strong> In diesem Parabel-Modul wird a=0 übersprungen, weil dann keine quadratische Funktion mehr vorliegt.':'Verändere möglichst nur die im Auftrag genannte Größe und beobachte gezielt.';
  if(q$('qInlineFormula'))q$('qInlineFormula').textContent=qFormula();
- if(q$('qInlineControls'))q$('qInlineControls').innerHTML=markup('q-inline');
- if(q$('qInlineControlNote'))q$('qInlineControlNote').innerHTML=note;
+ const inlineKeys=qState.inlineMode==='free'?freeKeys:m.controls;
+ if(q$('qInlineControls'))q$('qInlineControls').innerHTML=markup('q-inline',inlineKeys);
+ if(q$('qInlineControlNote'))q$('qInlineControlNote').innerHTML=qState.inlineMode==='free'?freeNote:guidedNote;
+ document.querySelectorAll('#quadraticWorkspaceApp [data-q-inline-mode]').forEach(b=>{
+   const active=b.dataset.qInlineMode===qState.inlineMode;b.setAttribute('aria-pressed',String(active));
+   b.onclick=()=>{qState.inlineMode=b.dataset.qInlineMode;qRenderControls();};
+ });
  document.querySelectorAll('#quadraticWorkspaceApp [data-q-control]').forEach(r=>r.addEventListener('input',()=>{
    let value=+r.value;
    if(r.dataset.qControl==='a'&&!m.compareLine&&Math.abs(value)<.001){value=value<0?-.25:.25;r.value=String(value)}
