@@ -982,6 +982,32 @@ body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{order:2;flex:0 0 au
   #quadraticWorkspaceApp .q-inline-controls #qInlineControls{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
+
+/* V50 · Graphfokus repariert: echte Vergrößerung auf allen Plattformen */
+body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
+@media(max-width:900px) and (orientation:portrait){
+  body.q-graph-focus #quadraticWorkspaceApp .chart-card{overflow:auto!important}
+  body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{
+    display:flex!important;flex-direction:column!important;
+    min-height:calc(100dvh - 62px);height:auto!important;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp #qPlot{
+    width:100%!important;height:58dvh!important;min-height:430px!important;max-height:620px!important;
+    aspect-ratio:auto!important;flex:0 0 auto!important;margin:0!important;
+  }
+  body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{
+    flex:0 0 auto!important;max-height:34dvh;overflow:auto;
+    padding-bottom:max(10px,env(safe-area-inset-bottom));
+  }
+}
+@media(max-width:430px) and (orientation:portrait){
+  body.q-graph-focus #quadraticWorkspaceApp #qPlot{height:56dvh!important;min-height:400px!important}
+  body.q-graph-focus #quadraticWorkspaceApp .q-inline-controls{max-height:36dvh}
+}
+@media(min-width:901px){
+  body.q-graph-focus #quadraticWorkspaceApp .chart-card{min-height:calc(100dvh - 34px)!important}
+  body.q-graph-focus #quadraticWorkspaceApp #qPlot{height:clamp(660px,76dvh,860px)!important;min-height:660px!important}
+}
 </style>
 </head>
 <body>
@@ -3349,8 +3375,14 @@ function qRenderControls(){
 function qSvgPoint(x,y,b){const px=b.l+(x-b.xmin)/(b.xmax-b.xmin)*b.w,py=b.t+b.h-(y-b.ymin)/(b.ymax-b.ymin)*b.h;return [px,py]}
 function qDraw(){
  const svg=q$('qPlot'),m=qCurrent(),v=qState.values;
- const B={l:55,t:25,w:665,h:425,xmin:-6,xmax:6,ymin:-10,ymax:12};
- let s=`<defs><clipPath id="qPlotClip"><rect x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}"/></clipPath><marker id="qAxisArrow" markerWidth="8" markerHeight="8" refX="6.6" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#64748b"/></marker></defs><rect width="760" height="500" fill="#fbfcff"/><rect x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}" fill="#fff" stroke="#e5eaf1"/>`;
+ const focus=document.body.classList.contains('q-graph-focus');
+ const compact=window.innerWidth<=900;
+ const portrait=window.innerHeight>=window.innerWidth;
+ const W=focus&&compact&&portrait?560:(focus&&compact?900:760);
+ const H=focus&&compact&&portrait?620:500;
+ const B={l:55,t:25,w:W-95,h:H-75,xmin:-6,xmax:6,ymin:-10,ymax:12};
+ svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+ let s=`<defs><clipPath id="qPlotClip"><rect x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}"/></clipPath><marker id="qAxisArrow" markerWidth="8" markerHeight="8" refX="6.6" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L8,4 L0,8 Z" fill="#64748b"/></marker></defs><rect width="${W}" height="${H}" fill="#fbfcff"/><rect x="${B.l}" y="${B.t}" width="${B.w}" height="${B.h}" fill="#fff" stroke="#e5eaf1"/>`;
  for(let x=-6;x<=6;x++){
    const [px]=qSvgPoint(x,0,B);
    if(x!==0)s+=`<line x1="${px}" y1="${B.t}" x2="${px}" y2="${B.t+B.h}" stroke="#e8edf4" stroke-width="1"/>`;
@@ -3435,10 +3467,11 @@ function qRenderLanguage(){const box=q$('qv-language');if(!box)return;const m=qC
 function qRenderTable(){const box=q$('qv-table');if(!box)return;const m=qCurrent(),v=qState.values;if(m.compareLine){const xs=[-2,-1,0,1,2];box.innerHTML=`<div class="kicker">Vergleichstabelle</div><h2>Gerade und quadratische Funktion an denselben Stellen vergleichen</h2><p class="mini">Jede Spalte gehört zu demselben x-Wert. So siehst du direkt, wann beide Funktionen gleiche oder unterschiedliche Werte liefern.</p><table><thead><tr><th>x</th>${xs.map(x=>`<th>${qFmt(x)}</th>`).join('')}</tr></thead><tbody><tr><td>${qLineFormula()}</td>${xs.map(x=>`<td>${qFmt(qGx(x))}</td>`).join('')}</tr><tr><td>${qFormula()}</td>${xs.map(x=>`<td>${qFmt(qFx(x))}</td>`).join('')}</tr><tr><td>Differenz f(x)−g(x)</td>${xs.map(x=>`<td><strong>${qFmt(qFx(x)-qGx(x))}</strong></td>`).join('')}</tr></tbody></table><div class="cardbox"><strong>${Math.abs(v.a)<1e-9?'Beobachtung bei a=0':'Beobachtung'}</strong>${Math.abs(v.a)<1e-9?'Alle Differenzen sind 0. Beide Terme beschreiben dieselbe Gerade.':`Die Differenz ist a·x². Bei x=0 ist sie 0; mit wachsendem |x| wird der Einfluss des quadratischen Terms sichtbar.`}</div>`;return;}const xs=[v.h-2,v.h-1,v.h,v.h+1,v.h+2];box.innerHTML=`<div class="kicker">Wertetabelle</div><h2>Term, Tabelle und Graph verbinden</h2><table><thead><tr><th>x</th>${xs.map(x=>`<th>${qFmt(x)}</th>`).join('')}</tr></thead><tbody><tr><td>f(x)</td>${xs.map(x=>`<td>${qFmt(qFx(x))}</td>`).join('')}</tr></tbody></table><div class="cardbox"><strong>Prüffrage</strong>Vergleiche Werte in gleichem Abstand links und rechts von u=${qFmt(v.h)}. Was fällt dir auf?</div>`;}
 function qRenderExplore(){const box=q$('qv-explore');if(!box)return;const m=qCurrent(),v=qState.values;const specs={a:['Formparameter a',-3,3,.25],h:['Scheitelkoordinate u',-5,5,.5],k:['Scheitelkoordinate v',-5,5,.5],m:['Steigung m der Geraden',-4,4,.25],b:['y-Achsenabschnitt b der Geraden',-6,6,.5]};const keys=m.compareLine?['a','m','b']:['a','h','k'];box.innerHTML=`<div class="kicker">Freies Erkunden</div><h2>Wie in einem dynamischen Graphen: alle Parameter selbst verändern</h2><p class="mini">Hier bist du nicht auf den Forscherauftrag beschränkt. Verändere mehrere Parameter gleichzeitig und beobachte direkt den Graphen.</p><div class="explore-formulas"><div class="formula" id="qExploreF">${qFormula()}</div>${m.compareLine?`<div class="formula" id="qExploreG">${qLineFormula()}</div>`:''}</div><div class="explore-grid">${keys.map(key=>{const [label,min,max,step]=specs[key];return `<div class="control"><div class="control-top"><label for="q-ex-${key}">${label}</label><output class="value" id="q-ex-out-${key}">${qFmt(v[key]??(key==='m'?2:0))}</output></div><input id="q-ex-${key}" data-q-explore="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${v[key]??(key==='m'?2:0)}"></div>`}).join('')}</div><div class="cardbox"><strong>Arbeitsidee</strong>Verändere zuerst nur einen Parameter, danach zwei oder mehrere gleichzeitig. Formuliere jeweils, was sich am Graphen ändert und was gleich bleibt.</div>`;box.querySelectorAll('[data-q-explore]').forEach(r=>r.addEventListener('input',()=>{let value=+r.value;if(r.dataset.qExplore==='a'&&!m.compareLine&&Math.abs(value)<.001){value=value<0?-.25:.25;r.value=String(value)}qState.values[r.dataset.qExplore]=value;q$('q-ex-out-'+r.dataset.qExplore).textContent=qFmt(value);q$('qFormula').textContent=qFormula();if(q$('qExploreF'))q$('qExploreF').textContent=qFormula();if(q$('qExploreG'))q$('qExploreG').textContent=qLineFormula();qDraw();qRenderTable();qRenderTaskInsight();}));}
 function qRenderAll(){qRenderHeader();qRenderControls();qRenderTabs();qRenderViews();qDraw();q$('qPrev').disabled=qState.index===0;q$('qNext').disabled=qState.index===qModules.length-1;}
-q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'↩ Ansicht zurück':'⛶ Graph groß';if(on){requestAnimationFrame(()=>{const card=q$('qPlot')?.closest('.chart-card');if(card)card.scrollTop=0;});}});q$('qPrev').addEventListener('click',()=>{if(qState.index>0)qOpen(qState.index-1,'replace')});q$('qNext').addEventListener('click',()=>{if(qState.index<qModules.length-1)qOpen(qState.index+1,'replace')});
+q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'↩ Ansicht zurück':'⛶ Graph groß';requestAnimationFrame(()=>{qDraw();const card=q$('qPlot')?.closest('.chart-card');if(on&&card)card.scrollTop=0;});});q$('qPrev').addEventListener('click',()=>{if(qState.index>0)qOpen(qState.index-1,'replace')});q$('qNext').addEventListener('click',()=>{if(qState.index<qModules.length-1)qOpen(qState.index+1,'replace')});
 document.querySelectorAll('[data-open-topic="quadratic"]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-open]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qOpen,'push')));document.querySelectorAll('[data-q-overview]').forEach(b=>b.addEventListener('click',()=>qShowOverview('replace')));document.querySelectorAll('[data-q-back-portal]').forEach(b=>b.addEventListener('click',()=>{if(qHistoryAvailable()&&history.state?.[QKEY])history.back();else qShowPortal('replace')}));
 window.addEventListener('popstate',e=>{const st=e.state;if(st?.[QKEY]){if(st.screen==='overview')qShowOverview('none');else if(st.screen==='module'){qState.index=st.index||0;qState.view=st.view||'task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();}return;}if(!q$('quadraticTopicOverview').hidden||!q$('quadraticExperience').hidden){q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('q-graph-focus')){document.body.classList.remove('q-graph-focus');q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='⛶ Graph groß'}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('q-graph-focus')){document.body.classList.remove('q-graph-focus');q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='⛶ Graph groß';qDraw();}});
+let qFocusResizeTimer=0;window.addEventListener('resize',()=>{if(!document.body.classList.contains('q-graph-focus'))return;clearTimeout(qFocusResizeTimer);qFocusResizeTimer=setTimeout(qDraw,90);});
 })();
 </script>
 
