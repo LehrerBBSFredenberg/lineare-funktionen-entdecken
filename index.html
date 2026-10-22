@@ -1200,7 +1200,7 @@ body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
     <section class="learning-band apply"><div class="learning-band-head"><div class="learning-band-icon">↗</div><div><h2>Anwenden &amp; Modellieren</h2><p>Parabeln aus Punkten, Sachbilder und Optimierungsprobleme mathematisch modellieren.</p></div></div><div class="learning-steps"><button class="learning-step" disabled>Modellieren · im Aufbau</button><button class="learning-step" disabled>Optimieren · im Aufbau</button></div></section>
     <section class="learning-band practice"><div class="learning-band-head"><div class="learning-band-icon">✓</div><div><h2>Üben &amp; Sichern</h2><p>70 Verständnisaufgaben mit direkter Rückmeldung zu Scheitelpunktform, Polynomform sowie Achsenschnittpunkten und Nullstellen.</p></div></div><div class="learning-steps"><button class="learning-step q-practice-launch" data-q-practice-open="0">Üben zur Scheitelpunktform</button><button class="learning-step q-practice-launch" data-q-practice-open="5">Üben zur Polynomform</button><button class="learning-step q-practice-launch" data-q-practice-open="9">Üben zu Achsenschnittpunkten &amp; Nullstellen</button></div></section>
   </div>
-  <div class="quadratic-progress-note"><strong>Ausbaustufe V54:</strong> Zusätzlich zu Scheitelpunktform und Polynomform ist jetzt der Lernblock „Achsenschnittpunkte &amp; Nullstellen“ freigeschaltet. Die Plattform unterscheidet x=0 und f(x)=0 konsequent, verbindet Graph und Rechnung und führt bis zur Linearfaktordarstellung. Üben &amp; Sichern umfasst 70 Aufgaben mit direkter Rückmeldung.</div>
+  <div class="quadratic-progress-note"><strong>Ausbaustufe V54.3:</strong> Zusätzlich zu Scheitelpunktform und Polynomform ist jetzt der Lernblock „Achsenschnittpunkte &amp; Nullstellen“ freigeschaltet. Die Plattform unterscheidet x=0 und f(x)=0 konsequent, verbindet Graph und Rechnung und führt bis zur Linearfaktordarstellung. Üben &amp; Sichern umfasst 70 Aufgaben mit direkter Rückmeldung.</div>
   <div class="linear-topic-footer"><span>Sprache &amp; Begründen bleibt in jedem passenden Lernmodul sichtbar.</span><button class="portal-link" type="button" data-info="privacy">Datenschutz</button></div>
 </section>
 
@@ -3455,13 +3455,16 @@ function qRootData(){
  const d=Math.sqrt(rhs),x1=-v.h-d,x2=-v.h+d;return {kind:'two',roots:[x1,x2]};
 }
 function qYIntercept(){return qFx(0)}
+function qDisplayExact(n){return Math.abs(n-Math.round(n*100)/100)<1e-9}
+function qRootRelation(x){return qDisplayExact(x)?'=':'≈'}
 function qFactorFormula(){
  const r=qRootData(),a=qState.values.a;
  if(r.kind==='none')return 'Über ℝ keine Linearfaktordarstellung';
  const factor=x=>`(x ${x>=0?'−':'+'} ${qFmt(Math.abs(x))})`;
  const ac=Math.abs(Math.abs(a)-1)<1e-9?'':qFmt(Math.abs(a));const lead=a<0?'−':'';
- if(r.kind==='double')return `f(x)=${lead}${ac}${factor(r.roots[0])}²`;
- return `f(x)=${lead}${ac}${factor(r.roots[0])}${factor(r.roots[1])}`;
+ const rel=r.roots.every(qDisplayExact)?'=':'≈';
+ if(r.kind==='double')return `f(x)${rel}${lead}${ac}${factor(r.roots[0])}²`;
+ return `f(x)${rel}${lead}${ac}${factor(r.roots[0])}${factor(r.roots[1])}`;
 }
 function qHideLinear(){const l1=q$('linearTopicOverview'),l2=q$('linearExperience');if(l1)l1.hidden=true;if(l2)l2.hidden=true;}
 function qHistoryAvailable(){return location.protocol==='http:'||location.protocol==='https:'}
@@ -3491,14 +3494,15 @@ function qRenderControls(){
  const guidedNote=m.compareLine?'<strong>Geführt untersuchen:</strong> Verändere nur a. Bei a=0 fällt f mit g zusammen.':m.id==='a'?'<strong>Geführt untersuchen:</strong> Verändere nur a und vergleiche mit der Normalparabel.':qIsPolyModule()?'<strong>Geführt untersuchen:</strong> Verändere nur die für diesen Lernschritt vorgesehenen Größen und beobachte, wie beide Termformen dieselbe Parabel beschreiben.':'<strong>Geführt untersuchen:</strong> Verändere nur die im aktuellen Lernziel untersuchten Größen.';
  const freeNote=m.compareLine?'<strong>Frei erkunden:</strong> Verändere a, m und b.':m.id==='normal'?'<strong>Frei erkunden:</strong> Verändere a, u und v; x steuert nur den markierten Punkt.':m.id==='completeidea'?'<strong>Frei erkunden:</strong> Verändere u und v. a=1 bleibt in diesem Lernschritt bewusst fest; der Fall a≠1 folgt im nächsten Modul.':'<strong>Frei erkunden:</strong> Verändere a, u und v.';
  const freeKeys=m.compareLine?['a','m','b']:m.id==='normal'?['a','h','k','x']:m.id==='completeidea'?['h','k']:['a','h','k'];
- function markup(prefix,keys){return keys.map(key=>{const [k,label,min,max,step]=specs[key];const val=v[key];return `<div class="control"><div class="control-top"><label for="${prefix}-${k}">${label}</label><output class="value" data-q-output="${k}">${qFmt(val)}</output></div><input id="${prefix}-${k}" data-q-control="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('')}
+ function markup(prefix,keys){return keys.map(key=>{const [k,label,min,max,step]=specs[key];const val=v[key];return `<div class="control"><div class="control-top"><label for="${prefix}-${k}">${qMathText(label)}</label><output class="value" data-q-output="${k}">${qFmt(val)}</output></div><input id="${prefix}-${k}" data-q-control="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('')}
  q$('qFormula').innerHTML=qMathFormula(qFormula());
- q$('qControls').innerHTML=markup('q',m.controls);
- q$('qControlNote').innerHTML=m.compareLine?'<strong>Wichtig:</strong> a=0 ist hier ausdrücklich erlaubt. Dann verschwindet der quadratische Anteil und f(x) ist dieselbe Gerade wie g(x).':m.id==='a'?'<strong>Hinweis:</strong> In diesem Parabel-Modul wird a=0 übersprungen, weil dann keine quadratische Funktion mehr vorliegt.':qState.controlMode==='free'?'<strong>Frei erkunden:</strong> Kombiniere mehrere Parameter bewusst. Formuliere vorher eine Vermutung und prüfe sie am Graphen.':'<strong>Geführt untersuchen:</strong> Verändere nur die im Lernziel genannte Größe. So kannst du Ursache und Wirkung eindeutig zuordnen.';
+ const activeKeys=qState.inlineMode==='free'?freeKeys:m.controls;
+ q$('qControls').innerHTML=markup('q',activeKeys);
+ q$('qControlNote').innerHTML=qMathText(qState.inlineMode==='free'?freeNote:guidedNote);
  if(q$('qInlineFormula'))q$('qInlineFormula').innerHTML=qMathFormula(qFormula());
  const inlineKeys=qState.inlineMode==='free'?freeKeys:m.controls;
  if(q$('qInlineControls'))q$('qInlineControls').innerHTML=markup('q-inline',inlineKeys);
- if(q$('qInlineControlNote'))q$('qInlineControlNote').innerHTML=qState.inlineMode==='free'?freeNote:guidedNote;
+ if(q$('qInlineControlNote'))q$('qInlineControlNote').innerHTML=qMathText(qState.inlineMode==='free'?freeNote:guidedNote);
  document.querySelectorAll('#quadraticWorkspaceApp [data-q-inline-mode]').forEach(b=>{
    const active=b.dataset.qInlineMode===qState.inlineMode;b.setAttribute('aria-pressed',String(active));
    b.onclick=()=>{qState.inlineMode=b.dataset.qInlineMode;qRenderControls();};
@@ -3543,7 +3547,11 @@ function qDraw(){
  s+=axisPill(B.l+B.w-42,qY0-30,'x');
  s+=axisPill(qX0+8,B.t+6,qOrdinateLabel);
  function pathFor(fn){let d='';for(let i=0;i<=360;i++){const x=B.xmin+(B.xmax-B.xmin)*i/360,y=fn(x),[px,py]=qSvgPoint(x,y,B);d+=(i?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)}return d}
- const qLabelBoxes=[];
+ const qXAxisPillW=Math.max(30,18+'x'.length*7),qOrdinatePillW=Math.max(30,18+qOrdinateLabel.length*7);
+ const qLabelBoxes=[
+  {x:B.l+B.w-42,y:qY0-30,w:qXAxisPillW,h:22},
+  {x:qX0+8,y:B.t+6,w:qOrdinatePillW,h:22}
+ ];
  function qBoxesOverlap(a,b,pad=5){return !(a.x+a.w+pad<=b.x||b.x+b.w+pad<=a.x||a.y+a.h+pad<=b.y||b.y+b.h+pad<=a.y)}
  function qBoxHitsAxis(box){
    const xAxis={x:B.l,y:qY0-5,w:B.w,h:10},yAxis={x:qX0-5,y:B.t,w:10,h:B.h};
@@ -3560,7 +3568,7 @@ function qDraw(){
    return false;
  }
  function qChooseLabelBox(ax,ay,w,h,avoidFns=[]){
-   const candidates=[[14,-h-14],[-w-14,-h-14],[14,14],[-w-14,14],[16,-h/2],[-w-16,-h/2],[8,-h-24],[-w-8,24]];
+   const candidates=[[14,-h-14],[-w-14,-h-14],[14,14],[-w-14,14],[16,-h/2],[-w-16,-h/2],[8,-h-24],[-w-8,24],[14,-h-44],[-w-14,-h-44],[14,44],[-w-14,44],[34,-h-14],[-w-34,-h-14],[34,14],[-w-34,14]];
    let best=null;
    candidates.forEach(([dx,dy],rank)=>{
      const rawX=ax+dx,rawY=ay+dy;
@@ -3656,7 +3664,7 @@ function qDraw(){
      const rd=qRootData();
      rd.roots.forEach((x,i)=>{
        if(x>=B.xmin&&x<=B.xmax){
-         const p=qSvgPoint(x,0,B),lab=rd.kind==='double'?`N(${qFmt(x)}|0)`:`N_${i+1}(${qFmt(x)}|0)`;
+         const p=qSvgPoint(x,0,B),approx=qDisplayExact(x)?'':'≈',lab=rd.kind==='double'?`N${approx}(${qFmt(x)}|0)`:`N_${i+1}${approx}(${qFmt(x)}|0)`;
          s+=`<circle cx="${p[0]}" cy="${p[1]}" r="5.4" fill="#c86b09"/>${qSmartLabel(p[0],p[1],lab,'#9a4e06',{avoidFns:[qFx],minWidth:82,maxWidth:155})}`;
        }
      });
@@ -3670,7 +3678,7 @@ function qDraw(){
  q$('qLegend').innerHTML=m.compareLine?(Math.abs(v.a)<1e-9?`<span class="f2">${qMathFormula(`f(x)=g(x)=${qLineFormula().replace('g(x)=','')}`)}</span>`:`<span class="f2">${qMathFormula(qLineFormula())}</span><span class="f1">${qMathFormula(qFormula())}</span>`):`${m.showBase?`<span class="old">Normalparabel ${qMathFormula('n(x)=x²')}</span>`:''}<span class="f1">${qMathFormula(qFormula())}</span><span class="f3">Scheitelpunkt ${qMathFormula('S')}</span>${qIsRootModule()?'<span style="color:#0f766e">y-Achsenschnittpunkt</span><span style="color:#9a4e06">Nullstellenpunkt(e)</span>':''}`;
  qRenderTaskInsight();
 }
-function qRenderTaskInsight(){const m=qCurrent(),v=qState.values;let text=m.hyp;if(m.compareLine){text=Math.abs(v.a)<1e-9?`a=0: Der quadratische Term verschwindet. Deshalb gilt ${qFormula()} und der Graph von f fällt genau mit ${qLineFormula()} zusammen.`:`a=${qFmt(v.a)}≠0: f enthält einen x²-Term und ist quadratisch; g bleibt linear. Am Graphen siehst du die Krümmung von f.`;}if(m.id==='a'){text=`Aktuell: a=${qFmt(v.a)}. Die Parabel ist ${v.a>0?'nach oben':'nach unten'} geöffnet und ${Math.abs(v.a)>1?'schmaler (gestreckt)':Math.abs(v.a)<1?'breiter (gestaucht)':'gleich breit wie die Normalparabel'}.`}if(m.id==='shift'||m.id==='read')text=`Aktuell gilt u=${qFmt(v.h)} und v=${qFmt(v.k)}; damit ist der Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}). ${v.a<0?'Die Parabel ist nach unten geöffnet.':'Die Parabel ist nach oben geöffnet.'}`;if(m.id==='normal')text=`Bei x=${qFmt(v.x)} gilt f(x)=${qFmt(qFx(v.x))}. Wegen der Symmetrie gilt auch f(${-v.x===0?'0':qFmt(-v.x)})=${qFmt(qFx(v.x))}.`;if(qIsPolyModule())text=`Dieselbe Funktion: ${qPolyFormula()} = ${qVertexFormula()}. Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}).`;if(qIsRootModule()){const rd=qRootData(),sy=qYIntercept();const rt=rd.kind==='none'?'keine reelle Nullstelle':rd.kind==='double'?`eine doppelte Nullstelle x=${qFmt(rd.roots[0])}`:`zwei Nullstellen x_1=${qFmt(rd.roots[0])} und x_2=${qFmt(rd.roots[1])}`;text=`Für die y-Achse gilt x=0: S_y(0|${qFmt(sy)}). Für die x-Achse gilt f(x)=0: aktuell ${rt}.`;if(m.id==='factors'||m.id==='rootconnect')text+=` Linearfaktordarstellung: ${qFactorFormula()}.`;}q$('qInsight').innerHTML=qMathText(text);}
+function qRenderTaskInsight(){const m=qCurrent(),v=qState.values;let text=m.hyp;if(m.compareLine){text=Math.abs(v.a)<1e-9?`a=0: Der quadratische Term verschwindet. Deshalb gilt ${qFormula()} und der Graph von f fällt genau mit ${qLineFormula()} zusammen.`:`a=${qFmt(v.a)}≠0: f enthält einen x²-Term und ist quadratisch; g bleibt linear. Am Graphen siehst du die Krümmung von f.`;}if(m.id==='a'){text=`Aktuell: a=${qFmt(v.a)}. Die Parabel ist ${v.a>0?'nach oben':'nach unten'} geöffnet und ${Math.abs(v.a)>1?'schmaler (gestreckt)':Math.abs(v.a)<1?'breiter (gestaucht)':'gleich breit wie die Normalparabel'}.`}if(m.id==='shift'||m.id==='read')text=`Aktuell gilt u=${qFmt(v.h)} und v=${qFmt(v.k)}; damit ist der Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}). ${v.a<0?'Die Parabel ist nach unten geöffnet.':'Die Parabel ist nach oben geöffnet.'}`;if(m.id==='normal')text=`Bei x=${qFmt(v.x)} gilt f(x)=${qFmt(qFx(v.x))}. Wegen der Symmetrie gilt auch f(${-v.x===0?'0':qFmt(-v.x)})=${qFmt(qFx(v.x))}.`;if(qIsPolyModule())text=`Dieselbe Funktion: ${qPolyFormula()} = ${qVertexFormula()}. Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}).`;if(qIsRootModule()){const rd=qRootData(),sy=qYIntercept();const rt=rd.kind==='none'?'keine reelle Nullstelle':rd.kind==='double'?`eine doppelte Nullstelle x${qRootRelation(rd.roots[0])}${qFmt(rd.roots[0])}`:`zwei Nullstellen x_1${qRootRelation(rd.roots[0])}${qFmt(rd.roots[0])} und x_2${qRootRelation(rd.roots[1])}${qFmt(rd.roots[1])}`;text=`Für die y-Achse gilt x=0: S_y(0|${qFmt(sy)}). Für die x-Achse gilt f(x)=0: aktuell ${rt}.`;if(m.id==='factors'||m.id==='rootconnect')text+=` Linearfaktordarstellung: ${qFactorFormula()}.`;}q$('qInsight').innerHTML=qMathText(text);}
 function qRenderTabs(){const tabs=[['task','Auftrag','untersuchen'],['language','Sprache & Begründen','präzise formulieren'],['table','Tabelle','Werte verbinden'],['explain','Erklärung','Zusammenhang verstehen'],['practice','Üben & Sichern','direkte Rückmeldung'],['explore','Freies Erkunden','verfügbare Parameter kombinieren']];q$('qTabs').innerHTML=tabs.map(([id,a,b])=>`<button class="tab" data-q-view="${id}" data-view="${id}" role="tab" aria-selected="${qState.view===id}"><span class="tab-main">${a}</span><span class="tab-sub">${b}</span></button>`).join('');q$('qTabs').querySelectorAll('[data-q-view]').forEach(b=>b.addEventListener('click',()=>{qState.view=b.dataset.qView;qRenderTabs();qRenderViews();if(qHistoryAvailable())qWrite('module','replace')}));}
 function qMathTokenize(raw){
  return String(raw??'').split(/(<[^>]+>|&[A-Za-z0-9#]+;)/g).map(part=>{
@@ -3782,11 +3790,29 @@ function qPurposeHtml(m){
  const p=map[m.id]; if(!p)return '';
  return `<div class="q-purpose"><h3>Warum machen wir das?</h3><div class="q-purpose-grid"><div class="q-purpose-item"><strong>${p[0]}</strong>${qMathText(p[1])}</div><div class="q-purpose-item"><strong>${p[2]}</strong>${qMathText(p[3])}</div><div class="q-purpose-item"><strong>${p[4]}</strong>${qMathText(p[5])}</div></div></div>`;
 }
+function qRootMethodWorkedHtml(){
+ const {a,b,c}=qPolyCoeffs(),rd=qRootData(),eps=1e-9;
+ const rootsHtml=rd.kind==='none'?qMathText('Keine reelle Lösung.'):rd.kind==='double'?qMathFormula(`x_1=x_2${qRootRelation(rd.roots[0])}${qFmt(rd.roots[0])}`):rd.roots.map((x,i)=>qMathFormula(`x_${i+1}${qRootRelation(x)}${qFmt(x)}`)).join(' · ');
+ if(Math.abs(c)<eps){
+  return `<div class="cardbox"><strong>Dynamischer Rechenweg: Ausklammern / Nullprodukt</strong><div class="q-mathline">${qMathFormula(`${qPolyFormula()}=0`)}</div><div class="q-mathline">${qMathFormula(`x(${qFmt(a)}x ${b>=0?'+':'−'} ${qFmt(Math.abs(b))})=0`)}</div><div class="q-calc-note">Ein Produkt ist 0, wenn mindestens ein Faktor 0 ist.</div><div class="q-mathline">${rootsHtml}</div></div>`;
+ }
+ if(Math.abs(b)<eps){
+  const rhs=-c/a;
+  return `<div class="cardbox"><strong>Dynamischer Rechenweg: direktes Wurzelziehen</strong><div class="q-mathline">${qMathFormula(`${qFmt(a)}x² ${c>=0?'+':'−'} ${qFmt(Math.abs(c))}=0`)}</div><div class="q-mathline">${qMathFormula(`x²=${qFmt(rhs)}`)}</div><div class="q-calc-note">Ist die rechte Seite nichtnegativ, beim Wurzelziehen beide Vorzeichen beachten.</div><div class="q-mathline">${rootsHtml}</div></div>`;
+ }
+ if(Math.abs(a-1)<eps){
+  const half=b/2,rad=half*half-c;
+  return `<div class="cardbox"><strong>Dynamischer Rechenweg: p-q-Formel</strong><div class="q-mathline">${qMathFormula(`${qPolyFormula()}=0`)}</div><div class="q-calc-note">Die Gleichung ist bereits normiert: ${qMathFormula(`p=${qFmt(b)}`)} und ${qMathFormula(`q=${qFmt(c)}`)}.</div><div class="q-mathline">${qMathFormula('x = −')}${qFracHtml('p','2','p geteilt durch 2')}${qMathFormula(' ± √(')}${qDelimGroupHtml(`${qFracHtml('p','2','p geteilt durch 2')}${qMathFormula('² − q')}`,'(',')')}${qMathFormula(')')}</div><div class="q-mathline">${qMathFormula(`x = ${qFmt(-half)} ± √(${qFmt(rad)})`)}</div><div class="q-calc-note">${rad<0?'Der Ausdruck unter der Wurzel ist negativ. Deshalb gibt es über ℝ keine Lösung.':'Der Ausdruck unter der Wurzel ist nichtnegativ; beide Vorzeichen liefern die reellen Lösungen.'}</div><div class="q-mathline">${rootsHtml}</div><div class="q-calc-note">Kontrolle: Jede gefundene Nullstelle in den ursprünglichen Funktionsterm einsetzen.</div></div>`;
+ }
+ const disc=b*b-4*a*c;
+ return `<div class="cardbox"><strong>Dynamischer Rechenweg: allgemeine Lösungsformel</strong><div class="q-mathline">${qMathFormula(`${qPolyFormula()}=0`)}</div><div class="q-calc-note">Hier gilt ${qMathFormula(`a=${qFmt(a)}`)}, ${qMathFormula(`b=${qFmt(b)}`)}, ${qMathFormula(`c=${qFmt(c)}`)}.</div><div class="q-mathline">${qMathFormula('x = ')}${qFracHtml(qMathFormula(`−b ± √(b²−4ac)`),qMathFormula('2a'),'allgemeine Lösungsformel')}</div><div class="q-calc-note">Diskriminante: ${qMathFormula(`b²−4ac=${qFmt(disc)}`)}. ${disc<0?'Sie ist negativ; daher gibt es keine reelle Nullstelle.':'Sie ist nichtnegativ; daher entstehen reelle Lösungen.'}</div><div class="q-mathline">${rootsHtml}</div></div>`;
+}
 function qRootDynamicHtml(m){
  const rd=qRootData(),sy=qYIntercept();
- const rootLine=rd.kind==='none'?'Keine reelle Nullstelle':rd.kind==='double'?`Doppelte Nullstelle: x=${qFmt(rd.roots[0])}`:`Nullstellen: x_1=${qFmt(rd.roots[0])}, x_2=${qFmt(rd.roots[1])}`;
- const points=rd.kind==='none'?'Der Graph hat keinen reellen Schnittpunkt mit der x-Achse.':rd.roots.map((x,i)=>`${rd.kind==='double'?'N':`N${i+1}`}(${qFmt(x)}|0)`).join(' · ');
- return `<div class="cardbox"><strong>Dynamisch zum aktuellen Graphen</strong><div class="q-form-compare"><div class="q-form-card"><strong>y-Achse</strong><div class="formula">${qMathFormula(`x=0 ⇒ f(0)=${qFmt(sy)}`)}</div><p>${qMathText(`S_y(0|${qFmt(sy)})`)}</p></div><div class="q-form-card"><strong>x-Achse / Nullstellen</strong><div class="formula">${qMathFormula('f(x)=0')}</div><p>${qMathText(rootLine)}<br>${qMathText(points)}</p></div></div>${m.id==='factors'||m.id==='rootconnect'?`<div class="formula">${qMathFormula(qFactorFormula())}</div>`:''}${m.id==='rootconnect'?`<div class="q-form-choice"><strong>Dieselbe Funktion:</strong> ${qMathFormula(qVertexFormula())} · ${qMathFormula(qPolyFormula())}${rd.kind!=='none'?` · ${qMathFormula(qFactorFormula())}`:''}</div>`:''}</div>`;
+ const rootLine=rd.kind==='none'?'Keine reelle Nullstelle':rd.kind==='double'?`Doppelte Nullstelle: x${qRootRelation(rd.roots[0])}${qFmt(rd.roots[0])}`:`Nullstellen: x_1${qRootRelation(rd.roots[0])}${qFmt(rd.roots[0])}, x_2${qRootRelation(rd.roots[1])}${qFmt(rd.roots[1])}`;
+ const points=rd.kind==='none'?'Der Graph hat keinen reellen Schnittpunkt mit der x-Achse.':rd.roots.map((x,i)=>`${rd.kind==='double'?'N':`N${i+1}`}${qDisplayExact(x)?'':'≈'}(${qFmt(x)}|0)`).join(' · ');
+ const factorHtml=(m.id==='factors'||m.id==='rootconnect')?(rd.kind==='none'?`<div class="q-form-choice">${qMathText('Über ℝ gibt es aktuell keine Linearfaktordarstellung in reelle Linearfaktoren.')}</div>`:`<div class="formula">${qMathFormula(qFactorFormula())}</div>`):'';
+ return `<div class="cardbox"><strong>Dynamisch zum aktuellen Graphen</strong><div class="q-form-compare"><div class="q-form-card"><strong>y-Achse</strong><div class="formula">${qMathFormula(`x=0 ⇒ f(0)=${qFmt(sy)}`)}</div><p>${qMathText(`S_y(0|${qFmt(sy)})`)}</p></div><div class="q-form-card"><strong>x-Achse / Nullstellen</strong><div class="formula">${qMathFormula('f(x)=0')}</div><p>${qMathText(rootLine)}<br>${qMathText(points)}</p></div></div>${factorHtml}${m.id==='rootmethods'?qRootMethodWorkedHtml():''}${m.id==='rootconnect'?`<div class="q-form-choice"><strong>Dieselbe Funktion:</strong> ${qMathFormula(qVertexFormula())} · ${qMathFormula(qPolyFormula())}${rd.kind!=='none'?` · ${qMathFormula(qFactorFormula())}`:''}</div>`:''}</div>`;
 }
 function qRepresentationHtml(m){
  if(!qIsPolyModule())return '';
