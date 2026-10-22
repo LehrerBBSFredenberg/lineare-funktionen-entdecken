@@ -3433,38 +3433,12 @@ function qRenderHeader(){
  q$('qModuleGrid').innerHTML=block.indices.map((moduleIndex,localIndex)=>{const x=qModules[moduleIndex];return `<button class="module-step" data-qi="${moduleIndex}" aria-current="${moduleIndex===qState.index?'step':'false'}"><span class="module-no">${localIndex+1}</span><span class="module-name">${x.title}</span></button>`}).join('');
  q$('qModuleGrid').querySelectorAll('[data-qi]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qi,'replace')));
 }
-function qFreeControlKeys(m){
- if(m.compareLine)return ['a','m','b'];
- if(m.id==='normal')return ['a','h','k','x'];
- if(m.id==='completeidea')return ['h','k'];
- return ['a','h','k'];
-}
-function qParamSymbol(key){return ({a:'a',h:'u',k:'v',x:'x',m:'m',b:'b'})[key]||key}
-function qParamList(keys){
- const names=keys.map(qParamSymbol);
- if(names.length<=1)return names[0]||'';
- if(names.length===2)return `${names[0]} und ${names[1]}`;
- return `${names.slice(0,-1).join(', ')} und ${names.at(-1)}`;
-}
-function qGuidedModeNote(m){
- const list=qParamList(m.controls);
- if(m.compareLine)return `<strong>Geführt untersuchen:</strong> Verändere nur ${list}. Bei a=0 fällt f mit g zusammen.`;
- if(m.id==='a')return `<strong>Geführt untersuchen:</strong> Verändere nur ${list} und vergleiche mit der Normalparabel.`;
- if(m.id==='completeidea')return `<strong>Geführt untersuchen:</strong> Verändere ${list}. a=1 bleibt bewusst fest, damit du zuerst das Grundprinzip der quadratischen Ergänzung untersuchst.`;
- return `<strong>Geführt untersuchen:</strong> Verändere nur ${list}. So bleibt erkennbar, welche Änderung welche Wirkung hat.`;
-}
-function qFreeModeNote(m){
- const keys=qFreeControlKeys(m),list=qParamList(keys);
- if(m.id==='completeidea')return `<strong>Frei erkunden:</strong> Verändere ${list}. a=1 bleibt in diesem Lernschritt bewusst fest; der Fall a≠1 folgt im nächsten Modul.`;
- if(m.id==='normal')return `<strong>Frei erkunden:</strong> Verändere ${list}. Dabei steuert x nur den markierten Punkt; a, u und v verändern die Parabel.`;
- return `<strong>Frei erkunden:</strong> Verändere ${list} und prüfe, welche Kombination welchen Effekt auf den Graphen hat.`;
-}
 function qRenderControls(){
  const m=qCurrent(),v=qState.values;
  const specs={a:['a','Formparameter a',-3,3,.25],h:['h','Parameter u (horizontal)',-5,5,.5],k:['k','Parameter v (vertikal)',-5,5,.5],x:['x','betrachtete Stelle x',-5,5,.5],m:['m','Steigung m der Geraden',-4,4,.25],b:['b','y-Achsenabschnitt b der Geraden',-6,6,.5]};
- const guidedNote=qGuidedModeNote(m);
- const freeNote=qFreeModeNote(m);
- const freeKeys=qFreeControlKeys(m);
+ const guidedNote=m.compareLine?'<strong>Geführt untersuchen:</strong> Verändere nur a. Bei a=0 fällt f mit g zusammen.':m.id==='a'?'<strong>Geführt untersuchen:</strong> Verändere nur a und vergleiche mit der Normalparabel.':qIsPolyModule()?'<strong>Geführt untersuchen:</strong> Verändere nur die für diesen Lernschritt vorgesehenen Größen und beobachte, wie beide Termformen dieselbe Parabel beschreiben.':'<strong>Geführt untersuchen:</strong> Verändere nur die im aktuellen Lernziel untersuchten Größen.';
+ const freeNote=m.compareLine?'<strong>Frei erkunden:</strong> Verändere a, m und b.':m.id==='normal'?'<strong>Frei erkunden:</strong> Verändere a, u und v; x steuert nur den markierten Punkt.':m.id==='completeidea'?'<strong>Frei erkunden:</strong> Verändere u und v. a=1 bleibt in diesem Lernschritt bewusst fest; der Fall a≠1 folgt im nächsten Modul.':'<strong>Frei erkunden:</strong> Verändere a, u und v.';
+ const freeKeys=m.compareLine?['a','m','b']:m.id==='normal'?['a','h','k','x']:m.id==='completeidea'?['h','k']:['a','h','k'];
  function markup(prefix,keys){return keys.map(key=>{const [k,label,min,max,step]=specs[key];const val=v[key];return `<div class="control"><div class="control-top"><label for="${prefix}-${k}">${label}</label><output class="value" data-q-output="${k}">${qFmt(val)}</output></div><input id="${prefix}-${k}" data-q-control="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('')}
  q$('qFormula').innerHTML=qMathFormula(qFormula());
  q$('qControls').innerHTML=markup('q',m.controls);
@@ -3578,10 +3552,80 @@ function qDraw(){
  qRenderTaskInsight();
 }
 function qRenderTaskInsight(){const m=qCurrent(),v=qState.values;let text=m.hyp;if(m.compareLine){text=Math.abs(v.a)<1e-9?`a=0: Der quadratische Term verschwindet. Deshalb gilt ${qFormula()} und der Graph von f fällt genau mit ${qLineFormula()} zusammen.`:`a=${qFmt(v.a)}≠0: f enthält einen x²-Term und ist quadratisch; g bleibt linear. Am Graphen siehst du die Krümmung von f.`;}if(m.id==='a'){text=`Aktuell: a=${qFmt(v.a)}. Die Parabel ist ${v.a>0?'nach oben':'nach unten'} geöffnet und ${Math.abs(v.a)>1?'schmaler (gestreckt)':Math.abs(v.a)<1?'breiter (gestaucht)':'gleich breit wie die Normalparabel'}.`}if(m.id==='shift'||m.id==='read')text=`Aktuell gilt u=${qFmt(v.h)} und v=${qFmt(v.k)}; damit ist der Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}). ${v.a<0?'Die Parabel ist nach unten geöffnet.':'Die Parabel ist nach oben geöffnet.'}`;if(m.id==='normal')text=`Bei x=${qFmt(v.x)} gilt f(x)=${qFmt(qFx(v.x))}. Wegen der Symmetrie gilt auch f(${-v.x===0?'0':qFmt(-v.x)})=${qFmt(qFx(v.x))}.`;if(qIsPolyModule())text=`Dieselbe Funktion: ${qPolyFormula()} = ${qVertexFormula()}. Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}).`;q$('qInsight').innerHTML=qMathText(text);}
-function qRenderTabs(){
- const tabs=[['task','Auftrag','untersuchen'],['language','Sprache & Begründen','präzise formulieren'],['table','Tabelle','Werte verbinden'],['explain','Erklärung','Zusammenhang verstehen'],['practice','Üben & Sichern','direkte Rückmeldung'],['explore','Freies Erkunden','verfügbare Parameter kombinieren']];
- q$('qTabs').innerHTML=tabs.map(([id,a,b])=>`<button class="tab" data-q-view="${id}" data-view="${id}" role="tab" aria-selected="${qState.view===id}"><span class="tab-main">${a}</span><span class="tab-sub">${b}</span></button>`).join('');
- q$('qTabs').querySelectorAll('[data-q-view]').forEach(b=>b.addEventListener('click',()=>{qState.view=b.dataset.qView;qRenderTabs();qRenderViews()}));
+function qRenderTabs(){const tabs=[['task','Auftrag','untersuchen'],['language','Sprache & Begründen','präzise formulieren'],['table','Tabelle','Werte verbinden'],['explain','Erklärung','Zusammenhang verstehen'],['practice','Üben & Sichern','direkte Rückmeldung'],['explore','Freies Erkunden','verfügbare Parameter kombinieren']];q$('qTabs').innerHTML=tabs.map(([id,a,b])=>`<button class="tab" data-q-view="${id}" data-view="${id}" role="tab" aria-selected="${qState.view===id}"><span class="tab-main">${a}</span><span class="tab-sub">${b}</span></button>`).join('');q$('qTabs').querySelectorAll('[data-q-view]').forEach(b=>b.addEventListener('click',()=>{qState.view=b.dataset.qView;qRenderTabs();qRenderViews()}));}
+function qMathTokenize(raw){
+ return String(raw??'').split(/(<[^>]+>|&[A-Za-z0-9#]+;)/g).map(part=>{
+  if(!part||part.startsWith('<')||part.startsWith('&'))return part;
+  let out='';
+  for(let i=0;i<part.length;){
+   const ch=part[i];
+   if(/[A-Za-z]/.test(ch)){out+=`<span class="math-var">${ch}</span>`;i++;continue;}
+   if(/[0-9]/.test(ch)){
+    let j=i+1;while(j<part.length&&/[0-9,.]/.test(part[j]))j++;
+    out+=`<span class="math-num">${part.slice(i,j)}</span>`;i=j;continue;
+   }
+   if(ch==='²'){out+='<sup class="math-num">2</sup>';i++;continue;}
+   if(ch==='³'){out+='<sup class="math-num">3</sup>';i++;continue;}
+   if(ch==='ₛ'){out+='<sub><span class="math-var">s</span></sub>';i++;continue;}
+   if(/[₀₁₂₃₄₅₆₇₈₉]/.test(ch)){out+=`<sub class="math-num">${'₀₁₂₃₄₅₆₇₈₉'.indexOf(ch)}</sub>`;i++;continue;}
+   if('+-−=≠≤≥<>·×⇒→|'.includes(ch)){out+=`<span class="math-op">${ch}</span>`;i++;continue;}
+   if('()[]{}'.includes(ch)){out+=`<span class="math-delim">${ch}</span>`;i++;continue;}
+   out+=ch;i++;
+  }
+  return out;
+ }).join('');
+}
+function qMathFormula(raw){return `<span class="q-inline-math">${qMathTokenize(raw)}</span>`}
+function qMathText(html){
+ const parts=String(html??'').split(/(<[^>]+>)/g);
+ return parts.map(part=>{
+  if(!part||part.startsWith('<'))return part;
+  let s=part;
+  const hold=[];
+  const stash=m=>{hold.push(m);return `\uE000${hold.length-1}\uE001`};
+  s=s.replace(/\b(?:S|P|N)(?:₁|₂)?\([^)]*\)/g,stash);
+  s=s.replace(/\b(?:f|g|n|K|E|G)\([^)]*\)(?:\s*[=≠≤≥<>]\s*(?:[−+]?\d+(?:,\d+)?|[−+]?\d*(?:,\d+)?x²(?:\s*[+−]\s*\d*(?:,\d+)?x)?(?:\s*[+−]\s*\d+(?:,\d+)?)?|[−+]?\d*(?:,\d+)?x(?:\s*[+−]\s*\d+(?:,\d+)?)?|\([^)]*\)²(?:\s*[+−]\s*\d+(?:,\d+)?)?))?/g,stash);
+  s=s.replace(/\([^)]*[xup][^)]*\)²/g,stash);
+  s=s.replace(/\|a\|(?:\s*[=≠≤≥<>]\s*\d+(?:,\d+)?)?/g,stash);
+  s=s.replace(/\b(?:x|p|u)²(?:\s*[+−]\s*\d*(?:,\d+)?x)?(?:\s*[+−]\s*\d+(?:,\d+)?)?/g,stash);
+  s=s.replace(/\b(?:2p|2ux|bx|ax²)(?:\s*[=≠≤≥<>]\s*[−+]?\d+(?:,\d+)?)?/g,stash);
+  s=s.replace(/\b(?:a|b|c|u|v|x|p|m|xₛ)\s*(?:=|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
+  // Auch einzelne mathematische Symbole im Fließtext typografisch als Mathematik setzen.
+  s=s.replace(/\b(?:a|b|c|u|v|x|p|m|f|g|n|K|E|G)\b/g,stash);
+  s=s.replace(/\uE000(\d+)\uE001/g,(_,i)=>qMathFormula(hold[+i]));
+  return s;
+ }).join('');
+}
+function qGcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const r=a%b;a=b;b=r}return a||1}
+function qExactHtml(value){
+ if(!Number.isFinite(value))return qFmt(value);
+ if(Math.abs(value-Math.round(value))<1e-9)return qFmt(Math.round(value));
+ for(const den of [2,4,5,8,10]){
+  const num=Math.round(value*den);
+  if(Math.abs(value-num/den)<1e-9){const g=qGcd(num,den);const n=num/g,d=den/g;return qFracHtml(String(n).replace('-','−'),String(d),`${qFmt(value)}`)}
+ }
+ return qFmt(value);
+}
+function qTypesetMathContainers(root){
+ if(!root)return;
+ root.querySelectorAll('.q-inline-math .math-delim,.q-mathline .math-delim,.q-eq-row .math-delim,.formula .math-delim').forEach(delim=>{delim.setAttribute('aria-hidden','true')});
+ root.querySelectorAll('.q-mathline,.formula').forEach(el=>{
+  if(el.querySelector('.q-inline-math,.math-frac'))return;
+  const txt=el.textContent;
+  if(txt.trim())el.innerHTML=qMathFormula(txt);
+ });
+ // Alle übrigen mathematischen Teil-Ausdrücke in Erklärungen, Hinweisen, Tabellen,
+ // Aufgaben und Rückmeldungen erhalten dieselbe Inline-Mathematiktypografie.
+ const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+ const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+ nodes.forEach(node=>{
+  const parent=node.parentElement;if(!parent)return;
+  if(parent.closest('.q-inline-math,.math-frac,script,style'))return;
+  const raw=node.nodeValue;if(!raw||!raw.trim())return;
+  const html=qMathText(raw);if(html===raw)return;
+  const tpl=document.createElement('template');tpl.innerHTML=html;
+  node.replaceWith(tpl.content);
+ });
 }
 function qRenderViews(){
  const m=qCurrent();
@@ -3684,19 +3728,7 @@ function qRenderLanguage(){
  }));
 }
 function qRenderTable(){const box=q$('qv-table');if(!box)return;const m=qCurrent(),v=qState.values;if(m.compareLine){const xs=[-2,-1,0,1,2];box.innerHTML=`<div class="kicker">Vergleichstabelle</div><h2>Gerade und quadratische Funktion an denselben Stellen vergleichen</h2><p class="mini">Jede Spalte gehört zu demselben x-Wert. So siehst du direkt, wann beide Funktionen gleiche oder unterschiedliche Werte liefern.</p><table><thead><tr><th>x</th>${xs.map(x=>`<th>${qFmt(x)}</th>`).join('')}</tr></thead><tbody><tr><td>${qMathFormula(qLineFormula())}</td>${xs.map(x=>`<td>${qFmt(qGx(x))}</td>`).join('')}</tr><tr><td>${qMathFormula(qFormula())}</td>${xs.map(x=>`<td>${qFmt(qFx(x))}</td>`).join('')}</tr><tr><td>Differenz ${qMathFormula("f(x)−g(x)")}</td>${xs.map(x=>`<td><strong>${qFmt(qFx(x)-qGx(x))}</strong></td>`).join('')}</tr></tbody></table><div class="cardbox"><strong>${Math.abs(v.a)<1e-9?'Beobachtung bei a=0':'Beobachtung'}</strong>${Math.abs(v.a)<1e-9?'Alle Differenzen sind 0. Beide Terme beschreiben dieselbe Gerade.':`Die Differenz ist a·x². Bei x=0 ist sie 0; mit wachsendem |x| wird der Einfluss des quadratischen Terms sichtbar.`}</div>`;return;}const xS=-v.h;const xs=[xS-2,xS-1,xS,xS+1,xS+2];box.innerHTML=`<div class="kicker">Wertetabelle</div><h2>Term, Tabelle und Graph verbinden</h2><table><thead><tr><th>x</th>${xs.map(x=>`<th>${qFmt(x)}</th>`).join('')}</tr></thead><tbody><tr><td>${qMathFormula("f(x)")}</td>${xs.map(x=>`<td>${qFmt(qFx(x))}</td>`).join('')}</tr></tbody></table><div class="cardbox"><strong>Prüffrage</strong>Vergleiche Werte in gleichem Abstand links und rechts vom Scheitelpunkt xₛ=−u=${qFmt(-v.h)}. Was fällt dir auf?</div>`;}
-function qRenderExplore(){
- const box=q$('qv-explore');if(!box)return;
- const m=qCurrent(),v=qState.values;
- const specs={a:['Formparameter a',-3,3,.25],h:['Parameter u (horizontal)',-5,5,.5],k:['Parameter v (vertikal)',-5,5,.5],m:['Steigung m der Geraden',-4,4,.25],b:['y-Achsenabschnitt b der Geraden',-6,6,.5],x:['betrachtete Stelle x',-5,5,.5]};
- const keys=qFreeControlKeys(m),list=qParamList(keys);
- const purpose=m.id==='completeidea'
-  ?`Verändere ${list}. Der Formparameter a bleibt hier bewusst auf 1 fest, damit du das Grundprinzip der quadratischen Ergänzung untersuchst. Den allgemeineren Fall a≠1 bearbeitest du im nächsten Modul.`
-  :m.id==='normal'
-   ?`Verändere ${list}. Dabei verändert x nur den markierten Punkt; a, u und v verändern die Parabel.`
-   :`Verändere ${list} bewusst. Beginne mit einem Parameter und kombiniere erst danach mehrere, damit Ursache und Wirkung nachvollziehbar bleiben.`;
- box.innerHTML=`<div class="kicker">Freies Erkunden</div><h2>Verfügbare Parameter selbst kombinieren</h2><p class="mini">${purpose}</p><div class="explore-formulas"><div class="formula" id="qExploreF">${qMathFormula(qFormula())}</div>${qIsPolyModule()?`<div class="formula">${qMathFormula(m.id==='expand'?qPolyFormula():qVertexFormula())}</div>`:''}${m.compareLine?`<div class="formula" id="qExploreG">${qMathFormula(qLineFormula())}</div>`:''}</div><div class="explore-grid">${keys.map(key=>{const [label,min,max,step]=specs[key];return `<div class="control"><div class="control-top"><label for="q-ex-${key}">${label}</label><output class="value" id="q-ex-out-${key}">${qFmt(v[key]??(key==='m'?2:0))}</output></div><input id="q-ex-${key}" data-q-explore="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${v[key]??(key==='m'?2:0)}"></div>`}).join('')}</div><div class="cardbox"><strong>Arbeitsidee</strong>Formuliere zuerst eine Vermutung. Verändere dann einen Parameter und prüfe sie. Kombiniere anschließend weitere verfügbare Parameter und beschreibe, was sich zusätzlich verändert.</div>`;
- box.querySelectorAll('[data-q-explore]').forEach(r=>r.addEventListener('input',()=>{let value=+r.value;if(r.dataset.qExplore==='a'&&!m.compareLine&&Math.abs(value)<.001){value=value<0?-.25:.25;r.value=String(value)}qState.values[r.dataset.qExplore]=value;q$('q-ex-out-'+r.dataset.qExplore).textContent=qFmt(value);q$('qFormula').innerHTML=qMathFormula(qFormula());if(q$('qExploreF'))q$('qExploreF').innerHTML=qMathFormula(qFormula());if(q$('qExploreG'))q$('qExploreG').innerHTML=qMathFormula(qLineFormula());qDraw();qRenderTable();qRenderTaskInsight();}));
-}
+function qRenderExplore(){const box=q$('qv-explore');if(!box)return;const m=qCurrent(),v=qState.values;const specs={a:['Formparameter a',-3,3,.25],h:['Parameter u (horizontal)',-5,5,.5],k:['Parameter v (vertikal)',-5,5,.5],m:['Steigung m der Geraden',-4,4,.25],b:['y-Achsenabschnitt b der Geraden',-6,6,.5]};const keys=m.compareLine?['a','m','b']:m.id==='completeidea'?['h','k']:['a','h','k'];box.innerHTML=`<div class="kicker">Freies Erkunden</div><h2>Verfügbare Parameter selbst kombinieren</h2><p class="mini">${m.id==='completeidea'?'Verändere u und v. a=1 bleibt bewusst fest, damit du das Grundprinzip der quadratischen Ergänzung untersuchst; a≠1 folgt im nächsten Modul.':m.id==='normal'?'Verändere a, u und v; x steuert nur den markierten Punkt.':'Verändere die hier verfügbaren Parameter bewusst. Beginne mit einem Parameter und kombiniere erst danach mehrere.'}</p><div class="explore-formulas"><div class="formula" id="qExploreF">${qMathFormula(qFormula())}</div>${qIsPolyModule()?`<div class="formula">${qMathFormula(m.id==='expand'?qPolyFormula():qVertexFormula())}</div>`:''}${m.compareLine?`<div class="formula" id="qExploreG">${qMathFormula(qLineFormula())}</div>`:''}</div><div class="explore-grid">${keys.map(key=>{const [label,min,max,step]=specs[key];return `<div class="control"><div class="control-top"><label for="q-ex-${key}">${label}</label><output class="value" id="q-ex-out-${key}">${qFmt(v[key]??(key==='m'?2:0))}</output></div><input id="q-ex-${key}" data-q-explore="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${v[key]??(key==='m'?2:0)}"></div>`}).join('')}</div><div class="cardbox"><strong>Arbeitsidee</strong>Verändere zuerst nur einen Parameter, danach zwei oder mehrere gleichzeitig. Formuliere jeweils, was sich am Graphen ändert und was gleich bleibt.</div>`;box.querySelectorAll('[data-q-explore]').forEach(r=>r.addEventListener('input',()=>{let value=+r.value;if(r.dataset.qExplore==='a'&&!m.compareLine&&Math.abs(value)<.001){value=value<0?-.25:.25;r.value=String(value)}qState.values[r.dataset.qExplore]=value;q$('q-ex-out-'+r.dataset.qExplore).textContent=qFmt(value);q$('qFormula').innerHTML=qMathFormula(qFormula());if(q$('qExploreF'))q$('qExploreF').innerHTML=qMathFormula(qFormula());if(q$('qExploreG'))q$('qExploreG').innerHTML=qMathFormula(qLineFormula());qDraw();qRenderTable();qRenderTaskInsight();}));}
 function qRenderAll(){qRenderHeader();qRenderControls();qRenderTabs();qRenderViews();qDraw();const {block,pos}=qBlockPosition();q$('qPrev').disabled=pos===0;q$('qNext').disabled=pos===block.indices.length-1;}
 q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'Ansicht zurück':'Graph groß';requestAnimationFrame(()=>{qDraw();const card=q$('qPlot')?.closest('.chart-card');if(on&&card)card.scrollTop=0;});});q$('qPrev').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos>0)qOpen(block.indices[pos-1],'replace')});q$('qNext').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos<block.indices.length-1)qOpen(block.indices[pos+1],'replace')});
 document.querySelectorAll('[data-open-topic="quadratic"]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-open]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qOpen,'push')));document.querySelectorAll('[data-q-practice-open]').forEach(b=>b.addEventListener('click',()=>{qOpen(+b.dataset.qPracticeOpen,'push');qState.view='practice';qRenderTabs();qRenderViews();}));document.querySelectorAll('[data-q-overview]').forEach(b=>b.addEventListener('click',()=>qShowOverview('replace')));document.querySelectorAll('[data-q-back-portal]').forEach(b=>b.addEventListener('click',()=>{if(qHistoryAvailable()&&history.state?.[QKEY])history.back();else qShowPortal('replace')}));
