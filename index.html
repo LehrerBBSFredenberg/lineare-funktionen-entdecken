@@ -3260,7 +3260,7 @@ function openPortalModal(kind,name="",options={}){
  kicker.textContent="Information";
  if(kind==="building"){
    title.textContent=`${name} – im Aufbau`;
-   body.innerHTML=`<p>Dieser Lernbereich wird gerade vorbereitet. Geplant sind interaktive Lernmodule, sprachsensible Erklärungen und Materialien, Übungen sowie Selbstchecks.</p><p><strong>Noch nicht freigeschaltet:</strong> Die Themenkarte zeigt bewusst schon die zukünftige Struktur der Lernplattform.</p><div class="modal-actions"><button class="portal-primary" data-modal-open-linear>Lineare Funktionen öffnen</button><button class="portal-secondary" data-modal-open-quadratic>Quadratische Funktionen öffnen</button></div>`;
+   body.innerHTML=`<p>Dieser Lernbereich wird gerade vorbereitet. Für Funktionen 3. Grades brauchst du Kenntnisse, die du bereits bei den linearen und quadratischen Funktionen aufgebaut hast.</p><div class="privacy-block"><strong>Das brauchst du als Grundlage</strong>Funktionsterme lesen und zwischen Darstellungen wechseln, Nullstellen als Stellen mit f(x)=0 verstehen, Schnittpunkte über f(x)=g(x) bestimmen sowie Graph, Term, Tabelle und Sprache miteinander verbinden.</div><p>Diese bekannten Ideen werden bei Funktionen 3. Grades wieder aufgegriffen und erweitert. Nutze die vorhandenen Lernbereiche deshalb gezielt zur Wiederholung.</p><div class="modal-actions"><button class="portal-primary" data-modal-open-linear>Lineare Funktionen öffnen</button><button class="portal-secondary" data-modal-open-quadratic>Quadratische Funktionen öffnen</button></div>`;
  }else if(kind==="planned"){
    title.textContent=`${name} – geplant`;
    body.innerHTML=`<p>Dieses Themenfeld gehört zur zukünftigen Mathematik-Lernwelt, ist aber noch nicht freigeschaltet.</p><p>Die Karte bleibt sichtbar, damit die Struktur der Plattform transparent ist und später ohne Umbau erweitert werden kann.</p>`;
@@ -3281,7 +3281,7 @@ function openPortalModal(kind,name="",options={}){
  if(options.historyMode!=="none") writeAppHistory("modal",options.historyMode||"push",{modalType:"info",kind,name});
  const first=modal.querySelector("button");if(first)first.focus();
  const go=modal.querySelector("[data-modal-open-linear]");if(go)go.addEventListener("click",()=>{hidePortalModal();showLinearOverview({historyMode:"replace"});});
- const goQ=modal.querySelector("[data-modal-open-quadratic]");if(goQ)goQ.addEventListener("click",()=>{hidePortalModal();qShowOverview("replace");});
+ const goQ=modal.querySelector("[data-modal-open-quadratic]");if(goQ)goQ.addEventListener("click",()=>{hidePortalModal();const quadraticCard=document.querySelector('[data-open-topic="quadratic"]');if(quadraticCard)quadraticCard.click();});
 }
 function hidePortalModal(){const modal=document.getElementById("portalModal");if(modal){modal.hidden=true;modal.querySelector(".portal-modal-card")?.classList.remove("media-dialog-card");}document.body.style.overflow="";}
 function closePortalModal(){
