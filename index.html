@@ -3538,7 +3538,7 @@ function qDraw(){
  const [qX0,qY0]=qSvgPoint(0,0,B);
  s+=`<line x1="${B.l}" y1="${qY0}" x2="${B.l+B.w-3}" y2="${qY0}" stroke="#64748b" stroke-width="1.9" marker-end="url(#qAxisArrow)"/>`;
  s+=`<line x1="${qX0}" y1="${B.t+B.h}" x2="${qX0}" y2="${B.t+3}" stroke="#64748b" stroke-width="1.9" marker-end="url(#qAxisArrow)"/>`;
- function axisPill(x,y,label){const w=Math.max(30,18+label.length*7);return `<g><rect x="${x}" y="${y}" width="${w}" height="22" rx="8" fill="#fff" fill-opacity=".96" stroke="#cbd5e1"/><text x="${x+w/2}" y="${y+15}" text-anchor="middle" font-size="12" font-weight="800" fill="#475569">${label}</text></g>`}
+ function axisPill(x,y,label){const w=Math.max(30,18+label.length*7);return `<g><rect x="${x}" y="${y}" width="${w}" height="22" rx="8" fill="#fff" fill-opacity=".96" stroke="#cbd5e1"/><text x="${x+w/2}" y="${y+15}" text-anchor="middle" font-size="12" font-weight="800" fill="#475569">${qSvgMathMarkup(label)}</text></g>`}
  const qOrdinateLabel=m.compareLine?'f(x), g(x)':m.showBase?'f(x), n(x)':'f(x)';
  s+=axisPill(B.l+B.w-42,qY0-30,'x');
  s+=axisPill(qX0+8,B.t+6,qOrdinateLabel);
@@ -3576,12 +3576,31 @@ function qDraw(){
    qLabelBoxes.push({x:best.x,y:best.y,w:best.w,h:best.h});
    return best;
  }
+ function qSvgEscape(raw){return String(raw??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+ function qSvgMathMarkup(raw){
+   const src=String(raw??'');let out='';
+   for(let i=0;i<src.length;){
+     const ch=src[i];
+     if(ch==='_'){
+       let j=i+1,sub='';
+       if(src[j]==='{'){j++;const start=j;while(j<src.length&&src[j]!=='}')j++;sub=src.slice(start,j);j+=src[j]==='}'?1:0;}
+       else if(/[0-9]/.test(src[j]||'')){const start=j;while(j<src.length&&/[0-9]/.test(src[j]))j++;sub=src.slice(start,j);}
+       else if(/[A-Za-z]/.test(src[j]||'')){sub=src[j];j++;}
+       if(sub){out+=`<tspan baseline-shift="sub" font-size="9"${/^[A-Za-z]+$/.test(sub)?' font-style="italic"':''}>${qSvgEscape(sub)}</tspan>`;i=j;continue;}
+     }
+     if(/[₀₁₂₃₄₅₆₇₈₉]/.test(ch)){out+=`<tspan baseline-shift="sub" font-size="9">${'₀₁₂₃₄₅₆₇₈₉'.indexOf(ch)}</tspan>`;i++;continue;}
+     if(ch==='ₛ'){out+='<tspan baseline-shift="sub" font-size="9" font-style="italic">s</tspan>';i++;continue;}
+     if(/[fgxnauvbcmp]/.test(ch)){out+=`<tspan font-style="italic">${ch}</tspan>`;i++;continue;}
+     out+=qSvgEscape(ch);i++;
+   }
+   return out;
+ }
  function qSmartLabel(ax,ay,text,color,opts={}){
    const w=Math.max(opts.minWidth||72,Math.min(opts.maxWidth||220,24+text.length*(opts.charWidth||6.3))),h=opts.h||24;
    const box=qChooseLabelBox(ax,ay,w,h,opts.avoidFns||[]),bx=box.x,by=box.y;
    const cx=ax<bx?bx:ax>bx+w?bx+w:Math.max(bx+6,Math.min(bx+w-6,ax));
    const cy=ay<by?by:ay>by+h?by+h:Math.max(by+5,Math.min(by+h-5,ay));
-   return `<g><line x1="${ax}" y1="${ay}" x2="${cx}" y2="${cy}" stroke="${color}" stroke-width="1.4" opacity=".62"/><rect x="${bx}" y="${by}" width="${w}" height="${h}" rx="8" fill="#fff" fill-opacity=".96" stroke="${color}" stroke-opacity=".5"/><text class="graph-label" x="${bx+8}" y="${by+16}" fill="${color}" font-size="12" font-weight="800">${text}</text></g>`;
+   return `<g><line x1="${ax}" y1="${ay}" x2="${cx}" y2="${cy}" stroke="${color}" stroke-width="1.4" opacity=".62"/><rect x="${bx}" y="${by}" width="${w}" height="${h}" rx="8" fill="#fff" fill-opacity=".96" stroke="${color}" stroke-opacity=".5"/><text class="graph-label" x="${bx+8}" y="${by+16}" fill="${color}" font-size="12" font-weight="800">${qSvgMathMarkup(text)}</text></g>`;
  }
  function graphLabel(fn,x,text,color,opts={}){
    let y=fn(x);if(!Number.isFinite(y))return '';
@@ -3622,7 +3641,7 @@ function qDraw(){
     s+=graphLabel(qFx,px,qFormula(),'#6d39c6',{placement:slope>=0?'below-right':'below-left'});
    }
  }else{
-   if(m.showBase)s+=graphLabel(x=>x*x,-2.2,'Normalparabel n(x)=x²','#64748b',{dx:-165,dy:-18});
+   if(m.showBase)s+=graphLabel(x=>x*x,-2.2,'n(x)=x²','#64748b',{dx:-165,dy:-18});
    s+=graphLabel(qFx,parabolaLabelX(),qFormula(),'#6d39c6',{dx:14,dy:v.a<0?-34:8});
    const [sx,sy]=qSvgPoint(-v.h,v.k,B);
    s+=`<line x1="${sx}" y1="${B.t}" x2="${sx}" y2="${B.t+B.h}" stroke="#6d39c6" stroke-dasharray="6 6" opacity=".35"/><circle cx="${sx}" cy="${sy}" r="5.5" fill="#a42d55"/>`;
@@ -3637,7 +3656,7 @@ function qDraw(){
      const rd=qRootData();
      rd.roots.forEach((x,i)=>{
        if(x>=B.xmin&&x<=B.xmax){
-         const p=qSvgPoint(x,0,B),lab=rd.kind==='double'?`N(${qFmt(x)}|0)`:`N${i+1}(${qFmt(x)}|0)`;
+         const p=qSvgPoint(x,0,B),lab=rd.kind==='double'?`N(${qFmt(x)}|0)`:`N_${i+1}(${qFmt(x)}|0)`;
          s+=`<circle cx="${p[0]}" cy="${p[1]}" r="5.4" fill="#c86b09"/>${qSmartLabel(p[0],p[1],lab,'#9a4e06',{avoidFns:[qFx],minWidth:82,maxWidth:155})}`;
        }
      });
@@ -3648,10 +3667,10 @@ function qDraw(){
    }
  }
  svg.innerHTML=s;
- q$('qLegend').innerHTML=m.compareLine?(Math.abs(v.a)<1e-9?`<span class="f2">f(x)=g(x)=${qLineFormula().replace('g(x)=','')}</span>`:`<span class="f2">${qLineFormula()}</span><span class="f1">${qFormula()}</span>`):`${m.showBase?'<span class="old">Normalparabel n(x)=x²</span>':''}<span class="f1">${qFormula()}</span><span class="f3">Scheitelpunkt S</span>${qIsRootModule()?'<span style="color:#0f766e">y-Achsenschnittpunkt</span><span style="color:#9a4e06">Nullstellenpunkt(e)</span>':''}`;
+ q$('qLegend').innerHTML=m.compareLine?(Math.abs(v.a)<1e-9?`<span class="f2">${qMathFormula(`f(x)=g(x)=${qLineFormula().replace('g(x)=','')}`)}</span>`:`<span class="f2">${qMathFormula(qLineFormula())}</span><span class="f1">${qMathFormula(qFormula())}</span>`):`${m.showBase?`<span class="old">Normalparabel ${qMathFormula('n(x)=x²')}</span>`:''}<span class="f1">${qMathFormula(qFormula())}</span><span class="f3">Scheitelpunkt ${qMathFormula('S')}</span>${qIsRootModule()?'<span style="color:#0f766e">y-Achsenschnittpunkt</span><span style="color:#9a4e06">Nullstellenpunkt(e)</span>':''}`;
  qRenderTaskInsight();
 }
-function qRenderTaskInsight(){const m=qCurrent(),v=qState.values;let text=m.hyp;if(m.compareLine){text=Math.abs(v.a)<1e-9?`a=0: Der quadratische Term verschwindet. Deshalb gilt ${qFormula()} und der Graph von f fällt genau mit ${qLineFormula()} zusammen.`:`a=${qFmt(v.a)}≠0: f enthält einen x²-Term und ist quadratisch; g bleibt linear. Am Graphen siehst du die Krümmung von f.`;}if(m.id==='a'){text=`Aktuell: a=${qFmt(v.a)}. Die Parabel ist ${v.a>0?'nach oben':'nach unten'} geöffnet und ${Math.abs(v.a)>1?'schmaler (gestreckt)':Math.abs(v.a)<1?'breiter (gestaucht)':'gleich breit wie die Normalparabel'}.`}if(m.id==='shift'||m.id==='read')text=`Aktuell gilt u=${qFmt(v.h)} und v=${qFmt(v.k)}; damit ist der Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}). ${v.a<0?'Die Parabel ist nach unten geöffnet.':'Die Parabel ist nach oben geöffnet.'}`;if(m.id==='normal')text=`Bei x=${qFmt(v.x)} gilt f(x)=${qFmt(qFx(v.x))}. Wegen der Symmetrie gilt auch f(${-v.x===0?'0':qFmt(-v.x)})=${qFmt(qFx(v.x))}.`;if(qIsPolyModule())text=`Dieselbe Funktion: ${qPolyFormula()} = ${qVertexFormula()}. Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}).`;if(qIsRootModule()){const rd=qRootData(),sy=qYIntercept();const rt=rd.kind==='none'?'keine reelle Nullstelle':rd.kind==='double'?`eine doppelte Nullstelle x=${qFmt(rd.roots[0])}`:`zwei Nullstellen x₁=${qFmt(rd.roots[0])} und x₂=${qFmt(rd.roots[1])}`;text=`Für die y-Achse gilt x=0: S_y(0|${qFmt(sy)}). Für die x-Achse gilt f(x)=0: aktuell ${rt}.`;if(m.id==='factors'||m.id==='rootconnect')text+=` Linearfaktordarstellung: ${qFactorFormula()}.`;}q$('qInsight').innerHTML=qMathText(text);}
+function qRenderTaskInsight(){const m=qCurrent(),v=qState.values;let text=m.hyp;if(m.compareLine){text=Math.abs(v.a)<1e-9?`a=0: Der quadratische Term verschwindet. Deshalb gilt ${qFormula()} und der Graph von f fällt genau mit ${qLineFormula()} zusammen.`:`a=${qFmt(v.a)}≠0: f enthält einen x²-Term und ist quadratisch; g bleibt linear. Am Graphen siehst du die Krümmung von f.`;}if(m.id==='a'){text=`Aktuell: a=${qFmt(v.a)}. Die Parabel ist ${v.a>0?'nach oben':'nach unten'} geöffnet und ${Math.abs(v.a)>1?'schmaler (gestreckt)':Math.abs(v.a)<1?'breiter (gestaucht)':'gleich breit wie die Normalparabel'}.`}if(m.id==='shift'||m.id==='read')text=`Aktuell gilt u=${qFmt(v.h)} und v=${qFmt(v.k)}; damit ist der Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}). ${v.a<0?'Die Parabel ist nach unten geöffnet.':'Die Parabel ist nach oben geöffnet.'}`;if(m.id==='normal')text=`Bei x=${qFmt(v.x)} gilt f(x)=${qFmt(qFx(v.x))}. Wegen der Symmetrie gilt auch f(${-v.x===0?'0':qFmt(-v.x)})=${qFmt(qFx(v.x))}.`;if(qIsPolyModule())text=`Dieselbe Funktion: ${qPolyFormula()} = ${qVertexFormula()}. Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}).`;if(qIsRootModule()){const rd=qRootData(),sy=qYIntercept();const rt=rd.kind==='none'?'keine reelle Nullstelle':rd.kind==='double'?`eine doppelte Nullstelle x=${qFmt(rd.roots[0])}`:`zwei Nullstellen x_1=${qFmt(rd.roots[0])} und x_2=${qFmt(rd.roots[1])}`;text=`Für die y-Achse gilt x=0: S_y(0|${qFmt(sy)}). Für die x-Achse gilt f(x)=0: aktuell ${rt}.`;if(m.id==='factors'||m.id==='rootconnect')text+=` Linearfaktordarstellung: ${qFactorFormula()}.`;}q$('qInsight').innerHTML=qMathText(text);}
 function qRenderTabs(){const tabs=[['task','Auftrag','untersuchen'],['language','Sprache & Begründen','präzise formulieren'],['table','Tabelle','Werte verbinden'],['explain','Erklärung','Zusammenhang verstehen'],['practice','Üben & Sichern','direkte Rückmeldung'],['explore','Freies Erkunden','verfügbare Parameter kombinieren']];q$('qTabs').innerHTML=tabs.map(([id,a,b])=>`<button class="tab" data-q-view="${id}" data-view="${id}" role="tab" aria-selected="${qState.view===id}"><span class="tab-main">${a}</span><span class="tab-sub">${b}</span></button>`).join('');q$('qTabs').querySelectorAll('[data-q-view]').forEach(b=>b.addEventListener('click',()=>{qState.view=b.dataset.qView;qRenderTabs();qRenderViews();if(qHistoryAvailable())qWrite('module','replace')}));}
 function qMathTokenize(raw){
  return String(raw??'').split(/(<[^>]+>|&[A-Za-z0-9#]+;)/g).map(part=>{
@@ -3668,6 +3687,13 @@ function qMathTokenize(raw){
    if(ch==='³'){out+='<sup class="math-num">3</sup>';i++;continue;}
    if(ch==='ₛ'){out+='<sub><span class="math-var">s</span></sub>';i++;continue;}
    if(/[₀₁₂₃₄₅₆₇₈₉]/.test(ch)){out+=`<sub class="math-num">${'₀₁₂₃₄₅₆₇₈₉'.indexOf(ch)}</sub>`;i++;continue;}
+   if(ch==='_'){
+    let j=i+1,sub='';
+    if(part[j]==='{'){j++;const start=j;while(j<part.length&&part[j]!=='}')j++;sub=part.slice(start,j);j+=part[j]==='}'?1:0;}
+    else if(/[0-9]/.test(part[j]||'')){const start=j;while(j<part.length&&/[0-9]/.test(part[j]))j++;sub=part.slice(start,j);}
+    else if(/[A-Za-z]/.test(part[j]||'')){sub=part[j];j++;}
+    if(sub){const cls=/^[0-9]+$/.test(sub)?'math-num':'math-var';out+=`<sub><span class="${cls}">${sub}</span></sub>`;i=j;continue;}
+   }
    if('+-−=≠≤≥<>·×⇒→|'.includes(ch)){out+=`<span class="math-op">${ch}</span>`;i++;continue;}
    if('()[]{}'.includes(ch)){out+=`<span class="math-delim">${ch}</span>`;i++;continue;}
    out+=ch;i++;
@@ -3683,13 +3709,17 @@ function qMathText(html){
   let s=part;
   const hold=[];
   const stash=m=>{hold.push(m);return `\uE000${hold.length-1}\uE001`};
-  s=s.replace(/\b(?:S|P|N)(?:₁|₂)?\([^)]*\)/g,stash);
+  s=s.replace(/\b(?:S|P|N)(?:(?:_[A-Za-z0-9]+)|[₀₁₂₃₄₅₆₇₈₉]+)?\([^)]*\)/g,stash);
   s=s.replace(/\b(?:f|g|n|K|E|G)\([^)]*\)(?:\s*[=≠≤≥<>]\s*(?:[−+]?\d+(?:,\d+)?|[−+]?\d*(?:,\d+)?x²(?:\s*[+−]\s*\d*(?:,\d+)?x)?(?:\s*[+−]\s*\d+(?:,\d+)?)?|[−+]?\d*(?:,\d+)?x(?:\s*[+−]\s*\d+(?:,\d+)?)?|\([^)]*\)²(?:\s*[+−]\s*\d+(?:,\d+)?)?))?/g,stash);
   s=s.replace(/\([^)]*[xup][^)]*\)²/g,stash);
   s=s.replace(/\|a\|(?:\s*[=≠≤≥<>]\s*\d+(?:,\d+)?)?/g,stash);
   s=s.replace(/\b(?:x|p|u)²(?:\s*[+−]\s*\d*(?:,\d+)?x)?(?:\s*[+−]\s*\d+(?:,\d+)?)?/g,stash);
   s=s.replace(/\b(?:2p|2ux|bx|ax²)(?:\s*[=≠≤≥<>]\s*[−+]?\d+(?:,\d+)?)?/g,stash);
   s=s.replace(/\b(?:a|b|c|u|v|x|p|m|xₛ)\s*(?:=|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
+  s=s.replace(/\b(?:x|S|N)_[A-Za-z0-9]+\s*(?:=|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
+  s=s.replace(/\b(?:x|S|N)_[A-Za-z0-9]+\b/g,stash);
+  s=s.replace(/\b(?:x|S|N)[₀₁₂₃₄₅₆₇₈₉]+\s*(?:=|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
+  s=s.replace(/\b(?:x|S|N)[₀₁₂₃₄₅₆₇₈₉]+\b/g,stash);
   // Auch einzelne mathematische Symbole im Fließtext typografisch als Mathematik setzen.
   s=s.replace(/\b(?:a|b|c|u|v|x|p|m|f|g|n|K|E|G)\b/g,stash);
   s=s.replace(/\uE000(\d+)\uE001/g,(_,i)=>qMathFormula(hold[+i]));
@@ -3754,7 +3784,7 @@ function qPurposeHtml(m){
 }
 function qRootDynamicHtml(m){
  const rd=qRootData(),sy=qYIntercept();
- const rootLine=rd.kind==='none'?'Keine reelle Nullstelle':rd.kind==='double'?`Doppelte Nullstelle: x=${qFmt(rd.roots[0])}`:`Nullstellen: x₁=${qFmt(rd.roots[0])}, x₂=${qFmt(rd.roots[1])}`;
+ const rootLine=rd.kind==='none'?'Keine reelle Nullstelle':rd.kind==='double'?`Doppelte Nullstelle: x=${qFmt(rd.roots[0])}`:`Nullstellen: x_1=${qFmt(rd.roots[0])}, x_2=${qFmt(rd.roots[1])}`;
  const points=rd.kind==='none'?'Der Graph hat keinen reellen Schnittpunkt mit der x-Achse.':rd.roots.map((x,i)=>`${rd.kind==='double'?'N':`N${i+1}`}(${qFmt(x)}|0)`).join(' · ');
  return `<div class="cardbox"><strong>Dynamisch zum aktuellen Graphen</strong><div class="q-form-compare"><div class="q-form-card"><strong>y-Achse</strong><div class="formula">${qMathFormula(`x=0 ⇒ f(0)=${qFmt(sy)}`)}</div><p>${qMathText(`S_y(0|${qFmt(sy)})`)}</p></div><div class="q-form-card"><strong>x-Achse / Nullstellen</strong><div class="formula">${qMathFormula('f(x)=0')}</div><p>${qMathText(rootLine)}<br>${qMathText(points)}</p></div></div>${m.id==='factors'||m.id==='rootconnect'?`<div class="formula">${qMathFormula(qFactorFormula())}</div>`:''}${m.id==='rootconnect'?`<div class="q-form-choice"><strong>Dieselbe Funktion:</strong> ${qMathFormula(qVertexFormula())} · ${qMathFormula(qPolyFormula())}${rd.kind!=='none'?` · ${qMathFormula(qFactorFormula())}`:''}</div>`:''}</div>`;
 }
