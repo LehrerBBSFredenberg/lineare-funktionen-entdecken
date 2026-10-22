@@ -3543,17 +3543,51 @@ function qDraw(){
  s+=axisPill(B.l+B.w-42,qY0-30,'x');
  s+=axisPill(qX0+8,B.t+6,qOrdinateLabel);
  function pathFor(fn){let d='';for(let i=0;i<=360;i++){const x=B.xmin+(B.xmax-B.xmin)*i/360,y=fn(x),[px,py]=qSvgPoint(x,y,B);d+=(i?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)}return d}
+ const qLabelBoxes=[];
+ function qBoxesOverlap(a,b,pad=5){return !(a.x+a.w+pad<=b.x||b.x+b.w+pad<=a.x||a.y+a.h+pad<=b.y||b.y+b.h+pad<=a.y)}
+ function qBoxHitsAxis(box){
+   const xAxis={x:B.l,y:qY0-5,w:B.w,h:10},yAxis={x:qX0-5,y:B.t,w:10,h:B.h};
+   return qBoxesOverlap(box,xAxis,0)||qBoxesOverlap(box,yAxis,0);
+ }
+ function qBoxHitsCurve(box,fn){
+   if(!fn)return false;
+   const pad=4;
+   for(let i=0;i<=90;i++){
+     const x=B.xmin+(B.xmax-B.xmin)*i/90,y=fn(x);if(!Number.isFinite(y)||y<B.ymin||y>B.ymax)continue;
+     const [px,py]=qSvgPoint(x,y,B);
+     if(px>=box.x-pad&&px<=box.x+box.w+pad&&py>=box.y-pad&&py<=box.y+box.h+pad)return true;
+   }
+   return false;
+ }
+ function qChooseLabelBox(ax,ay,w,h,avoidFns=[]){
+   const candidates=[[14,-h-14],[-w-14,-h-14],[14,14],[-w-14,14],[16,-h/2],[-w-16,-h/2],[8,-h-24],[-w-8,24]];
+   let best=null;
+   candidates.forEach(([dx,dy],rank)=>{
+     const rawX=ax+dx,rawY=ay+dy;
+     const x=Math.max(B.l+5,Math.min(B.l+B.w-w-5,rawX));
+     const y=Math.max(B.t+5,Math.min(B.t+B.h-h-5,rawY));
+     const box={x,y,w,h};
+     let score=rank*0.15+Math.abs(x-rawX)+Math.abs(y-rawY);
+     qLabelBoxes.forEach(other=>{if(qBoxesOverlap(box,other))score+=1200});
+     if(qBoxHitsAxis(box))score+=220;
+     avoidFns.forEach(fn=>{if(qBoxHitsCurve(box,fn))score+=320});
+     if(!best||score<best.score)best={...box,score};
+   });
+   qLabelBoxes.push({x:best.x,y:best.y,w:best.w,h:best.h});
+   return best;
+ }
+ function qSmartLabel(ax,ay,text,color,opts={}){
+   const w=Math.max(opts.minWidth||72,Math.min(opts.maxWidth||220,24+text.length*(opts.charWidth||6.3))),h=opts.h||24;
+   const box=qChooseLabelBox(ax,ay,w,h,opts.avoidFns||[]),bx=box.x,by=box.y;
+   const cx=ax<bx?bx:ax>bx+w?bx+w:Math.max(bx+6,Math.min(bx+w-6,ax));
+   const cy=ay<by?by:ay>by+h?by+h:Math.max(by+5,Math.min(by+h-5,ay));
+   return `<g><line x1="${ax}" y1="${ay}" x2="${cx}" y2="${cy}" stroke="${color}" stroke-width="1.4" opacity=".62"/><rect x="${bx}" y="${by}" width="${w}" height="${h}" rx="8" fill="#fff" fill-opacity=".96" stroke="${color}" stroke-opacity=".5"/><text class="graph-label" x="${bx+8}" y="${by+16}" fill="${color}" font-size="12" font-weight="800">${text}</text></g>`;
+ }
  function graphLabel(fn,x,text,color,opts={}){
    let y=fn(x);if(!Number.isFinite(y))return '';
    y=Math.max(B.ymin+.35,Math.min(B.ymax-.35,y));
-   const [ax,ay]=qSvgPoint(x,y,B),w=Math.max(84,Math.min(220,24+text.length*6.3)),h=24;
-   const placement=opts.placement||'above-right';
-   let bx=placement.includes('left')?ax-w-16:ax+16;
-   let by=placement.includes('below')?ay+16:ay-h-16;
-   bx=Math.max(B.l+5,Math.min(B.l+B.w-w-5,bx));by=Math.max(B.t+5,Math.min(B.t+B.h-h-5,by));
-   const cx=ax<bx?bx:ax>bx+w?bx+w:Math.max(bx+6,Math.min(bx+w-6,ax));
-   const cy=ay<by?by:ay>by+h?by+h:Math.max(by+5,Math.min(by+h-5,ay));
-   return `<g><line x1="${ax}" y1="${ay}" x2="${cx}" y2="${cy}" stroke="${color}" stroke-width="1.5" opacity=".7"/><circle cx="${ax}" cy="${ay}" r="3.2" fill="${color}"/><rect x="${bx}" y="${by}" width="${w}" height="${h}" rx="8" fill="#fff" stroke="${color}" stroke-opacity=".5"/><text class="graph-label" x="${bx+8}" y="${by+16}" fill="${color}">${text}</text></g>`;
+   const [ax,ay]=qSvgPoint(x,y,B);
+   return `<g><circle cx="${ax}" cy="${ay}" r="3.2" fill="${color}"/>${qSmartLabel(ax,ay,text,color,{avoidFns:[fn],minWidth:84,maxWidth:220})}</g>`;
  }
  function parabolaLabelX(){
    const a=Math.max(.25,Math.abs(v.a||1));
@@ -3592,11 +3626,21 @@ function qDraw(){
    s+=graphLabel(qFx,parabolaLabelX(),qFormula(),'#6d39c6',{dx:14,dy:v.a<0?-34:8});
    const [sx,sy]=qSvgPoint(-v.h,v.k,B);
    s+=`<line x1="${sx}" y1="${B.t}" x2="${sx}" y2="${B.t+B.h}" stroke="#6d39c6" stroke-dasharray="6 6" opacity=".35"/><circle cx="${sx}" cy="${sy}" r="5.5" fill="#a42d55"/>`;
-   const sp=`S(${qFmt(-v.h)}|${qFmt(v.k)})`,sw=Math.max(88,24+sp.length*6.2),sbx=Math.max(B.l+5,Math.min(B.l+B.w-sw-5,sx+10)),sby=Math.max(B.t+5,Math.min(B.t+B.h-27,sy-32));
-   s+=`<line x1="${sx}" y1="${sy}" x2="${sbx}" y2="${sby+12}" stroke="#a42d55" stroke-width="1.5" opacity=".65"/><rect x="${sbx}" y="${sby}" width="${sw}" height="24" rx="8" fill="#fff" stroke="#d8b4ce"/><text x="${sbx+8}" y="${sby+16}" font-size="12" fill="#8f274a" font-weight="800">${sp}</text>`;
+   const sp=`S(${qFmt(-v.h)}|${qFmt(v.k)})`;
+   s+=qSmartLabel(sx,sy,sp,'#8f274a',{avoidFns:[qFx],minWidth:88,maxWidth:150});
    if(qIsRootModule()){
-     const y0=qYIntercept(),yp=qSvgPoint(0,y0,B);if(y0>=B.ymin&&y0<=B.ymax){const lab=`S_y(0|${qFmt(y0)})`;s+=`<circle cx="${yp[0]}" cy="${yp[1]}" r="5.2" fill="#0f766e"/><text x="${yp[0]+8}" y="${Math.max(B.t+14,yp[1]-9)}" font-size="12" font-weight="800" fill="#0f766e">${lab}</text>`;}
-     const rd=qRootData();rd.roots.forEach((x,i)=>{if(x>=B.xmin&&x<=B.xmax){const p=qSvgPoint(x,0,B),lab=rd.kind==='double'?`N(${qFmt(x)}|0)`:`N${i+1}(${qFmt(x)}|0)`;s+=`<circle cx="${p[0]}" cy="${p[1]}" r="5.4" fill="#c86b09"/><text x="${p[0]+8}" y="${p[1]-10}" font-size="12" font-weight="800" fill="#9a4e06">${lab}</text>`;}});
+     const y0=qYIntercept(),yp=qSvgPoint(0,y0,B);
+     if(y0>=B.ymin&&y0<=B.ymax){
+       const lab=`S_y(0|${qFmt(y0)})`;
+       s+=`<circle cx="${yp[0]}" cy="${yp[1]}" r="5.2" fill="#0f766e"/>${qSmartLabel(yp[0],yp[1],lab,'#0f766e',{avoidFns:[qFx],minWidth:86,maxWidth:150})}`;
+     }
+     const rd=qRootData();
+     rd.roots.forEach((x,i)=>{
+       if(x>=B.xmin&&x<=B.xmax){
+         const p=qSvgPoint(x,0,B),lab=rd.kind==='double'?`N(${qFmt(x)}|0)`:`N${i+1}(${qFmt(x)}|0)`;
+         s+=`<circle cx="${p[0]}" cy="${p[1]}" r="5.4" fill="#c86b09"/>${qSmartLabel(p[0],p[1],lab,'#9a4e06',{avoidFns:[qFx],minWidth:82,maxWidth:155})}`;
+       }
+     });
    }
    if(m.id==='normal'){
      const x=v.x,y=qFx(x),p1=qSvgPoint(x,y,B),p2=qSvgPoint(-x,y,B);
