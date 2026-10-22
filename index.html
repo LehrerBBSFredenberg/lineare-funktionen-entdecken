@@ -1222,8 +1222,8 @@ body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
         <div class="q-inline-controls" id="qInlineControlsPanel" aria-label="Graphnahe Steuerung">
           <div class="q-inline-head"><span>Direkt am Graphen verändern</span><div id="qInlineFormula" class="q-inline-formula"></div></div>
           <div class="q-inline-modes" role="group" aria-label="Art der Steuerung">
-            <button type="button" class="q-inline-mode" data-q-inline-mode="guided" aria-pressed="true">Auftrag</button>
-            <button type="button" class="q-inline-mode" data-q-inline-mode="free" aria-pressed="false">Alle Parameter</button>
+            <button type="button" class="q-inline-mode" data-q-inline-mode="guided" aria-pressed="true">Geführt untersuchen</button>
+            <button type="button" class="q-inline-mode" data-q-inline-mode="free" aria-pressed="false">Frei erkunden</button>
           </div>
           <div id="qInlineControls"></div>
           <div class="q-inline-note" id="qInlineControlNote"></div>
@@ -3436,13 +3436,13 @@ function qRenderHeader(){
 function qRenderControls(){
  const m=qCurrent(),v=qState.values;
  const specs={a:['a','Formparameter a',-3,3,.25],h:['h','Parameter u (horizontal)',-5,5,.5],k:['k','Parameter v (vertikal)',-5,5,.5],x:['x','betrachtete Stelle x',-5,5,.5],m:['m','Steigung m der Geraden',-4,4,.25],b:['b','y-Achsenabschnitt b der Geraden',-6,6,.5]};
- const guidedNote=m.compareLine?'<strong>Auftrag:</strong> Verändere nur a. Bei a=0 fällt f mit g zusammen.':m.id==='a'?'<strong>Auftrag:</strong> Verändere nur a und vergleiche mit der Normalparabel.':qIsPolyModule()?'<strong>Auftrag:</strong> Verändere die Parameter und beobachte, wie beide Termformen dieselbe Parabel beschreiben.':'<strong>Auftrag:</strong> Verändere nur die im Modul untersuchten Größen.';
+ const guidedNote=m.compareLine?'<strong>Geführt untersuchen:</strong> Verändere nur a. Bei a=0 fällt f mit g zusammen.':m.id==='a'?'<strong>Geführt untersuchen:</strong> Verändere nur a und vergleiche mit der Normalparabel.':qIsPolyModule()?'<strong>Geführt untersuchen:</strong> Verändere nur die für diesen Lernschritt vorgesehenen Größen und beobachte, wie beide Termformen dieselbe Parabel beschreiben.':'<strong>Geführt untersuchen:</strong> Verändere nur die im aktuellen Lernziel untersuchten Größen.';
  const freeNote=m.compareLine?'<strong>Freies Erkunden:</strong> Verändere a, m und b gleichzeitig.':m.id==='normal'?'<strong>Freies Erkunden:</strong> Verändere zusätzlich a, u und v; x steuert den markierten Punkt.':'<strong>Freies Erkunden:</strong> Verändere a, u und v gleichzeitig.';
  const freeKeys=m.compareLine?['a','m','b']:m.id==='normal'?['a','h','k','x']:m.id==='completeidea'?['h','k']:['a','h','k'];
  function markup(prefix,keys){return keys.map(key=>{const [k,label,min,max,step]=specs[key];const val=v[key];return `<div class="control"><div class="control-top"><label for="${prefix}-${k}">${label}</label><output class="value" data-q-output="${k}">${qFmt(val)}</output></div><input id="${prefix}-${k}" data-q-control="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('')}
  q$('qFormula').innerHTML=qMathFormula(qFormula());
  q$('qControls').innerHTML=markup('q',m.controls);
- q$('qControlNote').innerHTML=m.compareLine?'<strong>Wichtig:</strong> a=0 ist hier ausdrücklich erlaubt. Dann verschwindet der quadratische Anteil und f(x) ist dieselbe Gerade wie g(x).':m.id==='a'?'<strong>Hinweis:</strong> In diesem Parabel-Modul wird a=0 übersprungen, weil dann keine quadratische Funktion mehr vorliegt.':'Verändere möglichst nur die im Auftrag genannte Größe und beobachte gezielt.';
+ q$('qControlNote').innerHTML=m.compareLine?'<strong>Wichtig:</strong> a=0 ist hier ausdrücklich erlaubt. Dann verschwindet der quadratische Anteil und f(x) ist dieselbe Gerade wie g(x).':m.id==='a'?'<strong>Hinweis:</strong> In diesem Parabel-Modul wird a=0 übersprungen, weil dann keine quadratische Funktion mehr vorliegt.':qState.controlMode==='free'?'<strong>Frei erkunden:</strong> Kombiniere mehrere Parameter bewusst. Formuliere vorher eine Vermutung und prüfe sie am Graphen.':'<strong>Geführt untersuchen:</strong> Verändere nur die im Lernziel genannte Größe. So kannst du Ursache und Wirkung eindeutig zuordnen.';
  if(q$('qInlineFormula'))q$('qInlineFormula').innerHTML=qMathFormula(qFormula());
  const inlineKeys=qState.inlineMode==='free'?freeKeys:m.controls;
  if(q$('qInlineControls'))q$('qInlineControls').innerHTML=markup('q-inline',inlineKeys);
