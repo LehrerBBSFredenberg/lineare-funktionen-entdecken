@@ -3788,19 +3788,19 @@ function qMathText(html){
   const hold=[];
   const stash=m=>{hold.push(m);return `\uE000${hold.length-1}\uE001`};
   s=s.replace(/\b(?:S|P|N)(?:(?:_[A-Za-z0-9]+)|[₀₁₂₃₄₅₆₇₈₉]+)?≈?\([^)]*\)/g,stash);
-  s=s.replace(/\b(?:f|g|n|K|E|G)\([^)]*\)\s*(?:=|≈|≠|≤|≥|<|>)\s*(?:f|g|n|K|E|G)\([^)]*\)/g,stash);
+  s=s.replace(/\b(?:f|g|n|K|E|G)\([^)]*\)\s*(?:=|≈|≠|≤|≥|<|>)\s*(?:f|g|n|K|E|G)\([^)]*\)(?:\s*(?:=|≈|≠|≤|≥|<|>)\s*[A-Za-z]_[A-Za-z0-9]+)?/g,stash);
   s=s.replace(/\b(?:f|g|n|K|E|G)\([^)]*\)(?:\s*[=≠≤≥<>]\s*(?:[−+]?\d+(?:,\d+)?|[−+]?\d*(?:,\d+)?x²(?:\s*[+−]\s*\d*(?:,\d+)?x)?(?:\s*[+−]\s*\d+(?:,\d+)?)?|[−+]?\d*(?:,\d+)?x(?:\s*[+−]\s*\d+(?:,\d+)?)?|\([^)]*\)²(?:\s*[+−]\s*\d+(?:,\d+)?)?))?/g,stash);
   s=s.replace(/\([^)]*[xup][^)]*\)²/g,stash);
   s=s.replace(/\|a\|(?:\s*[=≠≤≥<>]\s*\d+(?:,\d+)?)?/g,stash);
   s=s.replace(/\b(?:x|p|u)²(?:\s*[+−]\s*\d*(?:,\d+)?x)?(?:\s*[+−]\s*\d+(?:,\d+)?)?/g,stash);
   s=s.replace(/\b(?:2p|2ux|bx|ax²)(?:\s*[=≠≤≥<>]\s*[−+]?\d+(?:,\d+)?)?/g,stash);
   s=s.replace(/\b(?:a|b|c|u|v|x|p|m|xₛ)\s*(?:=|≈|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
-  s=s.replace(/\b(?:x|S|N)_[A-Za-z0-9]+\s*(?:=|≈|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
-  s=s.replace(/\b(?:x|S|N)_[A-Za-z0-9]+\b/g,stash);
+  s=s.replace(/\b(?:[A-Za-z])_[A-Za-z0-9]+\s*(?:=|≈|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
+  s=s.replace(/\b(?:[A-Za-z])_[A-Za-z0-9]+\b/g,stash);
   s=s.replace(/\b(?:x|S|N)[₀₁₂₃₄₅₆₇₈₉]+\s*(?:=|≈|≠|≤|≥|<|>)\s*[−+]?\d+(?:,\d+)?/g,stash);
   s=s.replace(/\b(?:x|S|N)[₀₁₂₃₄₅₆₇₈₉]+\b/g,stash);
   // Auch einzelne mathematische Symbole im Fließtext typografisch als Mathematik setzen.
-  s=s.replace(/\b(?:a|b|c|u|v|x|p|m|f|g|n|K|E|G)\b/g,stash);
+  s=s.replace(/\b(?:a|b|c|u|v|x|y|p|m|f|g|n|K|E|G)\b/g,stash);
   s=s.replace(/\uE000(\d+)\uE001/g,(_,i)=>qMathFormula(hold[+i]));
   return s;
  }).join('');
