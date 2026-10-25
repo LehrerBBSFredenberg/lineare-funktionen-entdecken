@@ -3537,14 +3537,14 @@ const qModules=[
   words:["Einsetzprobe","Kontrolle","Punktbedingung","Funktionswert","Plausibilität"],starter:"Für den Punkt ... berechne ich f(...)=... . Das stimmt mit ... überein, deshalb ... .",mistake:"Typischer Fehler: Nach einer einzigen richtigen Punktprobe aufhören. Der gesuchte Term muss alle drei gegebenen Punkte erfüllen.",counter:"Gegenbeispiel: Ein falscher quadratischer Term kann zufällig durch einen oder zwei der gegebenen Punkte gehen. Deshalb werden alle drei Bedingungen geprüft.",
   freeChallenge:"Erfinde einen Term, der nur durch A und B geht, aber C verfehlt. Nutze ihn als Gegenbeispiel dafür, warum alle drei Punktproben nötig sind.",
   quiz:[{q:"Was muss für A(−3|3) bei einer korrekten Einsetzprobe gelten?",opts:["f(−3)=3","f(3)=−3","f(−3)=0"],ok:0,fb:"Die x-Koordinate −3 wird eingesetzt; der Funktionswert muss 3 sein."},{q:"Für f(x)=0,5x²−0,5x−3 gilt f(1)=...",opts:["−3","3","−2"],ok:0,fb:"0,5−0,5−3=−3; damit passt B(1|−3)."},{q:"Warum reicht die Probe an nur einem Punkt nicht?",opts:["Weil der Term alle drei gegebenen Punkte erfüllen muss.","Weil quadratische Funktionen keine Punkte besitzen.","Weil nur der Scheitel geprüft werden darf."],ok:0,fb:"Gesucht ist eine Parabel durch alle drei Punkte; deshalb müssen alle drei Bedingungen stimmen."},{q:"Bei C(5|7) ergibt ein vorgeschlagener Term f(5)=6. Was folgt?",opts:["Der Term ist trotzdem richtig.","Der Term erfüllt die Bedingung von C nicht.","C muss in C(6|5) umbenannt werden."],ok:1,fb:"Für C müsste genau f(5)=7 gelten. Der vorgeschlagene Term scheitert an dieser Punktbedingung."},{q:"Welche Kontrolle verbindet Rechnung und Graph?",opts:["Die berechneten Punkte müssen auf dem gezeichneten Graphen liegen.","Nur die Farbe der Parabel prüfen.","Die x-Werte müssen alle positiv sein."],ok:0,fb:"Ein korrekter Term und sein Graph müssen dieselben drei gegebenen Punkte enthalten."}]},
- {id:"pointtransfer",title:"Transfer: Punkte gewinnen → Parabel bestimmen",form:"poly",pointModel:true,transferModel:true,defaults:{a:-.75,h:-4,k:12,x:0},controls:[],freeControls:[],points:[["A",2,9],["B",4,12],["C",10,-15]],solution:{a:-.75,b:6,c:0},guidedNote:"Geführt untersuchen: Trenne die Aufgabe in zwei Phasen: zuerst die Schnittpunkte der drei Geraden bestimmen, danach genau diese Punkte als Bedingungen für die gesuchte Parabel verwenden.",freeNote:"Frei erkunden: Entwickle selbst eine zweistufige Aufgabe, in der Punkte zunächst aus einer anderen Darstellung gewonnen und anschließend für einen quadratischen Funktionsterm genutzt werden.",
-  task:"Die Geraden f_1(x)=1,5x+6, f_2(x)=−3x+15 und f_3(x)=−4,5x+30 bilden ein Dreieck. Bestimme zuerst die drei Eckpunkte. Nutze anschließend dieselben Punkte als Bedingungen für eine quadratische Funktion, deren Graph durch alle drei Eckpunkte geht.",hyp:"Prüfe, ob die in Phase 1 gewonnenen Eckpunkte in Phase 2 ausreichen, um den quadratischen Funktionsterm eindeutig zu bestimmen.",
-  explain:[["Phase 1 · Punkte gewinnen","Durch paarweises Gleichsetzen der Geraden entstehen A(2|9), B(4|12) und C(10|−15)."],["Darstellungswechsel","Dieselben Koordinaten werden nun nicht mehr als Dreiecksecken, sondern als Punkte des gesuchten Parabelgraphen gelesen."],["Phase 2 · Bedingungen","Die Punkte liefern 9=4a+2b+c, 12=16a+4b+c und −15=100a+10b+c."],["Koeffizienten bestimmen","Aus dem Gleichungssystem folgt a=−0,75, b=6 und c=0."],["Ergebnis kontrollieren","f(x)=−0,75x²+6x erfüllt alle drei Punktbedingungen. Damit liegen alle drei Eckpunkte auch auf der Parabel."]],
-  worked:["f_1(x)=f_2(x) ⇒ 1,5x+6=−3x+15 ⇒ A(2|9)","f_1(x)=f_3(x) ⇒ 1,5x+6=−4,5x+30 ⇒ B(4|12)","f_2(x)=f_3(x) ⇒ −3x+15=−4,5x+30 ⇒ C(10|−15)","A(2|9), B(4|12), C(10|−15)","9=4a+2b+c","12=16a+4b+c","−15=100a+10b+c","a=−0,75","b=6","c=0","f(x)=−0,75x²+6x"],
+ {id:"pointtransfer",title:"Transfer: Punkte gewinnen → Parabel bestimmen",form:"poly",pointModel:true,transferModel:true,defaults:{a:-1.5,h:-3.5,k:12.375,x:0},controls:[],freeControls:[],points:[["A",2,9],["B",4,12],["C",7,-6]],solution:{a:-1.5,b:10.5,c:-6},guidedNote:"Geführt untersuchen: Trenne die Aufgabe in zwei Phasen: zuerst die Schnittpunkte der drei Geraden bestimmen, danach genau diese Punkte als Bedingungen für die gesuchte Parabel verwenden.",freeNote:"Frei erkunden: Entwickle selbst eine zweistufige Aufgabe, in der Punkte zunächst aus einer anderen Darstellung gewonnen und anschließend für einen quadratischen Funktionsterm genutzt werden.",
+  task:"Die Geraden f_1(x)=1,5x+6, f_2(x)=−3x+15 und f_3(x)=−6x+36 bilden ein Dreieck. Bestimme zuerst die drei Eckpunkte. Nutze anschließend dieselben Punkte als Bedingungen für eine quadratische Funktion, deren Graph durch alle drei Eckpunkte geht.",hyp:"Prüfe, ob die in Phase 1 gewonnenen Eckpunkte in Phase 2 ausreichen, um den quadratischen Funktionsterm eindeutig zu bestimmen.",
+  explain:[["Phase 1 · Punkte gewinnen","Durch paarweises Gleichsetzen der Geraden entstehen A(2|9), B(4|12) und C(7|−6)."],["Darstellungswechsel","Dieselben Koordinaten werden nun nicht mehr als Dreiecksecken, sondern als Punkte des gesuchten Parabelgraphen gelesen."],["Phase 2 · Bedingungen","Die Punkte liefern 9=4a+2b+c, 12=16a+4b+c und −6=49a+7b+c."],["Koeffizienten bestimmen","Aus dem Gleichungssystem folgt a=−1,5, b=10,5 und c=−6."],["Ergebnis kontrollieren","f(x)=−1,5x²+10,5x−6 erfüllt alle drei Punktbedingungen. Der Scheitelpunkt liegt bei S(3,5|12,375) und ist bewusst keiner der drei gegebenen Eckpunkte."]],
+  worked:["f_1(x)=f_2(x) ⇒ 1,5x+6=−3x+15 ⇒ A(2|9)","f_1(x)=f_3(x) ⇒ 1,5x+6=−6x+36 ⇒ B(4|12)","f_2(x)=f_3(x) ⇒ −3x+15=−6x+36 ⇒ C(7|−6)","A(2|9), B(4|12), C(7|−6)","9=4a+2b+c","12=16a+4b+c","−6=49a+7b+c","a=−1,5","b=10,5","c=−6","f(x)=−1,5x²+10,5x−6"],
   lang:["Ich nutze Ergebnisse aus der ersten Phase als gegebene Punkte der zweiten Phase.","Darstellungswechsel","Zuerst bestimme ich die Schnittpunkte der Geraden; anschließend lese ich dieselben Koordinaten als Punktbedingungen für die Parabel.","Die mathematische Bedeutung der Koordinaten ändert sich im Arbeitsprozess: Aus Dreiecksecken werden Bedingungen für einen neuen Funktionsterm."],
   words:["Schnittpunkt","Dreiecksecke","Punktbedingung","Darstellungswechsel","Transfer"],starter:"Zuerst bestimme ich ... . Diese Punkte verwende ich danach als ... für ... .",mistake:"Typischer Fehler: Nach den Schnittpunkten aufhören. In dieser Aufgabe sind die Eckpunkte nur Zwischenergebnisse; sie werden anschließend für den quadratischen Funktionsterm weiterverwendet.",counter:"Kontrollidee: Markiere nach jeder Phase, was jetzt gegeben und was jetzt gesucht ist. So bleibt sichtbar, wie Ergebnisse zu neuen Eingangsdaten werden.",
   freeChallenge:"Entwirf eine ähnliche zweistufige Aufgabe: Erzeuge drei Punkte zunächst durch Schnittpunkte von Geraden oder aus einer Tabelle und bestimme anschließend eine Parabel durch diese Punkte.",
-  quiz:[{q:"Was ist in der Transferaufgabe der erste Schritt?",opts:["Die drei Geraden paarweise schneiden.","Sofort a, b und c raten.","Nur die y-Achse der Parabel bestimmen."],ok:0,fb:"Zuerst müssen die drei Eckpunkte als Schnittpunkte der Geraden gewonnen werden."},{q:"Aus f_1(x)=1,5x+6 und f_2(x)=−3x+15 entsteht welcher Schnittpunkt?",opts:["A(2|9)","A(9|2)","A(2|0)"],ok:0,fb:"1,5x+6=−3x+15 liefert x=2; eingesetzt ergibt sich y=9."},{q:"Welche Rolle haben A(2|9), B(4|12), C(10|−15) in Phase 2?",opts:["Sie sind Punktbedingungen für die gesuchte Parabel.","Sie werden zu Nullstellen.","Sie sind Koeffizienten a, b und c."],ok:0,fb:"Dieselben Koordinaten werden nun als Punkte des gesuchten quadratischen Graphen verwendet."},{q:"Welcher Term geht durch alle drei Eckpunkte?",opts:["f(x)=−0,75x²+6x","f(x)=0,75x²−6x","f(x)=−0,75x²+6"],ok:0,fb:"Das Gleichungssystem liefert a=−0,75, b=6 und c=0."},{q:"Was beschreibt den Transfer am besten?",opts:["Ein Zwischenergebnis wird zum Ausgangspunkt des nächsten mathematischen Schritts.","Jede Teilaufgabe ist unabhängig von allen vorherigen Ergebnissen.","Schnittpunkte können nur bei Geraden verwendet werden."],ok:0,fb:"Die gewonnenen Schnittpunkte werden gezielt als neue Daten für die Parabelbestimmung weiterverwendet."}]}
+  quiz:[{q:"Was ist in der Transferaufgabe der erste Schritt?",opts:["Die drei Geraden paarweise schneiden.","Sofort a, b und c raten.","Nur die y-Achse der Parabel bestimmen."],ok:0,fb:"Zuerst müssen die drei Eckpunkte als Schnittpunkte der Geraden gewonnen werden."},{q:"Aus f_1(x)=1,5x+6 und f_2(x)=−3x+15 entsteht welcher Schnittpunkt?",opts:["A(2|9)","A(9|2)","A(2|0)"],ok:0,fb:"1,5x+6=−3x+15 liefert x=2; eingesetzt ergibt sich y=9."},{q:"Welche Rolle haben A(2|9), B(4|12), C(7|−6) in Phase 2?",opts:["Sie sind Punktbedingungen für die gesuchte Parabel.","Sie werden zu Nullstellen.","Sie sind Koeffizienten a, b und c."],ok:0,fb:"Dieselben Koordinaten werden nun als Punkte des gesuchten quadratischen Graphen verwendet."},{q:"Welcher Term geht durch alle drei Eckpunkte?",opts:["f(x)=−1,5x²+10,5x−6","f(x)=1,5x²−10,5x+6","f(x)=−1,5x²+10,5x"],ok:0,fb:"Das Gleichungssystem liefert a=−1,5, b=10,5 und c=−6."},{q:"Was beschreibt den Transfer am besten?",opts:["Ein Zwischenergebnis wird zum Ausgangspunkt des nächsten mathematischen Schritts.","Jede Teilaufgabe ist unabhängig von allen vorherigen Ergebnissen.","Schnittpunkte können nur bei Geraden verwendet werden."],ok:0,fb:"Die gewonnenen Schnittpunkte werden gezielt als neue Daten für die Parabelbestimmung weiterverwendet."}]}
 
 
 ];
@@ -3559,7 +3559,7 @@ function qIsPolyModule(){return ['polyread','expand','completeidea','complete'].
 function qIsPointModelModule(){return !!qCurrent().pointModel}
 function qModelPoints(){return qCurrent().points||[]}
 function qModelUnknownFormula(){return 'f(x)=ax²+bx+c'}
-function qTransferLineFormula(i){return [null,'f_1(x)=1,5x+6','f_2(x)=−3x+15','f_3(x)=−4,5x+30'][i]||''}
+function qTransferLineFormula(i){return [null,'f_1(x)=1,5x+6','f_2(x)=−3x+15','f_3(x)=−6x+36'][i]||''}
 function qPointFormulaHtml(){const m=qCurrent();if(m.transferModel&&qState.transferPhase===1)return [1,2,3].map(i=>qMathFormula(qTransferLineFormula(i))).join('<br>');return qMathFormula(qModelUnknownFormula())}
 
 function qModelSolutionFormula(){const s=qCurrent().solution;if(!s)return qPolyFormula();const lead=(s.a<0?'−':'')+(Math.abs(Math.abs(s.a)-1)<1e-9?'':qFmt(Math.abs(s.a)))+'x²';const lin=Math.abs(s.b)<1e-9?'':` ${s.b>0?'+':'−'} ${Math.abs(Math.abs(s.b)-1)<1e-9?'':qFmt(Math.abs(s.b))}x`;const con=Math.abs(s.c)<1e-9?'':` ${s.c>0?'+':'−'} ${qFmt(Math.abs(s.c))}`;return `f(x)=${lead}${lin}${con}`}
@@ -3716,7 +3716,19 @@ function qDraw(){
   {x:B.l+B.w-42,y:qY0-30,w:qXAxisPillW,h:22},
   {x:qX0+8,y:B.t+6,w:qOrdinatePillW,h:22}
  ];
+ const qLeaderLines=[];
  function qBoxesOverlap(a,b,pad=5){return !(a.x+a.w+pad<=b.x||b.x+b.w+pad<=a.x||a.y+a.h+pad<=b.y||b.y+b.h+pad<=a.y)}
+ function qLineHitsBox(x1,y1,x2,y2,box,pad=3){
+   const left=box.x-pad,right=box.x+box.w+pad,top=box.y-pad,bottom=box.y+box.h+pad;
+   if((x1>=left&&x1<=right&&y1>=top&&y1<=bottom)||(x2>=left&&x2<=right&&y2>=top&&y2<=bottom))return true;
+   const seg=(ax,ay,bx,by,cx,cy,dx,dy)=>{const o=(px,py,qx,qy,rx,ry)=>(qx-px)*(ry-py)-(qy-py)*(rx-px);const a=o(ax,ay,bx,by,cx,cy),b=o(ax,ay,bx,by,dx,dy),c=o(cx,cy,dx,dy,ax,ay),d=o(cx,cy,dx,dy,bx,by);return ((a===0||b===0||a*b<0)&&(c===0||d===0||c*d<0));};
+   return seg(x1,y1,x2,y2,left,top,right,top)||seg(x1,y1,x2,y2,right,top,right,bottom)||seg(x1,y1,x2,y2,right,bottom,left,bottom)||seg(x1,y1,x2,y2,left,bottom,left,top);
+ }
+ function qSegmentsCross(a,b){
+   const o=(p,q,r)=>(q.x-p.x)*(r.y-p.y)-(q.y-p.y)*(r.x-p.x);
+   const o1=o(a.a,a.b,b.a),o2=o(a.a,a.b,b.b),o3=o(b.a,b.b,a.a),o4=o(b.a,b.b,a.b);
+   return o1*o2<0&&o3*o4<0;
+ }
  function qBoxHitsAxis(box){
    const xAxis={x:B.l,y:qY0-5,w:B.w,h:10},yAxis={x:qX0-5,y:B.t,w:10,h:B.h};
    return qBoxesOverlap(box,xAxis,0)||qBoxesOverlap(box,yAxis,0);
@@ -3769,9 +3781,25 @@ function qDraw(){
  }
  function qSmartLabel(ax,ay,text,color,opts={}){
    const w=Math.max(opts.minWidth||72,Math.min(opts.maxWidth||220,24+text.length*(opts.charWidth||6.3))),h=opts.h||24;
-   const box=qChooseLabelBox(ax,ay,w,h,opts.avoidFns||[]),bx=box.x,by=box.y;
-   const cx=ax<bx?bx:ax>bx+w?bx+w:Math.max(bx+6,Math.min(bx+w-6,ax));
-   const cy=ay<by?by:ay>by+h?by+h:Math.max(by+5,Math.min(by+h-5,ay));
+   const avoidFns=opts.avoidFns||[],candidates=[];
+   [-h-14,14,-h-50,50,-h-90,90,-h-130,130].forEach(dy=>[14,-w-14,45,-w-45,80,-w-80,120,-w-120].forEach(dx=>candidates.push([dx,dy])));
+   candidates.push([16,-h/2],[-w-16,-h/2],[55,-h/2],[-w-55,-h/2],[100,-h/2],[-w-100,-h/2]);
+   let best=null;
+   candidates.forEach(([dx,dy],rank)=>{
+     const rawX=ax+dx,rawY=ay+dy,bx=Math.max(B.l+5,Math.min(B.l+B.w-w-5,rawX)),by=Math.max(B.t+5,Math.min(B.t+B.h-h-5,rawY));
+     const box={x:bx,y:by,w,h};
+     const cx=ax<bx?bx:ax>bx+w?bx+w:Math.max(bx+6,Math.min(bx+w-6,ax));
+     const cy=ay<by?by:ay>by+h?by+h:Math.max(by+5,Math.min(by+h-5,ay));
+     const leader={a:{x:ax,y:ay},b:{x:cx,y:cy}};
+     let score=rank*0.02+Math.abs(bx-rawX)+Math.abs(by-rawY);
+     qLabelBoxes.forEach(other=>{if(qBoxesOverlap(box,other))score+=30000;if(qLineHitsBox(ax,ay,cx,cy,other,2))score+=16000;});
+     qLeaderLines.forEach(line=>{if(qLineHitsBox(line.a.x,line.a.y,line.b.x,line.b.y,box,2))score+=22000;if(qSegmentsCross(leader,line))score+=12000;});
+     if(qBoxHitsAxis(box))score+=5000;
+     avoidFns.forEach(fn=>{if(qBoxHitsCurve(box,fn))score+=9000});
+     if(!best||score<best.score)best={box,cx,cy,leader,score};
+   });
+   const {box,cx,cy,leader}=best,bx=box.x,by=box.y;
+   qLabelBoxes.push(box);qLeaderLines.push(leader);
    return `<g><line x1="${ax}" y1="${ay}" x2="${cx}" y2="${cy}" stroke="${color}" stroke-width="1.4" opacity=".62"/><rect x="${bx}" y="${by}" width="${w}" height="${h}" rx="8" fill="#fff" fill-opacity=".96" stroke="${color}" stroke-opacity=".5"/><text class="graph-label" x="${bx+8}" y="${by+16}" fill="${color}" font-size="12" font-weight="800">${qSvgMathMarkup(text)}</text></g>`;
  }
  function graphLabel(fn,x,text,color,opts={}){
@@ -3822,13 +3850,13 @@ function qDraw(){
    if(id.kind!=='all')id.roots.forEach((x,i)=>{const y=qFx(x);if(x>=B.xmin&&x<=B.xmax&&y>=B.ymin&&y<=B.ymax){const pt=qSvgPoint(x,y,B),lab=qIntersectionPointText(x,i,id.roots.length);s+=`<circle cx="${pt[0]}" cy="${pt[1]}" r="5.6" fill="#c86b09"/>${qSmartLabel(pt[0],pt[1],lab,'#9a4e06',{avoidFns:[qFx,qSecondFx],minWidth:92,maxWidth:170})}`;}});
  }else if(qIsPointModelModule()){
    if(m.transferModel&&qState.transferPhase===1){
-     const l1=x=>1.5*x+6,l2=x=>-3*x+15,l3=x=>-4.5*x+30;
-     [[l1,'f_1','#2457d6',-3],[l2,'f_2','#0f766e',6],[l3,'f_3','#b45309',8]].forEach(([fn,lab,col,lx])=>{s+=`<path d="${pathFor(fn)}" fill="none" stroke="${col}" stroke-width="3.2" stroke-linecap="round"/>`;s+=graphLabel(fn,Math.max(B.xmin+.8,Math.min(B.xmax-.8,lx)),lab,col);});
+     const l1=x=>1.5*x+6,l2=x=>-3*x+15,l3=x=>-6*x+36;
+     [[l1,'f_1','#2457d6',-3.2],[l2,'f_2','#0f766e',6.2],[l3,'f_3','#b45309',7.6]].forEach(([fn,lab,col,lx])=>{s+=`<path d="${pathFor(fn)}" fill="none" stroke="${col}" stroke-width="3.2" stroke-linecap="round"/>`;s+=graphLabel(fn,Math.max(B.xmin+.8,Math.min(B.xmax-.8,lx)),lab,col);});
      qModelPoints().forEach(([name,x,y])=>{if(x>=B.xmin&&x<=B.xmax&&y>=B.ymin&&y<=B.ymax){const pt=qSvgPoint(x,y,B);s+=`<circle cx="${pt[0]}" cy="${pt[1]}" r="5.8" fill="#c86b09"/>${qSmartLabel(pt[0],pt[1],name,'#9a4e06',{avoidFns:[l1,l2,l3],minWidth:42,maxWidth:52})}`;}});
    }else{
      const showPointSolution=m.transferModel?qState.transferPhase===2:qState.view!=='task';
-     if(showPointSolution){const labelX=Math.max(B.xmin+.8,Math.min(B.xmax-.8,(B.xmin+B.xmax)/2));s+=graphLabel(qFx,labelX,'f','#6d39c6');}
      qModelPoints().forEach(([name,x,y])=>{if(x>=B.xmin&&x<=B.xmax&&y>=B.ymin&&y<=B.ymax){const pt=qSvgPoint(x,y,B),lab=`${name}(${qFmt(x)}|${qFmt(y)})`;s+=`<circle cx="${pt[0]}" cy="${pt[1]}" r="5.8" fill="#c86b09"/>${qSmartLabel(pt[0],pt[1],lab,'#9a4e06',{avoidFns:showPointSolution?[qFx]:[],minWidth:82,maxWidth:155})}`;}});
+     if(showPointSolution){const labelCandidates=[B.xmin+(B.xmax-B.xmin)*.68,B.xmin+(B.xmax-B.xmin)*.32,B.xmin+(B.xmax-B.xmin)*.78];let placed=false;for(const lx of labelCandidates){if(lx>B.xmin+.8&&lx<B.xmax-.8){s+=graphLabel(qFx,lx,'f','#6d39c6');placed=true;break;}}if(!placed)s+=graphLabel(qFx,parabolaLabelX(),'f','#6d39c6');}
    }
  }else if(m.compareLine){
    if(Math.abs(v.a)<1e-9){s+=graphLabel(qGx,lineLabelX(),`f(x)=g(x)=${qLineFormula().replace('g(x)=','')}`,'#2457d6',{placement:(v.m??2)>=0?'above-left':'above-right'});}
@@ -3963,7 +3991,7 @@ function qTaskHtml(m){
   const phase=qState.transferPhase;
   const phaseText=phase===1?'Bestimme zuerst die drei Eckpunkte als Schnittpunkte der Geraden. Die Parabel ist bewusst noch nicht sichtbar.':'Verwende jetzt genau dieselben Eckpunkte als drei Punktbedingungen für f(x)=ax²+bx+c. Erst in dieser Phase wird die Parabel sichtbar.';
   const obs=phase===1?'Welche drei Punkte entstehen durch das paarweise Schneiden der Geraden? Bestimme ihre Koordinaten.':'Welche Rolle haben dieselben Koordinaten jetzt? Formuliere aus jedem Punkt eine Bedingung und bestimme daraus a, b und c.';
-  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="q-phase-switch" aria-label="Arbeitsphasen"><button type="button" data-q-phase="1" aria-pressed="${phase===1}">Phase 1 · Punkte gewinnen</button><button type="button" data-q-phase="2" aria-pressed="${phase===2}">Phase 2 · Parabel bestimmen</button></div><div class="q-phase-note"><strong>Aktueller Schritt</strong>${qMathText(phaseText)}</div><div class="cardbox"><strong>Auftrag</strong>${qMathText(phase===1?'Die Geraden f_1(x)=1,5x+6, f_2(x)=−3x+15 und f_3(x)=−4,5x+30 bilden ein Dreieck. Bestimme die drei Eckpunkte durch paarweises Gleichsetzen.':'Nutze deine drei Eckpunkte aus Phase 1 als Punkte der gesuchten Parabel. Bilde drei Punktbedingungen und bestimme daraus den Funktionsterm.')}</div><div class="cardbox"><strong>Beobachtung</strong>${qMathText(obs)}</div><div class="q-sentence-starter"><strong>Satzstarter:</strong> ${qMathText(phase===1?'Durch das Gleichsetzen von ... und ... erhalte ich den Punkt ... .':'Der Punkt ... liefert die Bedingung ... . Aus den drei Bedingungen bestimme ich ... .')}</div></section>`;
+  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="q-phase-switch" aria-label="Arbeitsphasen"><button type="button" data-q-phase="1" aria-pressed="${phase===1}">Phase 1 · Punkte gewinnen</button><button type="button" data-q-phase="2" aria-pressed="${phase===2}">Phase 2 · Parabel bestimmen</button></div><div class="q-phase-note"><strong>Aktueller Schritt</strong>${qMathText(phaseText)}</div><div class="cardbox"><strong>Auftrag</strong>${qMathText(phase===1?'Die Geraden f_1(x)=1,5x+6, f_2(x)=−3x+15 und f_3(x)=−6x+36 bilden ein Dreieck. Bestimme die drei Eckpunkte durch paarweises Gleichsetzen.':'Nutze deine drei Eckpunkte aus Phase 1 als Punkte der gesuchten Parabel. Bilde drei Punktbedingungen und bestimme daraus den Funktionsterm.')}</div><div class="cardbox"><strong>Beobachtung</strong>${qMathText(obs)}</div><div class="q-sentence-starter"><strong>Satzstarter:</strong> ${qMathText(phase===1?'Durch das Gleichsetzen von ... und ... erhalte ich den Punkt ... .':'Der Punkt ... liefert die Bedingung ... . Aus den drei Bedingungen bestimme ich ... .')}</div></section>`;
  }
  const obs=qIsPointModelModule()?'Ordne die Koordinaten den Bedingungen zu. Beschreibe, welche Information jeder Punkt für den gesuchten Funktionsterm liefert.':'Untersuche zuerst selbst am Graphen. Notiere: Was verändert sich, was bleibt gleich und woran erkennst du das?';
  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="cardbox"><strong>Auftrag</strong>${qMathText(m.task)}</div><div class="cardbox"><strong>Vermutung</strong>${qMathText(m.hyp)}</div><div class="cardbox"><strong>Beobachtung formulieren</strong>${qMathText(obs)}</div><div class="q-sentence-starter"><strong>Satzstarter für deine Beobachtung:</strong> ${qMathText(m.starter)}</div></section>`;
