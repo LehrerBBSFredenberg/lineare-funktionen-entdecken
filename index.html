@@ -1092,6 +1092,10 @@ body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
 #quadraticWorkspaceApp .q-inline-formula .math-frac .den{font-weight:400}
 #quadraticWorkspaceApp .q-graph-stage>svg{display:block;visibility:visible;opacity:1;contain:none}
 </style>
+<style id="q-v567-navigation-style">
+#quadraticTopicOverview .learning-band{scroll-margin-top:18px}
+#quadraticTopicOverview .learning-band.apply{scroll-margin-top:24px}
+</style>
 </head>
 <body>
 
@@ -1491,7 +1495,10 @@ body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
 </div>
 
 </div><!-- /linearExperience -->
-<!-- V56.6 · ursprünglichen Lernort vor der unveränderten V34-Initialisierung sichern -->
+<!-- V56.7 · Kompatibilität für einen vorhandenen Aufruf im unveränderten V34-Skript.
+     Der Quadratik-Renderer besitzt eine eigene lokale qMathText-Funktion. -->
+<script id="q-v567-linear-text-compat">window.qMathText=window.qMathText||function(value){return String(value??'');};</script>
+<!-- V56.7 · ursprünglichen Lernort vor der unveränderten V34-Initialisierung sichern -->
 <script id="q-v566-boot-url">window.__quadraticBootUrl = window.location.href;</script>
 <script>
 (() => {
@@ -3772,8 +3779,29 @@ function qHideLinear(){const l1=q$('linearTopicOverview'),l2=q$('linearExperienc
 function qHistoryAvailable(){return location.protocol==='http:'||location.protocol==='https:'}
 function qUrl(screen){const u=new URL(location.href);u.searchParams.delete('pfad');u.searchParams.delete('modul');u.searchParams.delete('thema');u.searchParams.delete('qmodul');u.searchParams.delete('qview');if(screen==='overview')u.searchParams.set('thema','quadratisch');if(screen==='module'){u.searchParams.set('thema','quadratisch');u.searchParams.set('qmodul',qCurrent().id);u.searchParams.set('qview',qState.view)}return u}
 function qWrite(screen,mode='push'){if(!qHistoryAvailable())return;const state={[QKEY]:true,screen,index:qState.index,view:qState.view};history[mode==='replace'?'replaceState':'pushState'](state,'',qUrl(screen))}
-function qShowOverview(mode='push'){document.body.classList.remove('q-graph-focus');if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='Graph groß';}qHideLinear();q$('portalHome').hidden=true;q$('quadraticExperience').hidden=true;q$('quadraticTopicOverview').hidden=false;document.title='Quadratische Funktionen | Mathematik-Lernwelt';window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none')qWrite('overview',mode)}
-function qShowPortal(mode='replace'){document.body.classList.remove('q-graph-focus');if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='Graph groß';}q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;qHideLinear();q$('portalHome').hidden=false;document.title='Mathematik-Lernwelt';window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none'&&qHistoryAvailable())history.replaceState({mathematikLernweltV34:true,screen:'portal'},'',qUrl('portal'))}
+// Beim Zurueckkehren den zugehoerigen Lernbereich statt des Seitenanfangs zeigen.
+let qOverviewFocusIndex=null;
+function qFocusOverviewArea(index){
+ if(!Number.isInteger(index))return;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  if(q$('quadraticTopicOverview')?.hidden)return;
+  const link=q$('quadraticTopicOverview').querySelector(`[data-q-open="${index}"]`);
+  const section=link?.closest('.learning-band');
+  if(section)section.scrollIntoView({block:'start',behavior:'auto'});
+ }));
+}
+function qShowOverview(mode='push'){
+ const fromModule=!q$('quadraticExperience').hidden;
+ if(fromModule)qOverviewFocusIndex=qState.index;
+ document.body.classList.remove('q-graph-focus');
+ if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='Graph groß';}
+ qHideLinear();q$('portalHome').hidden=true;q$('quadraticExperience').hidden=true;q$('quadraticTopicOverview').hidden=false;
+ document.title='Quadratische Funktionen | Mathematik-Lernwelt';
+ if(mode!=='none')qWrite('overview',mode);
+ if(fromModule||(mode==='none'&&qOverviewFocusIndex!==null))qFocusOverviewArea(qOverviewFocusIndex);
+ else window.scrollTo({top:0,behavior:'auto'});
+}
+function qShowPortal(mode='replace'){document.body.classList.remove('q-graph-focus');if(q$('qFocus')){q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='Graph groß';}q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;qHideLinear();q$('portalHome').hidden=false;document.title='Mathematik-Lernwelt';window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none'&&qHistoryAvailable())history[mode==='replace'?'replaceState':'pushState']({mathematikLernweltV34:true,screen:'portal'},'',qUrl('portal'))}
 function qOpen(i,mode='push'){qState.index=Math.max(0,Math.min(qModules.length-1,Number(i)||0));qState.view='task';qState.inlineMode='guided';qState.transferPhase=1;qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;window.scrollTo({top:0,behavior:'smooth'});if(mode!=='none')qWrite('module',mode)}
 const qModuleBlocks=[
  {id:'vertex',title:'Scheitelpunktform',indices:[0,1,2,3,4]},
@@ -3796,7 +3824,7 @@ function qRenderHeader(){
  q$('qProgress').textContent=`Modul ${pos+1} von ${block.indices.length}`;
  q$('qModuleCurrent').textContent=`${pos+1} von ${block.indices.length} · ${block.title}`;
  q$('qModuleGrid').innerHTML=block.indices.map((moduleIndex,localIndex)=>{const x=qModules[moduleIndex];return `<button class="module-step" data-qi="${moduleIndex}" aria-current="${moduleIndex===qState.index?'step':'false'}"><span class="module-no">${localIndex+1}</span><span class="module-name">${x.title}</span></button>`}).join('');
- q$('qModuleGrid').querySelectorAll('[data-qi]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qi,'replace')));
+ q$('qModuleGrid').querySelectorAll('[data-qi]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qi,'push')));
 }
 function qRenderControls(){
  if(qIsApplied())return qModelControls();
@@ -4196,12 +4224,12 @@ function qTaskHtml(m){
  if(m.modelKind){
   const d=qModelData(),v=qState.values;
   const modelTasks={
-   arch:`Ein symmetrischer Bogen hat aktuell eine Spannweite von ${qFmt(d.W)} m und eine maximale Höhe von ${qFmt(d.H)} m über der Bezugslinie. Der Bogen wird näherungsweise durch eine Parabel beschrieben. Ermittle die Funktionsgleichung und die Höhe an der untersuchten Stelle.`,
-   flight:`Ein Ball startet bei x=0 auf der Höhe 0 m und landet nach ${qFmt(d.W)} m wieder auf derselben Höhe. Dazwischen erreicht er ${qFmt(d.H)} m Höhe. Bestimme die Scheitelpunktform der idealisierten Flugbahn.`,
-   fence:`Für eine rechteckige Weidefläche an einem geraden Kanal stehen ${qFmt(d.F)} m Zaun zur Verfügung. Nur drei Seiten benötigen Zaun. Bestimme die quadratische Flächenfunktion und die optimale kurze Seitenlänge.`,
-   critique:`Ein symmetrischer Bogen ist aktuell ${qFmt(d.W)} m breit und ${qFmt(d.H)} m hoch. Untersuche den errechneten Wert an der Stelle x=${qFmt(v.pos)} m. Prüfe, ob dieser Wert als Höhe des tatsächlichen Bogens gelten darf.`
+   arch:()=>`Ein symmetrischer Bogen hat aktuell eine Spannweite von ${qFmt(d.W)} m und eine maximale Höhe von ${qFmt(d.H)} m über der Bezugslinie. Der Bogen wird näherungsweise durch eine Parabel beschrieben. Ermittle die Funktionsgleichung und die Höhe an der untersuchten Stelle.`,
+   flight:()=>`Ein Ball startet bei x=0 auf der Höhe 0 m und landet nach ${qFmt(d.W)} m wieder auf derselben Höhe. Dazwischen erreicht er ${qFmt(d.H)} m Höhe. Bestimme die Scheitelpunktform der idealisierten Flugbahn.`,
+   fence:()=>`Für eine rechteckige Weidefläche an einem geraden Kanal stehen ${qFmt(d.F)} m Zaun zur Verfügung. Nur drei Seiten benötigen Zaun. Bestimme die quadratische Flächenfunktion und die optimale kurze Seitenlänge.`,
+   critique:()=>`Ein symmetrischer Bogen ist aktuell ${qFmt(d.W)} m breit und ${qFmt(d.H)} m hoch. Untersuche den errechneten Wert an der Stelle x=${qFmt(v.pos)} m. Prüfe, ob dieser Wert als Höhe des tatsächlichen Bogens gelten darf.`
   };
-  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="cardbox"><strong>Aktuelle Situation</strong>${qMathText(modelTasks[m.modelKind])}</div><div class="cardbox"><strong>Vermutung</strong>${qMathText(m.hyp)}</div><div class="cardbox"><strong>Modellannahme und Sachbereich</strong>${qMathText(m.modelKind==='fence'?'Die Kanalseite braucht keinen Zaun. Nur positive Rechteckseiten sind sinnvoll.':'Die reale Situation wird durch eine idealisierte Parabel innerhalb des angegebenen Bereichs angenähert.')}<div class="q-mathline">${d.domain}</div></div><div class="q-sentence-starter"><strong>Satzstarter:</strong> ${qMathText(m.starter)}</div></section>`;
+  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="cardbox"><strong>Aktuelle Situation</strong>${qMathText(modelTasks[m.modelKind]())}</div><div class="cardbox"><strong>Vermutung</strong>${qMathText(m.hyp)}</div><div class="cardbox"><strong>Modellannahme und Sachbereich</strong>${qMathText(m.modelKind==='fence'?'Die Kanalseite braucht keinen Zaun. Nur positive Rechteckseiten sind sinnvoll.':'Die reale Situation wird durch eine idealisierte Parabel innerhalb des angegebenen Bereichs angenähert.')}<div class="q-mathline">${d.domain}</div></div><div class="q-sentence-starter"><strong>Satzstarter:</strong> ${qMathText(m.starter)}</div></section>`;
  }
  if(m.transferModel){
   const phase=qState.transferPhase;
@@ -4486,9 +4514,9 @@ function qRenderAll(){
  qRenderHeader();qRenderControls();qRenderTabs();qRenderViews();qDraw();qEnsureGraphPaint();
  const {block,pos}=qBlockPosition();q$('qPrev').disabled=pos===0;q$('qNext').disabled=pos===block.indices.length-1;
 }
-q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'Ansicht zurück':'Graph groß';requestAnimationFrame(()=>{qDraw();const card=q$('qPlot')?.closest('.chart-card');if(on&&card)card.scrollTop=0;});});q$('qPrev').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos>0)qOpen(block.indices[pos-1],'replace')});q$('qNext').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos<block.indices.length-1)qOpen(block.indices[pos+1],'replace')});
-document.querySelectorAll('[data-open-topic="quadratic"]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-open]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qOpen,'push')));document.querySelectorAll('[data-q-practice-open]').forEach(b=>b.addEventListener('click',()=>{qOpen(+b.dataset.qPracticeOpen,'push');qState.view='practice';qRenderTabs();qRenderViews();}));document.querySelectorAll('[data-q-overview]').forEach(b=>b.addEventListener('click',()=>qShowOverview('replace')));document.querySelectorAll('[data-q-back-portal]').forEach(b=>b.addEventListener('click',()=>{if(qHistoryAvailable()&&history.state?.[QKEY])history.back();else qShowPortal('replace')}));
-window.addEventListener('popstate',e=>{const st=e.state;if(st?.[QKEY]){if(st.screen==='overview')qShowOverview('none');else if(st.screen==='module'){qState.index=st.index||0;qState.view=st.view||'task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();}return;}if(!q$('quadraticTopicOverview').hidden||!q$('quadraticExperience').hidden){q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;}});
+q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'Ansicht zurück':'Graph groß';requestAnimationFrame(()=>{qDraw();const card=q$('qPlot')?.closest('.chart-card');if(on&&card)card.scrollTop=0;});});q$('qPrev').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos>0)qOpen(block.indices[pos-1],'push')});q$('qNext').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos<block.indices.length-1)qOpen(block.indices[pos+1],'push')});
+document.querySelectorAll('[data-open-topic="quadratic"]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-open]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qOpen,'push')));document.querySelectorAll('[data-q-practice-open]').forEach(b=>b.addEventListener('click',()=>{qOpen(+b.dataset.qPracticeOpen,'push');qState.view='practice';qRenderTabs();qRenderViews();}));document.querySelectorAll('[data-q-overview]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-back-portal]').forEach(b=>b.addEventListener('click',()=>qShowPortal('push')));
+window.addEventListener('popstate',e=>{const st=e.state;if(st?.[QKEY]){if(st.screen==='overview')qShowOverview('none');else if(st.screen==='module'){qState.index=st.index||0;qState.view=st.view||'task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;window.scrollTo({top:0,behavior:'auto'});}return;}if(!q$('quadraticTopicOverview').hidden||!q$('quadraticExperience').hidden){q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;}});
 function qRestoreFromUrl(){
  try{
   const u=new URL(window.__quadraticBootUrl||location.href);
