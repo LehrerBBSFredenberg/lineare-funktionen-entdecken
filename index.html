@@ -1074,6 +1074,24 @@ body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
 @media(max-width:680px){#quadraticWorkspaceApp .q-model-value-grid{grid-template-columns:1fr 1fr}#quadraticWorkspaceApp .q-model-value-card{padding:9px 8px}}
 @media(max-width:390px){#quadraticWorkspaceApp .q-model-value-grid{grid-template-columns:1fr}}
 </style>
+
+<style id="q-v566-mathematical-typography">
+/* Technische Zeichendarstellung: Variable kursiv, Zahl und Einheit aufrecht. */
+#quadraticWorkspaceApp .q-model-control .control-top>label{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:700;line-height:1.52}
+#quadraticWorkspaceApp .q-model-control .control-top>label>.q-inline-math{font-family:"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif;font-weight:400;letter-spacing:0;white-space:nowrap}
+#quadraticWorkspaceApp .q-model-control .control-top>label .math-var{font-family:inherit;font-weight:400;font-style:italic}
+#quadraticWorkspaceApp .q-model-control .control-top>label .math-num,
+#quadraticWorkspaceApp .q-model-control .control-top>label .math-op{font-family:inherit;font-weight:400;font-style:normal}
+#quadraticWorkspaceApp .q-model-control .control-top>output{font-family:"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif;font-weight:600;font-size:1.06em}
+#quadraticWorkspaceApp .q-model-control .q-unit{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-style:normal;font-weight:500;margin-left:0}
+#quadraticWorkspaceApp .q-measure-sep{font-weight:500}
+#quadraticWorkspaceApp .q-inline-formula{font-family:"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif;font-weight:400;line-height:1.55;overflow-wrap:normal}
+#quadraticWorkspaceApp .q-inline-formula>.q-inline-math{font-weight:400;white-space:nowrap}
+#quadraticWorkspaceApp .q-inline-formula .math-frac{font-weight:400;vertical-align:middle}
+#quadraticWorkspaceApp .q-inline-formula .math-frac .num,
+#quadraticWorkspaceApp .q-inline-formula .math-frac .den{font-weight:400}
+#quadraticWorkspaceApp .q-graph-stage>svg{display:block;visibility:visible;opacity:1;contain:none}
+</style>
 </head>
 <body>
 
@@ -1473,6 +1491,8 @@ body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
 </div>
 
 </div><!-- /linearExperience -->
+<!-- V56.6 · ursprünglichen Lernort vor der unveränderten V34-Initialisierung sichern -->
+<script id="q-v566-boot-url">window.__quadraticBootUrl = window.location.href;</script>
 <script>
 (() => {
 const $=id=>document.getElementById(id);
@@ -3616,7 +3636,9 @@ function qModelData(){
        start=m.modelKind==='flight'?0:-half,end=m.modelKind==='flight'?W:half,
        peakX=m.modelKind==='flight'?half:0;
  const coeff=4*H/(W*W),fn=x=>H-coeff*(x-peakX)**2;
- const term=qMathFormula(`f(x)=${qFmt(H)}−`)+qModelRatio(4*H,W*W)+qMathFormula(`(x${peakX===0?'':`−${qFmt(peakX)}`})²`);
+ // Formtypografie: negativer Leitkoeffizient vor dem Quadratglied; bei u=0 kein (x)².
+ const square=peakX===0?'x²':`(x−${qFmt(peakX)})²`;
+ const term=qMathFormula('f(x)=−')+qModelRatio(4*H,W*W)+qMathFormula(`${square}+${qFmt(H)}`);
  return {kind:m.modelKind,W,H,coeff,start,end,peakX,peakY:H,fn,x:v.pos,rawX:v.pos,unit:'m',xUnit:'m',formula:term,
    domain:qMathFormula(`${qFmt(start)}≤x≤${qFmt(end)}`)};
 }
@@ -3649,10 +3671,19 @@ function qModelSteps(){
  ${row('5. Ergebnis prüfen und deuten',[qMathFormula(`f(${qFmt(d.peakX)})=${qFmt(H)}`),qMathFormula(`f(${qFmt(d.end)})=0`),qDim(`f(${qFmt(v.pos)})=${qFmt(evaluation)}`,'m')],valid?'Die berechnete Höhe gehört zum gewählten Sachbereich.':'Die Stelle liegt außerhalb des Modells; der berechnete Wert ist keine reale Höhe.')}</div>`;
 }
 function qModelFormula(){const d=qModelData();return d.kind==='fence'?`${d.formula}<span class="q-model-math-sep"></span>${d.vertex}`:d.formula}
-function qAppliedControlSpec(key){return {span:['Spannweite '+qMathFormula('W')+' in m',12,28,4],height:['Maximale Höhe '+qMathFormula('H')+' in m',4,12,2],reach:['Reichweite '+qMathFormula('R')+' in m',12,24,2],fence:['Zaunlänge '+qMathFormula('F')+' in m',160,320,40],pos:['Untersuchte Stelle x in m',qCurrent().modelKind==='flight'?0:qCurrent().modelKind==='fence'?0:-18,qCurrent().modelKind==='flight'?24:qCurrent().modelKind==='fence'?qState.values.fence/2-5:18,1]}[key]}
+function qAppliedControlSpec(key){
+ const measure=(description,symbol)=>`${description} ${qMathFormula(symbol)} <span class="q-measure-sep">in</span> <span class="q-unit">m</span>`;
+ return {
+  span:[measure('Spannweite','W'),12,28,4],
+  height:[measure('Maximale Höhe','H'),4,12,2],
+  reach:[measure('Reichweite','R'),12,24,2],
+  fence:[measure('Zaunlänge','F'),160,320,40],
+  pos:[measure('Untersuchte Stelle','x'),qCurrent().modelKind==='flight'?0:qCurrent().modelKind==='fence'?0:-18,qCurrent().modelKind==='flight'?24:qCurrent().modelKind==='fence'?qState.values.fence/2-5:18,1]
+ }[key]
+}
 function qModelControls(){
  const m=qCurrent(),d=qModelData(),v=qState.values,keys=qState.inlineMode==='free'?m.freeControls:m.controls;
- const markup=(prefix)=>keys.map(key=>{const [lab,min,max,step]=qAppliedControlSpec(key);return `<div class="control q-model-control"><div class="control-top"><label for="${prefix}-${key}">${qMathText(lab)}</label><output class="value" data-q-model-out="${key}">${qFmt(v[key])}</output></div><input id="${prefix}-${key}" data-q-model-control="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${v[key]}"></div>`}).join('');
+ const markup=(prefix)=>keys.map(key=>{const [lab,min,max,step]=qAppliedControlSpec(key);return `<div class="control q-model-control"><div class="control-top"><label for="${prefix}-${key}">${lab}</label><output class="value" data-q-model-out="${key}">${qFmt(v[key])}</output></div><input id="${prefix}-${key}" data-q-model-control="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${v[key]}"></div>`}).join('');
  q$('qFormula').innerHTML=qModelFormula();q$('qInlineFormula').innerHTML=qModelFormula();q$('qControls').innerHTML=markup('q-model-left');q$('qInlineControls').innerHTML=markup('q-model-inline');
  q$('qControlNote').innerHTML=qMathText(qState.inlineMode==='free'?m.freeNote:m.modelKind==='fence'?`Geführt untersuchen: Verändere die kurze Seite x. Die gesamte Zaunlänge bleibt bei ${qFmt(d.F)} m; nur drei Seiten werden eingezäunt.`:m.guidedNote);
  q$('qInlineControlNote').innerHTML=qMathText(qState.inlineMode==='free'?m.freeNote:m.modelKind==='fence'?`Geführt untersuchen: Verändere x bei einer Zaunlänge von ${qFmt(d.F)} m.`:m.guidedNote);
@@ -3847,15 +3878,22 @@ function qDraw(){
  const [qX0,qY0]=qSvgPoint(0,0,B);
  s+=`<line x1="${B.l}" y1="${qY0}" x2="${B.l+B.w-3}" y2="${qY0}" stroke="#64748b" stroke-width="1.9" marker-end="url(#qAxisArrow)"/>`;
  s+=`<line x1="${qX0}" y1="${B.t+B.h}" x2="${qX0}" y2="${B.t+3}" stroke="#64748b" stroke-width="1.9" marker-end="url(#qAxisArrow)"/>`;
- function axisPill(x,y,label){const w=Math.max(30,18+label.length*7);return `<g><rect x="${x}" y="${y}" width="${w}" height="22" rx="8" fill="#fff" fill-opacity=".96" stroke="#cbd5e1"/><text x="${x+w/2}" y="${y+15}" text-anchor="middle" font-size="12" font-weight="800" fill="#475569">${qSvgMathMarkup(label)}</text></g>`}
+ function axisPill(x,y,label,unit='',rightAligned=false){
+   const shown=label+(unit?` (${unit})`:'');
+   const w=Math.max(30,18+shown.length*7),bx=rightAligned?x-w:x;
+   const styled=qSvgMathMarkup(label)+(unit?`<tspan font-family="Inter,system-ui,sans-serif" font-size="11" font-style="normal" font-weight="500"> (${qSvgEscape(unit)})</tspan>`:'');
+   return `<g><rect x="${bx}" y="${y}" width="${w}" height="22" rx="8" fill="#fff" fill-opacity=".96" stroke="#cbd5e1"/><text x="${bx+w/2}" y="${y+15}" text-anchor="middle" font-size="12" font-weight="500" fill="#475569">${styled}</text></g>`;
+ }
  const qOrdinateLabel=qIsApplied()&&m.modelKind==='fence'?'A(x)':(m.compareLine||qIsIntersectionModule())?'f(x), g(x)':m.showBase?'f(x), n(x)':'f(x)';
- s+=axisPill(B.l+B.w-42,qY0-30,'x');
- s+=axisPill(qX0+8,B.t+6,qOrdinateLabel);
+ const qAxisUnitX=qIsApplied()?'m':'',qAxisUnitY=qIsApplied()?qModelData().unit:'';
+ const qAxisXShown='x'+(qAxisUnitX?` (${qAxisUnitX})`:''),qAxisYShown=qOrdinateLabel+(qAxisUnitY?` (${qAxisUnitY})`:'');
+ const qAxisXW=Math.max(30,18+qAxisXShown.length*7),qAxisYW=Math.max(30,18+qAxisYShown.length*7);
+ s+=axisPill(B.l+B.w-8,qY0-30,'x',qAxisUnitX,true);
+ s+=axisPill(qX0+8,B.t+6,qOrdinateLabel,qAxisUnitY);
  function pathFor(fn){let d='';for(let i=0;i<=360;i++){const x=B.xmin+(B.xmax-B.xmin)*i/360,y=fn(x),[px,py]=qSvgPoint(x,y,B);d+=(i?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)}return d}
- const qXAxisPillW=Math.max(30,18+'x'.length*7),qOrdinatePillW=Math.max(30,18+qOrdinateLabel.length*7);
  const qLabelBoxes=[
-  {x:B.l+B.w-42,y:qY0-30,w:qXAxisPillW,h:22},
-  {x:qX0+8,y:B.t+6,w:qOrdinatePillW,h:22}
+  {x:B.l+B.w-8-qAxisXW,y:qY0-30,w:qAxisXW,h:22},
+  {x:qX0+8,y:B.t+6,w:qAxisYW,h:22}
  ];
  const qLeaderLines=[];
  function qBoxesOverlap(a,b,pad=5){return !(a.x+a.w+pad<=b.x||b.x+b.w+pad<=a.x||a.y+a.h+pad<=b.y||b.y+b.h+pad<=a.y)}
@@ -4433,13 +4471,27 @@ function qRenderExplore(){
  box.innerHTML=`<div class="kicker">Freies Erkunden</div><h2>Verfügbare Parameter selbst kombinieren</h2><p class="mini">${qMathText(intro)}</p><div class="explore-formulas"><div class="formula" id="qExploreF">${qMathFormula(qFormula())}</div>${qIsIntersectionModule()?`<div class="formula" id="qExploreG">${qMathFormula(qSecondFormula())}</div>`:qIsPolyModule()?`<div class="formula">${qMathFormula(m.id==='expand'?qPolyFormula():qVertexFormula())}</div>`:m.compareLine?`<div class="formula" id="qExploreG">${qMathFormula(qLineFormula())}</div>`:''}</div><div class="explore-grid">${keys.map(key=>{const [label,min,max,step]=specs[key];const val=v[key]??0;return `<div class="control"><div class="control-top"><label for="q-ex-${key}">${qMathText(label)}</label><output class="value" id="q-ex-out-${key}">${qFmt(val)}</output></div><input id="q-ex-${key}" data-q-explore="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}).join('')}</div><div class="cardbox"><strong>Arbeitsidee</strong>${qIsIntersectionModule()?'Vorhersagen → verändern → Schnittpunkte beobachten → mit f(x)=g(x) prüfen.':'Verändere zuerst nur einen Parameter, danach zwei oder mehrere gleichzeitig. Formuliere jeweils, was sich am Graphen ändert und was gleich bleibt.'}</div>`;
  box.querySelectorAll('[data-q-explore]').forEach(r=>r.addEventListener('input',()=>{let value=+r.value;if((r.dataset.qExplore==='a'||r.dataset.qExplore==='a2')&&Math.abs(value)<.001){value=value<0?-.25:.25;r.value=String(value)}qState.values[r.dataset.qExplore]=value;q$('q-ex-out-'+r.dataset.qExplore).textContent=qFmt(value);const mainHtml=qIsIntersectionModule()?`${qMathFormula(qFormula())}<br>${qMathFormula(qSecondFormula())}`:qMathFormula(qFormula());q$('qFormula').innerHTML=mainHtml;if(q$('qInlineFormula'))q$('qInlineFormula').innerHTML=mainHtml;if(q$('qExploreF'))q$('qExploreF').innerHTML=qMathFormula(qFormula());if(q$('qExploreG'))q$('qExploreG').innerHTML=qMathFormula(qIsIntersectionModule()?qSecondFormula():qLineFormula());qDraw();qRenderTable();qRenderTaskInsight();if(qState.view==='explain'||qState.view==='language')qRenderViews();}));
 }
-function qRenderAll(){qRenderHeader();qRenderControls();qRenderTabs();qRenderViews();qDraw();const {block,pos}=qBlockPosition();q$('qPrev').disabled=pos===0;q$('qNext').disabled=pos===block.indices.length-1;}
+let qPaintFrame=0;
+function qEnsureGraphPaint(){
+ // SVG needs a second render after the newly visible panel has a real layout on mobile WebViews.
+ if(qPaintFrame)cancelAnimationFrame(qPaintFrame);
+ qPaintFrame=requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  qPaintFrame=0;
+  const plot=q$('qPlot'),view=q$('quadraticExperience');
+  if(!plot||!view||view.hidden)return;
+  qDraw();
+ }));
+}
+function qRenderAll(){
+ qRenderHeader();qRenderControls();qRenderTabs();qRenderViews();qDraw();qEnsureGraphPaint();
+ const {block,pos}=qBlockPosition();q$('qPrev').disabled=pos===0;q$('qNext').disabled=pos===block.indices.length-1;
+}
 q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'Ansicht zurück':'Graph groß';requestAnimationFrame(()=>{qDraw();const card=q$('qPlot')?.closest('.chart-card');if(on&&card)card.scrollTop=0;});});q$('qPrev').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos>0)qOpen(block.indices[pos-1],'replace')});q$('qNext').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos<block.indices.length-1)qOpen(block.indices[pos+1],'replace')});
 document.querySelectorAll('[data-open-topic="quadratic"]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-open]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qOpen,'push')));document.querySelectorAll('[data-q-practice-open]').forEach(b=>b.addEventListener('click',()=>{qOpen(+b.dataset.qPracticeOpen,'push');qState.view='practice';qRenderTabs();qRenderViews();}));document.querySelectorAll('[data-q-overview]').forEach(b=>b.addEventListener('click',()=>qShowOverview('replace')));document.querySelectorAll('[data-q-back-portal]').forEach(b=>b.addEventListener('click',()=>{if(qHistoryAvailable()&&history.state?.[QKEY])history.back();else qShowPortal('replace')}));
 window.addEventListener('popstate',e=>{const st=e.state;if(st?.[QKEY]){if(st.screen==='overview')qShowOverview('none');else if(st.screen==='module'){qState.index=st.index||0;qState.view=st.view||'task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();}return;}if(!q$('quadraticTopicOverview').hidden||!q$('quadraticExperience').hidden){q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;}});
 function qRestoreFromUrl(){
  try{
-  const u=new URL(location.href);
+  const u=new URL(window.__quadraticBootUrl||location.href);
   if(u.searchParams.get('thema')!=='quadratisch')return false;
   const id=u.searchParams.get('qmodul'),view=u.searchParams.get('qview');
   if(id){
@@ -4451,6 +4503,15 @@ function qRestoreFromUrl(){
  }catch(err){return false;}
 }
 qRestoreFromUrl();
+window.addEventListener('pageshow',()=>qEnsureGraphPaint());
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)qEnsureGraphPaint()});
+// A delayed mobile paint/return from scrolling must not leave the SVG panel empty.
+if('IntersectionObserver' in window){
+ const qPlotVisibility=new IntersectionObserver(entries=>{
+  if(entries.some(entry=>entry.isIntersecting))qEnsureGraphPaint();
+ },{threshold:0.01});
+ qPlotVisibility.observe(q$('qPlot'));
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('q-graph-focus')){document.body.classList.remove('q-graph-focus');q$('qFocus').setAttribute('aria-pressed','false');q$('qFocus').textContent='Graph groß';qDraw();}});
 let qFocusResizeTimer=0;window.addEventListener('resize',()=>{if(!document.body.classList.contains('q-graph-focus'))return;clearTimeout(qFocusResizeTimer);qFocusResizeTimer=setTimeout(qDraw,90);});
 })();
