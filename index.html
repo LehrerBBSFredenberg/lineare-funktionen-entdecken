@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Interne Version: V49 · Plattformübergreifend: Regler dauerhaft im Graphpanel auf Desktop, Android, iOS und Tablet; Auftrag / Alle Parameter responsiv. Lineare Funktionen bleiben unverändert auf V34. Nicht im Browser-Titel anzeigen. -->
+<!-- Interne Version: V56.11 · Didaktische Entdeckungsphasen Flächenoptimierung; V49 · Plattformübergreifend: Regler dauerhaft im Graphpanel auf Desktop, Android, iOS und Tablet; Auftrag / Alle Parameter responsiv. Lineare Funktionen bleiben unverändert auf V34. Nicht im Browser-Titel anzeigen. -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -1147,6 +1147,49 @@ body.q-graph-focus #quadraticWorkspaceApp .q-graph-stage{min-height:0}
 #quadraticWorkspaceApp .q-fence-bottom{border-top:4px solid #0f766e;text-align:center;padding-top:10px;font-weight:700}
 #quadraticWorkspaceApp .q-context-first .q-inline-math{font-weight:400!important}
 @media(max-width:650px){#quadraticWorkspaceApp .q-context-steps{grid-template-columns:1fr}#quadraticWorkspaceApp .q-context-first{padding:11px}#quadraticWorkspaceApp .q-fence-sketch{padding:9px 14px}}
+</style>
+<style id="q-v5610-sachkontext-notation">
+/* Nur Sachkontexte: typografisch konsistente Einheiten und aufrechte Operatorindizes. */
+#quadraticWorkspaceApp .q-transfer-calc .q-model-quantity{display:inline-block;white-space:nowrap;max-width:100%;font-family:"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif;font-weight:400}
+#quadraticWorkspaceApp .q-transfer-calc .q-model-quantity .q-unit,
+#quadraticWorkspaceApp .q-transfer-calc .q-unit{
+  font-family:"Cambria Math","STIX Two Math","Latin Modern Math","Times New Roman",serif;
+  font-style:normal;font-weight:400;font-size:1em;margin-left:.13em;white-space:nowrap
+}
+#quadraticWorkspaceApp .q-transfer-calc .q-math-roman{font-style:normal!important;font-weight:400}
+#quadraticWorkspaceApp .q-transfer-calc .q-unit sup{font-style:normal;font-size:.72em;vertical-align:super}
+#quadraticWorkspaceApp .q-context-steps .q-unit{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-style:normal;font-weight:400;margin-left:.16em}
+#quadraticWorkspaceApp .q-context-steps strong{display:block}
+#quadraticWorkspaceApp .q-context-steps p+p{margin-top:5px}
+#quadraticWorkspaceApp .q-context-steps p strong{display:inline;margin:0;font-weight:750;color:#2457d6}
+@media(max-width:420px){#quadraticWorkspaceApp .q-transfer-calc .q-mathline{font-size:.93em}}
+</style>
+<style id="q-v5610-sachtext-unit-style">
+#quadraticWorkspaceApp .q-sach-unit{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-style:normal!important;font-weight:400;white-space:nowrap}
+#quadraticWorkspaceApp .q-sach-unit sup{font-size:.7em;font-style:normal}
+</style>
+<style id="v5611-discovery-style">
+#quadraticWorkspaceApp .q-fence-phase-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:8px;margin:13px 0 18px}
+#quadraticWorkspaceApp .q-fence-phase-nav button{min-height:62px;display:flex;align-items:center;gap:9px;text-align:left;padding:10px;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:12px;font:750 .84rem/1.3 system-ui,sans-serif}
+#quadraticWorkspaceApp .q-fence-phase-nav button[aria-current="step"]{background:#eef4ff;border:2px solid #2457d6;color:#173d9a}
+#quadraticWorkspaceApp .q-fence-phase-nav button[disabled]{color:#64748b;background:#f5f7fa;opacity:.75;cursor:not-allowed}
+#quadraticWorkspaceApp .q-fence-phase-no{width:27px;height:27px;display:grid;place-items:center;border-radius:999px;background:#e2e8f0;color:#334155;flex:0 0 auto}
+#quadraticWorkspaceApp .q-fence-stage{border:1px solid #d4ddec;border-radius:16px;padding:14px;background:#fafcff;margin:12px 0}
+#quadraticWorkspaceApp .q-fence-stage>h3{font-size:1rem;color:#173d9a;margin:2px 0 12px}
+#quadraticWorkspaceApp .q-fence-work{border:1px solid #d8e2ef;border-radius:13px;background:#fff;padding:14px;margin:10px 0}
+#quadraticWorkspaceApp .q-fence-work h3,#quadraticWorkspaceApp .q-fence-work h4{margin:3px 0 10px;color:#26364e}
+#quadraticWorkspaceApp .q-fence-entry{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:13px 0}
+#quadraticWorkspaceApp .q-fence-entry label{display:grid;gap:6px;font-weight:800;font-size:.85rem}
+#quadraticWorkspaceApp .q-fence-entry input{box-sizing:border-box;display:block;min-width:0;width:100%;font-size:1rem;padding:11px 10px;border:1px solid #9db2d1;border-radius:10px;background:#fff;color:#172033}
+#quadraticWorkspaceApp .q-fence-guess-label{display:grid;gap:6px;font-weight:800;margin-bottom:12px}#quadraticWorkspaceApp .q-fence-guess-label input{width:100%;padding:10px;border:1px solid #9db2d1;border-radius:9px;font-size:1rem;box-sizing:border-box}#quadraticWorkspaceApp .q-fence-feedback{margin:12px 0;padding:11px;border-radius:10px;background:#edf6ff;border-left:4px solid #2457d6;color:#243956}
+#quadraticWorkspaceApp .q-fence-trials{display:grid;gap:7px}
+#quadraticWorkspaceApp .q-fence-trial{display:grid;grid-template-columns:minmax(65px,.65fr) 1.35fr 1fr;gap:8px;padding:9px;border:1px solid #dbe3ee;border-radius:10px;background:#fff;align-items:center}
+#quadraticWorkspaceApp .q-fence-trial span,#quadraticWorkspaceApp .q-fence-trial strong{min-width:0;overflow-wrap:break-word}
+#quadraticWorkspaceApp .q-fence-next{margin-top:12px;min-height:44px}
+#quadraticWorkspaceApp .q-fence-explain{margin:10px 0}
+#quadraticWorkspaceApp .q-fence-explain .q-fence-work{margin:0}
+@media(max-width:780px){#quadraticWorkspaceApp .q-fence-phase-nav{grid-template-columns:repeat(2,minmax(0,1fr))}#quadraticWorkspaceApp .q-fence-entry{grid-template-columns:1fr}#quadraticWorkspaceApp .q-fence-trial{grid-template-columns:1fr 1.4fr;gap:3px}#quadraticWorkspaceApp .q-fence-trial strong{grid-column:2}}
+@media(max-width:430px){#quadraticWorkspaceApp .q-fence-phase-nav{grid-template-columns:1fr 1fr}#quadraticWorkspaceApp .q-fence-phase-nav button{font-size:.76rem;padding:8px}}
 </style>
 </head>
 <body>
@@ -3701,18 +3744,29 @@ function qModelData(){
  return {kind:m.modelKind,W,H,coeff,start,end,peakX,peakY:H,fn,x:v.pos,rawX:v.pos,unit:'m',xUnit:'m',formula:term,
    domain:qMathFormula(`${qFmt(start)}≤x≤${qFmt(end)}`)};
 }
-function qDim(expr,unit){return `${qMathFormula(expr)} <span class="q-unit">${unit}</span>`}
+function qDim(expr,unit){return `<span class="q-model-quantity">${qMathFormula(expr)}<span class="q-unit">${unit==='m²'?'m<sup>2</sup>':unit}</span></span>`}
+function qModelMaxPrefix(){return `<span class="q-inline-math"><span class="math-var">A</span><sub><span class="q-math-roman">max</span></sub><span class="math-op">=</span></span>`}
+function qModelMaxLabel(value){return `${qModelMaxPrefix()}${qDim(qFmt(value),'m²')}`}
+function qModelAreaCheck(d){
+ const l=d.F/2;
+ return `${qModelMaxPrefix()}${qDim(qFmt(d.peakX),'m')}${qMathFormula('·')}${qDim(qFmt(l),'m')}${qMathFormula('=')}${qDim(qFmt(d.peakY),'m²')}`;
+}
 function qModelRatio(num,den){const g=qGcd(Math.round(num),Math.round(den)),n=Math.round(num)/g,d=Math.round(den)/g;return d===1?qMathFormula(String(n)):qFracHtml(qMathFormula(String(n)),qMathFormula(String(d)),`${qFmt(num/den)}`)}
+function qSachText(html){
+ // Nur in den Sachkontexten: m nach Zahlen bezeichnet Meter, nicht einen Variablenbuchstaben.
+ return qMathText(html).replace(/<span class="q-inline-math"><span class="math-var">m<\/span><\/span>(²)?/g,
+   (_match,squared)=>`<span class="q-sach-unit">m${squared?'<sup>2</sup>':''}</span>`);
+}
 function qModelRangeText(d){return d.kind==='fence'?`0 m < x < ${qFmt(d.end)} m`:`${qFmt(d.start)} m ≤ x ≤ ${qFmt(d.end)} m`}
 function qModelSteps(){
  const d=qModelData(),m=qCurrent(),F=d.F,H=d.H,W=d.W,t=qFmt(d.peakX),v=qState.values;
  const row=(heading,lines,note='')=>`<section class="q-eq-row"><span class="q-eq-label">${heading}</span>${lines.map(form=>`<span class="q-mathline">${form}</span>`).join('')}${note?`<span class="q-calc-note">${qMathText(note)}</span>`:''}</section>`;
  if(d.kind==='fence'){
   const other=F-2*v.pos;
-  return `<div class="q-transfer-calc">${row('1. Nebenbedingung aufstellen',[qMathFormula(`2x+l=${qFmt(F)}`),qMathFormula(`l=${qFmt(F)}−2x`)],'Die drei eingezäunten Seiten brauchen zusammen genau die vorhandene Zaunlänge. Wir lösen nach der dritten Seitenlänge auf, weil x als veränderliche Länge der beiden gleichen Seiten gewählt ist. Zu jedem x finden wir dadurch die noch verfügbare dritte Seite. Andersherum nach x umzustellen wäre ebenfalls richtig; dann würden wir die dritte Seitenlänge verändern.')}
-  ${row('2. Flächenfunktion bilden',[qMathFormula('A(x)=x·l'),qMathFormula(`A(x)=x·(${qFmt(F)}−2x)`),qMathFormula(`A(x)=−2x²+${qFmt(F)}x`)],'Die Fläche erhält man durch Länge mal Breite. Beide Seiten frei zu wählen, würde die feste Zaunlänge missachten. Deshalb ersetzen wir die dritte Seitenlänge durch den Ausdruck aus der Nebenbedingung. Die neue Funktion hängt nur noch von x ab und lässt sich als Parabel zeichnen.')}
+  return `<div class="q-transfer-calc">${row('1. Die vorhandene Zaunlänge beschreiben',[qMathFormula(`2x+l=${qFmt(F)}`),qMathFormula(`l=${qFmt(F)}−2x`)],'Die drei eingezäunten Seiten brauchen zusammen genau die vorhandene Zaunlänge. Wir lösen nach der dritten Seitenlänge auf, weil x als veränderliche Länge der beiden gleichen Seiten gewählt ist. Zu jedem x finden wir dadurch die noch verfügbare dritte Seite. Andersherum nach x umzustellen wäre ebenfalls richtig; dann würden wir die dritte Seitenlänge verändern.')}
+  ${row('2. Flächenfunktion bilden',[qMathFormula('A(x)=x·l'),qMathFormula(`A(x)=x·(${qFmt(F)}−2x)`),qMathFormula(`A(x)=−2x²+${qFmt(F)}x`)],'Die Fläche erhält man durch Länge mal Breite; zwei Längen in Metern ergeben einen Flächeninhalt in Quadratmetern. Beide Seiten frei zu wählen, würde die feste Zaunlänge missachten. Deshalb ersetzen wir die dritte Seitenlänge durch den Ausdruck aus der Nebenbedingung. Die neue Funktion hängt nur noch von x ab und lässt sich als Parabel zeichnen.')}
   ${row('3. Scheitelpunktform erzeugen',[qMathFormula(`A(x)=−2(x²−${qFmt(F/2)}x)`),qMathFormula(`A(x)=−2((x−${qFmt(d.peakX)})²−${qFmt(d.peakX*d.peakX)})`),qMathFormula(`A(x)=−2(x−${qFmt(d.peakX)})²+${qFmt(d.peakY)}`)],'Gesucht ist der größte Flächeninhalt. In der Polynomform ist er nicht unmittelbar zu erkennen; die quadratische Ergänzung schreibt dieselbe Funktion in Scheitelpunktform um. Der quadrierte Ausdruck ist nie negativ und wird mit einem negativen Faktor abgezogen. Er ist genau dann 0, wenn x am Scheitel liegt; dann ist die Fläche am größten. Eine Tabelle kann dieses Maximum vermuten lassen, aber nicht für alle Seitenlängen begründen.')}
-  ${row('4. Maximale Fläche ablesen',[qDim(`x=${qFmt(d.peakX)}`,'m'),qDim(`l=${qFmt(F)}−2·${qFmt(d.peakX)}=${qFmt(F/2)}`,'m'),qDim(`A_{max}=${qFmt(d.peakY)}`,'m²')],'Die x-Koordinate des Scheitels liefert die gesuchte Seitenlänge; die Höhe des Scheitels ist hier der maximale Flächeninhalt in Quadratmetern. Die dritte Zaunseite bestimmen wir erst danach mit der Nebenbedingung. Damit kennen wir die Maße des echten Rechtecks.')}
+  ${row('4. Maximale Fläche ablesen',[qDim(`x=${qFmt(d.peakX)}`,'m'),qDim(`l=${qFmt(F)}−2·${qFmt(d.peakX)}=${qFmt(F/2)}`,'m'),qModelMaxLabel(d.peakY),qModelAreaCheck(d)],'Die x-Koordinate des Scheitels liefert die erste gesuchte Seitenlänge, die Nebenbedingung liefert die zweite. Jetzt kontrollieren wir die Fläche unabhängig von der Parabel: Länge mal Breite. Die direkt darüber stehende Multiplikation zeigt die Rechnung mit den aktuellen Seitenlängen und Einheiten. Änderst du die Zaunlänge, ändern sich die drei Werte mit.')}
   ${row('5. Gewählte Seitenlänge prüfen',[qDim(`x=${qFmt(v.pos)}`,'m'),qDim(`l=${qFmt(other)}`,'m'),qDim(`A(${qFmt(v.pos)})=${qFmt(d.fn(v.pos))}`,'m²')],(v.pos<=0||other<=0)?'Diese Seitenlänge gehört nicht zum Sachbereich eines echten Rechtecks.':'Prüfe zuerst, ob zwei solche Seiten und die dritte Seite zusammen die verfügbare Zaunlänge ergeben. Vergleiche dann die Fläche mit dem Scheitelwert. Der Vergleich veranschaulicht das Ergebnis; das begründete Maximum liefert die Scheitelpunktform.')}</div>`;
  }
  const foot=m.modelKind==='flight';
@@ -3727,9 +3781,14 @@ function qModelSteps(){
  ${row('2. Scheitelpunktform ansetzen',[qMathFormula('f(x)=a(x+u)²+v'),qMathFormula(letter)],foot?'Die Scheitelkoordinaten sind bereits bekannt. Deshalb ist die Scheitelpunktform ein kurzer Weg: Die waagerechte Verschiebung gibt die Mitte der Flugstrecke an, der letzte Summand die maximale Höhe. Alternativ könnte man bei den beiden Nullstellen beginnen und die Linearfaktordarstellung nutzen.':'Wir haben den Ursprung in die Mitte gelegt. Dadurch liegt der Scheitel bei x=0; die Verschiebung fällt weg. Es bleibt nur der unbekannte Formparameter a, den wir mit einem Bogenende bestimmen. Auch die Polynomform wäre möglich, aber umständlicher.')}
  ${row('3. Ein Punkt liefert den Formparameter',[qMathFormula(`f(${qFmt(xPoint)})=0`),...lines],`Der bekannte Punkt ${foot?'N_1(0|0)':'am rechten Bogenende'} liefert die noch fehlende Information zur Krümmung: Dort ist die Höhe 0. Wir setzen diese Punktbedingung in den Ansatz ein und bestimmen a durch Äquivalenzumformungen. Der andere Endpunkt dient zur unabhängigen Kontrolle.`)}
  ${row('4. Funktionsterm und Sachbereich angeben',[d.formula,d.domain],foot?'Der Term ist mathematisch auch außerhalb dieser Strecke berechenbar. Als Ballhöhe darf er aber nur zwischen Start und Landung gedeutet werden.':'Die Formel setzt die Parabel rechnerisch fort. Als Bauwerkshöhe gilt das Modell nur zwischen den beiden Bogenenden.')}
- ${row('5. Ergebnis prüfen und deuten',[qMathFormula(`f(${qFmt(d.peakX)})=${qFmt(H)}`),qMathFormula(`f(${qFmt(d.end)})=0`),qDim(`f(${qFmt(v.pos)})=${qFmt(evaluation)}`,'m')],valid?'Zuerst prüfen wir die vorgegebenen Punkte als Probe. Die gewählte Stelle liegt im Sachbereich; ihr Funktionswert lässt sich deshalb im vereinfachten Modell als Höhe deuten.':'Der Term liefert einen rechnerischen Funktionswert. Die gewählte Stelle liegt jedoch außerhalb des Sachbereichs; das Ergebnis darf nicht als reale Höhe gedeutet werden.')}</div>`;
+ ${row('5. Ergebnis prüfen und deuten',[qMathFormula(`f(${qFmt(d.peakX)})=${qFmt(H)}`),qMathFormula(`f(${qFmt(d.end)})=0`),qDim(`f(${qFmt(v.pos)})=${qFmt(evaluation)}`,'m')],valid?'Die Probe verbindet die Rechnung mit der Situation: Am Scheitel beträgt die Höhe H Meter, am rechten Ende 0 Meter. Die gewählte Stelle liegt im Sachbereich; ihr Funktionswert gibt dort die modellierte Höhe in Metern an. Beim Brückenbogen endet das Bauwerk an den Nullstellen, beim Ballmodell landet der Ball dort auf dem Boden.':'Der berechnete Funktionswert kann rechnerisch richtig sein. Außerhalb des Sachbereichs gibt es aber keinen Punkt auf dem betrachteten Bogen beziehungsweise auf der untersuchten Flugstrecke. Deshalb darf der Zahlenwert nicht als reale Höhe bezeichnet werden.')}</div>`;
 }
-function qModelFormula(){const d=qModelData();return d.kind==='fence'?`${d.formula}<span class="q-model-math-sep"></span>${d.vertex}`:d.formula}
+function qModelFormula(){const d=qModelData();if((d.kind==='arch'||d.kind==='flight')&&!qState.appliedModelRevealed)return '';if(d.kind==='fence'){
+ if(qState.fenceStage<=2)return '';
+ if(qState.fenceStage===3)return qMathFormula(`l(x)=${qFmt(d.F)}−2x`);
+ if(qState.fenceStage===4)return d.formula;
+ return `${d.formula}<span class="q-model-math-sep"></span>${d.vertex}`;
+ }return d.formula}
 function qAppliedControlSpec(key){
  const measure=(description,symbol)=>`${description} ${qMathFormula(symbol)} <span class="q-measure-sep">in</span> <span class="q-unit">m</span>`;
  return {
@@ -3742,6 +3801,15 @@ function qAppliedControlSpec(key){
 }
 function qModelControls(){
  const m=qCurrent(),d=qModelData(),v=qState.values,keys=qState.inlineMode==='free'?m.freeControls:m.controls;
+ if(m.modelKind==='fence'&&qState.fenceStage<=3){
+  q$('qFormula').innerHTML=qModelFormula();q$('qInlineFormula').innerHTML=qModelFormula();q$('qControls').innerHTML='';
+  q$('qInlineControls').innerHTML='';
+  q$('qControlNote').textContent='Erst die Seitenlängen selbst untersuchen. Die Parabel und der Scheitel erscheinen später.';
+  q$('qInlineControlNote').textContent='Die eigenen Zahlen gibst du unter „Auftrag“ oder „Tabelle“ ein.';
+  document.querySelector('#quadraticWorkspaceApp .q-inline-modes').hidden=true;
+  return;
+ }
+ if(m.modelKind==='fence')document.querySelector('#quadraticWorkspaceApp .q-inline-modes').hidden=false;
  const markup=(prefix)=>keys.map(key=>{const [lab,min,max,step]=qAppliedControlSpec(key);return `<div class="control q-model-control"><div class="control-top"><label for="${prefix}-${key}">${lab}</label><output class="value" data-q-model-out="${key}">${qFmt(v[key])}</output></div><input id="${prefix}-${key}" data-q-model-control="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${v[key]}"></div>`}).join('');
  q$('qFormula').innerHTML=qModelFormula();q$('qInlineFormula').innerHTML=qModelFormula();q$('qControls').innerHTML=markup('q-model-left');q$('qInlineControls').innerHTML=markup('q-model-inline');
  q$('qControlNote').innerHTML=qMathText(qState.inlineMode==='free'?m.freeNote:m.modelKind==='fence'?`Geführt untersuchen: Verändere die kurze Seite x. Die gesamte Zaunlänge bleibt bei ${qFmt(d.F)} m; nur drei Seiten werden eingezäunt.`:m.guidedNote);
@@ -3761,14 +3829,124 @@ function qModelControls(){
   qDraw();qRenderViews();
  }));
 }
-function qModelTable(){
+function qModelTable(){const d=qModelData();if(d.kind==='fence')return qFenceTable();if((d.kind==='arch'||d.kind==='flight')&&!qState.appliedModelRevealed)return `<div class="kicker">Gegebene Punkte</div><h2>Erst Informationen ordnen</h2><p>Notiere Start und Ende beziehungsweise die beiden Bogenenden und die höchste Stelle. Erst danach berechnest du Funktionswerte mit dem ermittelten Term.</p><div class="q-eq-row"><span class="q-eq-label">Gegebener Scheitel</span><span class="q-mathline">${qMathFormula(`S(${qFmt(d.peakX)}|${qFmt(d.peakY)})`)}</span></div>`;return qModelTableOriginal();}
+function qModelTableOriginal(){
  const d=qModelData(),x0=d.start,x1=d.end, xs=d.kind==='fence'?[d.F/10,d.F/6,d.F/4,d.F/3,2*d.F/5]:[x0,(3*x0+x1)/4,(x0+x1)/2,(x0+3*x1)/4,x1],
   marked=d.kind==='fence'?d.peakX:d.peakX;
- return `<div class="kicker">Wertetabelle</div><h2>Rechnen und Graph vergleichen</h2><p class="mini">${d.kind==='fence'?'Alle gezeigten Seitenlängen sind positiv und ergeben echte Rechtecke. Die Randwerte x=0 und x=F/2 sind nicht zulässig.':'Alle Werte liegen im Sachbereich. Beobachte, wie sich die Funktionswerte bis zum Scheitelpunkt ändern.'}</p><div class="q-model-value-grid">${xs.map(x=>`<div class="q-model-value-card"><div>${qDim(`x=${qFmt(x)}`,'m')}</div><strong>${qDim(`${d.kind==='fence'?'A':'f'}(${qFmt(x)})=${qFmt(d.fn(x))}`,d.unit)}</strong>${Math.abs(x-marked)<1e-8?'<small>Scheitel / größter Wert</small>':''}</div>`).join('')}</div><div class="cardbox"><strong>Deutung</strong>${qMathText(d.kind==='fence'?`Bei x=${qFmt(d.peakX)} m ist der Flächeninhalt maximal. Das Maximum beträgt ${qFmt(d.peakY)} m².`:`Der Scheitel liegt bei S(${qFmt(d.peakX)}|${qFmt(d.peakY)}). Der Funktionswert beschreibt hier die maximale Höhe.`)}</div>`;
+ return `<div class="kicker">Wertetabelle</div><h2>Rechnen und Graph vergleichen</h2><p class="mini">${d.kind==='fence'?'Alle gezeigten Seitenlängen sind positiv und ergeben echte Rechtecke. Die Randwerte x=0 und x=F/2 sind nicht zulässig.':'Alle Werte liegen im Sachbereich. Beobachte, wie sich die Funktionswerte bis zum Scheitelpunkt ändern.'}</p><div class="q-model-value-grid">${xs.map(x=>`<div class="q-model-value-card"><div>${qDim(`x=${qFmt(x)}`,'m')}</div><strong>${qDim(`${d.kind==='fence'?'A':'f'}(${qFmt(x)})=${qFmt(d.fn(x))}`,d.unit)}</strong>${Math.abs(x-marked)<1e-8?'<small>Scheitel / größter Wert</small>':''}</div>`).join('')}</div><div class="cardbox"><strong>Deutung</strong>${qSachText(d.kind==='fence'?`Bei x=${qFmt(d.peakX)} m ist der Flächeninhalt maximal. Das Maximum beträgt ${qFmt(d.peakY)} m².`:`Der Scheitel liegt bei S(${qFmt(d.peakX)}|${qFmt(d.peakY)}). Der Funktionswert beschreibt hier die maximale Höhe.`)}</div>`;
 }
 function qAppliedExplore(){const m=qCurrent(),d=qModelData();return `<div class="kicker">Freies Erkunden</div><h2>Eine neue Situation prüfen</h2><div class="cardbox"><strong>Transferauftrag</strong>${qMathText(m.modelKind==='fence'?'Vergleiche eine Zaunlänge von 160 m mit 320 m. Wie verändert sich das Flächenmaximum? Begründe mit der Scheitelpunktform.':m.modelKind==='flight'?'Vergleiche zwei unterschiedliche Reichweiten bei unveränderter Maximalhöhe. Beschreibe, was mit der Flugbahn geschieht.':m.modelKind==='arch'?'Vergleiche zwei unterschiedlich breite Bögen bei gleicher Höhe. Erkläre, wie sich die Parabel verändert.':'Prüfe, welche mathematischen Aussagen auch außerhalb des Sachbereichs richtig gerechnet sind und welche Deutungen dort nicht zulässig sind.')}</div><div class="cardbox"><strong>Aktueller Sachbereich</strong>${d.domain}</div><div class="q-sentence-starter"><strong>Begründe:</strong> ${qMathText(m.starter)}</div><p class="mini">Im Modus „Frei erkunden“ oberhalb des Graphen kannst du zusätzliche passende Parameter verändern.</p>`}
 
-const qState={index:0,view:"task",values:{},lang:{},practice:{},inlineMode:"guided",transferPhase:1};
+const qState={index:0,view:"task",values:{},lang:{},practice:{},inlineMode:"guided",transferPhase:1,fenceStage:1,fenceAttempts:[],fenceDraft:{x:'',l:'',area:''},fenceFeedback:'',fenceUnlocked:2,fenceGuess:'',fenceGuessFeedback:'',fencePatternShown:false,appliedModelRevealed:false};
+function qFenceMode(){return qCurrent().modelKind==='fence'}
+function qFenceAdvance(n){
+ if(!qFenceMode())return;
+ n=Number(n);
+ if(!Number.isInteger(n)||n<1||n>5||n>qState.fenceUnlocked)return;
+ qState.fenceStage=n;
+ qRenderControls();qRenderViews();qDraw();qRenderTaskInsight();
+}
+function qFencePhases(){
+ const names=['Situation verstehen','Rechtecke erproben','Zusammenhang entdecken','Muster prüfen','Maximum begründen'];
+ return `<nav class="q-fence-phase-nav" aria-label="Lernphasen der Flächenoptimierung">${names.map((name,i)=>`<button type="button" data-fence-phase="${i+1}" ${i+1>qState.fenceUnlocked?'disabled':''} aria-current="${qState.fenceStage===i+1?'step':'false'}"><span class="q-fence-phase-no">${i+1}</span>${name}</button>`).join('')}</nav>`;
+}
+function qFenceNext(label='Weiter zum nächsten Schritt'){
+ const next=qState.fenceStage+1;
+ if(next>5)return '';
+ return `<button class="btn primary q-fence-next" type="button" data-fence-phase="${next}" ${next>qState.fenceUnlocked?'disabled':''}>${label} →</button>`;
+}
+function qFenceInputNumber(str){const s=String(str||'').trim().replace(',','.');return s!==''&&/^[-+]?\d+(?:\.\d+)?$/.test(s)?Number(s):NaN}
+function qFenceTry(){
+ const d=qModelData(),F=d.F,form=qState.fenceDraft;
+ const x=qFenceInputNumber(form.x),l=qFenceInputNumber(form.l),A=qFenceInputNumber(form.area);
+ if(!Number.isFinite(x)||!Number.isFinite(l)||!Number.isFinite(A))qState.fenceFeedback='Trage zuerst für beide Seitenlängen und für den Flächeninhalt eigene Zahlen ein.';
+ else if(x<=0||l<=0)qState.fenceFeedback='Beide Rechteckseiten müssen größer als 0 sein.';
+ else if(Math.abs(2*x+l-F)>1e-6)qState.fenceFeedback=`Prüfe die Zaunlänge: Beide Seiten der Länge x und die dritte Seite l müssen zusammen ${qFmt(F)} m ergeben. Rechne 2·x+l nach.`;
+ else if(Math.abs(x*l-A)>0.011)qState.fenceFeedback='Die drei Zaunseiten passen. Prüfe den Flächeninhalt erneut: Für ein Rechteck gilt Länge mal Breite, hier x·l.';
+ else if(qState.fenceAttempts.some(t=>Math.abs(t.x-x)<1e-8))qState.fenceFeedback='Dieses Rechteck hast du bereits untersucht. Wähle eine andere Seitenlänge, um vergleichen zu können.';
+ else{
+  qState.fenceAttempts.push({x,l,A});qState.fenceAttempts.sort((a,b)=>a.x-b.x);
+  qState.fenceFeedback=`Gut: Du hast ein zulässiges Rechteck mit ${qFmt(A)} m² Fläche berechnet. Probiere eine andere Aufteilung und vergleiche.`;
+  if(qState.fenceAttempts.length>=2)qState.fenceUnlocked=Math.max(qState.fenceUnlocked,4);
+  qState.fenceDraft={x:'',l:'',area:''};
+ }
+ qRenderViews();qDraw();qRenderTaskInsight();
+}
+function qFenceCheckGuess(){
+ const x=qFenceInputNumber(qState.fenceGuess),d=qModelData();
+ if(!Number.isFinite(x)||x<=0||x>=d.end){qState.fenceGuessFeedback='Nenne zunächst eine mögliche positive Seitenlänge aus dem Sachbereich.';}
+ else if(Math.abs(x-d.peakX)<1e-7){qState.fencePatternShown=true;qState.fenceUnlocked=5;qState.fenceGuessFeedback='Deine Vermutung passt zum beobachteten Muster. Jetzt fehlt noch ein Nachweis für alle möglichen Rechtecke.';}
+ else qState.fenceGuessFeedback='Vergleiche die beiden Paare links und rechts der Mitte. Welche Seitenlänge liegt jeweils genau zwischen beiden Werten?';
+ qRenderViews();qDraw();qRenderTaskInsight();
+}
+function qFenceAttemptsHtml(){
+ if(!qState.fenceAttempts.length)return '<p class="mini">Hier erscheinen deine selbst geprüften Rechtecke – zunächst ohne vorgegebene Ergebniswerte.</p>';
+ return `<div class="q-fence-trials" aria-label="Eigene Rechtecke">${qState.fenceAttempts.map((t,i)=>`<div class="q-fence-trial"><span>Versuch ${i+1}</span><span>${qDim(qFmt(t.x),'m')} · ${qDim(qFmt(t.l),'m')}</span><strong>${qDim(qFmt(t.A),'m²')}</strong></div>`).join('')}</div>`;
+}
+function qFenceTryUI(){
+ const f=qState.fenceDraft;
+ return `<section class="q-fence-work" aria-label="Eigene Rechtecke untersuchen"><h3>Deine eigenen Rechtecke</h3><p>Du darfst selbst entscheiden, wie du den Zaun aufteilst. Es gibt keine vorgegebenen Seitenlängen. Überlege: Zwei Seiten haben die Länge ${qMathFormula('x')}, die dritte Seite hat die Länge ${qMathFormula('l')}. Alle drei zusammen brauchen ${qDim(qFmt(qState.values.fence),'m')} Zaun.</p>
+ <div class="q-fence-entry"><label>Seite ${qMathFormula('x')} in m<input inputmode="decimal" type="text" data-fence-entry="x" autocomplete="off" value="${f.x}" placeholder="selbst wählen"></label><label>Seite ${qMathFormula('l')} in m<input inputmode="decimal" type="text" data-fence-entry="l" autocomplete="off" value="${f.l}" placeholder="selbst wählen"></label><label>Fläche ${qMathFormula('A')} in m²<input inputmode="decimal" type="text" data-fence-entry="area" autocomplete="off" value="${f.area}" placeholder="selbst ausrechnen"></label></div>
+ <div class="q-fence-action"><button type="button" class="btn primary" data-fence-check>Mein Rechteck prüfen</button></div>${qState.fenceFeedback?`<div class="q-fence-feedback" role="status">${qState.fenceFeedback}</div>`:''}
+ <h4>Gesammelte Versuche</h4>${qFenceAttemptsHtml()}<p class="mini">Mindestens zwei unterschiedliche, richtig berechnete Rechtecke helfen dir, eine erste Vermutung zu formulieren.</p>${qState.fenceAttempts.length>=2?qFenceNext('Zusammenhang aufstellen'):''}</section>`;
+}
+function qFenceStageBody(){
+ const d=qModelData(),F=d.F,o=d.peakX,s=qState.fenceStage,m=qMathFormula;
+ if(s===1)return `<div class="cardbox"><strong>Was ist wirklich eingezäunt?</strong>Das Gehege hat weiterhin vier Rechteckseiten. Der Kanal begrenzt die vierte Seite, dafür wird kein Zaun gebraucht. Für die Fläche gilt trotzdem Länge mal Breite. Zwei Zaunseiten sind gleich lang; beim Flächeninhalt verwenden wir jede der beiden verschiedenen Rechtecklängen nur einmal.</div><div class="q-eq-row"><span class="q-eq-label">Das weißt du bereits</span><span class="q-mathline">${m('A=x·l')}</span><span class="q-calc-note">Die beiden gleich langen Seiten dürfen nicht doppelt in die Flächenformel eingesetzt werden. Sie zählen nur beim Zaun zweimal.</span></div><div class="cardbox"><strong>Deine Forscherfrage</strong>Kann ein langes, schmales Rechteck mehr Fläche haben als ein kürzeres, breiteres? Überlege erst, bevor du Zahlen eingibst.</div>${qFenceNext('Selbst Rechtecke ausprobieren')}`;
+ if(s===2)return `${qFenceTryUI()}`;
+ if(s===3)return `<div class="cardbox"><strong>Warum brauchen wir eine Rechnung für alle Rechtecke?</strong>Beim Ausprobieren hast du einzelne Möglichkeiten getestet. Es gibt aber beliebig viele Seitenlängen. Wie können wir die dritte Seite berechnen, wenn du nur ${m('x')} kennst?</div><div class="q-eq-row"><span class="q-eq-label">Erst die Zaunlänge zählen</span><span class="q-mathline">${m(`x+x+l=${qFmt(F)}`)}</span><span class="q-mathline">${m(`2x+l=${qFmt(F)}`)}</span><span class="q-calc-note">Der gesamte Zaun wird auf genau drei Seiten verteilt. Alles, was die beiden gleichen Seiten verbrauchen, steht für die dritte nicht mehr zur Verfügung.</span></div><div class="q-eq-row"><span class="q-eq-label">Die dritte Seite bestimmen</span><span class="q-mathline">${m(`l=${qFmt(F)}−2x`)}</span><span class="q-calc-note">Wir ziehen von der gesamten Zaunlänge die beiden Seiten mit Länge x ab. Wir könnten auch nach x umstellen; das wäre ein ebenso richtiger Weg, nur wäre dann l unsere veränderliche Größe.</span></div><div class="q-eq-row"><span class="q-eq-label">Aus Seitenlängen wird eine Flächenfunktion</span><span class="q-mathline">${m('A=x·l')}</span><span class="q-mathline">${m(`A(x)=x·(${qFmt(F)}−2x)`)}</span><span class="q-mathline">${m(`A(x)=−2x²+${qFmt(F)}x`)}</span><span class="q-calc-note">Die lineare Beziehung für l beschreibt nur die dritte Seite. Erst das Produkt aus Breite und Länge beschreibt die gesuchte Fläche. Deshalb entsteht beim Ausmultiplizieren ein x²-Term.</span></div><div class="q-card"><strong>Wie nennt man das?</strong>Die Beziehung ${m(`2x+l=${qFmt(F)}`)} heißt <strong>Nebenbedingung</strong>: Sie schränkt unsere Möglichkeiten durch die feste Zaunlänge ein. Die Flächenfunktion ${m('A(x)')} heißt <strong>Zielfunktion</strong>, weil wir ihren größten Wert suchen. Die Begriffe benennen etwas, das du gerade bereits selbst verstanden hast.</div>${qFenceNext('Vermutung gezielt prüfen')}`;
+ if(s===4){
+  const xs=[o-20,o-10,o+10,o+20].filter(x=>x>0&&x<F/2);
+  return `<div class="cardbox"><strong>Was fällt dir auf?</strong>Die Funktion beschreibt jetzt alle möglichen Rechtecke. Vergleiche die Flächen für Seitenlängen, die symmetrisch um eine bisher unbekannte Mitte liegen. Welcher Wert von x liegt zwischen ${qFmt(o-10)} und ${qFmt(o+10)} und zugleich zwischen ${qFmt(o-20)} und ${qFmt(o+20)}? Vermute dort die günstigste Zaunaufteilung.</div><div class="q-model-value-grid">${xs.map(x=>`<div class="q-model-value-card"><div>${qDim(`x=${qFmt(x)}`,'m')}</div><strong>${qDim(`A(${qFmt(x)})=${qFmt(d.fn(x))}`,'m²')}</strong></div>`).join('')}</div><div class="q-fence-work"><label class="q-fence-guess-label">Meine vermutete beste Seitenlänge x in m<input type="text" inputmode="decimal" data-fence-guess value="${qState.fenceGuess}" placeholder="selbst vermuten"></label><button type="button" class="btn primary" data-fence-guess-check>Vermutung prüfen</button>${qState.fenceGuessFeedback?`<div role="status" class="q-fence-feedback">${qState.fenceGuessFeedback}</div>`:''}</div>${qState.fencePatternShown?`<div class="cardbox"><strong>Warum ist der Abstand wichtig?</strong>Bei 10 m Abstand von ${qFmt(o)} m liegt die Fläche um ${qFmt(d.peakY-d.fn(o-10))} m² unter unserem bisher besten Beispielwert, bei 20 m Abstand um ${qFmt(d.peakY-d.fn(o-20))} m² darunter. Der zweite Verlust ist viermal so groß. Diese Beobachtung deutet auf einen quadratischen Zusammenhang hin. Aber gilt sie für jedes Rechteck?</div>${qFenceNext('Vermutung mathematisch begründen')}`:''}`;
+ }
+
+ const sq=qFmt(o*o),half=qFmt(F/2);
+ return `<div class="q-card"><strong>Was soll die neue Termform leisten?</strong>Wir wollen nicht einfach ein weiteres Rechteck ausrechnen. Wir möchten für jede mögliche Seitenlänge zeigen, warum der bisherige Bestwert nicht überschritten werden kann. Dazu untersuchen wir, wie viel Fläche bei einer Abweichung von ${qFmt(o)} m verloren geht.</div><div class="q-eq-row"><span class="q-eq-label">Dieselbe Flächenfunktion anders schreiben</span><span class="q-mathline">${m(`A(x)=−2x²+${qFmt(F)}x`)}</span><span class="q-mathline">${m(`A(x)=−2(x²−${half}x)`)}</span><span class="q-mathline">${m(`A(x)=−2((x−${qFmt(o)})²−${sq})`)}</span><span class="q-mathline">${m(`A(x)=−2(x−${qFmt(o)})²+${qFmt(d.peakY)}`)}</span><span class="q-calc-note">Das ist eine quadratische Ergänzung. Beide Formen beschreiben dieselben Rechtecke und genau dieselbe Fläche. Jetzt erkennt man aber, wie sich jede Abweichung vom bisher besten Wert auswirkt.</span></div><div class="q-eq-row"><span class="q-eq-label">Was bedeutet der Term für das Gehege?</span><span class="q-mathline">${m(`A(x)=${qFmt(d.peakY)}−2(x−${qFmt(o)})²`)}</span><span class="q-calc-note">${qFmt(d.peakY)} m² ist die Fläche ohne Abweichung; die zweite Zahl beschreibt den Flächenverlust. Jede Abweichung – links oder rechts – verringert die Fläche. Weil (x−${qFmt(o)})² nie negativ ist, kann keine zulässige Seitenlänge eine größere Fläche ergeben.</span></div><div class="q-eq-row"><span class="q-eq-label">Ergebnis unabhängig kontrollieren</span><span class="q-mathline">${qDim(`x=${qFmt(o)}`,'m')}</span><span class="q-mathline">${qDim(`l=${qFmt(F-2*o)}`,'m')}</span><span class="q-mathline">${qModelAreaCheck(d)}</span><span class="q-calc-note">Der Fachbegriff für die entstandene Schreibweise ist Scheitelpunktform. Wir nutzen sie hier, weil sie zugleich die optimale Seitenlänge und den Flächenverlust bei jeder Abweichung sichtbar macht. Die Polynomform wäre weiterhin richtig, zeigt dies aber nicht direkt.</span></div>`;
+}
+function qFenceTask(){
+ return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag · Vom Rechteck zum Maximum</div><h2>Flächen optimieren</h2>${qFencePhases()}${qAppliedOrientation(qCurrent(),qModelData())}<div class="q-fence-stage"><h3>Schritt ${qState.fenceStage} · ${['Situation verstehen','Rechtecke erproben','Zusammenhang entdecken','Muster prüfen','Maximum begründen'][qState.fenceStage-1]}</h3>${qFenceStageBody()}</div></section>`;
+}
+function qFenceTable(){
+ if(qState.fenceStage<=2)return `<div class="kicker">Selbstversuche</div><h2>Deine Rechtecke vergleichen</h2><p>Die Tabelle enthält nur deine eigenen geprüften Versuche. Berechne zuerst selbst die beiden Seiten und die Fläche.</p>${qFenceTryUI()}`;
+ if(qState.fenceStage===3)return `<div class="kicker">Zusammenhang</div><h2>Von der Seitenlänge zur Fläche</h2><p>Die dritte Seite lässt sich aus deiner Wahl von x berechnen. Dadurch hängt der Flächeninhalt nur noch von einer frei gewählten Länge ab.</p><div class="q-eq-row"><span class="q-mathline">${qMathFormula(`l=${qFmt(qState.values.fence)}−2x`)}</span><span class="q-mathline">${qMathFormula(`A(x)=x·(${qFmt(qState.values.fence)}−2x)`)}</span></div>${qFenceAttemptsHtml()}`;
+ if(qState.fenceStage===4)return `<div class="kicker">Vergleich</div><h2>Gleiche Abstände – gleiche Flächen?</h2>${qFenceStageBody()}`;
+ return qModelTableOriginal();
+}
+function qAppliedInitialSketch(){
+ const d=qModelData(),svg=q$('qPlot'),arch=d.kind==='arch';
+ svg.setAttribute('viewBox','0 0 760 500');
+ const x1=arch?170:130,x2=arch?590:620,mid=(x1+x2)/2;
+ svg.innerHTML=`<rect width="760" height="500" fill="#f9fbff"/><text x="380" y="52" text-anchor="middle" font-size="23" fill="#26364e" font-weight="700">Aus Angaben ein Modell entwickeln</text><rect x="95" y="104" width="560" height="290" fill="#fff" stroke="#dbe3ee"/><path d="M95 374H655M${arch?mid:130} 394V104" stroke="#8392a8" stroke-width="2" fill="none"/>
+ ${[[x1,374,'N₁'],[mid,156,'S'],[x2,374,'N₂']].map(([x,y,n])=>`<circle cx="${x}" cy="${y}" r="6" fill="#2457d6"/><text x="${x+12}" y="${y-10}" font-size="18" fill="#1d4ed8" font-family="Cambria Math,serif">${n}</text>`).join('')}
+ <text x="380" y="428" text-anchor="middle" font-size="18" fill="#475569">${arch?'Zwei Bogenenden und eine höchste Stelle':'Start, höchste Stelle und Landung'}</text>
+ <text x="380" y="462" text-anchor="middle" font-size="17" fill="#475569">Noch kein Funktionsterm: Begründe zunächst die Punktlage.</text>`;
+ q$('qLegend').innerHTML='<span style="color:#2457d6">Gegebene Modellpunkte</span><span>Parabel und Term erst nach eigener Überlegung</span>';
+ q$('qInsight').textContent='Verbinde die drei gegebenen Punkte gedanklich durch eine symmetrische Parabel. Wo liegt der Scheitel, und welche Bedingungen muss der gesuchte Term erfüllen?';
+}
+function qFenceIntroGraph(){
+ const svg=q$('qPlot'),F=qState.values.fence,stage=qState.fenceStage;
+ svg.setAttribute('viewBox','0 0 760 500');
+ if(stage<3){
+ svg.innerHTML=`<rect width="760" height="500" fill="#f8fbff"/><text x="380" y="55" text-anchor="middle" font-size="24" font-weight="750" fill="#253858">Das Rechteck am Kanal</text><rect x="140" y="88" width="470" height="43" rx="8" fill="#dbeafe"/><path d="M140 116 Q160 105 180 116 T220 116 T260 116 T300 116 T340 116 T380 116 T420 116 T460 116 T500 116 T540 116 T580 116" stroke="#3b82f6" stroke-width="3" fill="none"/><text x="380" y="106" text-anchor="middle" fill="#1d4ed8" font-size="19">Kanal: kein Zaun</text><rect x="185" y="143" width="385" height="258" fill="#e6f5eb"/><path d="M185 143V401H570V143" stroke="#b45309" stroke-width="9" fill="none" stroke-linecap="round"/><text x="165" y="275" font-family="Cambria Math,serif" font-style="italic" font-size="29" fill="#8f4700">x</text><text x="584" y="275" font-family="Cambria Math,serif" font-style="italic" font-size="29" fill="#8f4700">x</text><text x="379" y="434" font-family="Cambria Math,serif" font-style="italic" font-size="29" fill="#8f4700">l</text><text x="380" y="270" text-anchor="middle" font-size="24" fill="#0f766e">Weidefläche</text><text x="380" y="462" text-anchor="middle" fill="#536279" font-size="17">Zuerst eigene Rechtecke untersuchen – noch keine Parabel.</text>`;
+ q$('qLegend').innerHTML='<span style="color:#b45309">eingezäunte Seiten: zweimal x und einmal l</span><span style="color:#2563eb">Kanal ohne Zaun</span>';
+ }else{
+ const xmax=F/2,ymax=F*1.08,px=x=>94+560*x/xmax,py=y=>410-310*y/ymax;
+ const ticks=[0,.25,.5,.75,1].map(t=>`<line x1="${px(t*xmax)}" y1="93" x2="${px(t*xmax)}" y2="411" stroke="#e5eaf1"/><text x="${px(t*xmax)}" y="440" fill="#64748b" text-anchor="middle" font-size="14">${qFmt(t*xmax)}</text>`).join('');
+ svg.innerHTML=`<rect width="760" height="500" fill="#f9fbff"/><text x="380" y="47" text-anchor="middle" font-size="22" fill="#26364e">Wie verändert sich die dritte Zaunseite?</text><rect x="94" y="93" width="560" height="318" fill="white" stroke="#e5eaf1"/>${ticks}<path d="M94 95V411H660" stroke="#64748b" stroke-width="2.5" fill="none"/><path d="M${px(0)} ${py(F)}L${px(xmax)} ${py(0)}" stroke="#0f766e" stroke-width="5" fill="none"/><text x="120" y="115" font-size="17" fill="#0f766e" font-family="Cambria Math,serif" font-style="italic">l(x)</text><text x="660" y="467" text-anchor="end" font-size="16" fill="#64748b">x in m</text><text x="110" y="80" font-size="16" fill="#64748b">l in m</text><text x="380" y="489" text-anchor="middle" font-size="16" fill="#536279">Die Seite l nimmt linear ab. Der Flächeninhalt wird erst danach untersucht.</text>`;
+ q$('qLegend').innerHTML='<span style="color:#0f766e">lineare Abhängigkeit der dritten Zaunseite</span>';
+ }
+ q$('qInsight').innerHTML=stage<3?'Noch keine fertige Flächenfunktion: Entdecke zunächst, wie die Seiten zusammenhängen.':'Diese Gerade beschreibt nur die verbleibende Zaunseite. Für die Fläche müssen wir beide Rechteckseiten miteinander multiplizieren.';
+}
+function qFenceAttachHandlers(){
+ const box=q$('qViews');if(!box||!qFenceMode())return;
+ box.querySelectorAll('[data-fence-phase]').forEach(b=>b.addEventListener('click',()=>qFenceAdvance(b.dataset.fencePhase)));
+ box.querySelectorAll('[data-fence-entry]').forEach(inp=>inp.addEventListener('input',()=>{
+  qState.fenceDraft[inp.dataset.fenceEntry]=inp.value;
+  // Show the same input in the other visible tab only on the next render.
+ }));
+ box.querySelectorAll('[data-fence-check]').forEach(b=>b.addEventListener('click',qFenceTry));box.querySelectorAll('[data-fence-guess]').forEach(inp=>inp.addEventListener('input',()=>{qState.fenceGuess=inp.value;}));box.querySelectorAll('[data-fence-guess-check]').forEach(b=>b.addEventListener('click',qFenceCheckGuess));
+}
+
 function qFmt(n){if(Math.abs(n)<1e-9)n=0;const s=Number.isInteger(n)?String(n):n.toFixed(2).replace(/\.?0+$/,'').replace('.',',');return s.replace('-', '−')}
 function qCurrent(){return qModules[qState.index]}
 function qFx(x){if(qIsApplied())return qModelData().fn(x);const v=qState.values;if(qCurrent().compareLine)return v.a*x*x+(v.m??2)*x+(v.b??0);return v.a*(x+v.h)*(x+v.h)+v.k}
@@ -3784,7 +3962,7 @@ function qPointFormulaHtml(){const m=qCurrent();if(m.transferModel&&qState.trans
 
 function qModelSolutionFormula(){const s=qCurrent().solution;if(!s)return qPolyFormula();const lead=(s.a<0?'−':'')+(Math.abs(Math.abs(s.a)-1)<1e-9?'':qFmt(Math.abs(s.a)))+'x²';const lin=Math.abs(s.b)<1e-9?'':` ${s.b>0?'+':'−'} ${Math.abs(Math.abs(s.b)-1)<1e-9?'':qFmt(Math.abs(s.b))}x`;const con=Math.abs(s.c)<1e-9?'':` ${s.c>0?'+':'−'} ${qFmt(Math.abs(s.c))}`;return `f(x)=${lead}${lin}${con}`}
 function qModelCheckFormula(x,y){const s=qCurrent().solution;if(!s)return `f(${qFmt(x)})=${qFmt(y)}`;const xv=x<0?`(${qFmt(x)})`:qFmt(x);const aAbs=Math.abs(s.a),aNum=Math.abs(aAbs-1)<1e-9?'':qFmt(aAbs)+'·',lead=`${s.a<0?'−':''}${aNum}${xv}²`;const bAbs=Math.abs(s.b),bTerm=Math.abs(s.b)<1e-9?'':`${s.b>0?'+':'−'}${Math.abs(bAbs-1)<1e-9?'':qFmt(bAbs)+'·'}${xv}`;const cTerm=Math.abs(s.c)<1e-9?'':`${s.c>0?'+':'−'}${qFmt(Math.abs(s.c))}`;return `f(${qFmt(x)})=${lead}${bTerm}${cTerm}=${qFmt(y)}`}
-function qResetValues(){qState.values={m:2,b:0,...qCurrent().defaults};qState.lang={};qState.practice={};}
+function qResetValues(){qState.values={m:2,b:0,...qCurrent().defaults};qState.lang={};qState.practice={};qState.fenceStage=1;qState.fenceAttempts=[];qState.fenceDraft={x:"",l:"",area:""};qState.fenceFeedback="";qState.fenceUnlocked=2;qState.fenceGuess='';qState.fenceGuessFeedback='';qState.fencePatternShown=false;qState.appliedModelRevealed=false;}
 function qSignedTerm(coef,symbol){if(Math.abs(coef)<1e-9)return '';const abs=Math.abs(coef),num=Math.abs(abs-1)<1e-9?'':qFmt(abs);return `${coef<0?'−':'+'}${num}${symbol}`}
 function qFormula(){const v=qState.values;if(qCurrent().form==='poly')return qPolyFormula();if(qCurrent().id==='expand')return qVertexFormula();if(qCurrent().compareLine){const parts=[];if(Math.abs(v.a)>1e-9)parts.push(`${v.a<0?'−':''}${Math.abs(Math.abs(v.a)-1)<1e-9?'':qFmt(Math.abs(v.a))}x²`);const m=v.m??2,b=v.b??0;if(Math.abs(m)>1e-9)parts.push(`${parts.length?(m<0?'−':'+'):(m<0?'−':'')}${Math.abs(Math.abs(m)-1)<1e-9?'':qFmt(Math.abs(m))}x`);if(Math.abs(b)>1e-9)parts.push(`${parts.length?(b<0?'−':'+'):(b<0?'−':'')}${qFmt(Math.abs(b))}`);return `f(x)=${parts.join('')||'0'}`;}const a=v.a,u=v.h,vv=v.k;const ac=Math.abs(Math.abs(a)-1)<1e-9?'':qFmt(Math.abs(a));const lead=a<0?'−':'';const core=u===0?`${lead}${ac}x²`:`${lead}${ac}(x ${u>0?'+':'−'} ${qFmt(Math.abs(u))})²`;const tail=vv===0?'':` ${vv>0?'+':'−'} ${qFmt(Math.abs(vv))}`;return `f(x)=${core||'0'}${tail}`}
 function qLineFormula(){const v=qState.values;const m=v.m??2,b=v.b??0;let body='';if(Math.abs(m)>1e-9)body=`${m<0?'−':''}${Math.abs(Math.abs(m)-1)<1e-9?'':qFmt(Math.abs(m))}x`;if(Math.abs(b)>1e-9)body+=`${body?(b<0?'−':'+'):(b<0?'−':'')}${qFmt(Math.abs(b))}`;return `g(x)=${body||'0'}`}
@@ -3925,6 +4103,8 @@ function qRenderControls(){
 function qSvgPoint(x,y,b){const px=b.l+(x-b.xmin)/(b.xmax-b.xmin)*b.w,py=b.t+b.h-(y-b.ymin)/(b.ymax-b.ymin)*b.h;return [px,py]}
 function qDraw(){
  const svg=q$('qPlot'),m=qCurrent(),v=qState.values;
+ if(qFenceMode()&&qState.fenceStage<=3){qFenceIntroGraph();return;}
+ if((m.modelKind==='arch'||m.modelKind==='flight')&&!qState.appliedModelRevealed){qAppliedInitialSketch();return;}
  const focus=document.body.classList.contains('q-graph-focus');
  const compact=window.innerWidth<=900;
  const portrait=window.innerHeight>=window.innerWidth;
@@ -4103,7 +4283,7 @@ function qDraw(){
  }else s+=`<path d="${pathFor(qFx)}" fill="none" stroke="#6d39c6" stroke-width="3.8" stroke-linecap="round"/>`;
  s+='</g>';
  if(qIsApplied()){
-   const d=qModelData(),fx=d.fn, points=[['S',d.peakX,d.peakY,'#8f274a']];
+   const d=qModelData(),fx=d.fn, points=d.kind==='fence'&&qState.fenceStage===4?[]:[['S',d.peakX,d.peakY,'#8f274a']];
    if(d.kind==='fence')points.push(['P',v.pos,fx(v.pos),'#2457d6']);
    else points.push(['N_1',d.start,0,'#0f766e'],['N_2',d.end,0,'#0f766e'],['P',v.pos,fx(v.pos),'#2457d6']);
    points.forEach(([name,x,y,color])=>{
@@ -4172,15 +4352,19 @@ function qDraw(){
    }
  }
  svg.innerHTML=s;
- q$('qLegend').innerHTML=qIsApplied()?`<span class="f1">${qModelFormula()}</span><span style="color:#8f274a">Scheitelpunkt</span><span style="color:#2457d6">untersuchte Stelle</span><span>gestrichelt: außerhalb des Sachbereichs</span>`:qIsPointModelModule()?(m.transferModel&&qState.transferPhase===1?`<span class="q-line1">${qMathFormula('f_1')}</span><span class="q-line2">${qMathFormula('f_2')}</span><span class="q-line3">${qMathFormula('f_3')}</span><span class="q-point-key" style="color:#9a4e06">Eckpunkte</span>`:(!m.transferModel&&qState.view==='task'?`<span class="q-point-key" style="color:#9a4e06">gegebene Punkte</span>`:`<span class="q-parabola">gesuchte quadratische Funktion</span><span class="q-point-key" style="color:#9a4e06">${m.transferModel?'dieselben Eckpunkte':'gegebene Punkte'}</span>`)):qIsIntersectionModule()?`<span class="f1">${qMathFormula(qFormula())}</span><span class="f2">${qMathFormula(qSecondFormula())}</span><span style="color:#9a4e06">Schnittpunkt(e)</span>`:m.compareLine?(Math.abs(v.a)<1e-9?`<span class="f2">${qMathFormula(`f(x)=g(x)=${qLineFormula().replace('g(x)=','')}`)}</span>`:`<span class="f2">${qMathFormula(qLineFormula())}</span><span class="f1">${qMathFormula(qFormula())}</span>`):`${m.showBase?`<span class="old">Normalparabel ${qMathFormula('n(x)=x²')}</span>`:''}<span class="f1">${qMathFormula(qFormula())}</span><span class="f3">Scheitelpunkt ${qMathFormula('S')}</span>${qIsRootModule()?'<span style="color:#0f766e">y-Achsenschnittpunkt</span><span style="color:#9a4e06">Nullstellenpunkt(e)</span>':''}`;
+ q$('qLegend').innerHTML=qIsApplied()?`<span class="f1">${qModelFormula()}</span>${qFenceMode()&&qState.fenceStage===4?'':'<span style="color:#8f274a">Scheitelpunkt</span>'}<span style="color:#2457d6">untersuchte Stelle</span><span>gestrichelt: außerhalb des Sachbereichs</span>`:qIsPointModelModule()?(m.transferModel&&qState.transferPhase===1?`<span class="q-line1">${qMathFormula('f_1')}</span><span class="q-line2">${qMathFormula('f_2')}</span><span class="q-line3">${qMathFormula('f_3')}</span><span class="q-point-key" style="color:#9a4e06">Eckpunkte</span>`:(!m.transferModel&&qState.view==='task'?`<span class="q-point-key" style="color:#9a4e06">gegebene Punkte</span>`:`<span class="q-parabola">gesuchte quadratische Funktion</span><span class="q-point-key" style="color:#9a4e06">${m.transferModel?'dieselben Eckpunkte':'gegebene Punkte'}</span>`)):qIsIntersectionModule()?`<span class="f1">${qMathFormula(qFormula())}</span><span class="f2">${qMathFormula(qSecondFormula())}</span><span style="color:#9a4e06">Schnittpunkt(e)</span>`:m.compareLine?(Math.abs(v.a)<1e-9?`<span class="f2">${qMathFormula(`f(x)=g(x)=${qLineFormula().replace('g(x)=','')}`)}</span>`:`<span class="f2">${qMathFormula(qLineFormula())}</span><span class="f1">${qMathFormula(qFormula())}</span>`):`${m.showBase?`<span class="old">Normalparabel ${qMathFormula('n(x)=x²')}</span>`:''}<span class="f1">${qMathFormula(qFormula())}</span><span class="f3">Scheitelpunkt ${qMathFormula('S')}</span>${qIsRootModule()?'<span style="color:#0f766e">y-Achsenschnittpunkt</span><span style="color:#9a4e06">Nullstellenpunkt(e)</span>':''}`;
  qRenderTaskInsight();
 }
 function qRenderTaskInsight(){const m=qCurrent(),v=qState.values;
+ if((m.modelKind==='arch'||m.modelKind==='flight')&&!qState.appliedModelRevealed){q$('qInsight').textContent='Ordne zuerst die gegebenen Punkte. Die fertige Funktion und die Werte folgen nach dem eigenen Ansatz.';return;}
+ if(qFenceMode()&&qState.fenceStage<=4){
+  q$('qInsight').innerHTML=qState.fenceStage===4?'Einzelne Versuche und der Graph stützen eine Vermutung. Ob das Maximum wirklich für alle zulässigen Seitenlängen gilt, wird erst im nächsten Schritt begründet.':'Noch kein fertiges Ergebnis: Untersuche erst die Zaunaufteilung und entwickle die passende Flächenfunktion.';return;
+ }
  if(qIsApplied()){
    const d=qModelData(),valid=v.pos>=d.start&&v.pos<=d.end;
    const answer=d.kind==='fence'?`Bei x=${qFmt(v.pos)} m beträgt die Fläche ${qFmt(d.fn(v.pos))} m²; maximal sind ${qFmt(d.peakY)} m² bei x=${qFmt(d.peakX)} m.`:
      `Bei x=${qFmt(v.pos)} m liefert die Rechnung f(x)=${qFmt(d.fn(v.pos))} m. ${valid?'Die Stelle gehört zum Modellbereich.':'Diese Stelle liegt außerhalb des Sachbereichs und ist nicht als reale Höhe zu deuten.'}`;
-   q$('qInsight').innerHTML=qMathText(answer);return;
+   q$('qInsight').innerHTML=qSachText(answer);return;
  }let text=m.hyp;if(m.transferModel){text=qState.transferPhase===1?'Phase 1: Die Eckpunkte entstehen durch paarweises Gleichsetzen der drei Geraden. Bestimme ihre Koordinaten, bevor du zur Parabel wechselst.':'Phase 2: Genau dieselben Eckpunkte werden jetzt als Punktbedingungen f(x_P)=y_P für die gesuchte Parabel verwendet.';q$('qInsight').innerHTML=qMathText(text);return;}if(qIsPointModelModule()){text=`Drei Punkte liefern drei Bedingungen. Lies jeden Punkt als f(x_P)=y_P und prüfe nach der Bestimmung des Terms alle drei Punktbedingungen.`;q$('qInsight').innerHTML=qMathText(text);return;}if(m.compareLine){text=Math.abs(v.a)<1e-9?`a=0: Der quadratische Term verschwindet. Deshalb gilt ${qFormula()} und der Graph von f fällt genau mit ${qLineFormula()} zusammen.`:`a=${qFmt(v.a)}≠0: f enthält einen x²-Term und ist quadratisch; g bleibt linear. Am Graphen siehst du die Krümmung von f.`;}if(m.id==='a'){text=`Aktuell: a=${qFmt(v.a)}. Die Parabel ist ${v.a>0?'nach oben':'nach unten'} geöffnet und ${Math.abs(v.a)>1?'schmaler (gestreckt)':Math.abs(v.a)<1?'breiter (gestaucht)':'gleich breit wie die Normalparabel'}.`}if(m.id==='shift'||m.id==='read')text=`Aktuell gilt u=${qFmt(v.h)} und v=${qFmt(v.k)}; damit ist der Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}). ${v.a<0?'Die Parabel ist nach unten geöffnet.':'Die Parabel ist nach oben geöffnet.'}`;if(m.id==='normal')text=`Bei x=${qFmt(v.x)} gilt f(x)=${qFmt(qFx(v.x))}. Wegen der Symmetrie gilt auch f(${-v.x===0?'0':qFmt(-v.x)})=${qFmt(qFx(v.x))}.`;if(qIsPolyModule())text=`Dieselbe Funktion: ${qPolyFormula()} = ${qVertexFormula()}. Scheitelpunkt S(${qFmt(-v.h)}|${qFmt(v.k)}).`;if(qIsRootModule()){const rd=qRootData(),sy=qYIntercept();const rt=rd.kind==='none'?'keine reelle Nullstelle':rd.kind==='double'?`eine doppelte Nullstelle x${qRootRelation(rd.roots[0])}${qFmt(rd.roots[0])}`:`zwei Nullstellen x_1${qRootRelation(rd.roots[0])}${qFmt(rd.roots[0])} und x_2${qRootRelation(rd.roots[1])}${qFmt(rd.roots[1])}`;text=`Für die y-Achse gilt x=0: S_y(0|${qFmt(sy)}). Für die x-Achse gilt f(x)=0: aktuell ${rt}.`;if(m.id==='factors'||m.id==='rootconnect')text+=` Linearfaktordarstellung: ${qFactorFormula()}.`;}if(qIsIntersectionModule()){const id=qIntersectionData();const count=id.kind==='all'?'unendlich viele':id.kind==='none'?'keine':id.kind==='one'?'genau einen':'zwei';const pts=id.roots.map((x,i)=>qIntersectionPointText(x,i,id.roots.length)).join('; ');text=`Für zwei Graphen gilt f(x)=g(x). Aktuell gibt es ${count} reelle Schnittpunkte${pts?`: ${pts}`:'.'}`;}q$('qInsight').innerHTML=qMathText(text);}
 function qRenderTabs(){const exploreSub=qIsPointModelModule()?'übertragen und prüfen':'verfügbare Parameter kombinieren';const tabs=[['task','Auftrag','untersuchen'],['language','Sprache & Begründen','präzise formulieren'],['table','Tabelle','Werte verbinden'],['explain','Erklärung','Zusammenhang verstehen'],['practice','Üben & Sichern','direkte Rückmeldung'],['explore','Freies Erkunden',exploreSub]];q$('qTabs').innerHTML=tabs.map(([id,a,b])=>`<button class="tab" data-q-view="${id}" data-view="${id}" role="tab" aria-selected="${qState.view===id}"><span class="tab-main">${a}</span><span class="tab-sub">${b}</span></button>`).join('');q$('qTabs').querySelectorAll('[data-q-view]').forEach(b=>b.addEventListener('click',()=>{qState.view=b.dataset.qView;qRenderTabs();qRenderViews();qDraw();if(qHistoryAvailable())qWrite('module','replace')}));}
 function qMathTokenize(raw){
@@ -4284,7 +4468,7 @@ function qAppliedOrientation(m,d){
    </div>
    <div class="q-context-steps"><div><strong>1. Gegeben</strong><p>${math(`F=${qFmt(d.F)}`)} <span class="q-unit">m</span> Zaun für drei Seiten.</p></div>
    <div><strong>2. Veränderbar</strong><p>${math('x')} ist der Abstand vom Kanal. Die gegenüberliegende Seite heißt ${math('l')}.</p></div>
-   <div><strong>3. Gesucht</strong><p>Welche Seitenlängen liefern die <strong>größte Weidefläche</strong>? Wir maximieren ${math('A(x)')}.</p></div></div>
+   <div><strong>3. Gesucht</strong><p>Welche Seitenlängen liefern die <strong>größte Weidefläche?</strong></p><p>${qState.fenceStage<3?'Wir möchten zuerst verstehen, welche Seitenlängen eine große Fläche ergeben.':'Wir suchen das Maximum der Flächenfunktion '+math('A(x)')+'.'}</p></div></div>
    <p class="q-context-bridge">Erst verstehen, dann rechnen: Die gesamte Zaunlänge bleibt gleich. Wird ${math('x')} größer, muss ${math('l')} kleiner werden.</p>
   </section>`;
  if(m.modelKind==='arch')return `<section class="q-context-first"><h3>Was soll modelliert werden?</h3><p>Die x-Achse ist die Bezugslinie. Die beiden Bogenenden haben Höhe 0; die Mitte hat die größte Höhe. Die Scheitelhöhe liegt hier genau auf der y-Achse.</p><div class="q-context-steps"><div><strong>Gegeben</strong><p>Spannweite ${math(`W=${qFmt(d.W)}`)} <span class="q-unit">m</span> und maximale Höhe ${math(`H=${qFmt(d.H)}`)} <span class="q-unit">m</span>.</p></div><div><strong>Gesucht</strong><p>Eine Parabelgleichung für den Bogen und die Höhe an einer ausgewählten Stelle.</p></div><div><strong>Besonderheit</strong><p>Der höchste Punkt ist gleichzeitig ein Punkt auf der y-Achse.</p></div></div></section>`;
@@ -4292,6 +4476,10 @@ function qAppliedOrientation(m,d){
  return `<section class="q-context-first"><h3>Mathematisches Modell und Wirklichkeit unterscheiden</h3><p>Ein Rechenwert kann mathematisch existieren und trotzdem außerhalb des tatsächlichen Bauwerks liegen. Prüfe, ob die untersuchte Stelle im Sachbereich liegt.</p><div class="q-context-steps"><div><strong>Modell</strong><p>Idealisierter Parabelbogen.</p></div><div><strong>Prüfung</strong><p>Liegt die Stelle auf dem modellierten Bauwerk?</p></div><div><strong>Deutung</strong><p>Gib nur im Sachbereich eine reale Höhe an.</p></div></div></section>`;
 }
 function qTaskHtml(m){
+ if((m.modelKind==='arch'||m.modelKind==='flight')&&!qState.appliedModelRevealed){
+  const d=qModelData();return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Vor dem Graphen: Modell verstehen</div><h2>${m.title}</h2>${qAppliedOrientation(m,d)}<div class="cardbox"><strong>Deine erste Aufgabe</strong>Zeichne oder beschreibe die Lage von Start und Ende und dem höchsten Punkt. Warum liegt der Scheitel in diesem vereinfachten symmetrischen Modell in der Mitte? Welche gegebenen Punktbedingungen bestimmen die Parabel?</div><div class="cardbox"><strong>Dann den Funktionsterm entwickeln</strong>Nutze die bekannte Scheitelpunktform ${qMathFormula('f(x)=a(x+u)²+v')} und einen Punkt auf der Höhe 0. Erst wenn du deinen Ansatz notiert hast, kannst du den Modellgraphen zur Kontrolle aufdecken.</div><button type="button" class="btn primary" data-model-reveal>Modellgraph und Rechenweg zur Kontrolle zeigen</button></section>`;
+ }
+ if(m.modelKind==='fence')return qFenceTask();
  if(m.modelKind){
   const d=qModelData(),v=qState.values;
   const modelTasks={
@@ -4300,7 +4488,7 @@ function qTaskHtml(m){
    fence:()=>`Für eine rechteckige Weidefläche an einem geraden Kanal stehen ${qFmt(d.F)} m Zaun zur Verfügung. Nur drei Seiten benötigen Zaun. Bestimme die quadratische Flächenfunktion und die optimale kurze Seitenlänge.`,
    critique:()=>`Ein symmetrischer Bogen ist aktuell ${qFmt(d.W)} m breit und ${qFmt(d.H)} m hoch. Untersuche den errechneten Wert an der Stelle x=${qFmt(v.pos)} m. Prüfe, ob dieser Wert als Höhe des tatsächlichen Bogens gelten darf.`
   };
-  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="cardbox"><strong>Aktuelle Situation</strong>${qMathText(modelTasks[m.modelKind]())}</div>${qAppliedOrientation(m,d)}<div class="cardbox"><strong>Vermutung</strong>${qMathText(m.hyp)}</div><div class="cardbox"><strong>Modellannahme und Sachbereich</strong>${qMathText(m.modelKind==='fence'?'Die Kanalseite braucht keinen Zaun. Nur positive Rechteckseiten sind sinnvoll.':'Die reale Situation wird durch eine idealisierte Parabel innerhalb des angegebenen Bereichs angenähert.')}<div class="q-mathline">${d.domain}</div></div><div class="q-sentence-starter"><strong>Satzstarter:</strong> ${qMathText(m.starter)}</div></section>`;
+  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="cardbox"><strong>Aktuelle Situation</strong>${qSachText(modelTasks[m.modelKind]())}</div>${qAppliedOrientation(m,d)}<div class="cardbox"><strong>Vermutung</strong>${qMathText(m.hyp)}</div><div class="cardbox"><strong>Modellannahme und Sachbereich</strong>${qMathText(m.modelKind==='fence'?'Die Kanalseite braucht keinen Zaun. Nur positive Rechteckseiten sind sinnvoll.':'Die reale Situation wird durch eine idealisierte Parabel innerhalb des angegebenen Bereichs angenähert.')}<div class="q-mathline">${d.domain}</div></div><div class="q-sentence-starter"><strong>Satzstarter:</strong> ${qMathText(m.starter)}</div></section>`;
  }
  if(m.transferModel){
   const phase=qState.transferPhase;
@@ -4312,9 +4500,14 @@ function qTaskHtml(m){
  return `<section class="view ${qState.view==='task'?'active':''}" id="qv-task" role="tabpanel"><div class="kicker">Forscherauftrag</div><h2>${m.title}</h2><div class="cardbox"><strong>Auftrag</strong>${qMathText(m.task)}</div><div class="cardbox"><strong>Vermutung</strong>${qMathText(m.hyp)}</div><div class="cardbox"><strong>Beobachtung formulieren</strong>${qMathText(obs)}</div><div class="q-sentence-starter"><strong>Satzstarter für deine Beobachtung:</strong> ${qMathText(m.starter)}</div></section>`;
 }
 function qRenderViews(){
- const m=qCurrent();
- q$('qViews').innerHTML=`${qTaskHtml(m)}<section class="view ${qState.view==='language'?'active':''}" id="qv-language" role="tabpanel"></section><section class="view ${qState.view==='table'?'active':''}" id="qv-table" role="tabpanel"></section><section class="view ${qState.view==='explain'?'active':''}" id="qv-explain" role="tabpanel"><div class="kicker">Erklärung</div><h2>Zusammenhang verstehen</h2>${qPurposeHtml(m)}${qIsRootModule()?qRootDynamicHtml(m):''}${qIsIntersectionModule()?qIntersectionDynamicHtml(m):''}${qIsPointModelModule()?qPointWorkedHtml(m):''}${qIsApplied()?`${qAppliedOrientation(m,qModelData())}<div class="q-dynamic-example-note"><strong>Dynamischer Rechenweg:</strong> Die Werte der aktuellen Situation werden bei jeder Regleränderung neu eingesetzt.</div>${qModelSteps()}`:''}${qIsPolyModule()?`<div class="q-dynamic-example-note"><strong>Dynamisches Beispiel zum aktuellen Graphen:</strong> Das folgende Beispiel gehört genau zu der Parabel, die oben eingestellt ist. Verändere die Regler – Term, Rechenweg und Scheitelpunkt passen sich an.</div>${qRepresentationHtml(m)}`:''}<div class="q-wordbank" aria-label="Fachwortbank">${m.words.map(w=>`<span>${qMathText(w)}</span>`).join('')}</div><div class="q-explain-grid">${m.explain.map(([h,t])=>`<div class="rule"><strong>${h}</strong>${qMathText(t)}</div>`).join('')}<div class="rule q-callout"><strong>Warum ist das so?</strong>${qMathText(qWhyText(m))}</div><div class="rule q-error"><strong>Typischer Fehler</strong>${qMathText(m.mistake)}</div><div class="rule q-counter"><strong>Gegenbeispiel oder Kontrollidee</strong>${qMathText(m.counter)}</div></div><div class="q-sentence-starter"><strong>Erkläre den Zusammenhang anschließend selbst:</strong> ${qMathText(m.starter)}</div>${qMediaHtml(m)}</section><section class="view ${qState.view==='practice'?'active':''}" id="qv-practice" role="tabpanel"></section><section class="view ${qState.view==='explore'?'active':''}" id="qv-explore" role="tabpanel"></section>`;
- qRenderLanguage();qRenderTable();qRenderPractice();qRenderExplore();qTypesetMathContainers(q$('qViews'));q$('qViews').querySelectorAll('[data-q-phase]').forEach(b=>b.addEventListener('click',()=>{qState.transferPhase=+b.dataset.qPhase;qRenderControls();qRenderViews();qDraw();qRenderTaskInsight();}));
+ const m=qCurrent(),mathText=qIsApplied()?qSachText:qMathText;
+ if(qFenceMode()){
+  const s=qState.fenceStage;
+  q$('qViews').innerHTML=`${qFenceTask()}<section class="view ${qState.view==='language'?'active':''}" id="qv-language" role="tabpanel"><div class="kicker">Sprache und Begründen</div><h2>Beschreibe deine Entdeckung</h2><div class="cardbox"><strong>Satzstarter</strong>${s<3?'Wenn die beiden Seiten x länger werden, dann ... . Die dritte Seite ... . Die Fläche berechne ich, indem ... .':s<5?'Die Zaunbedingung bedeutet ... . Die Fläche wächst zunächst, weil ... . Unsere Beispiele lassen vermuten, dass ... .':'Die Scheitelpunktform zeigt den Flächenverlust, wenn ... . Deshalb ist die gefundene Fläche tatsächlich maximal.'}</div><div class="cardbox"><strong>Fachwörter erst nach der Entdeckung</strong>${s<3?'Nenne vorerst Seitenlänge, Zaunlänge und Flächeninhalt. Die mathematischen Namen für die Bedingungen folgen später.':'Die Gleichung für die gesamte Zaunlänge nennen wir Nebenbedingung. Die Flächenfunktion heißt Zielfunktion, weil wir ihr Maximum suchen.'}</div></section><section class="view ${qState.view==='table'?'active':''}" id="qv-table" role="tabpanel"></section><section class="view ${qState.view==='explain'?'active':''}" id="qv-explain" role="tabpanel"><div class="kicker">Erklärung</div><h2>Warum gehen wir genau so vor?</h2><div class="q-fence-explain">${qFenceStageBody()}</div>${s===5?`<div class="q-dynamic-example-note"><strong>Rechenweg zur aktuellen Zaunlänge:</strong> Die Zahlen passen sich dynamisch an.</div>${qModelSteps()}${qMediaHtml(m)}`:''}</section><section class="view ${qState.view==='practice'?'active':''}" id="qv-practice" role="tabpanel"><div class="kicker">Üben & Sichern</div><h2>Überprüfe dein Verständnis</h2>${s<5?`<div class="cardbox"><strong>Denke erst selbst nach</strong>${s<=2?'Warum reicht die verfügbare Zaunlänge nicht für vier neue Zaunseiten? Warum gilt die bekannte Flächenformel trotzdem?':s===3?'Warum ist die dritte Zaunseite linear von x abhängig, die Fläche aber quadratisch?':'Was zeigen gleiche Abstände von der vermuteten besten Seitenlänge? Reicht das für einen Beweis?'} </div><p class="mini">Die vollständigen Selbsttestaufgaben werden nach dem mathematischen Nachweis freigegeben.</p>`:''}</section><section class="view ${qState.view==='explore'?'active':''}" id="qv-explore" role="tabpanel"><div class="kicker">Freies Erkunden</div><h2>Eigene Entscheidungen</h2>${s<=2?`<p>Wähle selbst Seitenlängen und überprüfe deine Flächen – ohne vorgegebene Ergebnisse.</p>${qFenceTryUI()}`:s<5?`<p>Vergleiche deine eigenen Rechtecke und nutze die abgeleitete Funktion, um weitere zulässige Seitenlängen zu untersuchen.</p>${qFenceAttemptsHtml()}`:qAppliedExplore()}</section>`;
+  qRenderTable();if(s===5)qRenderPractice();qTypesetMathContainers(q$('qViews'));qFenceAttachHandlers();return;
+ }
+ q$('qViews').innerHTML=`${qTaskHtml(m)}<section class="view ${qState.view==='language'?'active':''}" id="qv-language" role="tabpanel"></section><section class="view ${qState.view==='table'?'active':''}" id="qv-table" role="tabpanel"></section><section class="view ${qState.view==='explain'?'active':''}" id="qv-explain" role="tabpanel"><div class="kicker">Erklärung</div><h2>Zusammenhang verstehen</h2>${qPurposeHtml(m)}${qIsRootModule()?qRootDynamicHtml(m):''}${qIsIntersectionModule()?qIntersectionDynamicHtml(m):''}${qIsPointModelModule()?qPointWorkedHtml(m):''}${qIsApplied()?`${qAppliedOrientation(m,qModelData())}${(m.modelKind==='arch'||m.modelKind==='flight')&&!qState.appliedModelRevealed?'<div class="cardbox"><strong>Rechenweg zur Kontrolle</strong>Beginne mit der Punktskizze im Auftrag. Den vollständigen dynamischen Rechenweg kannst du danach dort freigeben.</div>':'<div class="q-dynamic-example-note"><strong>Dynamischer Rechenweg:</strong> Die Werte der aktuellen Situation werden bei jeder Regleränderung neu eingesetzt.</div>'+qModelSteps()}`:''}${qIsPolyModule()?`<div class="q-dynamic-example-note"><strong>Dynamisches Beispiel zum aktuellen Graphen:</strong> Das folgende Beispiel gehört genau zu der Parabel, die oben eingestellt ist. Verändere die Regler – Term, Rechenweg und Scheitelpunkt passen sich an.</div>${qRepresentationHtml(m)}`:''}<div class="q-wordbank" aria-label="Fachwortbank">${m.words.map(w=>`<span>${mathText(w)}</span>`).join('')}</div><div class="q-explain-grid">${m.explain.map(([h,t])=>`<div class="rule"><strong>${h}</strong>${mathText(t)}</div>`).join('')}<div class="rule q-callout"><strong>Warum ist das so?</strong>${mathText(qWhyText(m))}</div><div class="rule q-error"><strong>Typischer Fehler</strong>${mathText(m.mistake)}</div><div class="rule q-counter"><strong>Gegenbeispiel oder Kontrollidee</strong>${mathText(m.counter)}</div></div><div class="q-sentence-starter"><strong>Erkläre den Zusammenhang anschließend selbst:</strong> ${mathText(m.starter)}</div>${qMediaHtml(m)}</section><section class="view ${qState.view==='practice'?'active':''}" id="qv-practice" role="tabpanel"></section><section class="view ${qState.view==='explore'?'active':''}" id="qv-explore" role="tabpanel"></section>`;
+ qRenderLanguage();qRenderTable();qRenderPractice();qRenderExplore();qTypesetMathContainers(q$('qViews'));q$('qViews').querySelectorAll('[data-model-reveal]').forEach(b=>b.addEventListener('click',()=>{qState.appliedModelRevealed=true;qRenderAll();}));q$('qViews').querySelectorAll('[data-q-phase]').forEach(b=>b.addEventListener('click',()=>{qState.transferPhase=+b.dataset.qPhase;qRenderControls();qRenderViews();qDraw();qRenderTaskInsight();}));
 }
 function qPurposeHtml(m){
  const map={
@@ -4516,9 +4709,9 @@ function qWhyText(m){
  return 'In der Scheitelpunktform wird der quadratische Teil am Scheitel 0. Deshalb kann man die Lage direkt aus der Klammer und dem Summanden v ablesen; a verändert anschließend nur Öffnung und Breite.';
 }
 function qRenderPractice(){
- const box=q$('qv-practice');if(!box)return;const m=qCurrent(),answers=qState.practice;
+ const box=q$('qv-practice');if(!box)return;const m=qCurrent(),answers=qState.practice,mathText=m.modelKind?qSachText:qMathText;
  const done=Object.keys(answers).length,score=Object.entries(answers).filter(([i,a])=>m.quiz[+i]&&a===m.quiz[+i].ok).length;
- box.innerHTML=`<div class="kicker">Üben & Sichern</div><h2>Verständnis prüfen</h2><p class="mini">Wähle eine Antwort. Du erhältst sofort eine fachliche Rückmeldung. Ändern ist jederzeit möglich.${m.modelKind?" Einzelne Aufgaben verwenden feste Beispielzahlen und ändern sich nicht mit den Reglern.":""}</p>${m.quiz.map((item,i)=>{const sel=Number.isInteger(answers[i])?answers[i]:null;return `<div class="q-practice-item"><div class="q-practice-question">${i+1}. ${qMathText(item.q)}</div><div class="q-practice-options">${item.opts.map((o,j)=>`<button type="button" class="q-practice-option ${sel===j?(j===item.ok?'correct':'wrong'):''}" data-q-answer="${i}:${j}">${qMathText(o)}</button>`).join('')}</div>${sel!==null?`<div class="q-feedback"><strong>${sel===item.ok?'Richtig.':'Noch nicht.'}</strong> ${qMathText(item.fb)}</div>`:''}</div>`}).join('')}<div class="q-practice-summary"><strong>Stand:</strong> ${score} von ${m.quiz.length} richtig beantwortet. ${done<m.quiz.length?'Bearbeite noch alle Aufgaben.':score===m.quiz.length?'Dieser Baustein sitzt. Wechsle danach zurück zum Graphen und begründe eine Beobachtung in eigenen Worten.':'Nutze Erklärung oder Sprache & Begründen und versuche die Aufgaben anschließend erneut.'}</div>`;
+ box.innerHTML=`<div class="kicker">Üben & Sichern</div><h2>Verständnis prüfen</h2><p class="mini">Wähle eine Antwort. Du erhältst sofort eine fachliche Rückmeldung. Ändern ist jederzeit möglich.${m.modelKind?" Einzelne Aufgaben verwenden feste Beispielzahlen und ändern sich nicht mit den Reglern.":""}</p>${m.quiz.map((item,i)=>{const sel=Number.isInteger(answers[i])?answers[i]:null;return `<div class="q-practice-item"><div class="q-practice-question">${i+1}. ${mathText(item.q)}</div><div class="q-practice-options">${item.opts.map((o,j)=>`<button type="button" class="q-practice-option ${sel===j?(j===item.ok?'correct':'wrong'):''}" data-q-answer="${i}:${j}">${mathText(o)}</button>`).join('')}</div>${sel!==null?`<div class="q-feedback"><strong>${sel===item.ok?'Richtig.':'Noch nicht.'}</strong> ${mathText(item.fb)}</div>`:''}</div>`}).join('')}<div class="q-practice-summary"><strong>Stand:</strong> ${score} von ${m.quiz.length} richtig beantwortet. ${done<m.quiz.length?'Bearbeite noch alle Aufgaben.':score===m.quiz.length?'Dieser Baustein sitzt. Wechsle danach zurück zum Graphen und begründe eine Beobachtung in eigenen Worten.':'Nutze Erklärung oder Sprache & Begründen und versuche die Aufgaben anschließend erneut.'}</div>`;
  box.querySelectorAll('[data-q-answer]').forEach(b=>b.addEventListener('click',()=>{const [i,j]=b.dataset.qAnswer.split(':').map(Number);qState.practice[i]=j;qRenderPractice();}));
 }
 function qLanguagePrompt(m,i){
@@ -4538,16 +4731,16 @@ function qLanguagePrompt(m,i){
  return prompts[i];
 }
 function qRenderLanguage(){
- const box=q$('qv-language');if(!box)return;const m=qCurrent();
+ const box=q$('qv-language');if(!box)return;const m=qCurrent(),mathText=m.modelKind?qSachText:qMathText;
  const labels=['1 · Beobachten','2 · Benennen','3 · Sag es genauer','4 · Begründen'];
  box.innerHTML=`<div class="kicker">Sprache & Begründen</div><h2>Von der Beobachtung zur mathematischen Begründung</h2>
  <div class="q-language-purpose"><strong>Wozu dieser Tab?</strong> Hier lernst du nicht neuen Stoff. Du übersetzt deine eigene Beobachtung schrittweise in Fachsprache und eine mathematische Begründung. Wenn du das bereits sicher kannst, kannst du diesen Tab überspringen.</div>
- <div class="q-wordbank" aria-label="Fachwortbank">${m.words.map(w=>`<span>${qMathText(w)}</span>`).join('')}</div>
- ${labels.map((lab,i)=>`<div class="language-step"><div class="language-step-head"><div><div class="language-step-title">${lab}</div><div class="language-step-sub">${qMathText(qLanguagePrompt(m,i))}</div></div></div>
+ <div class="q-wordbank" aria-label="Fachwortbank">${m.words.map(w=>`<span>${mathText(w)}</span>`).join('')}</div>
+ ${labels.map((lab,i)=>`<div class="language-step"><div class="language-step-head"><div><div class="language-step-title">${lab}</div><div class="language-step-sub">${mathText(qLanguagePrompt(m,i))}</div></div></div>
  <textarea class="q-language-input" rows="3" placeholder="Formuliere hier zunächst selbst …" aria-label="${lab} – eigene Formulierung"></textarea>
  <button class="btn small" data-q-lang="${i}">Musterformulierung anzeigen</button>
- <div class="lang-answer-summary" data-q-lang-answer="${i}" hidden>${qMathText(m.lang[i])}</div></div>`).join('')}
- <div class="q-sentence-starter"><strong>Satzstarter als Hilfe:</strong> ${qMathText(m.starter)}</div>`;
+ <div class="lang-answer-summary" data-q-lang-answer="${i}" hidden>${mathText(m.lang[i])}</div></div>`).join('')}
+ <div class="q-sentence-starter"><strong>Satzstarter als Hilfe:</strong> ${mathText(m.starter)}</div>`;
  box.querySelectorAll('[data-q-lang]').forEach(b=>b.addEventListener('click',()=>{
    const a=box.querySelector(`[data-q-lang-answer="${b.dataset.qLang}"]`);
    const hidden=a.hasAttribute('hidden'); if(hidden){a.removeAttribute('hidden');b.textContent='Musterformulierung ausblenden';}else{a.setAttribute('hidden','');b.textContent='Musterformulierung anzeigen';}
