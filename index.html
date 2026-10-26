@@ -3837,12 +3837,18 @@ function qModelTableOriginal(){
 }
 function qAppliedExplore(){const m=qCurrent(),d=qModelData();return `<div class="kicker">Freies Erkunden</div><h2>Eine neue Situation prüfen</h2><div class="cardbox"><strong>Transferauftrag</strong>${qMathText(m.modelKind==='fence'?'Vergleiche eine Zaunlänge von 160 m mit 320 m. Wie verändert sich das Flächenmaximum? Begründe mit der Scheitelpunktform.':m.modelKind==='flight'?'Vergleiche zwei unterschiedliche Reichweiten bei unveränderter Maximalhöhe. Beschreibe, was mit der Flugbahn geschieht.':m.modelKind==='arch'?'Vergleiche zwei unterschiedlich breite Bögen bei gleicher Höhe. Erkläre, wie sich die Parabel verändert.':'Prüfe, welche mathematischen Aussagen auch außerhalb des Sachbereichs richtig gerechnet sind und welche Deutungen dort nicht zulässig sind.')}</div><div class="cardbox"><strong>Aktueller Sachbereich</strong>${d.domain}</div><div class="q-sentence-starter"><strong>Begründe:</strong> ${qMathText(m.starter)}</div><p class="mini">Im Modus „Frei erkunden“ oberhalb des Graphen kannst du zusätzliche passende Parameter verändern.</p>`}
 
-const qState={index:0,view:"task",values:{},lang:{},practice:{},earlyPractice:{},inlineMode:"guided",transferPhase:1,fenceStage:1,fenceAttempts:[],fenceDraft:{x:'',l:'',area:''},fenceFeedback:'',fenceUnlocked:2,fenceGuess:'',fenceGuessFeedback:'',fencePatternShown:false,appliedModelRevealed:false};
+const qState={index:0,view:"task",values:{},lang:{},practice:{},earlyPractice:{},inlineMode:"guided",transferPhase:1,fenceStage:1,fenceAttempts:[],fenceDraft:{x:'',l:'',area:''},fenceFeedback:'',fenceUnlocked:2,fenceGuess:'',fenceGuessFeedback:'',fencePatternShown:false,fenceStage3Completed:false,appliedModelRevealed:false};
 function qFenceMode(){return qCurrent().modelKind==='fence'}
 function qFenceAdvance(n){
  if(!qFenceMode())return;
  n=Number(n);
- if(!Number.isInteger(n)||n<1||n>5||n>qState.fenceUnlocked)return;
+ if(!Number.isInteger(n)||n<1||n>5)return;
+ // Schritt 4 darf erst bewusst aus Schritt 3 heraus erreicht werden.
+ if(n===4&&qState.fenceStage===3&&qState.fenceUnlocked===3){
+  qState.fenceStage3Completed=true;
+  qState.fenceUnlocked=4;
+ }
+ if(n>qState.fenceUnlocked)return;
  qState.fenceStage=n;
  qRenderControls();qRenderViews();qDraw();qRenderTaskInsight();
 }
@@ -3853,7 +3859,8 @@ function qFencePhases(){
 function qFenceNext(label='Weiter zum nächsten Schritt'){
  const next=qState.fenceStage+1;
  if(next>5)return '';
- return `<button class="btn primary q-fence-next" type="button" data-fence-phase="${next}" ${next>qState.fenceUnlocked?'disabled':''}>${label} →</button>`;
+ const completingStage3=qState.fenceStage===3&&next===4&&qState.fenceUnlocked===3;
+ return `<button class="btn primary q-fence-next" type="button" data-fence-phase="${next}" ${next>qState.fenceUnlocked&&!completingStage3?'disabled':''}>${label} →</button>`;
 }
 function qFenceInputNumber(str){const s=String(str||'').trim().replace(',','.');return s!==''&&/^[-+]?\d+(?:\.\d+)?$/.test(s)?Number(s):NaN}
 function qFenceTry(){
@@ -3867,12 +3874,13 @@ function qFenceTry(){
  else{
   qState.fenceAttempts.push({x,l,A});qState.fenceAttempts.sort((a,b)=>a.x-b.x);
   qState.fenceFeedback=`Gut: Du hast ein zulässiges Rechteck mit ${qFmt(A)} m² Fläche berechnet. Probiere eine andere Aufteilung und vergleiche.`;
-  if(qState.fenceAttempts.length>=2)qState.fenceUnlocked=Math.max(qState.fenceUnlocked,4);
+  if(qState.fenceAttempts.length>=2)qState.fenceUnlocked=Math.max(qState.fenceUnlocked,3);
   qState.fenceDraft={x:'',l:'',area:''};
  }
  qRenderViews();qDraw();qRenderTaskInsight();
 }
 function qFenceCheckGuess(){
+ if(qState.fenceStage!==4||!qState.fenceStage3Completed)return;
  const x=qFenceInputNumber(qState.fenceGuess),d=qModelData();
  if(!Number.isFinite(x)||x<=0||x>=d.end){qState.fenceGuessFeedback='Nenne zunächst eine mögliche positive Seitenlänge aus dem Sachbereich.';}
  else if(Math.abs(x-d.peakX)<1e-7){qState.fencePatternShown=true;qState.fenceUnlocked=5;qState.fenceGuessFeedback='Deine Vermutung passt zum beobachteten Muster. Jetzt fehlt noch ein Nachweis für alle möglichen Rechtecke.';}
@@ -3941,10 +3949,10 @@ function qFenceAttachHandlers(){
  const box=q$('qViews');if(!box||!qFenceMode())return;
  box.querySelectorAll('[data-fence-phase]').forEach(b=>b.addEventListener('click',()=>qFenceAdvance(b.dataset.fencePhase)));
  box.querySelectorAll('[data-fence-entry]').forEach(inp=>inp.addEventListener('input',()=>{
-  qState.fenceDraft[inp.dataset.fenceEntry]=inp.value;
+  qState.fenceDraft[inp.dataset.fenceEntry]=inp.value;qSaveFenceProgress();
   // Show the same input in the other visible tab only on the next render.
  }));
- box.querySelectorAll('[data-fence-check]').forEach(b=>b.addEventListener('click',qFenceTry));box.querySelectorAll('[data-fence-guess]').forEach(inp=>inp.addEventListener('input',()=>{qState.fenceGuess=inp.value;}));box.querySelectorAll('[data-fence-guess-check]').forEach(b=>b.addEventListener('click',qFenceCheckGuess));
+ box.querySelectorAll('[data-fence-check]').forEach(b=>b.addEventListener('click',qFenceTry));box.querySelectorAll('[data-fence-guess]').forEach(inp=>inp.addEventListener('input',()=>{qState.fenceGuess=inp.value;qSaveFenceProgress();}));box.querySelectorAll('[data-fence-guess-check]').forEach(b=>b.addEventListener('click',qFenceCheckGuess));
 }
 
 function qFmt(n){if(Math.abs(n)<1e-9)n=0;const s=Number.isInteger(n)?String(n):n.toFixed(2).replace(/\.?0+$/,'').replace('.',',');return s.replace('-', '−')}
@@ -3962,7 +3970,45 @@ function qPointFormulaHtml(){const m=qCurrent();if(m.transferModel&&qState.trans
 
 function qModelSolutionFormula(){const s=qCurrent().solution;if(!s)return qPolyFormula();const lead=(s.a<0?'−':'')+(Math.abs(Math.abs(s.a)-1)<1e-9?'':qFmt(Math.abs(s.a)))+'x²';const lin=Math.abs(s.b)<1e-9?'':` ${s.b>0?'+':'−'} ${Math.abs(Math.abs(s.b)-1)<1e-9?'':qFmt(Math.abs(s.b))}x`;const con=Math.abs(s.c)<1e-9?'':` ${s.c>0?'+':'−'} ${qFmt(Math.abs(s.c))}`;return `f(x)=${lead}${lin}${con}`}
 function qModelCheckFormula(x,y){const s=qCurrent().solution;if(!s)return `f(${qFmt(x)})=${qFmt(y)}`;const xv=x<0?`(${qFmt(x)})`:qFmt(x);const aAbs=Math.abs(s.a),aNum=Math.abs(aAbs-1)<1e-9?'':qFmt(aAbs)+'·',lead=`${s.a<0?'−':''}${aNum}${xv}²`;const bAbs=Math.abs(s.b),bTerm=Math.abs(s.b)<1e-9?'':`${s.b>0?'+':'−'}${Math.abs(bAbs-1)<1e-9?'':qFmt(bAbs)+'·'}${xv}`;const cTerm=Math.abs(s.c)<1e-9?'':`${s.c>0?'+':'−'}${qFmt(Math.abs(s.c))}`;return `f(${qFmt(x)})=${lead}${bTerm}${cTerm}=${qFmt(y)}`}
-function qResetValues(){qState.values={m:2,b:0,...qCurrent().defaults};qState.lang={};qState.practice={};qState.earlyPractice={};qState.fenceStage=1;qState.fenceAttempts=[];qState.fenceDraft={x:"",l:"",area:""};qState.fenceFeedback="";qState.fenceUnlocked=2;qState.fenceGuess='';qState.fenceGuessFeedback='';qState.fencePatternShown=false;qState.appliedModelRevealed=false;}
+function qResetValues(){qState.values={m:2,b:0,...qCurrent().defaults};qState.lang={};qState.practice={};qState.earlyPractice={};qState.fenceStage=1;qState.fenceAttempts=[];qState.fenceDraft={x:"",l:"",area:""};qState.fenceFeedback="";qState.fenceUnlocked=2;qState.fenceGuess='';qState.fenceGuessFeedback='';qState.fencePatternShown=false;qState.fenceStage3Completed=false;qState.appliedModelRevealed=false;}
+// V56.14: Lernfortschritt der Flächenoptimierung pro Browser-Tab sichern.
+// sessionStorage ist bewusst lokal; die App benötigt keinen Account und keine Übertragung.
+function qFenceStorageKey(){return 'mathelernwelt-v5614-fence-'+qCurrent().id}
+function qSaveFenceProgress(){
+ if(!qFenceMode())return;
+ try{
+  const record={version:1,stage:qState.fenceStage,unlocked:qState.fenceUnlocked,
+   stage3:qState.fenceStage3Completed,attempts:qState.fenceAttempts,draft:qState.fenceDraft,
+   feedback:qState.fenceFeedback,guess:qState.fenceGuess,guessFeedback:qState.fenceGuessFeedback,
+   pattern:qState.fencePatternShown,earlyPractice:qState.earlyPractice,practice:qState.practice,
+   fence:qState.values.fence};
+  sessionStorage.setItem(qFenceStorageKey(),JSON.stringify(record));
+ }catch(_err){} // Bei gesperrtem Speicher bleibt die Lernwelt nutzbar.
+}
+function qRestoreFenceProgress(){
+ if(!qFenceMode())return;
+ try{
+  const raw=sessionStorage.getItem(qFenceStorageKey());if(!raw)return;
+  const record=JSON.parse(raw);if(!record||record.version!==1)return;
+  const F=qState.values.fence;
+  if(Number.isFinite(record.fence)&&record.fence>=80&&record.fence<=400)qState.values.fence=record.fence;
+  const limit=qState.values.fence;
+  const trials=Array.isArray(record.attempts)?record.attempts.filter(t=>t&&[t.x,t.l,t.A].every(Number.isFinite)&&t.x>0&&t.l>0&&Math.abs(2*t.x+t.l-limit)<1e-6&&Math.abs(t.x*t.l-t.A)<0.011).slice(0,50):[];
+  qState.fenceAttempts=trials;
+  qState.fenceDraft=record.draft&&typeof record.draft==='object'?{
+   x:String(record.draft.x||'').slice(0,24),l:String(record.draft.l||'').slice(0,24),area:String(record.draft.area||'').slice(0,24)}:{x:'',l:'',area:''};
+  qState.fenceFeedback=typeof record.feedback==='string'?record.feedback.slice(0,350):'';
+  qState.fenceGuess=typeof record.guess==='string'?record.guess.slice(0,24):'';
+  qState.fenceGuessFeedback=typeof record.guessFeedback==='string'?record.guessFeedback.slice(0,350):'';
+  qState.fenceStage3Completed=trials.length>=2&&record.stage3===true;
+  qState.fencePatternShown=qState.fenceStage3Completed&&record.pattern===true;
+  qState.fenceUnlocked=qState.fencePatternShown?5:qState.fenceStage3Completed?4:trials.length>=2?3:2;
+  qState.fenceStage=Number.isInteger(record.stage)?Math.max(1,Math.min(record.stage,qState.fenceUnlocked)):1;
+  qState.earlyPractice=record.earlyPractice&&typeof record.earlyPractice==='object'?record.earlyPractice:{};
+  qState.practice=record.practice&&typeof record.practice==='object'?record.practice:{};
+ }catch(_err){} // Ungültige oder fehlende Daten führen zum normalen Start.
+}
+function qClearFenceProgress(){if(!qFenceMode())return;try{sessionStorage.removeItem(qFenceStorageKey())}catch(_err){}}
 function qSignedTerm(coef,symbol){if(Math.abs(coef)<1e-9)return '';const abs=Math.abs(coef),num=Math.abs(abs-1)<1e-9?'':qFmt(abs);return `${coef<0?'−':'+'}${num}${symbol}`}
 function qFormula(){const v=qState.values;if(qCurrent().form==='poly')return qPolyFormula();if(qCurrent().id==='expand')return qVertexFormula();if(qCurrent().compareLine){const parts=[];if(Math.abs(v.a)>1e-9)parts.push(`${v.a<0?'−':''}${Math.abs(Math.abs(v.a)-1)<1e-9?'':qFmt(Math.abs(v.a))}x²`);const m=v.m??2,b=v.b??0;if(Math.abs(m)>1e-9)parts.push(`${parts.length?(m<0?'−':'+'):(m<0?'−':'')}${Math.abs(Math.abs(m)-1)<1e-9?'':qFmt(Math.abs(m))}x`);if(Math.abs(b)>1e-9)parts.push(`${parts.length?(b<0?'−':'+'):(b<0?'−':'')}${qFmt(Math.abs(b))}`);return `f(x)=${parts.join('')||'0'}`;}const a=v.a,u=v.h,vv=v.k;const ac=Math.abs(Math.abs(a)-1)<1e-9?'':qFmt(Math.abs(a));const lead=a<0?'−':'';const core=u===0?`${lead}${ac}x²`:`${lead}${ac}(x ${u>0?'+':'−'} ${qFmt(Math.abs(u))})²`;const tail=vv===0?'':` ${vv>0?'+':'−'} ${qFmt(Math.abs(vv))}`;return `f(x)=${core||'0'}${tail}`}
 function qLineFormula(){const v=qState.values;const m=v.m??2,b=v.b??0;let body='';if(Math.abs(m)>1e-9)body=`${m<0?'−':''}${Math.abs(Math.abs(m)-1)<1e-9?'':qFmt(Math.abs(m))}x`;if(Math.abs(b)>1e-9)body+=`${body?(b<0?'−':'+'):(b<0?'−':'')}${qFmt(Math.abs(b))}`;return `g(x)=${body||'0'}`}
@@ -4504,7 +4550,7 @@ function qRenderViews(){
  if(qFenceMode()){
   const s=qState.fenceStage;
   q$('qViews').innerHTML=`${qFenceTask()}<section class="view ${qState.view==='language'?'active':''}" id="qv-language" role="tabpanel"><div class="kicker">Sprache und Begründen</div><h2>Beschreibe deine Entdeckung</h2><div class="cardbox"><strong>Satzstarter</strong>${s<3?'Wenn die beiden Seiten x länger werden, dann ... . Die dritte Seite ... . Die Fläche berechne ich, indem ... .':s<5?'Die Zaunbedingung bedeutet ... . Die Fläche wächst zunächst, weil ... . Unsere Beispiele lassen vermuten, dass ... .':'Die Scheitelpunktform zeigt den Flächenverlust, wenn ... . Deshalb ist die gefundene Fläche tatsächlich maximal.'}</div><div class="cardbox"><strong>Fachwörter erst nach der Entdeckung</strong>${s<3?'Nenne vorerst Seitenlänge, Zaunlänge und Flächeninhalt. Die mathematischen Namen für die Bedingungen folgen später.':'Die Gleichung für die gesamte Zaunlänge nennen wir Nebenbedingung. Die Flächenfunktion heißt Zielfunktion, weil wir ihr Maximum suchen.'}</div></section><section class="view ${qState.view==='table'?'active':''}" id="qv-table" role="tabpanel"></section><section class="view ${qState.view==='explain'?'active':''}" id="qv-explain" role="tabpanel"><div class="kicker">Erklärung</div><h2>Warum gehen wir genau so vor?</h2><div class="q-fence-explain">${qFenceStageBody()}</div>${s===5?`<div class="q-dynamic-example-note"><strong>Rechenweg zur aktuellen Zaunlänge:</strong> Die Zahlen passen sich dynamisch an.</div>${qModelSteps()}${qMediaHtml(m)}`:''}</section><section class="view ${qState.view==='practice'?'active':''}" id="qv-practice" role="tabpanel"><div class="kicker">Üben & Sichern</div><h2>${s<5?'Prüfe, was du bisher verstanden hast':'Überprüfe dein Verständnis'}</h2>${s<5?'<p class="mini">Wähle zu jeder kurzen Frage eine Antwort. Du bekommst sofort eine Erklärung. Später folgen weitere Aufgaben zu deinem fertigen Modell.</p>':''}</section><section class="view ${qState.view==='explore'?'active':''}" id="qv-explore" role="tabpanel"><div class="kicker">Freies Erkunden</div><h2>Eigene Entscheidungen</h2>${s<=2?`<p>Wähle selbst Seitenlängen und überprüfe deine Flächen – ohne vorgegebene Ergebnisse.</p>${qFenceTryUI()}`:s<5?`<p>Vergleiche deine eigenen Rechtecke und nutze die abgeleitete Funktion, um weitere zulässige Seitenlängen zu untersuchen.</p>${qFenceAttemptsHtml()}`:qAppliedExplore()}</section>`;
-  qRenderTable();if(s===5)qRenderPractice();else qRenderEarlyPractice(q$('qv-practice'));qTypesetMathContainers(q$('qViews'));qFenceAttachHandlers();return;
+  qRenderTable();if(s===5)qRenderPractice();else qRenderEarlyPractice(q$('qv-practice'));qTypesetMathContainers(q$('qViews'));qFenceAttachHandlers();qSaveFenceProgress();return;
  }
  q$('qViews').innerHTML=`${qTaskHtml(m)}<section class="view ${qState.view==='language'?'active':''}" id="qv-language" role="tabpanel"></section><section class="view ${qState.view==='table'?'active':''}" id="qv-table" role="tabpanel"></section><section class="view ${qState.view==='explain'?'active':''}" id="qv-explain" role="tabpanel"><div class="kicker">Erklärung</div><h2>Zusammenhang verstehen</h2>${qPurposeHtml(m)}${qIsRootModule()?qRootDynamicHtml(m):''}${qIsIntersectionModule()?qIntersectionDynamicHtml(m):''}${qIsPointModelModule()?qPointWorkedHtml(m):''}${qIsApplied()?`${qAppliedOrientation(m,qModelData())}${(m.modelKind==='arch'||m.modelKind==='flight')&&!qState.appliedModelRevealed?'<div class="cardbox"><strong>Rechenweg zur Kontrolle</strong>Beginne mit der Punktskizze im Auftrag. Den vollständigen dynamischen Rechenweg kannst du danach dort freigeben.</div>':'<div class="q-dynamic-example-note"><strong>Dynamischer Rechenweg:</strong> Die Werte der aktuellen Situation werden bei jeder Regleränderung neu eingesetzt.</div>'+qModelSteps()}`:''}${qIsPolyModule()?`<div class="q-dynamic-example-note"><strong>Dynamisches Beispiel zum aktuellen Graphen:</strong> Das folgende Beispiel gehört genau zu der Parabel, die oben eingestellt ist. Verändere die Regler – Term, Rechenweg und Scheitelpunkt passen sich an.</div>${qRepresentationHtml(m)}`:''}<div class="q-wordbank" aria-label="Fachwortbank">${m.words.map(w=>`<span>${mathText(w)}</span>`).join('')}</div><div class="q-explain-grid">${m.explain.map(([h,t])=>`<div class="rule"><strong>${h}</strong>${mathText(t)}</div>`).join('')}<div class="rule q-callout"><strong>Warum ist das so?</strong>${mathText(qWhyText(m))}</div><div class="rule q-error"><strong>Typischer Fehler</strong>${mathText(m.mistake)}</div><div class="rule q-counter"><strong>Gegenbeispiel oder Kontrollidee</strong>${mathText(m.counter)}</div></div><div class="q-sentence-starter"><strong>Erkläre den Zusammenhang anschließend selbst:</strong> ${mathText(m.starter)}</div>${qMediaHtml(m)}</section><section class="view ${qState.view==='practice'?'active':''}" id="qv-practice" role="tabpanel"></section><section class="view ${qState.view==='explore'?'active':''}" id="qv-explore" role="tabpanel"></section>`;
  qRenderLanguage();qRenderTable();qRenderPractice();qRenderExplore();qTypesetMathContainers(q$('qViews'));q$('qViews').querySelectorAll('[data-model-reveal]').forEach(b=>b.addEventListener('click',()=>{qState.appliedModelRevealed=true;qRenderAll();}));q$('qViews').querySelectorAll('[data-q-phase]').forEach(b=>b.addEventListener('click',()=>{qState.transferPhase=+b.dataset.qPhase;qRenderControls();qRenderViews();qDraw();qRenderTaskInsight();}));
@@ -4752,7 +4798,7 @@ function qPracticeContinuation(kind){
   const next=qState.fenceStage+1;
   if(next>5)return '';
   const names=['','Situation verstehen','Rechtecke erproben','Zusammenhang entdecken','Muster prüfen','Maximum begründen'];
-  const unlocked=next<=qState.fenceUnlocked;
+  const unlocked=next<=qState.fenceUnlocked||(qState.fenceStage===3&&next===4&&qState.fenceUnlocked===3);
   const need=qState.fenceStage===2?'zwei unterschiedliche Rechtecke selbst prüfen':
    qState.fenceStage===4?'deine Vermutung zur günstigsten Seitenlänge prüfen':'den aktuellen Auftrag bearbeiten';
   const label=unlocked?`Weiter zu Schritt ${next}: ${names[next]}`:`Zum Auftrag: ${need}`;
@@ -4771,7 +4817,7 @@ function qHandlePracticeContinue(button){
  if(kind==='fence'){
   if(m.modelKind!=='fence')return;
   const next=Number(button.dataset.nextStage);
-  if(!Number.isInteger(next)||next<qState.fenceStage||next>5||next>qState.fenceUnlocked)return;
+  if(!Number.isInteger(next)||next<qState.fenceStage||next>5||(next>qState.fenceUnlocked&&!(qState.fenceStage===3&&next===4&&qState.fenceUnlocked===3)))return;
   qState.view='task';
   qFenceAdvance(next);
  }else if(kind==='model'){
@@ -4807,7 +4853,7 @@ function qRenderEarlyPractice(box){
   qState.earlyPractice[data.id][i]=j;
   qState.view='practice'; // Kein impliziter Sprung zum Auftrag nach einer Antwort.
   qRenderEarlyPractice(box);
-  qTypesetMathContainers(box);
+  qTypesetMathContainers(box);qSaveFenceProgress();
   // Tastenbedienung: Fokus auch nach gezielter Aktualisierung erhalten.
   const same=Array.from(box.querySelectorAll('[data-q-early-answer]')).find(x=>x.dataset.qEarlyAnswer===`${i}:${j}`);
   if(same&&e.detail===0)same.focus({preventScroll:true});
@@ -4818,8 +4864,13 @@ function qRenderPractice(){
  const box=q$('qv-practice');if(!box)return;const m=qCurrent(),answers=qState.practice,mathText=m.modelKind?qSachText:qMathText;
  if((m.modelKind==='arch'||m.modelKind==='flight')&&!qState.appliedModelRevealed){qRenderEarlyPractice(box);return;}
  const done=Object.keys(answers).length,score=Object.entries(answers).filter(([i,a])=>m.quiz[+i]&&a===m.quiz[+i].ok).length;
- box.innerHTML=`<div class="kicker">Üben & Sichern</div><h2>Verständnis prüfen</h2><p class="mini">Wähle eine Antwort. Du erhältst sofort eine fachliche Rückmeldung. Ändern ist jederzeit möglich.${m.modelKind?" Einzelne Aufgaben verwenden feste Beispielzahlen und ändern sich nicht mit den Reglern.":""}</p>${m.quiz.map((item,i)=>{const sel=Number.isInteger(answers[i])?answers[i]:null;return `<div class="q-practice-item"><div class="q-practice-question">${i+1}. ${mathText(item.q)}</div><div class="q-practice-options">${item.opts.map((o,j)=>`<button type="button" class="q-practice-option ${sel===j?(j===item.ok?'correct':'wrong'):''}" data-q-answer="${i}:${j}">${mathText(o)}</button>`).join('')}</div>${sel!==null?`<div class="q-feedback"><strong>${sel===item.ok?'Richtig.':'Noch nicht.'}</strong> ${mathText(item.fb)}</div>`:''}</div>`}).join('')}<div class="q-practice-summary"><strong>Stand:</strong> ${score} von ${m.quiz.length} richtig beantwortet. ${done<m.quiz.length?'Bearbeite noch alle Aufgaben.':score===m.quiz.length?'Dieser Baustein sitzt. Wechsle danach zurück zum Graphen und begründe eine Beobachtung in eigenen Worten.':'Nutze Erklärung oder Sprache & Begründen und versuche die Aufgaben anschließend erneut.'}</div>${m.modelKind&&done===m.quiz.length?qPracticeContinuation('review'):''}`;
- box.querySelectorAll('[data-q-answer]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const [i,j]=b.dataset.qAnswer.split(':').map(Number);qState.practice[i]=j;qState.view='practice';qRenderPractice();}));
+ box.innerHTML=`<div class="kicker">Üben & Sichern</div><h2>Verständnis prüfen</h2><p class="mini">Wähle eine Antwort. Du erhältst sofort eine fachliche Rückmeldung. Ändern ist jederzeit möglich.${m.modelKind?" Einzelne Aufgaben verwenden feste Beispielzahlen und ändern sich nicht mit den Reglern.":""}</p>${m.quiz.map((item,i)=>{const sel=Number.isInteger(answers[i])?answers[i]:null;return `<div class="q-practice-item"><div class="q-practice-question">${i+1}. ${mathText(item.q)}</div><div class="q-practice-options">${item.opts.map((o,j)=>`<button type="button" class="q-practice-option ${sel===j?(j===item.ok?'correct':'wrong'):''}" data-q-answer="${i}:${j}" aria-pressed="${sel===j}">${mathText(o)}</button>`).join('')}</div>${sel!==null?`<div class="q-feedback"><strong>${sel===item.ok?'Richtig.':'Noch nicht.'}</strong> ${mathText(item.fb)}</div>`:''}</div>`}).join('')}<div class="q-practice-summary"><strong>Stand:</strong> ${score} von ${m.quiz.length} richtig beantwortet. ${done<m.quiz.length?'Bearbeite noch alle Aufgaben.':score===m.quiz.length?'Dieser Baustein sitzt. Wechsle danach zurück zum Graphen und begründe eine Beobachtung in eigenen Worten.':'Nutze Erklärung oder Sprache & Begründen und versuche die Aufgaben anschließend erneut.'}</div>${m.modelKind&&done===m.quiz.length?qPracticeContinuation('review'):''}`;
+ box.querySelectorAll('[data-q-answer]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const [i,j]=b.dataset.qAnswer.split(':').map(Number);qState.practice[i]=j;qState.view='practice';qRenderPractice();
+  // Ein neu aufgebauter Quiz-Reiter darf Tastaturnutzende nicht an den Seitenanfang werfen.
+  const same=Array.from(box.querySelectorAll('[data-q-answer]')).find(x=>x.dataset.qAnswer===`${i}:${j}`);
+  if(same&&e.detail===0)same.focus({preventScroll:true});
+  qSaveFenceProgress();
+ }));
  qBindPracticeContinuation(box);
 }
 function qLanguagePrompt(m,i){
@@ -4901,9 +4952,9 @@ function qRenderAll(){
  qRenderHeader();qRenderControls();qRenderTabs();qRenderViews();qDraw();qEnsureGraphPaint();
  const {block,pos}=qBlockPosition();q$('qPrev').disabled=pos===0;q$('qNext').disabled=pos===block.indices.length-1;
 }
-q$('qReset').addEventListener('click',()=>{qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'Ansicht zurück':'Graph groß';requestAnimationFrame(()=>{qDraw();const card=q$('qPlot')?.closest('.chart-card');if(on&&card)card.scrollTop=0;});});q$('qPrev').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos>0)qOpen(block.indices[pos-1],'push')});q$('qNext').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos<block.indices.length-1)qOpen(block.indices[pos+1],'push')});
+q$('qReset').addEventListener('click',()=>{qClearFenceProgress();qResetValues();qRenderAll()});q$('qFocus').addEventListener('click',()=>{const on=!document.body.classList.contains('q-graph-focus');document.body.classList.toggle('q-graph-focus',on);q$('qFocus').setAttribute('aria-pressed',String(on));q$('qFocus').textContent=on?'Ansicht zurück':'Graph groß';requestAnimationFrame(()=>{qDraw();const card=q$('qPlot')?.closest('.chart-card');if(on&&card)card.scrollTop=0;});});q$('qPrev').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos>0)qOpen(block.indices[pos-1],'push')});q$('qNext').addEventListener('click',()=>{const {block,pos}=qBlockPosition();if(pos<block.indices.length-1)qOpen(block.indices[pos+1],'push')});
 document.querySelectorAll('[data-open-topic="quadratic"]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-open]').forEach(b=>b.addEventListener('click',()=>qOpen(+b.dataset.qOpen,'push')));document.querySelectorAll('[data-q-practice-open]').forEach(b=>b.addEventListener('click',()=>{qOpen(+b.dataset.qPracticeOpen,'push');qState.view='practice';qRenderTabs();qRenderViews();}));document.querySelectorAll('[data-q-overview]').forEach(b=>b.addEventListener('click',()=>qShowOverview('push')));document.querySelectorAll('[data-q-back-portal]').forEach(b=>b.addEventListener('click',()=>qShowPortal('push')));
-window.addEventListener('popstate',e=>{const st=e.state;if(st?.[QKEY]){if(st.screen==='overview')qShowOverview('none');else if(st.screen==='module'){qState.index=st.index||0;qState.view=st.view||'task';qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;window.scrollTo({top:0,behavior:'auto'});}return;}if(!q$('quadraticTopicOverview').hidden||!q$('quadraticExperience').hidden){q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;}});
+window.addEventListener('popstate',e=>{const st=e.state;if(st?.[QKEY]){if(st.screen==='overview')qShowOverview('none');else if(st.screen==='module'){qState.index=st.index||0;qState.view=st.view||'task';qResetValues();qRestoreFenceProgress();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;window.scrollTo({top:0,behavior:'auto'});}return;}if(!q$('quadraticTopicOverview').hidden||!q$('quadraticExperience').hidden){q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=true;}});
 function qRestoreFromUrl(){
  try{
   const u=new URL(window.__quadraticBootUrl||location.href);
@@ -4912,12 +4963,13 @@ function qRestoreFromUrl(){
   if(id){
    const idx=qModules.findIndex(m=>m.id===id);
    if(idx<0){qShowOverview('none');qWrite('overview','replace');return true;}
-   qState.index=idx;qState.view=['task','language','table','explain','practice','explore'].includes(view)?view:'task';qState.inlineMode='guided';qState.transferPhase=1;qResetValues();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;qWrite('module','replace');return true;
+   qState.index=idx;qState.view=['task','language','table','explain','practice','explore'].includes(view)?view:'task';qState.inlineMode='guided';qState.transferPhase=1;qResetValues();qRestoreFenceProgress();qHideLinear();q$('portalHome').hidden=true;q$('quadraticTopicOverview').hidden=true;q$('quadraticExperience').hidden=false;qRenderAll();document.title=`${qCurrent().title} | Mathematik-Lernwelt`;qWrite('module','replace');return true;
   }
   qShowOverview('none');qWrite('overview','replace');return true;
  }catch(err){return false;}
 }
 qRestoreFromUrl();
+window.addEventListener('pagehide',qSaveFenceProgress);
 window.addEventListener('pageshow',()=>qEnsureGraphPaint());
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)qEnsureGraphPaint()});
 // A delayed mobile paint/return from scrolling must not leave the SVG panel empty.
