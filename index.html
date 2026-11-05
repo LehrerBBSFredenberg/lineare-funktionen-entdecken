@@ -6047,6 +6047,7 @@ try{const u=new URL(location.href);if(u.searchParams.get('thema')==='wirtschaft'
 #cubicExperience .cu-label{position:absolute;width:max-content;max-width:82%;padding:3px 5px;border:1px solid currentColor;border-radius:7px;background:#fff;font-size:14px;line-height:1.25;pointer-events:none;white-space:nowrap}
 #cubicExperience .cu-tick{font-size:12px;line-height:1.3;color:#465a70;padding-top:2px}
 #cubicExperience .cu-svgunit{font:13px system-ui,sans-serif;fill:#465a70}
+#cubicExperience .cu-axisunit{font:normal 12px/1.3 system-ui,sans-serif;white-space:nowrap}
 #cubicExperience .cu-caption{font-size:.83rem;color:#53687e;line-height:1.5}
 #cubicExperience .cu-math{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",math,serif;font-style:normal;font-weight:normal;font-size:1.13em;vertical-align:middle;line-height:1.45;white-space:nowrap}
 #cubicExperience .cu-equation{display:block;max-width:100%;overflow-x:auto;padding:10px 7px;background:#f5f8fd;border-radius:9px;margin:7px 0;font-size:1.03rem}
@@ -6060,8 +6061,17 @@ try{const u=new URL(location.href);if(u.searchParams.get('thema')==='wirtschaft'
 #cubicExperience .cu-modes{display:flex;flex-wrap:wrap}
 #cubicExperience .cu-modes [aria-pressed="true"]{background:#e9f1ff;border-width:2px}
 #cubicExperience #cuTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;border-bottom:1px solid #d8e1ee;padding-bottom:13px}
-#cubicExperience .cu-tab{font-size:.82rem;padding:9px 6px;min-height:51px}
-#cubicExperience .cu-tab[aria-selected="true"]{background:#e9f1ff;border:2px solid #2457b0;color:#174c90}
+#cubicExperience .cu-tab{font-size:.82rem;padding:10px 12px;min-height:67px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;text-align:left;background:linear-gradient(180deg,#fff,var(--cu-tab-bg));border-color:var(--cu-tab-border);color:var(--cu-tab-color)}
+#cubicExperience .cu-tab strong{font-size:.88rem;line-height:1.25}
+#cubicExperience .cu-tab span{font-size:.71rem;line-height:1.35;color:#69798f}
+#cubicExperience .cu-tab[data-tab="task"]{--cu-tab-bg:#f4f7ff;--cu-tab-border:#c9d8fb;--cu-tab-color:#1c4aaf}
+#cubicExperience .cu-tab[data-tab="language"]{--cu-tab-bg:#faf7ff;--cu-tab-border:#decff8;--cu-tab-color:#6d39c6}
+#cubicExperience .cu-tab[data-tab="table"]{--cu-tab-bg:#f3fcf9;--cu-tab-border:#bfe7dc;--cu-tab-color:#0f766e}
+#cubicExperience .cu-tab[data-tab="explain"]{--cu-tab-bg:#fff8ef;--cu-tab-border:#f0d7b2;--cu-tab-color:#a85700}
+#cubicExperience .cu-tab[data-tab="practice"]{--cu-tab-bg:#f8fafc;--cu-tab-border:#d9e1ec;--cu-tab-color:#34445b}
+#cubicExperience .cu-tab[data-tab="explore"]{--cu-tab-bg:#f5f7ff;--cu-tab-border:#c7d2fe;--cu-tab-color:#4338ca}
+#cubicExperience .cu-tab[aria-selected="true"]{background:var(--cu-tab-bg);border-color:var(--cu-tab-color);box-shadow:inset 0 -3px 0 var(--cu-tab-color);color:var(--cu-tab-color)}
+#cubicExperience .cu-section-position{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;margin-top:18px;font-size:.85rem;font-weight:700;color:#53687e;scroll-margin-top:10px}
 #cubicExperience #cuBody{padding-top:13px;min-height:200px}
 #cubicExperience .cu-card{border-bottom:1px solid #dce5f0;padding:17px 0 20px;margin-bottom:8px}
 #cubicExperience .cu-card:last-child{border-bottom:0;margin-bottom:0}
@@ -6094,12 +6104,12 @@ try{const u=new URL(location.href);if(u.searchParams.get('thema')==='wirtschaft'
 
 #cubicExperience .cu-navigation{margin-top:18px}#cubicExperience .cu-navigation>summary{padding:10px 0;min-height:44px}#cubicExperience .cu-navigation #cuModules{margin-top:8px}#cubicExperience .cu-module{hyphens:auto}
 </style>
-<script id="cubic-v58">/* Lernwelt V58.0: gekapselter kubischer Bereich. Bestehende Renderer bleiben unverändert. */
+<script id="cubic-v58">/* Lernwelt V58.0.1: Achsenbezeichnungen und Skalen an den tatsächlichen Achsen. */
 (function(){
 'use strict';
 const STORE='lernwelt-kubisch-v58';
 const $=id=>document.getElementById(id), esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const tabs=[['task','Auftrag'],['language','Sprache & Begründen'],['table','Tabelle'],['explain','Erklärung'],['practice','Üben & Sichern'],['explore','Freies Erkunden']];
+const tabs=[['task','Auftrag','untersuchen'],['language','Sprache & Begründen','präzise formulieren'],['table','Tabelle','Werte verbinden'],['explain','Erklärung','Zusammenhang verstehen'],['practice','Üben & Sichern','direkte Rückmeldung'],['explore','Freies Erkunden','gezielt verändern']];
 const fmt=(n,d=3)=>Number.isFinite(n)?new Intl.NumberFormat('de-DE',{maximumFractionDigits:d}).format(Math.abs(n)<1e-10?0:n):'nicht definiert';
 const num=s=>{const t=String(s??'').trim().replace(/\u2212/g,'-').replace(',','.');return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(t)?Number(t):NaN;};
 function ast(raw){
@@ -6232,7 +6242,7 @@ const z=()=>state.items[state.i],mod=()=>modules[state.i];
 const coeff=()=>{const p=z().p;if(state.i===1)return [p.a,3*p.a*p.u,3*p.a*p.u*p.u, p.a*p.u*p.u*p.u+p.v];if(state.i===2)return [p.a,p.b,p.c,p.d];if(cases[mod().id])return cases[mod().id][z().case].c;if(mod().box)return [4,-20,25,0];return [1,0,0,0];};
 const expected=()=>state.i===1?poly(coeff(),2):mod().list?roots(coeff()).map(r=>r.x):mod().count?roots(coeff()).length:mod().dynamic?coeff()[3]:mod().answer;
 const root=document.createElement('main');root.id='cubicExperience';root.hidden=true;document.body.append(root);
-root.innerHTML='<header class="cu-head"><div><div class="cu-kicker">Lernwelt Mathematik</div><h1>Kubische Funktionen</h1><p>Graph · Term · Tabelle · Sprache</p></div><button type="button" class="cu-btn cu-light" data-cu="home">Themenübersicht</button></header><details id="cuNavigation" class="cu-navigation"><summary>Lernabschnitt auswählen</summary><nav id="cuModules" aria-label="Lernabschnitte"></nav></details><h2 id="cuTitle"></h2><div class="cu-layout"><section class="cu-graphcard" aria-label="Graph und zugehörige Steuerung"><div class="cu-tools"><button type="button" class="cu-btn cu-light" data-cu="focus" id="cuFocus">Graph groß</button><button type="button" class="cu-btn cu-light" data-cu="reset">Dieses Modul zurücksetzen</button></div><div id="cuTerm"></div><div id="cuGraphScroll" tabindex="0" role="region" aria-label="Graph; in der großen Ansicht seitlich verschiebbar"><div id="cuGraph"></div></div><p class="cu-caption" id="cuCaption"></p><div id="cuControls"></div></section><section class="cu-learning"><div id="cuTabs" role="tablist" aria-label="Lernansichten"></div><div id="cuBody" role="tabpanel"></div></section></div>';
+root.innerHTML='<header class="cu-head"><div><div class="cu-kicker">Lernwelt Mathematik</div><h1>Kubische Funktionen</h1><p>Graph · Term · Tabelle · Sprache</p></div><button type="button" class="cu-btn cu-light" data-cu="home">Themenübersicht</button></header><details id="cuNavigation" class="cu-navigation" open><summary>8 Lernabschnitte · Thema auswählen</summary><nav id="cuModules" aria-label="Lernabschnitte"></nav></details><div class="cu-section-position"><span id="cuPosition"></span><button type="button" class="cu-btn cu-light" data-cu="sections">Alle 8 Lernabschnitte</button></div><h2 id="cuTitle"></h2><div class="cu-layout"><section class="cu-graphcard" aria-label="Graph und zugehörige Steuerung"><div class="cu-tools"><button type="button" class="cu-btn cu-light" data-cu="focus" id="cuFocus">Graph groß</button><button type="button" class="cu-btn cu-light" data-cu="reset">Dieses Modul zurücksetzen</button></div><div id="cuTerm"></div><div id="cuGraphScroll" tabindex="0" role="region" aria-label="Graph; in der großen Ansicht seitlich verschiebbar"><div id="cuGraph"></div></div><p class="cu-caption" id="cuCaption"></p><div id="cuControls"></div></section><section class="cu-learning"><div id="cuTabs" role="tablist" aria-label="Lernansichten"></div><div id="cuBody" role="tabpanel"></div></section></div>';
 function hideOld(){['portalHome','linearTopicOverview','linearExperience','quadraticTopicOverview','quadraticExperience','economicExperience'].forEach(id=>{if($(id))$(id).hidden=true;});document.body.classList.remove('graph-focus','q-graph-focus');}
 function url(mode='replace',entry=false){const u=new URL(location.href);['qmodul','qview','emodul','eview','ezoom'].forEach(k=>u.searchParams.delete(k));u.searchParams.set('thema','kubisch');u.searchParams.set('kmodul',mod().id);u.searchParams.set('kview',state.tab);if(state.focus)u.searchParams.set('kzoom','1');else u.searchParams.delete('kzoom');history[mode+'State']({cu58:true,i:state.i,tab:state.tab,focus:state.focus,focusEntry:entry,scrollY:window.scrollY},'',u);}
 function open(i,tab='task',mode='push',focus=false){state.i=Math.max(0,Math.min(modules.length-1,i));state.tab=tabs.some(t=>t[0]===tab)?tab:'task';state.focus=focus;state.free=state.tab==='explore';hideOld();root.hidden=false;document.title=mod().title+' | Kubische Funktionen';render();if(mode!=='none')url(mode,focus);window.scrollTo({top:0,behavior:'instant'});}
@@ -6240,6 +6250,7 @@ function focus(on){if(on===state.focus)return;if(!on&&history.state?.cu58&&histo
 function home(){root.hidden=true;state.focus=false;root.classList.remove('cu-focus');const u=new URL(location.href);['thema','kmodul','kview','kzoom'].forEach(k=>u.searchParams.delete(k));history.pushState({mathematikLernweltV34:true,screen:'portal'},'',u);$('portalHome').hidden=false;document.title='Mathematik-Lernwelt';requestAnimationFrame(()=>document.querySelector('[data-open-topic="cubic"]').scrollIntoView({block:'center',behavior:'instant'}));}
 function controls(){
  const zz=z();let html='';
+ if(state.i===0)html+=p('Hier bleibt die Grundfunktion [[f(x)=x^3]] fest. Im nächsten Abschnitt veränderst du den Vorfaktor und die Verschiebungen mit Reglern.')+'<button type="button" class="cu-btn cu-light" data-cu-module="1">Parameter verändern · Abschnitt 2</button>';
  if(cases[mod().id])html+='<label class="cu-field" for="cuCase">Beispiel auswählen<select id="cuCase" data-cu-case>'+cases[mod().id].map((v,i)=>'<option value="'+i+'"'+(i===zz.case?' selected':'')+'>'+esc(v.name)+'</option>').join('')+'</select></label>';
  const keys=state.i===1?(state.free?['a','u','v']:['a']):state.i===2?(state.free?['a','b','c','d']:['d']):mod().box?['x']:[];
  if(state.i===1||state.i===2)html+='<div class="cu-modes"><button class="cu-btn cu-light" data-cu="guided" aria-pressed="'+!state.free+'">Geführt untersuchen</button><button class="cu-btn cu-light" data-cu="free" aria-pressed="'+state.free+'">Frei erkunden</button></div>'+p(state.free?'Verändere zuerst einen Parameter und kombiniere anschließend die verfügbaren Parameter. Formuliere vorher eine Vermutung.':state.i===1?'Im geführten Modus veränderst du nur [[a]]. Die Verschiebungen bleiben fest, damit du die Wirkung des Vorfaktors erkennen kannst.':'Im geführten Modus veränderst du nur [[d]]. Vergleiche die y-Achsenschnittpunkte.');
@@ -6362,10 +6373,10 @@ const makers={task,language,table,explain,practice,explore};
 function body(){const active=document.activeElement?.id;$('cuBody').innerHTML=makers[state.tab]();$('cuBody').setAttribute('aria-labelledby','cuTab-'+state.tab);if(active&&$(active))$(active).focus({preventScroll:true});}
 function render(){
  root.classList.toggle('cu-focus',state.focus);
- $('cuNavigation').open=window.innerWidth>1050;
+ $('cuPosition').textContent='Lernabschnitt '+(state.i+1)+' von '+modules.length;
  $('cuTitle').textContent=(state.i+1)+' · '+mod().title;
  $('cuModules').innerHTML=modules.map((m,i)=>'<button type="button" class="cu-module" data-cu-module="'+i+'" aria-current="'+(state.i===i?'step':'false')+'"><strong>'+(i+1)+' · '+esc(m.title)+'</strong><span>'+esc(m.sub)+'</span></button>').join('');
- $('cuTabs').innerHTML=tabs.map(([id,title])=>'<button type="button" role="tab" class="cu-tab" id="cuTab-'+id+'" data-cu="tab" data-tab="'+id+'" aria-selected="'+(id===state.tab)+'" aria-controls="cuBody">'+esc(title)+'</button>').join('');
+ $('cuTabs').innerHTML=tabs.map(([id,title,sub])=>'<button type="button" role="tab" class="cu-tab" id="cuTab-'+id+'" data-cu="tab" data-tab="'+id+'" aria-label="'+esc(title)+'" aria-selected="'+(id===state.tab)+'" aria-controls="cuBody"><strong>'+esc(title)+'</strong><span>'+esc(sub)+'</span></button>').join('');
  $('cuFocus').textContent=state.focus?'Normale Ansicht':'Graph groß';controls();body();scheduleDraw();
 }
 function answerList(raw,target){const tokens=String(raw??'').split(/[;|\n]/).map(s=>s.trim()).filter(Boolean),vs=tokens.map(num);if(!vs.length||!vs.every(Number.isFinite))return false;const unique=vs.filter((x,i)=>!vs.slice(0,i).some(y=>Math.abs(x-y)<.001)).sort((a,b)=>a-b);const want=[...target].sort((a,b)=>a-b);return unique.length===want.length&&unique.every((x,i)=>Math.abs(x-want[i])<.000001);}
@@ -6378,12 +6389,13 @@ root.addEventListener('input',e=>{
 });
 root.addEventListener('change',e=>{if(e.target.matches('[data-cu-case]')){const next=Number(e.target.value),current=z(),all=current.variants||{},copy=JSON.parse(JSON.stringify(current));delete copy.variants;all[current.case]=copy;const target=JSON.parse(JSON.stringify(all[next]||fresh(state.i)));target.case=next;target.variants=all;state.items[state.i]=target;save();render();}});
 root.addEventListener('click',e=>{
- const moduleButton=e.target.closest('[data-cu-module]');if(moduleButton){open(Number(moduleButton.dataset.cuModule));return;}
+ const moduleButton=e.target.closest('[data-cu-module]');if(moduleButton){open(Number(moduleButton.dataset.cuModule));requestAnimationFrame(()=>root.querySelector('.cu-section-position').scrollIntoView({block:'start',behavior:'instant'}));return;}
  const qb=e.target.closest('[data-cu-quiz]');if(qb){z().quiz[qb.dataset.cuQuiz]=Number(qb.dataset.answer);save();body();root.querySelector('[data-cu-quiz="'+qb.dataset.cuQuiz+'"][data-answer="'+qb.dataset.answer+'"]')?.focus({preventScroll:true});return;}
  const bt=e.target.closest('[data-cu-box-term]');if(bt){const good=Number(bt.dataset.cuBoxTerm)===0;if(good)z().stage=2;result(good,'Der Term passt zu deinen eigenen Versuchen. Jetzt kannst du Graph, Tabelle und Sachbereich untersuchen.','Prüfe, wie viele Ecken eine Grundkante verkürzen. Multipliziere anschließend beide Grundkanten und die Höhe.');return;}
  const b=e.target.closest('[data-cu]');if(!b)return;
  const a=b.dataset.cu;
  if(a==='home')home();
+ if(a==='sections'){$('cuNavigation').open=true;$('cuNavigation').scrollIntoView({block:'start',behavior:'instant'});$('cuModules').querySelector('[aria-current="step"]')?.focus({preventScroll:true});}
  if(a==='focus')focus(!state.focus);
  if(a==='reset'){state.items[state.i]=fresh(state.i);save();render();}
  if(a==='tab'){state.tab=b.dataset.tab;state.free=state.tab==='explore';render();url('replace',state.focus);}
@@ -6419,15 +6431,15 @@ function draw(){
  const ys=Array.from({length:161},(_,i)=>poly(c,lo+(hi-lo)*i/160));let mn=Math.min(0,...ys),mx=Math.max(0,...ys),pad=Math.max(1,(mx-mn)*.12);mn-=pad;mx+=pad;
  const P={l:W<500?57:76,r:W-22,t:48,b:H-64};const X=x=>P.l+(x-lo)/(hi-lo)*(P.r-P.l),Y=y=>P.b-(y-mn)/(mx-mn)*(P.b-P.t),zx=X(0),zy=Y(0);
  let out='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="'+esc(mod().box?'Volumen in Abhängigkeit von der Höhe; Sachbereich null bis zweieinhalb Dezimeter':'Aktueller kubischer Funktionsgraph mit Achsen und Skala')+'"><defs><clipPath id="cuClip"><rect x="'+P.l+'" y="'+P.t+'" width="'+(P.r-P.l)+'" height="'+(P.b-P.t)+'"/></clipPath><marker id="cuArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#45566e"/></marker></defs>';
- const fo=(x,y,w,s,align='center')=>'<foreignObject x="'+x+'" y="'+y+'" width="'+w+'" height="31"><div xmlns="http://www.w3.org/1999/xhtml" class="cu-tick" style="text-align:'+align+'">'+M(s)+'</div></foreignObject>';
+ const fo=(x,y,w,s,align='center',axis='',unit='')=>'<foreignObject'+(axis?' data-cu-axis="'+axis+'"':'')+' x="'+x+'" y="'+y+'" width="'+w+'" height="31"><div xmlns="http://www.w3.org/1999/xhtml" class="cu-tick" style="text-align:'+align+'">'+M(s)+(unit?'<span class="cu-axisunit"> ('+unit+')</span>':'')+'</div></foreignObject>';
  const dx=niceStep(hi-lo),dy=niceStep(mx-mn);
- for(let x=Math.ceil(lo/dx)*dx;x<=hi+1e-8;x+=dx){out+='<line x1="'+X(x)+'" y1="'+P.t+'" x2="'+X(x)+'" y2="'+P.b+'" stroke="#e5ebf2"/>'+fo(X(x)-30,P.b+5,60,fmt(x,2));}
- for(let y=Math.ceil(mn/dy)*dy;y<=mx+1e-8;y+=dy){out+='<line x1="'+P.l+'" y1="'+Y(y)+'" x2="'+P.r+'" y2="'+Y(y)+'" stroke="#e5ebf2"/>'+fo(1,Y(y)-12,P.l-9,fmt(y,2),'right');}
+ let axisTicks='';
+ for(let x=Math.ceil(lo/dx)*dx;x<=hi+1e-8;x+=dx){const px=X(x);out+='<line x1="'+px+'" y1="'+P.t+'" x2="'+px+'" y2="'+P.b+'" stroke="#e5ebf2"/>';axisTicks+='<line x1="'+px+'" y1="'+(zy-4)+'" x2="'+px+'" y2="'+(zy+4)+'" stroke="#45566e"/>'+fo(Math.abs(x)<1e-8?px-31:px-29,zy+6,Math.abs(x)<1e-8?24:58,fmt(x,2),Math.abs(x)<1e-8?'right':'center','x-tick');}
+ for(let y=Math.ceil(mn/dy)*dy;y<=mx+1e-8;y+=dy){const py=Y(y);out+='<line x1="'+P.l+'" y1="'+py+'" x2="'+P.r+'" y2="'+py+'" stroke="#e5ebf2"/>';if(Math.abs(y)>1e-8)axisTicks+='<line x1="'+(zx-4)+'" y1="'+py+'" x2="'+(zx+4)+'" y2="'+py+'" stroke="#45566e"/>'+fo(zx-55,py-12,45,fmt(y,2),'right','y-tick');}
  out+='<line x1="'+P.l+'" y1="'+zy+'" x2="'+(P.r+9)+'" y2="'+zy+'" stroke="#45566e" stroke-width="1.6" marker-end="url(#cuArrow)"/><line x1="'+zx+'" y1="'+P.b+'" x2="'+zx+'" y2="'+(P.t-10)+'" stroke="#45566e" stroke-width="1.6" marker-end="url(#cuArrow)"/>';
  const curve=Array.from({length:241},(_,i)=>{const x=lo+(hi-lo)*i/240;return {x:X(x),y:Y(poly(c,x))};});
  out+='<path d="'+curve.map((v,i)=>(i?'L':'M')+v.x.toFixed(2)+' '+v.y.toFixed(2)).join(' ')+'" fill="none" stroke="#6544ae" stroke-width="3" clip-path="url(#cuClip)"/>';
- out+=fo(P.l,4,W-P.l-8,mod().box?'V(x)':'f(x)','left')+fo(W-155,H-30,130,'x','right');
- if(mod().box)out+='<text x="'+(P.l+63)+'" y="24" class="cu-svgunit">(dm³)</text><text x="'+(W-22)+'" y="'+(H-10)+'" text-anchor="end" class="cu-svgunit">(dm)</text>';
+ out+=axisTicks+fo(Math.max(4,Math.min(W-(mod().box?120:66)-4,zx-(mod().box?60:33))),4,mod().box?120:66,mod().box?'V(x)':'f(x)','center','y-title',mod().box?'dm³':'')+fo(W-(mod().box?76:32),Math.max(4,zy-32),mod().box?69:25,'x','right','x-title',mod().box?'dm':'');
  const labels=[{name:mod().box?'V(x)':'f(x)',x:hi-(hi-lo)*.22,y:poly(c,hi-(hi-lo)*.22),color:'#6544ae',curve:true}];
  if(!mod().box){
   const showRoots=z().done||(mod().division&&z().done);
@@ -6449,8 +6461,34 @@ function boxSketch(W,H){
 function intersects(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;}
 function segmentRect(a,b,r){let t0=0,t1=1;const dx=b.x-a.x,dy=b.y-a.y;for(const [p,q] of [[-dx,a.x-r.x],[dx,r.x+r.w-a.x],[-dy,a.y-r.y],[dy,r.y+r.h-a.y]]){if(p===0){if(q<0)return false;}else{const t=q/p;if(p<0)t0=Math.max(t0,t);else t1=Math.min(t1,t);if(t0>t1)return false;}}return true;}
 function cross(a,b,c,d){const v=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);return v(a,b,c)*v(a,b,d)<0&&v(c,d,a)*v(c,d,b)<0;}
+function positionAxisTicks(){
+ if(!graphData)return;const {curve,zx,zy,W,H}=graphData,g=$('cuGraph'),origin=g.getBoundingClientRect();
+ const rect=el=>{const b=el.getBoundingClientRect();return {x:b.left-origin.left,y:b.top-origin.top,w:b.width,h:b.height};};
+ const occupied=[...g.querySelectorAll('[data-cu-axis$="title"] math,[data-cu-axis$="title"] .cu-axisunit')].map(rect);
+ for(const fo of g.querySelectorAll('[data-cu-axis$="tick"]')){
+  const r=rect(fo.querySelector('math')),horizontal=fo.dataset.cuAxis==='x-tick';
+  const other=horizontal?{...r,y:zy-r.h-8}:{...r,x:zx+9};
+  const candidates=[r,other];
+  if(horizontal)for(const base of [r,other])for(const sign of [-1,1])candidates.push({...base,x:base.x+sign*(r.w/2+7)});
+  let best=null;
+  for(const [index,c] of candidates.entries()){
+   if(c.x<2||c.y<2||c.x+c.w>W-2||c.y+c.h>H-2)continue;
+   const padded={x:c.x-2,y:c.y-2,w:c.w+4,h:c.h+4};
+   let score=index+occupied.filter(o=>intersects(o,padded)).length*10000;
+   for(let k=1;k<curve.length;k++)if(segmentRect(curve[k-1],curve[k],padded))score+=100;
+   if(!best||score<best.score)best={r:c,score};
+  }
+  if(!best)continue;
+  fo.setAttribute('x',Number(fo.getAttribute('x'))+best.r.x-r.x);
+  fo.setAttribute('y',Number(fo.getAttribute('y'))+best.r.y-r.y);
+  occupied.push(best.r);
+ }
+}
 function positionLabels(){
  if(!graphData)return;const {P,X,Y,curve,labels,zx,zy}=graphData,placed=[],leaders=[];let lines='';
+ positionAxisTicks();
+ const origin=$('cuGraph').getBoundingClientRect();
+ for(const el of $('cuGraph').querySelectorAll('[data-cu-axis] math,[data-cu-axis] .cu-axisunit')){const r=el.getBoundingClientRect();placed.push({x:r.left-origin.left-3,y:r.top-origin.top-3,w:r.width+6,h:r.height+6});}
  // Point roles get priority; the curve name yields to their labels.
  const order=labels.map((l,i)=>({l,i})).sort((a,b)=>Number(a.l.curve)-Number(b.l.curve));
  for(const {l,i} of order){const el=$('cuGraph').querySelector('[data-label="'+i+'"]'),w=el.offsetWidth,h=el.offsetHeight;let best=null;
