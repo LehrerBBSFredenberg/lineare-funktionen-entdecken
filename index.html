@@ -6194,8 +6194,35 @@ try{const u=new URL(location.href);if(u.searchParams.get('thema')==='wirtschaft'
 @media(max-width:1050px){#cubicExperience .cu-overview-hero{grid-template-columns:1fr;gap:20px}#cubicExperience .cu-overview-example{max-width:700px;width:100%;justify-self:center}}
 @media(max-width:680px){#cubicExperience .cu-overview-hero{padding:20px 17px;border-radius:21px}#cubicExperience .cu-overview-hero h1{font-size:2.05rem}#cubicExperience .cu-overview-group{padding:14px 13px}#cubicExperience .cu-overview-grid{padding-left:0}#cubicExperience .cu-band-head{gap:11px}#cubicExperience .cu-media-grid,#cubicExperience #cuBody .cu-media-grid{grid-template-columns:1fr}#cubicExperience .cu-media-section{padding:14px}#cubicExperience .cu-chart-head .cu-tools{flex-shrink:1}#cubicExperience .cu-chart-head .cu-btn{font-size:.75rem;padding:9px 10px}#cubicExperience #cuPointReadout{grid-template-columns:1fr}}
 @media(max-width:400px){#cubicExperience .cu-overview-example{grid-template-columns:1fr;padding:12px}#cubicExperience .cu-example-graph{max-width:240px;width:100%;justify-self:center}#cubicExperience .cu-overview-example figcaption{grid-column:auto}#cubicExperience .cu-example-representations{grid-template-columns:1fr}#cubicExperience .cu-chart-head{flex-wrap:wrap}#cubicExperience .cu-chart-head .cu-tools{flex-direction:row;align-items:center}}
+
+/* V58.3: ruhige Lesegroessen und Formularkopf wie im Quadratikbereich. */
+#cubicExperience .cu-learning{font-size:.86rem;line-height:1.55}
+#cubicExperience .cu-learning h3{font-size:1rem;line-height:1.3;margin:0 0 9px}
+#cubicExperience .cu-learning p{margin:7px 0 10px}
+#cubicExperience .cu-learning .cu-card{border:1px solid #d8e1ee;border-radius:14px;background:#fbfcfe;padding:12px;margin:9px 0}
+#cubicExperience .cu-learning .cu-help{padding:11px 12px;margin:9px 0;border-radius:14px}
+#cubicExperience .cu-learning summary{font-size:.84rem;line-height:1.4}
+#cubicExperience .cu-learning .cu-math{font-size:1.02em}
+#cubicExperience .cu-learning .cu-equation{font-size:.94rem;padding:8px 10px;border:1px solid #e0d8ee;background:white;margin:8px 0}
+#cubicExperience .cu-learning .cu-equation .cu-math{font-size:1.06em}
+#cubicExperience .cu-learning .cu-field{font-size:.84rem;margin:9px 0;gap:7px}
+#cubicExperience .cu-field-label{display:block;line-height:1.4}
+#cubicExperience .cu-field-label .cu-math{vertical-align:baseline}
+#cubicExperience .cu-learning :is(input:not([type="range"]),select,textarea){font-size:.86rem;line-height:1.45;padding:10px 11px}
+#cubicExperience .cu-learning .cu-btn{font-size:.82rem;padding:9px 12px;min-height:44px}
+#cubicExperience .cu-learning .cu-choice{font-size:.84rem;font-weight:600;padding:9px 10px}
+#cubicExperience .cu-learning .cu-feedback{font-size:.8rem;padding:9px 10px;line-height:1.5}
+#cubicExperience .cu-learning .cu-steps{font-size:.82rem;line-height:1.5;margin:10px 0;padding-left:22px}
+#cubicExperience .cu-learning .cu-steps li{padding:4px 0}
+#cubicExperience .cu-learning :is(table,.cu-wordbank){font-size:.84rem}
+#cubicExperience .cu-learning :is(th,td){font-size:.82rem;padding:8px 6px}
+#cubicExperience .cu-learning .cu-score{font-size:.84rem}
+#cubicExperience .cu-parameter-key{padding:11px 12px;border:1px solid #d8c8f5;background:#faf7ff;border-radius:13px;margin:12px 0 9px}
+#cubicExperience .cu-parameter-key h4{font-size:.85rem;line-height:1.35;margin:0 0 7px;color:#4e2a82}
+#cubicExperience .cu-parameter-key p{font-size:.8rem;line-height:1.5;margin:6px 0}
+#cubicExperience .cu-parameter-key .cu-math{font-size:1.03em}
 </style>
-<script id="cubic-v58">/* Lernwelt V58.2 Prüfversion: Quadratik-Referenz für Einstieg, Steuerung und Erklärwege. */
+<script id="cubic-v58">/* Lernwelt V58.3 Prüfversion: sichtbare Parameterwirkung und einheitliche Lesetypografie. */
 (function(){
 'use strict';
 const STORE='lernwelt-kubisch-v58';
@@ -6357,6 +6384,14 @@ function sliderName(k){
  if(state.i===1)return {a:'Formparameter '+M('a'),u:'Parameter '+M('u')+' (horizontal)',v:'Parameter '+M('v')+' (vertikal)'}[k];
  return k==='d'?'Absolutglied '+M('d'):'Koeffizient '+M(k);
 }
+function parameterMeaning(full=false){
+ const body=p('[[a]] verändert die Höhe relativ zur Geraden [[y=v]]: Bei [[|a|>1]] wird gestreckt, bei [[0<|a|<1]] gestaucht. Ein negatives [[a]] spiegelt an [[y=v]].')+
+ p('[[u]] verschiebt waagerecht: positiv nach links, negativ nach rechts. Das Zentrum liegt deshalb bei der Stelle [[x=−u]].')+
+ p('[[v]] verschiebt senkrecht: positiv nach oben, negativ nach unten. Das Zentrum liegt auf der Höhe [[v]].')+
+ p('Das markierte [[Z(−u|v)]] ist das Symmetriezentrum dieser Kubikfamilie. Es ist kein Hoch- oder Tiefpunkt.')+
+ p('Beide Achsen behalten beim Verändern dieselbe Skala. So bleibt die Wirkung von Streckung und Verschiebung sichtbar.');
+ return full?body+detail('An die Quadratik anknüpfen',p('Bei der Parabel [[f(x)=a(x+u)^2+v]] liest du den Scheitelpunkt [[S(−u|v)]] ab. Bei unserer Kubikfamilie [[f(x)=a(x+u)^3+v]] liest du dagegen das Symmetriezentrum [[Z(−u|v)]] ab.')+p('An der Stelle [[x=−u]] verschwindet der Klammerinhalt:')+eq('f(−u)=a·0^3+v=v')+p('Nur für [[v=0]] liegt dieses Zentrum zugleich auf der x-Achse. Diese Darstellung beschreibt nicht jede kubische Funktion.')):body;
+}
 function overviewIllustration(){
  const path=Array.from({length:101},(_,i)=>{const x=-1.5+3*i/100;return (i?'L':'M')+(120+60*x).toFixed(2)+' '+(110-24*x*x*x).toFixed(2);}).join(' ');
  const label=(x,y,w,t)=>'<foreignObject x="'+x+'" y="'+y+'" width="'+w+'" height="24"><div xmlns="http://www.w3.org/1999/xhtml" class="cu-mini-math">'+M(t)+'</div></foreignObject>';
@@ -6382,7 +6417,7 @@ function mediaSection(i=null){
 }
 function overviewContent(){
  const meta=[{icon:'E',cls:'basics',desc:'Grundfunktion, Parameter und allgemeine Form: Graph, Term und Werte gemeinsam untersuchen.'},{icon:'N',cls:'compare',desc:'Nullstellenbedingung, Kandidaten und Polynomdivision: Bekanntes aus der Quadratik weiterverwenden.'},{icon:'V',cls:'apply',desc:'Eigenschaften begründen und ein geometrisches Volumenmodell entwickeln – ohne Ableitungen.'}];
- return '<section class="cu-overview-hero"><div><div class="cu-kicker">Themenübersicht</div><h1>Kubische Funktionen</h1>'+p('Hier untersuchst du kubische Funktionen aus verschiedenen Darstellungen. Du verbindest Graph, Funktionsterm, Tabelle und sprachliche Beschreibung. Wähle einen Lernbereich und arbeite Schritt für Schritt.')+'<div class="cu-representation-row" aria-label="Darstellungen verbinden"><span>Graph</span><span>Funktionsterm</span><span>Tabelle</span><span>Sprache</span></div></div>'+overviewIllustration()+'</section>'+card('Darstellungen bewusst verbinden',p('Wie bei den quadratischen Funktionen gehören die Darstellungen zusammen. Vergleiche zunächst die Grundfunktionen, untersuche dann Parameter und nutze beim Nullstellenrechnen bereits bekannte quadratische Verfahren.')+'<div class="cu-shortcuts"><button type="button" class="cu-btn cu-light" data-cu-module="0">Grundfunktion untersuchen</button><button type="button" class="cu-btn cu-light" data-cu-module="1">Parameter verändern</button><button type="button" class="cu-btn cu-light" data-cu-module="5">Polynomdivision verstehen</button></div>')+mediaSection()+groups.map((g,i)=>'<section class="cu-overview-group cu-band-'+meta[i].cls+'" id="cuGroup-'+i+'"><header class="cu-band-head"><span class="cu-band-icon" aria-hidden="true">'+meta[i].icon+'</span><div><h2>'+esc(g.title)+'</h2>'+p(meta[i].desc)+'</div></header><div class="cu-overview-grid">'+g.items.map(n=>'<button type="button" class="cu-module cu-overview-module" data-cu-module="'+n+'"><strong>'+(n+1)+' · '+esc(modules[n].title)+'</strong><span>'+esc(modules[n].sub)+'</span></button>').join('')+'</div></section>').join('');
+ return '<section class="cu-overview-hero"><div><div class="cu-kicker">Themenübersicht</div><h1>Kubische Funktionen</h1>'+p('Hier untersuchst du kubische Funktionen aus verschiedenen Darstellungen. Du verbindest Graph, Funktionsterm, Tabelle und sprachliche Beschreibung. Wähle einen Lernbereich und arbeite Schritt für Schritt.')+'<div class="cu-representation-row" aria-label="Darstellungen verbinden"><span>Graph</span><span>Funktionsterm</span><span>Tabelle</span><span>Sprache</span></div></div>'+overviewIllustration()+'</section>'+card('Darstellungen bewusst verbinden',p('Wie bei den quadratischen Funktionen gehören die Darstellungen zusammen. Vergleiche zunächst die Grundfunktionen, untersuche dann Parameter und nutze beim Nullstellenrechnen bereits bekannte quadratische Verfahren.')+'<div class="cu-shortcuts"><button type="button" class="cu-btn cu-light" data-cu-module="0">Grundfunktion untersuchen</button><button type="button" class="cu-btn cu-light" data-cu-module="1">Parameter verändern</button><button type="button" class="cu-btn cu-light" data-cu-module="5">Polynomdivision verstehen</button></div>')+mediaSection()+groups.map((g,i)=>'<section class="cu-overview-group cu-band-'+meta[i].cls+'" id="cuGroup-'+i+'"><header class="cu-band-head"><span class="cu-band-icon" aria-hidden="true">'+meta[i].icon+'</span><div><h2>'+esc(g.title)+'</h2>'+p(meta[i].desc)+'</div></header><div class="cu-overview-grid">'+g.items.map(n=>'<button type="button" class="cu-module cu-overview-module" data-cu-module="'+n+'"><strong>'+esc(modules[n].title)+'</strong><span>'+esc(modules[n].sub)+'</span></button>').join('')+'</div></section>').join('');
 }
 function divisionExplanation(){
  return p('Aus der Quadratik kennst du die Nullstellenbedingung und den Satz vom Nullprodukt. Nach einer Polynomdivision brauchst du genau dieses Vorwissen wieder.')+eq('f(x)=0')+
@@ -6417,16 +6452,17 @@ function controls(){
  html+=p(state.free?'Verfügbare Parameter: '+keys.map(k=>'[['+k+']]').join(', ')+'. Ändere zuerst einen Wert und kombiniere anschließend mehrere. Formuliere vorher eine Vermutung.':state.i===1?'Du veränderst nur [['+gp+']]. Fest bleiben '+['a','u','v'].filter(k=>k!==gp).map(k=>'[['+k+'='+fmt(zz.p[k])+']]').join(' und ')+'. So kannst du Ursache und Wirkung unterscheiden.':'Du veränderst nur [[d]]. Die anderen drei Koeffizienten bleiben auf ihren aktuellen Werten. Vergleiche die y-Achsenpunkte.');}
  if(keys.length)html+='<div class="cu-sliders">'+keys.map(k=>{const spec=k==='x'?(state.i===0?[-3,3,.25]:[0.1,2.4,0.1]):k==='a'?[-3,3,.25]:[-4,4,.5];return '<label class="cu-field cu-slider-card" for="cuParam-'+k+'"><span class="cu-slider-head"><span>'+sliderName(k)+'</span><output id="cuOut-'+k+'">'+M(fmt(zz.p[k]))+'</output></span><input id="cuParam-'+k+'" data-cu-param="'+k+'" type="range" min="'+spec[0]+'" max="'+spec[1]+'" step="'+spec[2]+'" value="'+zz.p[k]+'"></label>';}).join('')+'</div>';
  if(state.i===0)html+='<div id="cuPointReadout">'+pointPair()+'</div>';
+ if(state.i===1)html+='<section class="cu-parameter-key"><h4>Was bedeuten die Parameter?</h4>'+parameterMeaning()+'</section>';
  if(state.i===1||state.i===2)html+='<p class="cu-caption">Der Vorfaktor '+M('a')+' bleibt von null verschieden, damit der Term kubisch bleibt.</p>';
  $('cuControls').innerHTML=html;
  $('cuCondition').innerHTML=state.i===2?conditionBlock('y'):mod().list||mod().candidate||mod().division||mod().count?conditionBlock('x'):'';
 }
 function pointPair(){const x=z().p.x,y=poly(coeff(),x),sign=isApprox(x)||isApprox(y)?'≈':'';return eq('P'+sign+'('+fmt(x)+'|'+fmt(y)+')')+eq('Q'+sign+'('+fmt(-x)+'|'+fmt(-y)+')');}
 function currentFormula(){if(state.i===1){const v=z().p;return 'f(x)='+(v.a===1?'':v.a===-1?'−':fmt(v.a))+(v.u===0?'x^3':'(x'+signed(v.u)+')^3')+(v.v===0?'':signed(v.v));}return polyText(coeff(),mod().box?'V':'f');}
-function definitions(){return detail('Begriffe für diesen Schritt',mod().words.map(([w,v])=>'<p><strong>'+esc(w)+':</strong> '+esc(v)+(w==='Nullstelle'?' Bedingung: '+M('f(x)=0')+'.':'')+'</p>').join('')).replace('<details class="cu-help">','<details class="cu-help" open>');}
+function definitions(){return detail('Begriffe für diesen Schritt',mod().words.map(([w,v])=>'<p><strong>'+esc(w)+':</strong> '+(state.i===1&&w==='Spiegelung'?rich('Ein negatives [[a]] spiegelt die verschobene Grundkurve an der waagerechten Geraden [[y=v]]. Bei [[v=0]] ist das die x-Achse.'):esc(v))+(w==='Nullstelle'?' Bedingung: '+M('f(x)=0')+'.':'')+'</p>').join('')).replace('<details class="cu-help">','<details class="cu-help" open>');}
 function button(text,action,extra=''){return '<button type="button" class="cu-btn" data-cu="'+action+'" '+extra+'>'+rich(text)+'</button>';}
 function fb(){return z().feedback?'<div class="cu-feedback '+(z().good?'cu-good':'cu-try')+'" role="status">'+rich(z().feedback)+'</div>':'';}
-function field(id,label,value='',type='text'){return '<label class="cu-field" for="'+id+'">'+rich(label)+'<input id="'+id+'" name="'+id+'" type="'+type+'" inputmode="'+((id==='cuRoots'||(id==='cuAnswer'&&mod().list))?'text':'decimal')+'" value="'+esc(value)+'" autocomplete="off"></label>';}
+function field(id,label,value='',type='text'){return '<label class="cu-field" for="'+id+'"><span class="cu-field-label">'+rich(label)+'</span><input id="'+id+'" name="'+id+'" type="'+type+'" inputmode="'+((id==='cuRoots'||(id==='cuAnswer'&&mod().list))?'text':'decimal')+'" value="'+esc(value)+'" autocomplete="off"></label>';}
 function form(id,body,label){return '<form id="'+id+'" novalidate>'+body+'<button type="submit" class="cu-btn">'+esc(label)+'</button></form>';}
 function gate(){return mod().box?z().stage>=2:mod().division?z().stage>=2:true;}
 function task(){
@@ -6554,6 +6590,7 @@ function currentWorkedExample(){
 }
 function explain(){
  const ql=quality();let body=card('Wozu dieser Lernschritt?',p(ql.purpose))+card('Warum dieser Weg?',p(ql.why))+card(mod().division?'Von der Kubik zurück zur Quadratik':'Kurz erklärt und rechnerischer Weg',state.i===0?eq('f(x)=x^3')+eq('x^3=x·x·x')+p('Die Hochzahl zählt gleiche Faktoren. Unterscheide Potenz und Multiplikation mit der Hochzahl.'):mod().explain())+currentWorkedExample()+definitions();
+ if(state.i===1)body+=card('Parameter der Kubikfamilie verstehen',parameterMeaning(true));
  if(!mod().box)body+=conditionReference();
  if(mod().division&&z().done)body+=quadraticWork(divide(coeff(),num(z().r)).q);
  body+=detail('Am Graphen erklärt',p(ql.graph)+button('Am Graphen erkunden','tab','data-tab="explore"'))+detail('Mit Tabelle erklärt',p(ql.table)+button('Werte vergleichen','tab','data-tab="table"'))+card('Merksatz',p(ql.rule))+detail('Gegenbeispiel',p(ql.counter))+detail('Transferfrage · AB '+(state.i===6||mod().box?'III':'II'),p(ql.transfer));
@@ -6586,10 +6623,10 @@ const makers={task,language,table,explain,practice,explore};
 function body(){const active=document.activeElement?.id;$('cuBody').innerHTML=makers[state.tab]();$('cuBody').setAttribute('aria-labelledby','cuTab-'+state.tab);if(active&&$(active))$(active).focus({preventScroll:true});}
 function render(){
  root.classList.toggle('cu-focus',state.focus);
- $('cuPosition').textContent='Lernabschnitt '+(state.i+1)+' von '+modules.length;
- $('cuTitle').textContent=(state.i+1)+' · '+mod().title;
+ $('cuPosition').textContent=groups.find(g=>g.items.includes(state.i)).title;
+ $('cuTitle').textContent=mod().title;
  $('cuNavigation').querySelector('summary').textContent='Teilmodule · '+groups.find(g=>g.items.includes(state.i)).title;
- $('cuModules').innerHTML=modules.map((m,i)=>({m,i})).filter(({i})=>groups.find(g=>g.items.includes(state.i)).items.includes(i)).map(({m,i})=>'<button type="button" class="cu-module" data-cu-module="'+i+'" aria-current="'+(state.i===i?'step':'false')+'"><strong>'+(i+1)+' · '+esc(m.title)+'</strong><span>'+esc(m.sub)+'</span></button>').join('');
+ $('cuModules').innerHTML=modules.map((m,i)=>({m,i})).filter(({i})=>groups.find(g=>g.items.includes(state.i)).items.includes(i)).map(({m,i})=>'<button type="button" class="cu-module" data-cu-module="'+i+'" aria-current="'+(state.i===i?'step':'false')+'"><strong>'+esc(m.title)+'</strong><span>'+esc(m.sub)+'</span></button>').join('');
  $('cuTabs').innerHTML=tabs.map(([id,title,sub])=>'<button type="button" role="tab" class="cu-tab" id="cuTab-'+id+'" data-cu="tab" data-tab="'+id+'" tabindex="'+(id===state.tab?'0':'-1')+'" aria-label="'+esc(title)+'" aria-selected="'+(id===state.tab)+'" aria-controls="cuBody"><strong>'+esc(title)+'</strong><span>'+esc(sub)+'</span></button>').join('');
  $('cuFocus').textContent=state.focus?'Normale Ansicht':'Graph groß';controls();body();scheduleDraw();
 }
@@ -6636,16 +6673,21 @@ root.addEventListener('submit',e=>{
 let frame=0,lastWidth=0,graphData=null;
 function scheduleDraw(){cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);}
 function niceStep(range){const p=Math.pow(10,Math.floor(Math.log10(range/5)));return [1,2,5,10].find(k=>k*p>=range/5)*p;}
+function plotWindow(c,rr){
+ // A common frame is necessary for comparing the parameter a; autoscale hides it.
+ if(state.i===1)return {lo:-6,hi:6,mn:-12,mx:12,fixed:true};
+ let lo=-3.2,hi=3.2;
+ if(mod().box){lo=0;hi=2.5;}
+ else if(cases[mod().id]){lo=Math.min(-3,...rr.map(r=>r.x-1.5));hi=Math.max(3,...rr.map(r=>r.x+1.5));}
+ lo=Math.min(0,lo);hi=Math.max(0,hi);
+ const ys=Array.from({length:161},(_,i)=>poly(c,lo+(hi-lo)*i/160));let mn=Math.min(0,...ys),mx=Math.max(0,...ys),pad=Math.max(1,(mx-mn)*.12);mn-=pad;mx+=pad;
+ return {lo,hi,mn,mx,fixed:false};
+}
 function draw(){
  if(root.hidden)return;
  const g=$('cuGraph'),outer=$('cuGraphScroll');g.style.width=state.focus?'max(100%, 900px)':'100%';const W=Math.max(260,Math.round(g.clientWidth||outer.clientWidth)),H=state.focus?540:Math.max(360,Math.min(480,W*.85));g.style.height=H+'px';
  if(mod().box&&!gate()){g.innerHTML=boxSketch(W,H);$('cuTerm').innerHTML='<p><strong>Volumenfunktion selbst entwickeln</strong></p>';$('cuCaption').textContent='Die Skizze zeigt die Pappe und die vier gleich großen Eckausschnitte. Der Modellgraph folgt nach deinen eigenen Versuchen.';graphData=null;return;}
- const c=coeff(),rr=roots(c);let lo=-3.2,hi=3.2;
- if(state.i===1){lo=-z().p.u-3;hi=-z().p.u+3;}
- else if(mod().box){lo=0;hi=2.5;}
- else if(cases[mod().id]){lo=Math.min(-3,...rr.map(r=>r.x-1.5));hi=Math.max(3,...rr.map(r=>r.x+1.5));}
- lo=Math.min(0,lo);hi=Math.max(0,hi);
- const ys=Array.from({length:161},(_,i)=>poly(c,lo+(hi-lo)*i/160));let mn=Math.min(0,...ys),mx=Math.max(0,...ys),pad=Math.max(1,(mx-mn)*.12);mn-=pad;mx+=pad;
+ const c=coeff(),rr=roots(c),{lo,hi,mn,mx}=plotWindow(c,rr);
  const P={l:W<500?57:76,r:W-22,t:48,b:H-35};const X=x=>P.l+(x-lo)/(hi-lo)*(P.r-P.l),Y=y=>P.b-(y-mn)/(mx-mn)*(P.b-P.t),zx=X(0),zy=Y(0);
  let out='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="'+esc(mod().box?'Volumen in Abhängigkeit von der Höhe; Sachbereich null bis zweieinhalb Dezimeter':'Aktueller kubischer Funktionsgraph mit Achsen und Skala')+'"><defs><clipPath id="cuClip"><rect x="'+P.l+'" y="'+P.t+'" width="'+(P.r-P.l)+'" height="'+(P.b-P.t)+'"/></clipPath><marker id="cuArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#45566e"/></marker></defs>';
  const fo=(x,y,w,s,align='center',axis='',unit='')=>'<foreignObject'+(axis?' data-cu-axis="'+axis+'"':'')+' x="'+x+'" y="'+y+'" width="'+w+'" height="31"><div xmlns="http://www.w3.org/1999/xhtml" class="cu-tick" style="text-align:'+align+'">'+M(s)+(unit?'<span class="cu-axisunit"> ('+unit+')</span>':'')+'</div></foreignObject>';
@@ -6664,15 +6706,17 @@ function draw(){
   labels.push({name:'S_y(0|'+fmt(c[3])+')',x:0,y:c[3],color:'#176e6a'});
   if(showRoots)rr.forEach((r,i)=>{if(Math.abs(r.x)<1e-7&&Math.abs(c[3])<1e-7)labels[1].name='S_y=N_'+(i+1)+'(0|0)';else labels.push({name:'N_'+(i+1)+(isApprox(r.x)?'≈':'')+'('+fmt(r.x)+'|0)',x:r.x,y:0,color:'#176e6a'});});
  }
+ if(state.i===1){const x=-z().p.u,y=z().p.v,same=labels.find(l=>!l.curve&&Math.abs(l.x-x)<1e-7&&Math.abs(l.y-y)<1e-7);if(same)same.name='Z='+same.name;else labels.push({name:'Z('+fmt(x)+'|'+fmt(y)+')',x,y,color:'#a42d55'});}
  const selected=state.i===0?[['P',z().p.x],['Q',-z().p.x],['R',z().pointX]]:[['P',mod().box?z().p.x:z().pointX]];
  if(mod().candidate&&z().candidate)selected.push(['R',z().candidate.r]);
  for(const [name,chosen] of selected)if(Number.isFinite(chosen)&&chosen>=lo&&chosen<=hi){const same=labels.find(l=>!l.curve&&Math.abs(l.x-chosen)<1e-7&&Math.abs(l.y-poly(c,chosen))<1e-7);if(same)same.name=name+'='+same.name;else labels.push({name:name+(isApprox(chosen)||isApprox(poly(c,chosen))?'≈':'')+'('+fmt(chosen)+'|'+fmt(poly(c,chosen))+')',x:chosen,y:poly(c,chosen),color:name==='Q'?'#176e6a':'#995a12'});}
 
+ for(let i=labels.length-1;i>=0;i--){const l=labels[i];if(!l.curve&&(l.x<lo||l.x>hi||l.y<mn||l.y>mx))labels.splice(i,1);}
  labels.forEach(l=>{if(!l.curve)out+='<circle cx="'+X(l.x)+'" cy="'+Y(l.y)+'" r="4" fill="'+l.color+'" stroke="white" stroke-width="1.5"/>';});
  out+='<g id="cuLeaders"></g></svg>';
  g.innerHTML=out+labels.map((l,i)=>'<div class="cu-label" data-label="'+i+'" style="color:'+l.color+'">'+M(l.name)+'</div>').join('');
  $('cuTerm').innerHTML=eq(currentFormula());
- $('cuCaption').innerHTML=mod().box?'Echte Schachteln: '+M('0<x<2,5')+' dm. Die Randpunkte sind entartete Schachteln.':'Sichtbarer Ausschnitt: '+M(fmt(lo)+'≤x≤'+fmt(hi))+'. Die Funktion setzt sich außerhalb des Bildausschnitts fort.';
+ $('cuCaption').innerHTML=mod().box?'Echte Schachteln: '+M('0<x<2,5')+' dm. Die Randpunkte sind entartete Schachteln.':state.i===1?'Fester Vergleichsausschnitt: '+M('−6≤x≤6')+' und '+M('−12≤f(x)≤12')+'. Die Achsen skalieren beim Verändern nicht mit. Der Graph setzt sich außerhalb fort.':'Sichtbarer Ausschnitt: '+M(fmt(lo)+'≤x≤'+fmt(hi))+'. Die Funktion setzt sich außerhalb des Bildausschnitts fort.';
  graphData={W,H,P,X,Y,curve,labels,zx,zy,lo,hi};positionLabels();
 }
 function boxSketch(W,H){
@@ -6713,7 +6757,8 @@ function positionLabels(){
  // Point roles get priority; the curve name yields to their labels.
  const order=labels.map((l,i)=>({l,i})).sort((a,b)=>Number(a.l.curve)-Number(b.l.curve));
  for(const {l,i} of order){const el=$('cuGraph').querySelector('[data-label="'+i+'"]'),measured=el.getBoundingClientRect(),w=Math.ceil(measured.width),h=Math.ceil(measured.height);let best=null;
-  const anchors=l.curve?[.12,.22,.34,.47,.61,.73,.86].map(t=>curve[Math.round(t*(curve.length-1))]):[{x:X(l.x),y:Y(l.y)}];
+  const visibleCurve=curve.filter(v=>v.x>=P.l&&v.x<=P.r&&v.y>=P.t&&v.y<=P.b);
+  const anchors=l.curve?[.12,.22,.34,.47,.61,.73,.86].map(t=>(visibleCurve.length?visibleCurve:curve)[Math.round(t*((visibleCurve.length?visibleCurve:curve).length-1))]):[{x:X(l.x),y:Y(l.y)}];
   for(const a of anchors){
    const positions=[[12,-h-12],[-w-12,-h-12],[12,12],[-w-12,12],[-w/2,-h-22],[-w/2,20]];
    // If nearby labels cluster, use the remaining plot area, with measured text sizes.
